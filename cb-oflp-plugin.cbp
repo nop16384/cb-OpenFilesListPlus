@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="cb-oflp-plugin" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Option virtualFolders="src/;src/plugin/;src/panels/;src/panels/c/;src/panels/h/;src/plugin/c/;src/plugin/h/;src/log/;src/common/;" />
+		<Build>
+			<Target title="default">
+				<Option output="plugin/libOpenFilesListPlus" prefix_auto="0" extension_auto="1" />
+				<Option object_output="obj" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option host_application="codeblocks" />
+				<Option run_host_application_in_terminal="0" />
+				<Compiler>
+					<Add option="-ansi" />
+					<Add option="-g" />
+					<Add option="`wx-config --cflags`" />
+					<Add option="-fPIC" />
+					<Add directory="/home/gwr/Src/C-C++/gwr.codeblocks/src/svn10373/trunk/src/include" />
+				</Compiler>
+				<Linker>
+					<Add option="`wx-config --libs`" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="zip -j9 plugin/OpenFilesListPlus.zip src/manifest.xml src/oflp.xrc graphics/oflp-panel-header-button-bar-blue.png graphics/oflp-panel-header-button-bar-green.png graphics/oflp-panel-header-button-bar-orange.png graphics/oflp-panel-header-button-bar-red.png  graphics/oflp-panel-header-button-bar-up.png graphics/oflp-panel-header-button-bar-down.png" />
+					<Add after="zip -j9 plugin/OpenFilesListPlus.cbplugin plugin/libOpenFilesListPlus.so plugin/OpenFilesListPlus.zip" />
+				</ExtraCommands>
+			</Target>
+			<Target title="CheckSymbols">
+				<Option output="plugin/OpenFilesListPlus" prefix_auto="0" extension_auto="1" />
+				<Option object_output="obj" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option host_application="codeblocks" />
+				<Option run_host_application_in_terminal="0" />
+				<Compiler>
+					<Add option="-ansi" />
+					<Add option="-g" />
+					<Add option="`wx-config --cflags`" />
+					<Add option="-fPIC" />
+					<Add directory="/home/gwr/Src/C-C++/gwr.codeblocks/src/svn10373/trunk/src/include" />
+				</Compiler>
+				<Linker>
+					<Add option="`wx-config --libs`" />
+					<Add option="-Wl,-z,defs" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-fPIC" />
+		</Compiler>
+		<Unit filename="src/earlgrey-cb.log.cc">
+			<Option virtualFolder="src/log/" />
+		</Unit>
+		<Unit filename="src/earlgrey-cb.log.hh">
+			<Option virtualFolder="src/log/" />
+		</Unit>
+		<Unit filename="src/manifest.xml">
+			<Option virtualFolder="src/common/" />
+		</Unit>
+		<Unit filename="src/oflp-common.hh">
+			<Option virtualFolder="src/common/" />
+		</Unit>
+		<Unit filename="src/oflp-panel-header.cci">
+			<Option virtualFolder="src/panels/c/" />
+		</Unit>
+		<Unit filename="src/oflp-panel-header.hhi">
+			<Option virtualFolder="src/panels/h/" />
+		</Unit>
+		<Unit filename="src/oflp-panel-utils.cci">
+			<Option virtualFolder="src/panels/c/" />
+		</Unit>
+		<Unit filename="src/oflp-panel-utils.hhi">
+			<Option virtualFolder="src/panels/h/" />
+		</Unit>
+		<Unit filename="src/oflp-panel.cc">
+			<Option virtualFolder="src/panels/c/" />
+		</Unit>
+		<Unit filename="src/oflp-panel.hh">
+			<Option virtualFolder="src/panels/h/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-events.cci">
+			<Option virtualFolder="src/plugin/c/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-events.hhi">
+			<Option virtualFolder="src/plugin/h/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-gfx.hhi">
+			<Option virtualFolder="src/plugin/h/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-menus.hhi">
+			<Option virtualFolder="src/plugin/h/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-panels.cci">
+			<Option virtualFolder="src/plugin/c/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-panels.hhi">
+			<Option virtualFolder="src/plugin/h/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin.cpp">
+			<Option virtualFolder="src/plugin/c/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin.hh">
+			<Option virtualFolder="src/plugin/h/" />
+		</Unit>
+		<Unit filename="src/oflp.xrc">
+			<Option virtualFolder="src/common/" />
+		</Unit>
+		<Unit filename="src/todo.h">
+			<Option virtualFolder="src/common/" />
+		</Unit>
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<lib_finder disable_auto="1" />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

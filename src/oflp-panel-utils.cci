@@ -1,0 +1,262 @@
+//  ############################################################################
+//
+//                          OFLPPanelDataObject
+//
+//  ############################################################################
+OFLPPanelDataObject::OFLPPanelDataObject()
+{
+    wxDataFormat fmt;
+    fmt.SetId(_T("c::b/oflpp-item-drag"));
+
+    SetFormat(fmt);
+
+    a_data_size = 0;
+}
+//  ============================================================================
+bool        OFLPPanelDataObject::p0_serialize   ()
+{
+    a_data[0]                           =   a_data_panel_index;
+    a_data[1]                           =   a_data_item_index;
+    *( p0_serialized_editor_pointer() ) =   a_data_editor;
+
+    a_data_size = 2 * sizeof(unsigned char) + sizeof(EditorBase*);
+
+    return true;
+}
+bool        OFLPPanelDataObject::p0_deserialize ()
+{
+    a_data_panel_index  =   a_data[0];
+    a_data_item_index   =   a_data[1];
+    a_data_editor       =   *( p0_serialized_editor_pointer() );
+    //  ........................................................................
+    //  validity checks
+    if ( a_data_panel_index >= OFLPPanelDataObject::s_panel_index_max )
+        return false;
+
+    if ( a_data_item_index  >= OFLPPanelDataObject::s_item_index_max  )
+        return false;
+
+    if ( ! a_data_editor )
+        return false;
+
+    return true;
+}
+//  ============================================================================
+size_t      OFLPPanelDataObject::GetDataSize    ()                     const
+{
+    GWR_INF("OFLPPanelDataObject::GetDataSize():[%i]", GWR_SIZE_T_TO_INT(a_data_size));
+    return a_data_size;
+}
+
+bool        OFLPPanelDataObject::GetDataHere    (void *buf)            const
+{
+    GWR_INF("%s", _T("OFLPPanelDataObject::GetDataHere():start") );
+    if ( ! a_data_size )
+        return false;
+
+    memcpy( buf, (void*)a_data, a_data_size );
+    return true;
+}
+
+int         OFLPPanelDataObject::GetDataPanelIx ()
+{
+    if ( ! a_data_size )
+        return wxNOT_FOUND;
+
+    return static_cast< int >( a_data_panel_index );
+}
+
+int         OFLPPanelDataObject::GetDataItemIx  ()
+{
+    if ( ! a_data_size )
+        return wxNOT_FOUND;
+
+    return static_cast< int >( a_data_item_index );
+}
+
+EditorBase* OFLPPanelDataObject::GetDataEditor  ()
+{
+    if ( ! a_data_size )
+        return NULL;
+
+    return a_data_editor;
+}
+//  ============================================================================
+bool        OFLPPanelDataObject::SetData        (size_t len, const void *buf)   //  unformatted input serializer
+{
+    GWR_INF("%s", _T("OFLPPanelDataObject::SetData(1):start") );
+    //  ........................................................................
+    if ( len > GetDataCapacity() )
+        return false;
+
+    memcpy( (void*)a_data, buf, len );
+
+    if ( ! p0_deserialize() )
+        return false;
+
+    a_data_size =   len;
+    return true;
+}
+
+bool        OFLPPanelDataObject::SetData        (int _panel_ix, int _item_ix, EditorBase* _editor)  //  formatted input serializer
+{
+    GWR_INF("%s", _T("OFLPPanelDataObject::SetData(2):start") );
+    //  ........................................................................
+    //  input validity checks
+    if ( ( _panel_ix < 0 ) || ( _panel_ix >= OFLPPanelDataObject::s_panel_index_max ) )
+        return false;
+
+    if ( ( _item_ix < 0  ) || ( _item_ix >= OFLPPanelDataObject::s_item_index_max   ) )
+        return false;
+
+    if ( ! _editor )
+        return false;
+    //  ........................................................................
+    //  import data
+    a_data_panel_index  =   static_cast< unsigned char >( _panel_ix );
+    a_data_item_index   =   static_cast< unsigned char >( _item_ix  );
+    a_data_editor       =   _editor;
+    //  ........................................................................
+    //  now serialize
+    return p0_serialize();
+}
+//  ############################################################################
+//
+//                          OPENFILESLISTPLUGINPANELITEMDATA
+//                          OPENFILESLISTPLUGINPANELITEMINFO
+//
+//  ############################################################################
+OpenFilesListPlusPanelItemData::OpenFilesListPlusPanelItemData(
+        OpenFilesListPlusPanel    *   _panel  ,
+        EditorBase                  *   _ed     )
+            :   a_editor(_ed), a_panel(_panel)
+{
+}
+
+OpenFilesListPlusPanelItemInfo::OpenFilesListPlusPanelItemInfo(wxTreeEvent& _e)
+    :   OpenFilesListPlusPanelItemData    (NULL, NULL )   ,
+        a_is_ok                             (false      )
+{
+    OFLPPanelItemData   *   data;
+    //  ........................................................................
+    //D GWR_INF("%s", wxS("OFLPPanelItemInfo::()"));
+    //  ........................................................................
+    a_iid   =   _e.GetItem();
+    //D GWR_INF("  iid   [%p]", a_iid);
+    if ( ! a_iid.IsOk() )   goto lab_failure;
+
+    a_tree  = static_cast< wxTreeCtrl* >( _e.GetEventObject() );
+    //D GWR_INF("  tree  [%p]", a_tree);
+    if ( ! a_tree )         goto lab_failure;
+
+    //  when DnD ended, OnTreeSelChanged is called on the source ; we land
+    //  here with a valid iid but a NULL data, since the item was removed !
+    data    = static_cast< OFLPPanelItemData* >( a_tree->GetItemData(a_iid) );
+    //D GWR_INF("  data  [%p]", data);
+    if ( ! data )           goto lab_failure;
+
+    a_panel     =   data->GetPanel();
+    //D GWR_INF("  panel [%p]", a_panel);
+    if ( ! a_panel )        goto lab_failure;
+
+    a_editor    =   data->GetEditor();
+    //D GWR_INF("  editor[%p]", a_editor);
+    if ( ! a_editor )       goto lab_failure;
+
+    #ifdef  GWR_OFLP_SANITY_CHECKS                                              //  _GWR_SANITY_CHECK_
+    if ( GetPanel()->editor_index(GetEditor()) == wxNOT_FOUND )
+        goto lab_failure;
+
+    if ( GetPanel()->tree() != a_tree )
+        goto lab_failure;
+    #endif
+
+    a_is_ok     =   true;
+    return;
+    //  ........................................................................
+lab_failure:
+    //D GWR_ERR("%s", wxS("  failure"));
+    OpenFilesListPlusPanelItemData:p1_raz();
+    OpenFilesListPlusPanelItemInfo:p1_raz();
+    return;
+}
+//  ############################################################################
+//
+//                          OPENFILESLISTPLUGINPANELDROPTARGET
+//
+//  ############################################################################
+OpenFilesListPlusPanelDropTarget::        OpenFilesListPlusPanelDropTarget(wxTreeCtrl* _owner, OFLPPanel* _owner_panel)
+{
+    a_owner         =   _owner;
+    a_owner_panel   =   _owner_panel;
+    d_data_object   =   new OFLPPanelDataObject();
+
+    SetDataObject( d_data_object );
+}
+
+OpenFilesListPlusPanelDropTarget::       ~OpenFilesListPlusPanelDropTarget()
+{
+    //delete d_data_object;
+}
+
+bool OpenFilesListPlusPanelDropTarget::   OnDrop(wxCoord x, wxCoord y)
+{
+    GWR_INF("%s", _T("OFLPPanelDropTarget::OnDrop():start") );
+    return true;
+}
+
+wxDragResult
+OpenFilesListPlusPanelDropTarget::        OnData(wxCoord x, wxCoord y, wxDragResult defaultDragResult)
+{
+    wxDragResult        dres;
+
+    EditorBase      *   deditor;
+    OFLPPanel       *   dpanel  =   NULL;
+    int                 dpvix   =   0;
+    int                 diix    =   0;
+
+    int                 pvix    =   0;
+    wxTreeItemId        iid;
+    //  ........................................................................
+    //  ........................................................................
+    //  use predef wxWidgets object copy ; depending on ??? ( answer :
+    //  dropSource.DoDragDrop() ) the drag result may differ from what the drop
+    //  source has asked for
+    dres = wxDropTarget::OnData(x, y, defaultDragResult);
+
+    GWR_INF("OFLPPanelDropTarget::OnData():suggested drag result[%s] returned[%s]"  ,
+        OpenFilesListPlusPanel::stringize_drag_result(defaultDragResult).c_str()  ,
+        OpenFilesListPlusPanel::stringize_drag_result(dres).c_str()               );
+
+    if ( dres != defaultDragResult )
+    {
+        d_data_object->ClrData();
+        return dres;
+    }
+    //  ........................................................................
+    //  now insert item
+    deditor = d_data_object->GetDataEditor();                                   //  get editor from unserialized data
+    dpvix   = d_data_object->GetDataPanelIx();                                  //  ...panel visual index
+    diix    = d_data_object->GetDataItemIx();                                   //  ...item visual index
+    GWR_INF("  data:pvix[%i] iix[%i] ed[%p]\n", dpvix, diix, deditor);
+
+    #ifdef  GWR_OFLP_SANITY_CHECKS                                              //  _GWR_SANITY_CHECK_
+    dpanel  = opanel()->plugin()->panel_get(deditor);                           //  get panel from editor
+    GWR_INF("  panel:from editor[%p]", dpanel);
+
+    pvix    = opanel()->plugin()->panel_get_visual_index(dpanel);
+    //iid     = dpanel->item_find(ed);
+
+    if ( dpvix != pvix )
+    {
+        GWR_ERR("  panel visual index mismatch:[%i]", pvix);
+        return wxDragError;
+    }
+    #endif                                                                      //  _GWR_TODO_ check item index too
+
+    //  insert item
+    opanel()->editor_add(deditor);
+    opanel()->editor_select(deditor);
+
+    return dres;
+}

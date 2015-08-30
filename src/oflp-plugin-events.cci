@@ -1,0 +1,286 @@
+//  ############################################################################
+//
+//                          EDITOR EVENTS
+//
+//  ############################################################################
+/*
+void OpenFilesListPlus::OnProjectOpened   (cb_unused CodeBlocksEvent& event)
+{
+    GWR_INF("%s", _T("########## OpenFilesListPlus::OnProjectOpened() ##########\n"));
+    //  ........................................................................
+    /*
+    if (m_EditorArray.IsEmpty())
+        return;
+
+    for (size_t i = 0; i < m_EditorArray.GetCount(); ++i)
+    {
+        EditorBase* eb = m_EditorArray[i];
+        if (eb)
+        {
+            RefreshOpenFilesTree(eb);
+        }
+    }
+    m_EditorArray.Clear();
+}
+*/
+void OpenFilesListPlus::evh_editor_opened       (CodeBlocksEvent& event)
+{
+    GWR_INF("%s", _T("########## OpenFilesListPlus::OnEditorOpened() ##########\n"));
+    //  ........................................................................
+    EditorBase  *   eb  =   event.GetEditor();
+    //  ........................................................................
+    if (Manager::Get()->GetProjectManager()->IsBusy() && eb && ( panel_get(eb) == NULL) )
+    {
+        a_BulkPanel->editor_add(eb);
+    }
+    else
+    {
+        RefreshOpenFilesTree(eb);
+    }
+    /*
+    EditorBase* eb = event.GetEditor();
+    if (Manager::Get()->GetProjectManager()->IsBusy() && eb && (m_EditorArray.Index(eb) == wxNOT_FOUND))
+    {
+        m_EditorArray.Add(eb);
+    }
+    else
+    {
+        RefreshOpenFilesTree(eb);
+    }
+    */
+}
+
+void OpenFilesListPlus::evh_editor_closed       (CodeBlocksEvent& event)
+{
+    GWR_INF("%s", _T("########## OpenFilesListPlus::OnEditorClosed() ##########"));
+    RefreshOpenFilesTree(event.GetEditor(), true);
+}
+
+void OpenFilesListPlus::evh_editor_activated    (CodeBlocksEvent& event)        //  _GWR_KNO_   editors may be activated by tabs
+{
+    GWR_INF("########## OpenFilesListPlus::OnEditorActivated(%s) ##########", event.GetEditor()->GetShortName().c_str());
+    //  ........................................................................
+    //  Manager::Get()->GetLogManager()->Log(_T("OnEditorActivated: ") + event.GetEditor()->GetFilename());
+    RefreshOpenFilesTree(event.GetEditor());
+}
+
+void OpenFilesListPlus::evh_editor_deactivated  (CodeBlocksEvent& event)
+{
+//  Manager::Get()->GetLogManager()->Log(_T("OnEditorDeactivated: ") + event.GetEditor()->GetFilename());
+    RefreshOpenFilesTree(event.GetEditor());
+}
+
+void OpenFilesListPlus::evh_editor_modified     (CodeBlocksEvent& event)
+{
+    GWR_INF("%s", _T("########## OpenFilesListPlus::OnEditorModified() ##########"));
+    RefreshOpenFilesTree(event.GetEditor());
+}
+
+void OpenFilesListPlus::evh_editor_saved        (CodeBlocksEvent& event)
+{
+    GWR_INF("%s", _T("########## OpenFilesListPlus::OnEditorSaved() ##########"));
+    RefreshOpenFilesTree(event.GetEditor());
+}
+//  ############################################################################
+//
+//                          TREE ITEM EVENTS
+//
+//  ############################################################################
+void OpenFilesListPlus::evh_tree_item_activated     (wxTreeEvent& event)
+{
+    OFLPPanelItemInfo   inf( event );
+    //  ........................................................................
+    GWR_INF("%s", _T("########## OpenFilesListPlus::OnTreeItemActivated() ##########"));
+
+    if (Manager::IsAppShuttingDown())
+        return;
+
+    if ( ! inf.IsOk() )
+        return;
+
+    //  In productivity mode, activation :
+    //  - makes the corresponding editor the active editor ; since activation in
+    //  wxWidgets correspond to a double click, that editor has already been
+    //  made the active one.
+    //  - reload the file
+    if ( menu_options()->mode_productivity() )
+    {
+        //  reload the file
+        Manager::Get()->GetEditorManager()->GetBuiltinEditor(inf.GetEditor())->Reload();
+    }
+    //  In standard mode, activation :
+    //  - makes the corresponding editor the active editor
+    if ( menu_options()->mode_standard() )
+    {
+        //  active selected editor
+        Manager::Get()->GetEditorManager()->SetActiveEditor(inf.GetEditor());
+    }
+}
+
+// tree item right-clicked
+void OpenFilesListPlus::evh_tree_item_right_click   (wxTreeEvent& event)
+{
+    OFLPPanelItemInfo   inf( event );
+    //  ........................................................................
+    GWR_INF("%s", _T("########## OpenFilesListPlus::OnTreeItemRightClick() ##########"));
+
+    if (Manager::IsAppShuttingDown())
+        return;
+
+    if ( ! inf.IsOk() )
+        return;
+
+    wxPoint pt = inf.GetTree()->ClientToScreen(event.GetPoint());
+    inf.GetEditor()->DisplayContextMenu(pt,mtOpenFilesList);
+}
+
+// tree sel changed
+void OpenFilesListPlus::evh_tree_sel_changed        (wxTreeEvent &event)
+{
+    GWR_INF("%s", _T("########## OpenFilesListPlus::OnTreeSelChanged() ##########"));
+    //  ........................................................................
+    OFLPPanelItemInfo   inf( event );
+    //  ........................................................................
+
+    if(Manager::IsAppShuttingDown())
+        return;
+
+    if ( ! inf.IsOk() )
+        return;
+
+    //  in productivity mode, selecting a file makes the corresponding editor
+    //  the active editor
+    if ( menu_options()->mode_productivity() )
+    {
+        //  active selected editor
+        Manager::Get()->GetEditorManager()->SetActiveEditor(inf.GetEditor());
+    }
+
+    //  deselect any other wxTreeCtrl's selected item
+    panels_unselect(inf.GetPanel());
+}
+//  ############################################################################
+//
+//                          PANEL HEADER EVENTS
+//
+//  ############################################################################
+void    OpenFilesListPlus::   evh_panel_header_button_clicked_add (wxCommandEvent& _e)
+{
+    panel_add(wxString::FromUTF8("panel"), false);
+}
+
+void    OpenFilesListPlus::   evh_panel_header_button_clicked_del (wxCommandEvent& _e)
+{
+    //  fasten your seatbelt for the cast
+    //  event -> wxObject -> wxButton -> GetClientData() -> OFLPPanel*
+    OFLPPanel   *   panel   = static_cast< OFLPPanel* >
+    (
+        ( static_cast< wxButton* >( _e.GetEventObject() ) )->GetClientData()
+    );
+    //  ........................................................................
+    GWR_INF("OFLP::evh_panel_header_button_del_CLICKED():EventObject[%p] ClientData()[%p]",
+        _e.GetEventObject(), panel);
+    //  ........................................................................
+    panel_del(panel);
+}
+
+void    OpenFilesListPlus::   evh_panel_header_button_clicked_mm  (wxCommandEvent& _e)
+{
+    //  fasten your seatbelt for the cast
+    //  event -> wxObject -> wxButton -> GetClientData() -> OFLPPanel*
+    OFLPPanel   *   panel   = static_cast< OFLPPanel* >
+    (
+        ( static_cast< wxButton* >( _e.GetEventObject() ) )->GetClientData()
+    );
+    wxSizerItem *   sitem   = dw_MainSizer->GetItem(panel);
+    //  ........................................................................
+    GWR_INF("OFLP::evh_panel_header_button_sh_CLICKED():EventObject[%p] ClientData()[%p] SizerItem[%p]",
+        _e.GetEventObject(), panel, sitem);
+    //  ........................................................................
+    #ifdef  GWR_OFLP_SANITY_CHECKS                                              //  _GWR_SANITY_CHECK_
+    if ( ! sitem )
+    {
+        GWR_ERR("%s", wxS("  NULL wxSizerItem"));
+        return;
+    }
+    #endif
+    //  ........................................................................
+    if ( panel->is_minimized() )
+    {
+        GWR_INF("%s", wxS("  maximizing"));
+        panel->maximize();
+        sitem->SetProportion(1);
+    }
+    else
+    {
+        GWR_INF("%s", wxS("  minimizing"));
+        panel->minimize();
+        sitem->SetProportion(0);
+    }
+    dw_MainSizer->Layout();
+}
+
+void    OpenFilesListPlus::   evh_panel_header_button_clicked_up  (wxCommandEvent& _e)
+{
+    //  fasten your seatbelt for the cast
+    //  event -> wxObject -> wxButton -> GetClientData() -> OFLPPanel*
+    OFLPPanel   *   panel = static_cast< OFLPPanel* >
+    (
+        ( static_cast< wxButton* >( _e.GetEventObject() ) )->GetClientData()
+    );
+    //  ........................................................................
+    GWR_INF("OFLP::evh_panel_header_button_up_CLICKED():EventObject[%p] ClientData()[%p]",
+        _e.GetEventObject(), panel);
+
+    panel_move_up(panel);
+}
+
+void    OpenFilesListPlus::   evh_panel_header_button_clicked_down(wxCommandEvent& _e)
+{
+    //  fasten your seatbelt for the cast
+    //  event -> wxObject -> wxButton -> GetClientData() -> OFLPPanel*
+    OFLPPanel   *   panel = static_cast< OFLPPanel* >
+    (
+        ( static_cast< wxButton* >( _e.GetEventObject() ) )->GetClientData()
+    );
+    GWR_INF("OFLP::evh_panel_header_button_dn_CLICKED():EventObject[%p] ClientData()[%p]",
+        _e.GetEventObject(), panel);
+
+    panel_move_dn(panel);
+}
+
+void    OpenFilesListPlus::   evh_panel_header_button_clicked_opt (wxCommandEvent& _e)
+{
+    //  this handler is connect to a wxButton, so
+    //  - _e.GetEventObject() is not NULL
+    //  - _e.GetEventObject() can be casted to a wxWindow
+    static_cast< wxWindow* >( _e.GetEventObject() )->PopupMenu(menu_options());
+}
+//  ############################################################################
+//
+//                          MENU EVENTS
+//
+//  ############################################################################
+void    OpenFilesListPlus::   evh_menu_option_checked             (wxCommandEvent& _e)
+{
+    bool    lc  =   menu_options()->log_console();
+    bool    lw  =   menu_options()->log_window();
+
+    GWR_INF( "%s", wxS("EVENT MENU") );
+
+    menu_options()->evh_menu_option_checked(_e);                                //  process event
+
+    if ( ( ! lw ) &&     menu_options()->log_window()   )
+    {
+        GWR_INF( "%s", wxS("+log window") );
+        earlgreycb::A_log_window =   true;
+        earlgreycb::Log_window_show( Manager::Get()->GetAppWindow() );
+    }
+    if ( (   lw ) && ( ! menu_options()->log_window() ) )
+    {
+        GWR_INF( "%s", wxS("-log window") );
+        earlgreycb::A_log_window =   false;
+        earlgreycb::Log_window_hide();
+    }
+}
+
