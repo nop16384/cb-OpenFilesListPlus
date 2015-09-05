@@ -2,88 +2,14 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="default" />
-	<File name="src/manifest.xml" open="1" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/manifest.xml" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="251" topLine="0" />
+			<Cursor1 position="293" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src/oflp.xrc" open="0" top="0" tabpos="16" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/todo.h" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="190" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src/oflp-common.hh" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="581" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src/oflp-plugin-menus.hhi" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2654" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="6" />
-			<Collapse line="10" />
-			<Collapse line="43" />
-			<Collapse line="74" />
-			<Collapse line="90" />
-			<Collapse line="101" />
-		</Folding>
-	</File>
-	<File name="src/oflp-plugin-gfx.hhi" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2291" topLine="1" />
-		</Cursor>
-		<Folding>
-			<Collapse line="21" />
-			<Collapse line="25" />
-			<Collapse line="31" />
-			<Collapse line="36" />
-			<Collapse line="46" />
-			<Collapse line="56" />
-			<Collapse line="92" />
-			<Collapse line="110" />
-		</Folding>
-	</File>
-	<File name="src/oflp-plugin-events.cci" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="10025" topLine="45" />
-		</Cursor>
-		<Folding>
-			<Collapse line="264" />
-			<Collapse line="273" />
-			<Collapse line="279" />
-		</Folding>
-	</File>
-	<File name="src/oflp-plugin-panels.cci" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1824" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="6" />
-			<Collapse line="15" />
-			<Collapse line="56" />
-			<Collapse line="73" />
-			<Collapse line="127" />
-			<Collapse line="131" />
-			<Collapse line="146" />
-			<Collapse line="154" />
-			<Collapse line="163" />
-			<Collapse line="165" />
-		</Folding>
-	</File>
-	<File name="src/oflp-panel.hh" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="0" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="20" />
-			<Collapse line="96" />
-		</Folding>
-	</File>
-	<File name="src/oflp-panel-utils.cci" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="8859" topLine="23" />
+			<Cursor1 position="1177" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src/oflp-plugin-panels.hhi" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -91,105 +17,181 @@
 			<Cursor1 position="120" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src/oflp-panel-header.hhi" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-plugin.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="847" topLine="0" />
+			<Cursor1 position="11571" topLine="234" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-panel.hh" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2652" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="20" />
+			<Collapse line="98" />
+		</Folding>
+	</File>
+	<File name="src/oflp-panel-utils.hhi" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3408" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="35" />
+			<Collapse line="61" />
+			<Collapse line="84" />
+			<Collapse line="106" />
+		</Folding>
+	</File>
+	<File name="src/oflp-plugin-menus.hhi" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3995" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-panel-header.cci" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="394" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-plugin.hh" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6850" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-plugin-events.hhi" open="0" top="0" tabpos="17" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1299" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/earlgrey-cb.log.hh" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="181" topLine="12" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-common.hh" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="581" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-panel.cc" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="14223" topLine="73" />
+		</Cursor>
+		<Folding>
+			<Collapse line="35" />
+			<Collapse line="39" />
+			<Collapse line="63" />
+			<Collapse line="98" />
+			<Collapse line="109" />
+			<Collapse line="122" />
+			<Collapse line="127" />
+			<Collapse line="137" />
+			<Collapse line="148" />
+			<Collapse line="162" />
+			<Collapse line="166" />
+			<Collapse line="178" />
+			<Collapse line="211" />
+			<Collapse line="254" />
+			<Collapse line="265" />
+			<Collapse line="269" />
+			<Collapse line="277" />
+			<Collapse line="293" />
+			<Collapse line="305" />
+			<Collapse line="319" />
+			<Collapse line="323" />
+			<Collapse line="334" />
+			<Collapse line="338" />
+			<Collapse line="372" />
+			<Collapse line="377" />
+			<Collapse line="382" />
+			<Collapse line="387" />
+			<Collapse line="396" />
+			<Collapse line="407" />
+			<Collapse line="417" />
+			<Collapse line="433" />
+			<Collapse line="442" />
+			<Collapse line="447" />
+			<Collapse line="459" />
+			<Collapse line="468" />
+			<Collapse line="476" />
+			<Collapse line="481" />
+			<Collapse line="489" />
+			<Collapse line="509" />
+			<Collapse line="536" />
+		</Folding>
+	</File>
+	<File name="src/oflp-plugin-gfx.hhi" open="0" top="0" tabpos="16" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="982" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-panel-header.hhi" open="0" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="995" topLine="0" />
 		</Cursor>
 		<Folding>
 			<Collapse line="9" />
 		</Folding>
 	</File>
-	<File name="src/oflp-plugin-events.hhi" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp.xrc" open="0" top="0" tabpos="16" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1189" topLine="0" />
+			<Cursor1 position="190" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src/oflp-plugin.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/post-build.bash" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="613" topLine="0" />
+			<Cursor1 position="879" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-plugin-events.cci" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5511" topLine="40" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-panel-utils.cci" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="8301" topLine="18" />
 		</Cursor>
 		<Folding>
-			<Collapse line="27" />
-			<Collapse line="42" />
-			<Collapse line="47" />
-			<Collapse line="54" />
-			<Collapse line="126" />
-			<Collapse line="143" />
-			<Collapse line="148" />
-			<Collapse line="157" />
-			<Collapse line="172" />
-			<Collapse line="184" />
-			<Collapse line="193" />
-			<Collapse line="205" />
-			<Collapse line="212" />
-			<Collapse line="214" />
-			<Collapse line="233" />
-			<Collapse line="253" />
-			<Collapse line="272" />
-		</Folding>
-	</File>
-	<File name="src/oflp-panel-utils.hhi" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1196" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="8" />
-			<Collapse line="36" />
-			<Collapse line="62" />
-			<Collapse line="84" />
-			<Collapse line="106" />
-		</Folding>
-	</File>
-	<File name="src/oflp-plugin.hh" open="1" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="0" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="24" />
-			<Collapse line="134" />
-		</Folding>
-	</File>
-	<File name="src/todo.h" open="1" top="1" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="556" topLine="69" />
-		</Cursor>
-	</File>
-	<File name="src/earlgrey-cb.log.cc" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1392" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="64" />
-			<Collapse line="70" />
-		</Folding>
-	</File>
-	<File name="src/oflp-panel-header.cci" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2964" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src/earlgrey-cb.log.hh" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="517" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="7" />
-		</Folding>
-	</File>
-	<File name="src/oflp-panel.cc" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3816" topLine="88" />
-		</Cursor>
-		<Folding>
-			<Collapse line="99" />
-			<Collapse line="104" />
-			<Collapse line="113" />
-			<Collapse line="124" />
+			<Collapse line="16" />
+			<Collapse line="26" />
+			<Collapse line="45" />
+			<Collapse line="51" />
+			<Collapse line="61" />
+			<Collapse line="69" />
+			<Collapse line="77" />
+			<Collapse line="85" />
+			<Collapse line="101" />
+			<Collapse line="132" />
 			<Collapse line="138" />
-			<Collapse line="142" />
-			<Collapse line="154" />
 			<Collapse line="188" />
+			<Collapse line="197" />
+			<Collapse line="202" />
 		</Folding>
 	</File>
-	<EditorTabsLayout layout="05c52be055e34469003e2b6e00000002=0;cb-oflp-plugin:src/earlgrey-cb.log.hh,1;cb-oflp-plugin:src/earlgrey-cb.log.cc,2;cb-oflp-plugin:src/oflp-panel-utils.cci,3;cb-oflp-plugin:src/oflp-panel-utils.hhi,4;cb-oflp-plugin:src/oflp-panel-header.cci,5;cb-oflp-plugin:src/oflp-plugin-menus.hhi,6;cb-oflp-plugin:src/oflp-plugin-panels.cci,7;cb-oflp-plugin:src/oflp-plugin.cpp,8;cb-oflp-plugin:src/oflp-plugin-events.cci,9;cb-oflp-plugin:src/oflp-panel.cc,10;cb-oflp-plugin:src/oflp-panel.hh,11;cb-oflp-plugin:src/oflp-plugin.hh,*12;cb-oflp-plugin:src/todo.h,13;cb-oflp-plugin:src/manifest.xml@layout2|name=dummy;caption=;state=2098174;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=495;besth=317;minw=495;minh=317;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=05c52be055e34469003e2b6e00000002;caption=;state=2098172;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=200;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=202|" />
+	<File name="src/earlgrey-cb.log.cc" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="177" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="9" />
+			<Collapse line="17" />
+			<Collapse line="50" />
+			<Collapse line="95" />
+			<Collapse line="100" />
+			<Collapse line="105" />
+			<Collapse line="110" />
+			<Collapse line="115" />
+			<Collapse line="124" />
+			<Collapse line="129" />
+			<Collapse line="140" />
+			<Collapse line="151" />
+			<Collapse line="156" />
+		</Folding>
+	</File>
+	<File name="src/oflp-plugin-panels.cci" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6222" topLine="0" />
+		</Cursor>
+	</File>
+	<EditorTabsLayout layout="061c97b055eb04e70033a9ae00000002=*0;cb-oflp-plugin:src/oflp-plugin.cpp,1;cb-oflp-plugin:src/oflp-plugin-panels.cci,2;cb-oflp-plugin:src/oflp-plugin-events.cci,3;cb-oflp-plugin:src/oflp-panel.cc,4;cb-oflp-plugin:src/oflp-panel-utils.cci,5;cb-oflp-plugin:src/oflp-panel-header.cci,6;cb-oflp-plugin:src/earlgrey-cb.log.cc,7;cb-oflp-plugin:src/earlgrey-cb.log.hh,8;cb-oflp-plugin:src/post-build.bash,9;cb-oflp-plugin:src/oflp-panel.hh@layout2|name=dummy;caption=;state=2098174;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=543;besth=345;minw=543;minh=345;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=061c97b055eb04e70033a9ae00000002;caption=;state=2098172;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=200;besth=200;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=202|" />
 </CodeBlocks_layout_file>

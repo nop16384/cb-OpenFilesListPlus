@@ -17,10 +17,12 @@
 #include    "oflp-plugin.hh"
 //  ............................................................................
 #define GWR_OFLP_SANITY_CHECKS
-#define GWR_LOG(FORMAT, ...)    GWRCB_LOG("log:" FORMAT, __VA_ARGS__);
-#define GWR_INF(FORMAT, ...)    GWRCB_INF("inf:" FORMAT, __VA_ARGS__);
-#define GWR_WNG(FORMAT, ...)    GWRCB_WNG("Wng:" FORMAT, __VA_ARGS__);
-#define GWR_ERR(FORMAT, ...)    GWRCB_ERR("ERR:" FORMAT, __VA_ARGS__);
+#define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
+#define GWR_TKI(FORMAT, ...)    GWRCB_TKI(FORMAT, __VA_ARGS__);
+#define GWR_TKE(FORMAT, ...)    GWRCB_TKE(FORMAT, __VA_ARGS__);
+#define GWR_INF(FORMAT, ...)    GWRCB_INF(FORMAT, __VA_ARGS__);
+#define GWR_WNG(FORMAT, ...)    GWRCB_WNG(FORMAT, __VA_ARGS__);
+#define GWR_ERR(FORMAT, ...)    GWRCB_ERR(FORMAT, __VA_ARGS__);
 //  ############################################################################
 #include    "oflp-panel-header.cci"
 #include    "oflp-panel-utils.cci"
@@ -60,40 +62,61 @@ OpenFilesListPlusPanel::      stringize_drag_result(wxDragResult _dres)
 
 void OpenFilesListPlusPanel:: OnDragInit  (wxTreeEvent& _e)
 {
+    wxDropSource            dropSource( d_tree);
+
     wxDragResult            dres;
     OFLPPanelDataObject     dobj;
-    wxTreeItemId            iid     =   _e.GetItem();
+    wxTreeItemId            iid     =   _e.GetItem();                           //  _GWR_REM_ always valid ( cf wxdoc )
     wxTreeItemData      *   idata   =   d_tree->GetItemData(iid);
     OFLPPanelItemData   *   pidata  =   NULL;
     EditorBase          *   editor  =   NULL;
+
+    OFLPPanel           *   dpanel  =   NULL;
     //  ........................................................................
-    GWR_INF("%s", _T("OFLPPanel::OnDragInit():start") );
-    GWR_INF("OFLPPanel::OnDragInit():object format count [%i]", GWR_SIZE_T_TO_INT( dobj.GetFormatCount()) );
+    earlgreycb::Log_function_enter(wxS("OFLPPanel::OnDragInit()"));
+    //  ........................................................................
+    GWR_INF("OnDragInit():object format count [%i]", GWR_SIZE_T_TO_INT( dobj.GetFormatCount()) );
     //  ........................................................................
     //  You can init a drag anywhere inside the wxTreeCtrl, even where there is
     //  nothing ! In this case, iid IsOk() ( why ??? ) , but idata is NULL
-    if ( ! iid.IsOk() )
-        return;
+    if ( ! iid.IsOk() )                                                         //  _GWR_UNUSEFUL_ should never happen
+        goto lab_return;
+
     if ( ! idata )
-        return;
+        goto lab_return;
+
     pidata  =   static_cast< OFLPPanelItemData* >( idata );
     editor  =   pidata->GetEditor();
     //  ........................................................................
     //  prepare drag source
     dobj.SetData( plugin()->panel_get_visual_index(this) , 0xab, editor );      //  _GWR_TODO_ iid
-    wxDropSource        dropSource(dobj, d_tree);
+    //wxDropSource        dropSource(dobj, d_tree);
+    dropSource.SetData(dobj);
     //  ........................................................................
     // do DnD
     dres = dropSource.DoDragDrop( wxDrag_DefaultMove );
     if ( dres != wxDragMove )
     {
-        GWR_ERR("OFLPPanel::OnDragInit():res[%s], expected wxDragMove", OpenFilesListPlusPanel::stringize_drag_result(dres).c_str() );
-        return;
+        GWR_ERR("           OnDragInit():res[%s], expected wxDragMove", OpenFilesListPlusPanel::stringize_drag_result(dres).c_str() );
+        goto lab_return;
     }
     //  ........................................................................
     //  delete our item ; this will cause a SELECTION_CHANGE event with a       //  _GWR_TECH_
     //  NULL data
     editor_del( static_cast< OFLPPanelItemData* >( idata )->GetEditor() );
+
+    dpanel  =   OpenFilesListPlus::Instance()->a_dnd_destination_panel;
+    if ( ! dpanel )
+    {
+        GWR_TKE("%s", wxS("OnDragInit():NULL destination panel"));
+        goto lab_return;
+    }
+    dpanel->editor_add(editor);
+    dpanel->editor_select(editor);
+    //  ........................................................................
+lab_return:
+    earlgreycb::Log_function_exit();
+    return;
 }
 
 void OpenFilesListPlusPanel:: OnDragEnd   (wxTreeEvent& _e)
@@ -104,9 +127,10 @@ void OpenFilesListPlusPanel:: OnDragEnd   (wxTreeEvent& _e)
 void OpenFilesListPlusPanel:: p0_allow_kill_focus_event           (bool _b)
 {
     //  When user enters a new panel name, TEXT_ENTER _AND_ KILL_FOCUS are
-    //  called ( in this order, but whatever, the two are called ). Thats why
-    //  we need some kind of flag, avoiding to delete the same object twice
-    //  in p0_title_ctrl_replace()
+    //  called ( in this order, but whatever, the two are called ).
+    //  Thats why we need some kind of flag, avoiding to delete the same object
+    //  a second time when evh_title_dynamic_KILL_FOCUS handler
+    //  calls p0_title_ctrl_replace()
     a_allow_kill_focus_event = _b;
 }
 
@@ -174,7 +198,6 @@ void OpenFilesListPlusPanel:: p0_create_tree()
 
     d_drop_target   =   new OpenFilesListPlusPanelDropTarget(d_tree, this);
     d_tree->SetDropTarget(d_drop_target);
-
 }
 //  ============================================================================
 OpenFilesListPlusPanel::OpenFilesListPlusPanel(
@@ -230,6 +253,13 @@ OpenFilesListPlusPanel::OpenFilesListPlusPanel(
 
 OpenFilesListPlusPanel::~OpenFilesListPlusPanel()
 {
+    //delete  dw_header;
+
+    //delete  d_tree;
+
+    //delete  d_drop_target;
+
+    //delete  dw_sizer;
 }
 //  ============================================================================
 void            OpenFilesListPlusPanel::  reset()
@@ -295,6 +325,8 @@ bool            OpenFilesListPlusPanel::  item_del            (EditorBase* _edit
         return false;
     }
 
+    //  delete d_tree->GetItemData( iid );                                      //  wxTreeCtrl does it by itself
+
     d_tree->Delete(iid);
     return true;
 }
@@ -315,6 +347,28 @@ bool            OpenFilesListPlusPanel::  item_select         (EditorBase* _edit
     return true;
 }
 
+bool            OpenFilesListPlusPanel::  item_selected       (EditorBase* _editor)
+{
+    wxTreeItemId    iid = d_tree->GetSelection();
+
+    if ( ! iid.IsOk() )
+    {
+        return false;
+    }
+
+    OFLPPanelItemData   *   idata = static_cast< OFLPPanelItemData* >( d_tree->GetItemData(iid) );
+
+    if ( ! idata )
+    {
+        return false;
+    }
+
+    if ( idata->GetEditor() == _editor )
+        return true;
+
+    return false;
+}
+
 void            OpenFilesListPlusPanel::  items_deselect      ()
 {
     d_tree->UnselectAll();
@@ -330,32 +384,30 @@ int             OpenFilesListPlusPanel::  editor_index    (EditorBase* _editor)
     return a_editors_array.Index(_editor);
 }
 
-wxTreeItemId    OpenFilesListPlusPanel::  editor_add      (EditorBase* _editor)
+void            OpenFilesListPlusPanel::  editor_add      (EditorBase* _editor)
 {
     wxTreeItemId    iid;
     int             mod =   OpenFilesListPlus::Instance()->gfx()->icon(_editor);
     //  ........................................................................
-    GWR_INF("%s", _T("OFLPPanel::editor_add()"));
+    GWR_TKI("OFLPPanel::editor_add():[%p][%p]", this, _editor);
     //  ........................................................................
     iid = item_append(_editor);
 
     if ( ! iid.IsOk() )
     {
-        return iid;
+        return;
     }
 
     a_editors_array.Add(_editor);
 
     //d_tree->SetItemImage(iid, mod, wxTreeItemIcon_Normal);
     //d_tree->SetItemImage(iid, mod, wxTreeItemIcon_Selected);
-
-    return iid;
 }
 
 void            OpenFilesListPlusPanel::  editor_del      (EditorBase* _editor)
 {
     //  ........................................................................
-    GWR_INF("%s", _T("OFLPPanel::editor_del()"));
+    GWR_TKI("OFLPPanel::editor_del():[%p][%p]", this, _editor);
     //  ........................................................................
     item_del(_editor);
 
@@ -365,9 +417,17 @@ void            OpenFilesListPlusPanel::  editor_del      (EditorBase* _editor)
 void            OpenFilesListPlusPanel::  editor_select   (EditorBase* _editor)
 {
     //  ........................................................................
-    GWR_INF("%s", _T("OFLPPanel::editor_select()"));
+    GWR_TKI("OFLPPanel::editor_select():[%p][%p]", this, _editor);
     //  ........................................................................
     item_select(_editor);
+}
+
+bool            OpenFilesListPlusPanel::  editor_selected (EditorBase* _editor)
+{
+    //  ........................................................................
+    GWR_INF("%s", _T("OFLPPanel::editor_selected()"));
+    //  ........................................................................
+    return item_selected(_editor);
 }
 
 void            OpenFilesListPlusPanel::  editor_sync     (EditorBase* _editor)
@@ -389,17 +449,17 @@ void            OpenFilesListPlusPanel::  editor_sync     (EditorBase* _editor)
         d_tree->SetItemImage( iid, mod , wxTreeItemIcon_Normal );
         d_tree->SetItemImage( iid, mod , wxTreeItemIcon_Selected );
     }
-    if ( d_tree->GetItemText(iid)   != _editor->GetShortName() )
-    {
-        d_tree->SetItemText( iid, _editor->GetShortName() );
-        d_tree->SortChildren( d_tree->GetRootItem() );
-    }
+    ////if ( d_tree->GetItemText(iid)   != _editor->GetShortName() )
+    ////{
+        ////d_tree->SetItemText( iid, _editor->GetShortName() );
+        ////d_tree->SortChildren( d_tree->GetRootItem() );
+    ////}
 }
 
 void            OpenFilesListPlusPanel::  editors_del     ()
 {
     //  ........................................................................
-    GWR_INF("%s", _T("OFLPPanel::editors_del()"));
+    GWR_INF("OFLPPanel::editors_del([%p])", this);
     //  ........................................................................
     a_editors_array.Clear();
     items_del();
@@ -408,7 +468,7 @@ void            OpenFilesListPlusPanel::  editors_del     ()
 void            OpenFilesListPlusPanel::  editors_deselect()
 {
     //  ........................................................................
-    GWR_INF("%s", _T("OFLPPanel::editors_deselect()"));
+    GWR_INF("OFLPPanel::editors_deselect([%p])", this);
     //  ........................................................................
     items_deselect();
 }

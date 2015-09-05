@@ -45,7 +45,6 @@ class OpenFilesListPlusPanelHeader        : public wxPanel
 
     //  ------------------------------------------------------------------------
   public:
-    OpenFilesListPlusPanelHeader();
     OpenFilesListPlusPanelHeader(OFLPPanel* _parent, wxString _title);
     virtual ~OpenFilesListPlusPanelHeader();
 };

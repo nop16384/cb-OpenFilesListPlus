@@ -2,8 +2,11 @@
 #define __GWR_CB_LOG_HH__
 //  ............................................................................
 #include    <stdio.h>
-#include    <wx/log.h>
+
+#include    <wx/string.h>
 //  ............................................................................
+class   wxWindow;
+
 namespace   earlgreycb
 {
 
@@ -12,14 +15,27 @@ extern  bool    A_log_window;
 //  ............................................................................
 extern  void    Log_console     (wxString&);
 extern  void    Log_window      (wxString&);
-extern  void    Log_window_show (wxWindow*);
-extern  void    Log_window_hide ();
+extern  void    Log_window_open (wxWindow*);
+extern  void    Log_window_close();
+
+extern          void            Log_spc_inc();
+extern          void            Log_spc_dec();
+extern  const   wxChar      *   Log_spc_wxc();
+
+extern          void            Log_function_start  (const wxChar*);
+extern          void            Log_function_enter  (const wxChar*);
+extern          void            Log_function_exit   ();
 //  ............................................................................
 #define GWR_SIZE_T_TO_INT(V) ( static_cast< int >( V ) )
 //  ............................................................................
-#define     GWRCB_LOG(FORMAT, ...)                                              \
+#define     GWRCB_LOG(WXFORMAT, ...)                                            \
 {                                                                               \
-    wxString tmp = wxString::Format( wxString::FromUTF8(FORMAT), __VA_ARGS__ ); \
+    wxString tmp =                                                              \
+        wxString::Format(                                                       \
+            WXFORMAT                    ,                                       \
+            earlgreycb::Log_spc_wxc()   ,                                       \
+            __VA_ARGS__                 );                                      \
+                                                                                \
     if ( earlgreycb::A_log_console )                                            \
     {                                                                           \
         earlgreycb::Log_console  ( tmp );                                       \
@@ -30,12 +46,13 @@ extern  void    Log_window_hide ();
     }                                                                           \
 }
 //  ............................................................................
-#define GWRCB_TKI(FORMAT, ...)    GWRCB_LOG("tki:" FORMAT, __VA_ARGS__);
-#define GWRCB_TKW(FORMAT, ...)    GWRCB_LOG("tkw:" FORMAT, __VA_ARGS__);
-#define GWRCB_TKE(FORMAT, ...)    GWRCB_LOG("TKE:" FORMAT, __VA_ARGS__);
-#define GWRCB_INF(FORMAT, ...)    GWRCB_LOG("inf:" FORMAT, __VA_ARGS__);
-#define GWRCB_WNG(FORMAT, ...)    GWRCB_LOG("wng:" FORMAT, __VA_ARGS__);
-#define GWRCB_ERR(FORMAT, ...)    GWRCB_LOG("ERR:" FORMAT, __VA_ARGS__);
+#define GWRCB_TCS(FORMAT, ...)      GWRCB_LOG( wxS("%s"        FORMAT), __VA_ARGS__);
+#define GWRCB_TKI(FORMAT, ...)      GWRCB_LOG( wxS("%s" "tki:" FORMAT), __VA_ARGS__);
+#define GWRCB_TKW(FORMAT, ...)      GWRCB_LOG( wxS("%s" "tkw:" FORMAT), __VA_ARGS__);
+#define GWRCB_TKE(FORMAT, ...)      GWRCB_LOG( wxS("%s" "TKE:" FORMAT), __VA_ARGS__);
+#define GWRCB_INF(FORMAT, ...)      GWRCB_LOG( wxS("%s" "inf:" FORMAT), __VA_ARGS__);
+#define GWRCB_WNG(FORMAT, ...)      GWRCB_LOG( wxS("%s" "wng:" FORMAT), __VA_ARGS__);
+#define GWRCB_ERR(FORMAT, ...)      GWRCB_LOG( wxS("%s" "ERR:" FORMAT), __VA_ARGS__);
 
 }
 

@@ -127,14 +127,14 @@ bool        OFLPPanelDataObject::SetData        (int _panel_ix, int _item_ix, Ed
 //
 //  ############################################################################
 OpenFilesListPlusPanelItemData::OpenFilesListPlusPanelItemData(
-        OpenFilesListPlusPanel    *   _panel  ,
+        OpenFilesListPlusPanel      *   _panel  ,
         EditorBase                  *   _ed     )
             :   a_editor(_ed), a_panel(_panel)
 {
 }
 
 OpenFilesListPlusPanelItemInfo::OpenFilesListPlusPanelItemInfo(wxTreeEvent& _e)
-    :   OpenFilesListPlusPanelItemData    (NULL, NULL )   ,
+    :   OpenFilesListPlusPanelItemData      (NULL, NULL )   ,
         a_is_ok                             (false      )
 {
     OFLPPanelItemData   *   data;
@@ -210,53 +210,62 @@ OpenFilesListPlusPanelDropTarget::        OnData(wxCoord x, wxCoord y, wxDragRes
 {
     wxDragResult        dres;
 
-    EditorBase      *   deditor;
-    OFLPPanel       *   dpanel  =   NULL;
-    int                 dpvix   =   0;
-    int                 diix    =   0;
+    EditorBase      *   editor;
+    OFLPPanel       *   spanel  =   NULL;
+    int                 spvix   =   0;
+    int                 siix    =   0;
 
-    int                 pvix    =   0;
-    wxTreeItemId        iid;
+    OFLPPanel       *   cpanel  =   NULL;
+    int                 cpvix   =   0;
+    int                 ciix    =   0;
+    wxTreeItemId        ciid;
     //  ........................................................................
+    earlgreycb::Log_function_enter(wxS("OFLPPanelDropTarget::OnData()"));
     //  ........................................................................
+    //  reset destination panel for the end of OnDragInit()
+    OpenFilesListPlus::Instance()->dnd_dst_panel_set(NULL);
+
     //  use predef wxWidgets object copy ; depending on ??? ( answer :
     //  dropSource.DoDragDrop() ) the drag result may differ from what the drop
     //  source has asked for
     dres = wxDropTarget::OnData(x, y, defaultDragResult);
 
-    GWR_INF("OFLPPanelDropTarget::OnData():suggested drag result[%s] returned[%s]"  ,
+    GWR_TKI("OnData():suggested drag result[%s] returned[%s]"  ,
         OpenFilesListPlusPanel::stringize_drag_result(defaultDragResult).c_str()  ,
         OpenFilesListPlusPanel::stringize_drag_result(dres).c_str()               );
 
     if ( dres != defaultDragResult )
     {
         d_data_object->ClrData();
-        return dres;
+        goto lab_return;
     }
     //  ........................................................................
     //  now insert item
-    deditor = d_data_object->GetDataEditor();                                   //  get editor from unserialized data
-    dpvix   = d_data_object->GetDataPanelIx();                                  //  ...panel visual index
-    diix    = d_data_object->GetDataItemIx();                                   //  ...item visual index
-    GWR_INF("  data:pvix[%i] iix[%i] ed[%p]\n", dpvix, diix, deditor);
+    editor  = d_data_object->GetDataEditor();                                   //  get editor from unserialized data
+    spvix   = d_data_object->GetDataPanelIx();                                  //  ...src panel visual index
+    siix    = d_data_object->GetDataItemIx();                                   //  ...src item visual index
+    GWR_INF("  data:spvix[%i] siix[%i] ed[%p]\n", spvix, siix, editor);
 
     #ifdef  GWR_OFLP_SANITY_CHECKS                                              //  _GWR_SANITY_CHECK_
-    dpanel  = opanel()->plugin()->panel_get(deditor);                           //  get panel from editor
-    GWR_INF("  panel:from editor[%p]", dpanel);
+    cpanel  = OpenFilesListPlus::Instance()->panel_get(editor);                 //  get src panel from editor
+    GWR_INF("  panel:from editor[%p]", cpanel);
 
-    pvix    = opanel()->plugin()->panel_get_visual_index(dpanel);
+    cpvix   = OpenFilesListPlus::Instance()->panel_get_visual_index(cpanel);
     //iid     = dpanel->item_find(ed);
 
-    if ( dpvix != pvix )
+    GWR_TKI("  check:cpvix[%i] ciix[%i]", cpvix, ciix);
+
+    if ( cpvix != spvix )
     {
-        GWR_ERR("  panel visual index mismatch:[%i]", pvix);
-        return wxDragError;
+        GWR_ERR("%s", wxS("  check:panel visual index mismatch") );
+        dres = wxDragError;
+        goto lab_return;
     }
     #endif                                                                      //  _GWR_TODO_ check item index too
 
-    //  insert item
-    opanel()->editor_add(deditor);
-    opanel()->editor_select(deditor);
-
+    OpenFilesListPlus::Instance()->dnd_dst_panel_set( opanel() );
+    //  ........................................................................
+lab_return:
+    earlgreycb::Log_function_exit();
     return dres;
 }

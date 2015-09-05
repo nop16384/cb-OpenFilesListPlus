@@ -22,7 +22,6 @@ class OpenFilesListPlusPanelItemData      : public wxTreeItemData
   public:
     EditorBase                  *   GetEditor() const   { return a_editor;  }
     OpenFilesListPlusPanel      *   GetPanel()  const   { return a_panel;   }
-
 };
 /// ****************************************************************************
 //! \class  OpenFilesListPlusPanelItemInfo
@@ -73,6 +72,7 @@ class OFLPPanelDataObject                   : public wxDataObjectSimple
     char    a_data[s_capacity];
     size_t  a_data_size;                                                        //! a_data_size = 0 <=> no data stored in object
 
+  public:
     //  ( wxWidgets would say ) "formatted" data for OFLPPanel
     unsigned    char    a_data_panel_index;                                     //! formatted OFLPPanel index
     unsigned    char    a_data_item_index;                                      //! formatted item index in above OFLPPanel

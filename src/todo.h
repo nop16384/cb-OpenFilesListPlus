@@ -73,6 +73,7 @@
 2015.08.??  Done, installed in the tree
 //  ============================================================================
 (009)
+2015.09.02  - resizing the log window causes a cbEventEditorActivated
 //  ============================================================================
 (010)
 2015.08.22  done
@@ -110,3 +111,4 @@
             * wxXmlResource::Get()->Load( symbolic name );
 //  ============================================================================
 (021)
+2015.09.01  Done : by replacing the wxLog...stuff by a wxFrame + wxTextCtrl

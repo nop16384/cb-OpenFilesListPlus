@@ -50,6 +50,7 @@ class OpenFilesListPlusPanel              : public wxPanel
     wxTreeItemId            item_find           (EditorBase*);
     bool                    item_del            (EditorBase*);
     bool                    item_select         (EditorBase*);
+    bool                    item_selected       (EditorBase*);
 
     void                    items_deselect      ();
     void                    items_del           ();
@@ -58,9 +59,10 @@ class OpenFilesListPlusPanel              : public wxPanel
     void                    reset();
 
     int                     editor_index    (EditorBase*);
-    wxTreeItemId            editor_add      (EditorBase*);
+    void                    editor_add      (EditorBase*);
     void                    editor_del      (EditorBase*);
     void                    editor_select   (EditorBase*);
+    bool                    editor_selected (EditorBase*);
     void                    editor_sync     (EditorBase*);
 
     void                    editors_del     ();

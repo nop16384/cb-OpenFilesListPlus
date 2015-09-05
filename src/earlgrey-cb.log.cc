@@ -1,81 +1,163 @@
 #include    "earlgrey-cb.log.hh"
-#include    <wx/window.h>
+
 #include    <wx/frame.h>
 #include    <wx/font.h>
+
+#include    <wx/textctrl.h>
+#include    <wx/sizer.h>
+
 namespace   earlgreycb
 {
 
-class   LogWindow : public wxLogWindow
+/// ****************************************************************************
+//! \class  Spacer
+//!
+//! \brief  For log indentations.
+/// ****************************************************************************
+class Spacer
 {
-  public:
-    virtual bool OnFrameClose 	(wxFrame* _frame)
+    private:
+    wxString            a_spaces;
+
+    public:
+    const   wxChar  *   wcstr() { return a_spaces.wc_str();  }
+    void                inc()   { a_spaces.append( wxString::FromUTF8("    ")); }
+    void                dec()
         {
-            return false;
+            if ( ! a_spaces.length() )
+            {
+                return;
+            }
+            a_spaces = a_spaces.Right( a_spaces.length() - 4 );
         }
 
-  public:
-    LogWindow(wxWindow* _parent, const wxString& _title, bool _show=true, bool _passToOld=true)
-        :   wxLogWindow(_parent, _title, _show, _passToOld)
-        {
-        }
+    public:
+    Spacer()
+    {
+    }
+    ~Spacer()
+    {
+    }
 };
-//  ............................................................................
+/// ****************************************************************************
+//! \class  LogFrame
+//!
+//! \brief  Window for outputing logs into.
+//!
+//! \detail Because using wxLogWindow involves using wxLog, and I get other C::B
+//!     logs in it.
+/// ****************************************************************************
+class   LogFrame : public wxFrame
+{
+  private:
+    wxSizer         *   dw_log_sizer;
+    wxTextCtrl      *   dw_log_txt_ctrl;
+
+  public:
+            LogFrame(wxWindow* _parent)
+                :   wxFrame(_parent, wxNewId(), wxString::FromUTF8("OpenFilesListPlus"), wxDefaultPosition, wxSize(600,300))
+                {
+                    dw_log_txt_ctrl     =   new wxTextCtrl(
+                    this            , wxNewId()                         ,
+                    wxEmptyString   , wxDefaultPosition , wxDefaultSize ,
+                    wxTE_MULTILINE | wxTE_READONLY | wxHSCROLL          );
+
+                    //dw_log_txt_ctrl->SetWindowStyle( wxTE_MULTILINE );        //  GWR_TECH_ causes crash
+                    wxFont fnt(8, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxString::FromUTF8("monospace") );
+                    dw_log_txt_ctrl->SetFont(fnt);
+
+                    dw_log_sizer        =   new wxBoxSizer(wxVERTICAL);
+                    dw_log_sizer->Add( dw_log_txt_ctrl, 1, wxEXPAND, 0);
+                    this->SetSizer( dw_log_sizer );
+
+                    this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler(LogFrame::evh_close_window), NULL, this);
+                }
+  public:
+    void    log(wxString& _wxs)
+        {
+            dw_log_txt_ctrl->AppendText( _wxs + wxString::FromUTF8("\n") );
+        }
+
+    void    evh_close_window(wxCloseEvent& _e)
+        {
+            _e.Veto();
+        }
+
+};
+//  ############################################################################
 bool                A_log_console   =   false;
 bool                A_log_window    =   false;
 
-LogWindow       *   dw_log_window   =   NULL;
+Spacer              a_spacer;
+LogFrame        *   dw_log_frame    =   NULL;
 //  ............................................................................
-void    Log_window_show(wxWindow* _parent)
+const wxChar*
+        Log_spc_wxc()
 {
-    wxFrame     *   f   =   NULL;
-    //  ........................................................................
-    if ( dw_log_window )
-    {
-        return;
-    }
-
-    wxFont fnt(8, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxString::FromUTF8("monospace") );
-    wxLog::EnableLogging(true);
-
-    dw_log_window   = new LogWindow( _parent, _T(" OpenFilesList"), true, false );
-    f               = dw_log_window->GetFrame();
-    f->SetSize(20,30,600,300);
-
-    wxWindow        *   www = NULL;
-    wxWindowList        wl  = f->GetChildren();
-    for ( wxWindowList::iterator it = wl.begin() ; it != wl.end() ; it++ )
-    {
-        www=*it;
-        www->SetFont(fnt);
-    }
+    return a_spacer.wcstr();
 }
 
-void    Log_window_hide()
+void    Log_spc_inc()
 {
-    if ( ! dw_log_window )
+    a_spacer.inc();
+}
+
+void    Log_spc_dec()
+{
+    a_spacer.dec();
+}
+
+void    Log_function_start(const wxChar* _funcname)
+{
+    GWRCB_TCS("%s%s%s", wxS("----------  "), _funcname, wxS("  ---------- ") );
+}
+
+void    Log_function_enter(const wxChar* _funcname)
+{
+    earlgreycb::Log_spc_inc();
+
+    GWRCB_TCS("%s", wxS("***********************************************************")  );
+    GWRCB_TCS("%s",  _funcname);
+    GWRCB_TCS("%s", wxS("***********************************************************")  );
+}
+
+void    Log_function_exit()
+{
+    earlgreycb::Log_spc_dec();
+}
+//  ............................................................................
+void    Log_window_open     (wxWindow* _parent)
+{
+    if ( dw_log_frame )
     {
         return;
     }
 
-    delete dw_log_window;
-    dw_log_window = NULL;
+    dw_log_frame    =   new LogFrame( _parent );
+    dw_log_frame->Show();
+}
+
+void    Log_window_close    ()
+{
+    if ( ! dw_log_frame )
+    {
+        return;
+    }
+
+    delete dw_log_frame;
+    dw_log_frame = NULL;
 }
 //  ............................................................................
 void        Log_console (wxString& _wxs)
 {
     printf("%s\n", _wxs.mb_str(wxConvUTF8).data());
-
 }
 
 void        Log_window  (wxString& _wxs)
 {
-    if ( dw_log_window )
+    if ( dw_log_frame )
     {
-
-        wxLog   *   old = wxLog::GetActiveTarget();
-        wxLog::SetActiveTarget(dw_log_window);
-        wxLogMessage(_wxs);
-        wxLog::SetActiveTarget(old);
+        dw_log_frame->log( _wxs );
     }
 }
 

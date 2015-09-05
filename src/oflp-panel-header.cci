@@ -141,8 +141,6 @@ void OpenFilesListPlusPanelHeader::   button_show     (int _ix, bool _b)
     bt->Show(_b);
 }
 //  ============================================================================
-OpenFilesListPlusPanelHeader::        OpenFilesListPlusPanelHeader()        {}
-OpenFilesListPlusPanelHeader::       ~OpenFilesListPlusPanelHeader()        {}
 OpenFilesListPlusPanelHeader::        OpenFilesListPlusPanelHeader(
         OFLPPanel   *   _parent ,
         wxString        _title  )
@@ -169,4 +167,19 @@ OpenFilesListPlusPanelHeader::        OpenFilesListPlusPanelHeader(
             wxEVT_LEFT_DOWN                                             ,
             wxMouseEventHandler(OFLPPanel::evh_title_static_LEFT_DOWN)  ,
             NULL,aw_parent                                              );
+}
+
+OpenFilesListPlusPanelHeader::       ~OpenFilesListPlusPanelHeader()
+{
+    //for ( ButtonsArray::iterator it = a_buttons_array.begin() ; it != a_buttons_array.end() ; it++ )
+    //{
+        //delete ( *it );
+    //}
+
+    //delete dw_sizer;
+
+    //if ( dw_txt_old )
+        //delete dw_txt_old;
+
+    //delete aw_txt;
 }

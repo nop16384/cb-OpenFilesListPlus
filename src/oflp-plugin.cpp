@@ -17,10 +17,11 @@
 #include    "oflp-panel.hh"
 //  ............................................................................
 #define GWR_OFLP_SANITY_CHECKS
-#define GWR_LOG(FORMAT, ...)    GWRCB_LOG("log:" FORMAT, __VA_ARGS__);
-#define GWR_INF(FORMAT, ...)    GWRCB_INF("inf:" FORMAT, __VA_ARGS__);
-#define GWR_WNG(FORMAT, ...)    GWRCB_WNG("Wng:" FORMAT, __VA_ARGS__);
-#define GWR_ERR(FORMAT, ...)    GWRCB_ERR("ERR:" FORMAT, __VA_ARGS__);
+#define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
+#define GWR_TKI(FORMAT, ...)    GWRCB_TKI(FORMAT, __VA_ARGS__);
+#define GWR_INF(FORMAT, ...)    GWRCB_INF(FORMAT, __VA_ARGS__);
+#define GWR_WNG(FORMAT, ...)    GWRCB_WNG(FORMAT, __VA_ARGS__);
+#define GWR_ERR(FORMAT, ...)    GWRCB_ERR(FORMAT, __VA_ARGS__);
 //  ............................................................................
 OpenFilesListPlus   *   OpenFilesListPlus::s_singleton  =   NULL;
 //  ............................................................................
@@ -64,7 +65,7 @@ void OpenFilesListPlus::OnAttach()
     //  ........................................................................
     earlgreycb::A_log_console   =   false;
     earlgreycb::A_log_window    =   true;                                       //  enable log window at start
-    earlgreycb::Log_window_show( Manager::Get()->GetAppWindow() );              //  enable log window at start
+    earlgreycb::Log_window_open( Manager::Get()->GetAppWindow() );              //  enable log window at start
 
     GWR_INF("OpenFilesListPlugin::OnAttach [%p][%p]", this, Instance());
     //  ........................................................................
@@ -127,6 +128,7 @@ void OpenFilesListPlus::OnRelease(bool appShutDown)
 {
     if (appShutDown)
         return;
+
     // remove registered event sinks
     Manager::Get()->RemoveAllEventSinksFor(this);
 
@@ -135,7 +137,9 @@ void OpenFilesListPlus::OnRelease(bool appShutDown)
     evt.pWindow = dw_MainPanel;
     Manager::Get()->ProcessEvent(evt);
 
-    // finally destroy the tree
+    // finally destroy the widgets
+    earlgreycb::Log_window_close();
+
     dw_MainPanel->Destroy();
     dw_MainPanel = nullptr;
 }
@@ -235,7 +239,7 @@ void OpenFilesListPlus::RefreshOpenFilesTree    (EditorBase* ed, bool remove)
     OFLPPanel                       *   panel   =   NULL;
     wxTreeItemId                    iid;
     //  ........................................................................
-    GWR_INF("%s", _T("OpenFilesListPlugin::RefreshOpenFilesTree()"));
+    earlgreycb::Log_function_enter(wxS("OpenFilesListPlugin::RefreshOpenFilesTree()"));
     //  ........................................................................
     if (Manager::IsAppShuttingDown() || !ed)
         return;
@@ -260,7 +264,11 @@ void OpenFilesListPlus::RefreshOpenFilesTree    (EditorBase* ed, bool remove)
             //  ensure selected if it is the active one
             if ( ed == aed )
             {
-                panel->editor_select(ed);
+                if ( ! panel->editor_selected(ed) )
+                {
+                    GWR_TKI("%s", wxS("RefreshOpenFilesTree():editor_selected() optimization"));
+                    panel->editor_select(ed);
+                }
                 panels_unselect(panel);
             }
         }
@@ -278,6 +286,8 @@ void OpenFilesListPlus::RefreshOpenFilesTree    (EditorBase* ed, bool remove)
         }
     }
     dw_MainPanel->Thaw();
+
+    earlgreycb::Log_function_exit();
 }
 //  ############################################################################
 #include    "oflp-plugin-panels.cci"

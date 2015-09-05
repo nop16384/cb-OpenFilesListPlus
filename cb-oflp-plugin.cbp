@@ -25,8 +25,9 @@
 					<Add option="`wx-config --libs`" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="zip -j9 plugin/OpenFilesListPlus.zip src/manifest.xml src/oflp.xrc graphics/oflp-panel-header-button-bar-blue.png graphics/oflp-panel-header-button-bar-green.png graphics/oflp-panel-header-button-bar-orange.png graphics/oflp-panel-header-button-bar-red.png  graphics/oflp-panel-header-button-bar-up.png graphics/oflp-panel-header-button-bar-down.png" />
-					<Add after="zip -j9 plugin/OpenFilesListPlus.cbplugin plugin/libOpenFilesListPlus.so plugin/OpenFilesListPlus.zip" />
+					<Add after="chmod u=rwx ./src/post-build.bash" />
+					<Add after="./src/post-build.bash" />
+					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
 			<Target title="CheckSymbols">
@@ -108,6 +109,10 @@
 		</Unit>
 		<Unit filename="src/oflp.xrc">
 			<Option virtualFolder="src/common/" />
+		</Unit>
+		<Unit filename="src/post-build.bash">
+			<Option virtualFolder="src/common/" />
+			<Option target="default" />
 		</Unit>
 		<Unit filename="src/todo.h">
 			<Option virtualFolder="src/common/" />

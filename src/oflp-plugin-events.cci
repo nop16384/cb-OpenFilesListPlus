@@ -58,10 +58,14 @@ void OpenFilesListPlus::evh_editor_closed       (CodeBlocksEvent& event)
 
 void OpenFilesListPlus::evh_editor_activated    (CodeBlocksEvent& event)        //  _GWR_KNO_   editors may be activated by tabs
 {
-    GWR_INF("########## OpenFilesListPlus::OnEditorActivated(%s) ##########", event.GetEditor()->GetShortName().c_str());
+    earlgreycb::Log_function_enter(wxS("OpenFilesListPlus::OnEditorActivated()"));
+    //  ........................................................................
+    GWR_TKI("OnEditorActivated():[%s]", event.GetEditor()->GetShortName().c_str());
     //  ........................................................................
     //  Manager::Get()->GetLogManager()->Log(_T("OnEditorActivated: ") + event.GetEditor()->GetFilename());
     RefreshOpenFilesTree(event.GetEditor());
+    //  ........................................................................
+    earlgreycb::Log_function_exit();
 }
 
 void OpenFilesListPlus::evh_editor_deactivated  (CodeBlocksEvent& event)
@@ -72,13 +76,13 @@ void OpenFilesListPlus::evh_editor_deactivated  (CodeBlocksEvent& event)
 
 void OpenFilesListPlus::evh_editor_modified     (CodeBlocksEvent& event)
 {
-    GWR_INF("%s", _T("########## OpenFilesListPlus::OnEditorModified() ##########"));
+    //GWR_INF("%s", _T("########## OpenFilesListPlus::OnEditorModified() ##########"));
     RefreshOpenFilesTree(event.GetEditor());
 }
 
 void OpenFilesListPlus::evh_editor_saved        (CodeBlocksEvent& event)
 {
-    GWR_INF("%s", _T("########## OpenFilesListPlus::OnEditorSaved() ##########"));
+    //GWR_INF("%s", _T("########## OpenFilesListPlus::OnEditorSaved() ##########"));
     RefreshOpenFilesTree(event.GetEditor());
 }
 //  ############################################################################
@@ -90,13 +94,13 @@ void OpenFilesListPlus::evh_tree_item_activated     (wxTreeEvent& event)
 {
     OFLPPanelItemInfo   inf( event );
     //  ........................................................................
-    GWR_INF("%s", _T("########## OpenFilesListPlus::OnTreeItemActivated() ##########"));
-
+    earlgreycb::Log_function_enter(wxS("OpenFilesListPlus::OnTreeItemActivated()"));
+    //  ........................................................................
     if (Manager::IsAppShuttingDown())
-        return;
+        goto lab_return;
 
     if ( ! inf.IsOk() )
-        return;
+        goto lab_return;
 
     //  In productivity mode, activation :
     //  - makes the corresponding editor the active editor ; since activation in
@@ -115,6 +119,9 @@ void OpenFilesListPlus::evh_tree_item_activated     (wxTreeEvent& event)
         //  active selected editor
         Manager::Get()->GetEditorManager()->SetActiveEditor(inf.GetEditor());
     }
+    //  ........................................................................
+lab_return:
+    earlgreycb::Log_function_exit();
 }
 
 // tree item right-clicked
@@ -122,7 +129,7 @@ void OpenFilesListPlus::evh_tree_item_right_click   (wxTreeEvent& event)
 {
     OFLPPanelItemInfo   inf( event );
     //  ........................................................................
-    GWR_INF("%s", _T("########## OpenFilesListPlus::OnTreeItemRightClick() ##########"));
+    //GWR_INF("%s", _T("########## OpenFilesListPlus::OnTreeItemRightClick() ##########"));
 
     if (Manager::IsAppShuttingDown())
         return;
@@ -137,16 +144,21 @@ void OpenFilesListPlus::evh_tree_item_right_click   (wxTreeEvent& event)
 // tree sel changed
 void OpenFilesListPlus::evh_tree_sel_changed        (wxTreeEvent &event)
 {
-    GWR_INF("%s", _T("########## OpenFilesListPlus::OnTreeSelChanged() ##########"));
+    earlgreycb::Log_function_enter(wxS("OpenFilesListPlus::OnTreeSelChanged()"));
+    //  ........................................................................
     //  ........................................................................
     OFLPPanelItemInfo   inf( event );
     //  ........................................................................
 
     if(Manager::IsAppShuttingDown())
-        return;
+        goto lab_return;
 
     if ( ! inf.IsOk() )
-        return;
+    {
+        GWR_TKI("OnTreeSelChanged():invalid OFLPPanelDataObject for panel[%p]", event.GetEventObject());
+        goto lab_return;
+    }
+    GWR_TKI("OnTreeSelChanged():[%p][%s]", inf.GetPanel(), inf.GetEditor()->GetShortName().wc_str());
 
     //  in productivity mode, selecting a file makes the corresponding editor
     //  the active editor
@@ -158,6 +170,10 @@ void OpenFilesListPlus::evh_tree_sel_changed        (wxTreeEvent &event)
 
     //  deselect any other wxTreeCtrl's selected item
     panels_unselect(inf.GetPanel());
+    //  ........................................................................
+lab_return:
+    earlgreycb::Log_function_exit();
+
 }
 //  ############################################################################
 //
@@ -274,13 +290,13 @@ void    OpenFilesListPlus::   evh_menu_option_checked             (wxCommandEven
     {
         GWR_INF( "%s", wxS("+log window") );
         earlgreycb::A_log_window =   true;
-        earlgreycb::Log_window_show( Manager::Get()->GetAppWindow() );
+        earlgreycb::Log_window_open( Manager::Get()->GetAppWindow() );
     }
     if ( (   lw ) && ( ! menu_options()->log_window() ) )
     {
         GWR_INF( "%s", wxS("-log window") );
         earlgreycb::A_log_window =   false;
-        earlgreycb::Log_window_hide();
+        earlgreycb::Log_window_close();
     }
 }
 

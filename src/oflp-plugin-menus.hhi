@@ -89,8 +89,8 @@
             };
        ~MenuOptions()
             {
-                delete dw_m1_mode;
-                delete dw_m1_log;
+                //delete dw_m1_mode;
+                //delete dw_m1_log;
             }
     };
     //  ========================================================================
