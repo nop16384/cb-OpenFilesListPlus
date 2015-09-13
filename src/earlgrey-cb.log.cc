@@ -55,7 +55,7 @@ class   LogFrame : public wxFrame
 
   public:
             LogFrame(wxWindow* _parent)
-                :   wxFrame(_parent, wxNewId(), wxString::FromUTF8("OpenFilesListPlus"), wxDefaultPosition, wxSize(600,300))
+                :   wxFrame(_parent, wxNewId(), wxString::FromUTF8("OpenFilesListPlus"), wxDefaultPosition, wxSize(900,800))
                 {
                     dw_log_txt_ctrl     =   new wxTextCtrl(
                     this            , wxNewId()                         ,
@@ -107,7 +107,7 @@ void    Log_spc_dec()
     a_spacer.dec();
 }
 
-void    Log_function_start(const wxChar* _funcname)
+void    Log_function_mark(const wxChar* _funcname)
 {
     GWRCB_TCS("%s%s%s", wxS("----------  "), _funcname, wxS("  ---------- ") );
 }

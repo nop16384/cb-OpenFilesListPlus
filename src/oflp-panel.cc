@@ -89,7 +89,7 @@ void OpenFilesListPlusPanel:: OnDragInit  (wxTreeEvent& _e)
     editor  =   pidata->GetEditor();
     //  ........................................................................
     //  prepare drag source
-    dobj.SetData( plugin()->panel_get_visual_index(this) , 0xab, editor );      //  _GWR_TODO_ iid
+    dobj.SetData( OpenFilesListPlus::Instance()->panel_get_visual_index(this) , 0xab, editor );      //  _GWR_TODO_ iid
     //wxDropSource        dropSource(dobj, d_tree);
     dropSource.SetData(dobj);
     //  ........................................................................
@@ -97,7 +97,7 @@ void OpenFilesListPlusPanel:: OnDragInit  (wxTreeEvent& _e)
     dres = dropSource.DoDragDrop( wxDrag_DefaultMove );
     if ( dres != wxDragMove )
     {
-        GWR_ERR("           OnDragInit():res[%s], expected wxDragMove", OpenFilesListPlusPanel::stringize_drag_result(dres).c_str() );
+        GWR_ERR("           OnDragInit():res[%s], expected wxDragMove", OpenFilesListPlusPanel::stringize_drag_result(dres).wc_str() );
         goto lab_return;
     }
     //  ........................................................................
@@ -121,7 +121,7 @@ lab_return:
 
 void OpenFilesListPlusPanel:: OnDragEnd   (wxTreeEvent& _e)
 {
-    GWR_INF("%s", _T("OFLPPanel::OnDragEnd()") );
+    GWR_INF("%s", wxS("OFLPPanel::OnDragEnd()") );
 }
 //  ============================================================================
 void OpenFilesListPlusPanel:: p0_allow_kill_focus_event           (bool _b)
@@ -147,7 +147,7 @@ void OpenFilesListPlusPanel:: evh_title_static_LEFT_DOWN          (wxMouseEvent&
 
 void OpenFilesListPlusPanel:: evh_title_dynamic_TEXT_ENTER        (wxCommandEvent& _e)
 {
-    GWR_INF("%s", _T("OFLPPanel:: evh_title_dynamic_TEXT_ENTER()"));
+    GWR_INF("%s", wxS("OFLPPanel:: evh_title_dynamic_TEXT_ENTER()"));
 
     p0_allow_kill_focus_event(false);
 
@@ -161,11 +161,11 @@ void OpenFilesListPlusPanel:: evh_title_dynamic_TEXT_ENTER        (wxCommandEven
 
 void OpenFilesListPlusPanel:: evh_title_dynamic_KILL_FOCUS        (wxFocusEvent   & _e)
 {
-    GWR_INF("%s", _T("OFLPPanel:: evh_title_dynamic_KILL_FOCUS()"));
+    GWR_INF("%s", wxS("OFLPPanel:: evh_title_dynamic_KILL_FOCUS()"));
 
     if ( ! a_allow_kill_focus_event )
     {
-        GWR_INF("%s", _T("  (aborted)"));
+        GWR_INF("%s", wxS("  (aborted)"));
         return;
     }
 
@@ -190,11 +190,11 @@ void OpenFilesListPlusPanel:: p0_create_tree()
         wxTreeEventHandler(OpenFilesListPlusPanel::OnDragEnd), NULL, this);
 
     d_tree->Connect(wxEVT_COMMAND_TREE_ITEM_ACTIVATED,
-        wxTreeEventHandler(OpenFilesListPlus::evh_tree_item_activated)      , NULL, a_ofl_plugin);
+        wxTreeEventHandler(OpenFilesListPlus::evh_tree_item_activated)      , NULL, OpenFilesListPlus::Instance());
     d_tree->Connect(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK,
-        wxTreeEventHandler(OpenFilesListPlus::evh_tree_item_right_click)    , NULL, a_ofl_plugin);
+        wxTreeEventHandler(OpenFilesListPlus::evh_tree_item_right_click)    , NULL, OpenFilesListPlus::Instance());
     d_tree->Connect(wxEVT_COMMAND_TREE_SEL_CHANGED,
-        wxTreeEventHandler(OpenFilesListPlus::evh_tree_sel_changed)         , NULL, a_ofl_plugin);
+        wxTreeEventHandler(OpenFilesListPlus::evh_tree_sel_changed)         , NULL, OpenFilesListPlus::Instance());
 
     d_drop_target   =   new OpenFilesListPlusPanelDropTarget(d_tree, this);
     d_tree->SetDropTarget(d_drop_target);
@@ -206,7 +206,6 @@ OpenFilesListPlusPanel::OpenFilesListPlusPanel(
         wxString                _title  ,
         bool                    _bulk   )
         :   wxPanel                     ( _parent, wxNewId()    )   ,
-            a_ofl_plugin                ( _ofl_plugin   )   ,
             a_bulk                      ( _bulk         )   ,
             a_allow_kill_focus_event    ( true          )
 {
@@ -271,7 +270,7 @@ wxTreeItemId    OpenFilesListPlusPanel::  item_find           (EditorBase* _edit
     wxTreeItemIdValue   cookie  =   0;
     wxTreeItemId        iid     = d_tree->GetFirstChild( d_tree->GetRootItem(), cookie );
     //  ........................................................................
-    //D GWR_INF("%s", _T("OpenFilesListPlusPanel::item_find()"));
+    //D GWR_INF("%s", wxS("OpenFilesListPlusPanel::item_find()"));
     //  ........................................................................
     // loop all tree items
     while ( iid )
@@ -280,12 +279,12 @@ wxTreeItemId    OpenFilesListPlusPanel::  item_find           (EditorBase* _edit
         EditorBase              *   e       = data->GetEditor();
         if ( _editor == e )
         {
-            //D GWR_INF("%s", _T("OpenFilesListPlusPanel::item_find():found"));
+            //D GWR_INF("%s", wxS("OpenFilesListPlusPanel::item_find():found"));
             return iid;
         }
         iid = d_tree->GetNextChild(d_tree->GetRootItem(), cookie);
     }
-    //D GWR_INF("%s", _T("OpenFilesListPlusPanel::item_find():not found"));
+    //D GWR_INF("%s", wxS("OpenFilesListPlusPanel::item_find():not found"));
     iid.Unset();
     return iid;
 }
@@ -304,12 +303,12 @@ wxTreeItemId    OpenFilesListPlusPanel::  item_append         (EditorBase* _edit
 
     if ( ! iid.IsOk() )
     {
-        GWR_ERR("%s", _T("OpenFilesListPlusPanel::item_append():failed"));
+        GWR_TKE("%s", wxS("OpenFilesListPlusPanel::item_append():failed"));
         iid.Unset();
         return iid;
     }
 
-    GWR_INF("OpenFilesListPlusPanel::item_append():success img[%i]", mod);
+    //D GWR_INF("OFLPPanel::item_append():success img[%i]", mod);
 
     d_tree->SortChildren(d_tree->GetRootItem());
 
@@ -340,8 +339,8 @@ bool            OpenFilesListPlusPanel::  item_select         (EditorBase* _edit
         return false;
     }
 
-    if ( d_tree->GetSelection() == iid )
-        return true;
+    //if ( d_tree->GetSelection() == iid )                                      //  buggy
+        //return true;
 
     d_tree->SelectItem(iid);
     return true;
@@ -349,6 +348,15 @@ bool            OpenFilesListPlusPanel::  item_select         (EditorBase* _edit
 
 bool            OpenFilesListPlusPanel::  item_selected       (EditorBase* _editor)
 {
+    wxTreeItemId    iid = item_find(_editor);
+    //  ........................................................................
+    if ( ! iid.IsOk() )
+    {
+        return false;
+    }
+
+    return ( d_tree->IsSelected(iid) );
+    /*
     wxTreeItemId    iid = d_tree->GetSelection();
 
     if ( ! iid.IsOk() )
@@ -367,6 +375,7 @@ bool            OpenFilesListPlusPanel::  item_selected       (EditorBase* _edit
         return true;
 
     return false;
+    */
 }
 
 void            OpenFilesListPlusPanel::  items_deselect      ()
@@ -384,12 +393,31 @@ int             OpenFilesListPlusPanel::  editor_index    (EditorBase* _editor)
     return a_editors_array.Index(_editor);
 }
 
+int             OpenFilesListPlusPanel::  editor_index    (ProjectFile* _prf)
+{
+    EditorBase  *   ed      =   NULL;
+    cbEditor    *   cbed    =   NULL;
+    //  ........................................................................
+    for ( EditorArray::iterator
+        it  =   a_editors_array.begin()     ;
+        it  !=  a_editors_array.end()       ;
+        it++                                )
+    {
+        ed      =   *(it);
+        cbed    =   static_cast< cbEditor* >( ed );
+
+        if ( cbed->GetProjectFile() == _prf )
+            return a_editors_array.Index(ed);
+    }
+    return wxNOT_FOUND;
+}
+
 void            OpenFilesListPlusPanel::  editor_add      (EditorBase* _editor)
 {
     wxTreeItemId    iid;
     int             mod =   OpenFilesListPlus::Instance()->gfx()->icon(_editor);
     //  ........................................................................
-    GWR_TKI("OFLPPanel::editor_add():[%p][%p]", this, _editor);
+    //D GWR_TKI("OFLPPanel::editor_add():[%p][%p]", this, _editor);
     //  ........................................................................
     iid = item_append(_editor);
 
@@ -399,9 +427,6 @@ void            OpenFilesListPlusPanel::  editor_add      (EditorBase* _editor)
     }
 
     a_editors_array.Add(_editor);
-
-    //d_tree->SetItemImage(iid, mod, wxTreeItemIcon_Normal);
-    //d_tree->SetItemImage(iid, mod, wxTreeItemIcon_Selected);
 }
 
 void            OpenFilesListPlusPanel::  editor_del      (EditorBase* _editor)
@@ -425,9 +450,15 @@ void            OpenFilesListPlusPanel::  editor_select   (EditorBase* _editor)
 bool            OpenFilesListPlusPanel::  editor_selected (EditorBase* _editor)
 {
     //  ........................................................................
-    GWR_INF("%s", _T("OFLPPanel::editor_selected()"));
+    GWR_INF("%s", wxS("OFLPPanel::editor_selected()"));
     //  ........................................................................
-    return item_selected(_editor);
+    bool b = item_selected(_editor);
+
+    GWR_INF("OFLPPanel::editor_selected():[%s][%i]",
+            _editor->GetShortName().wc_str()    ,
+            b                                   );
+
+    return b;
 }
 
 void            OpenFilesListPlusPanel::  editor_sync     (EditorBase* _editor)
@@ -435,7 +466,7 @@ void            OpenFilesListPlusPanel::  editor_sync     (EditorBase* _editor)
     wxTreeItemId    iid;
     int             mod =   OpenFilesListPlus::Instance()->gfx()->icon(_editor);
     //  ........................................................................
-    GWR_INF("%s", _T("OFLPPanel::editor_refresh()") );
+    GWR_INF("%s", wxS("OFLPPanel::editor_sync()") );
     //  ........................................................................
     iid = item_find(_editor);
 
@@ -446,14 +477,21 @@ void            OpenFilesListPlusPanel::  editor_sync     (EditorBase* _editor)
 
     if ( d_tree->GetItemImage(iid, wxTreeItemIcon_Normal)  != mod )
     {
+        GWR_INF("%s", wxS("editor_sync():editor icon changed"));
+
         d_tree->SetItemImage( iid, mod , wxTreeItemIcon_Normal );
         d_tree->SetItemImage( iid, mod , wxTreeItemIcon_Selected );
     }
-    ////if ( d_tree->GetItemText(iid)   != _editor->GetShortName() )
-    ////{
-        ////d_tree->SetItemText( iid, _editor->GetShortName() );
-        ////d_tree->SortChildren( d_tree->GetRootItem() );
-    ////}
+
+    if ( d_tree->GetItemText(iid).Cmp( _editor->GetShortName() ) )
+    {
+        GWR_INF("editor_sync():editor name changed [%s] -> [%s]",
+            d_tree->GetItemText(iid).wc_str()   ,
+             _editor->GetShortName().wc_str()   );
+
+        d_tree->SetItemText( iid, _editor->GetShortName() );
+        d_tree->SortChildren( d_tree->GetRootItem() );
+    }
 }
 
 void            OpenFilesListPlusPanel::  editors_del     ()

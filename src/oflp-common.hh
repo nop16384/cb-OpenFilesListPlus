@@ -9,6 +9,12 @@
 #endif
 //  ............................................................................
 #include    "earlgrey-cb.log.hh"                                                //  OFLP plugin log system
+#include    "earlgrey-cb.hstring.hh"                                            //  earlgreycb::HString
+//  ............................................................................
+#define OFLP_FILE_VERSION_MAJOR_STR     "1"
+#define OFLP_FILE_VERSION_MINOR_STR     "0"
+#define OFLP_FILE_VERSION_MAJOR_NUM     1
+#define OFLP_FILE_VERSION_MINOR_NUM     0
 //  ............................................................................
 //  declare all classes ( and some aliases ) for header files
 class   EditorBase;
@@ -27,6 +33,5 @@ typedef OpenFilesListPlusPanelItemInfo  OFLPPanelItemInfo;
 typedef OpenFilesListPlusPanelHeader    OFLPPanelHeader;
 //  ............................................................................
 WX_DEFINE_ARRAY(EditorBase              *, EditorArray);
-WX_DEFINE_ARRAY(OpenFilesListPlusPanel  *, PanelArray);
 //  ............................................................................
 #endif                                                                          //  __OFLP_COMMON_HH__

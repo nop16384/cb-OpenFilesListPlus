@@ -16,7 +16,7 @@ class OpenFilesListPlusPanelHeader        : public wxPanel
   private:
     OFLPPanel           *       aw_parent;                                      //  _GWR_TODO_ can use this->GetParent() instead
 
-    wxString                    a_title;
+    earlgreycb::HString         a_title;
 
     wxPanel             *       dw_panel;
     wxSizer             *       dw_sizer;
@@ -28,7 +28,10 @@ class OpenFilesListPlusPanelHeader        : public wxPanel
     ButtonsArray                    a_buttons_array;
 
   public:
-    wxString    const   &           get_title()                 const   { return a_title; }
+    wxString    const   &           get_title()
+        {
+            return a_title.get();
+        }
 
   private:
     void                    p0_create_buttons       ();

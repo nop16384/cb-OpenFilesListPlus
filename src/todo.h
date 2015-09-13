@@ -5,46 +5,38 @@
 
 +(003)  2015.08.21  Rescan all old methods for compatibility
 
-+(004)  2015.08.21  When editor change from ofl, focus stay on ofl, is not given
-                    to editor
++(004)  2015.08.21  Save layout & options
 
- (005)  2015.08.21  When editing OFLPPanel title, the wxTextCtrl remains if
-                    user click anywhere else ; should switch back to wxStaticText
+ (005)  2015.08.21  Verify icons
 
-+(006)  2015.08.21  Save layout & options
+ (006)  2015.08.21  Possibility to hide the wxTreeCtrl
 
- (007)  2015.08.21  After DnD selection of item is lost
+ (007)  2015.08.22  Hide up & down buttons when panel is minimized
 
- (008)  2015.08.21  Verify icons
-
-+(009)  2015.08.21  Double loop : mouse -> activate editor -> select editor -> OnTreeItemSelected -> refresh -> select editor
-
- (010)  2015.08.21  Possibility to hide the wxTreeCtrl
-
- (011)  2015.08.22  Double call to OFLPPanelHeader::switch_to_static()
-                    because of TEXT_ENTER _AND_ KILL_FOCUS events
-
- (012)  2015.08.22  Hide up & down buttons when panel is minimized
-
-+(013)  2015.08.28  - in gfx->bitmap(), check icon index bounds for image list
++(008)  2015.08.28  - in gfx->bitmap(), check icon index bounds for image list
                     - shows a dummy bitmap if file not found
 
-+(014)  2015.08.29  change font in popop menu
++(009)  2015.08.29  change font in popop menu
 
- (015)  2015.08.29  libxxx.so vs xxx.so in zip file & lib loading
-
-+(016)  2015.08.30  Better panels resize : avoid vertical scrollbar if space
++(010)  2015.08.30  Better panels resize : avoid vertical scrollbar if space
                     is available in other panels
 
- (017)  2015.08.30  When closing log window, menu options is not refreshed
+ (011)  2015.08.30  Put png files inside zip file
 
- (018)  2015.08.30  View menu misplacement
++(012)  2015.09.06  Memory leaks ?
 
- (019)  2015.08.30  C::B OFLP window title !
++(013)  2015.09.12  Select active editor after workspace laoding
 
- (020)  2015.08.30  Put png files inside zip file
++(014)  2015.09.12  Put up & down arrows near mini/maxi-mize button in OFLPPanelHeader
 
- (021)  2015.08.30  I get bunch of cb debug in my wxLog window
++(015)  2015.09.13  Layout : apply() : rewrite for handling all cases
+
++(016)  2015.09.13  Layout : C::B save everything relationships
+
++(017)  2015.09.13  Layout : OFLPPanels ordering at loading
+
++(018)  2015.09.13  OFLP::on_editor_modified() : DONT call refresh for
+                    a letter typed !!!
 //  ############################################################################
 (001)
 2015.08.21  Done: call to SetFocus() )
@@ -60,55 +52,40 @@
               RefreshOpenFilesTree() : name + icon + tree re-sorting
 //  ============================================================================
 (004)
+2015.09.12  Done : layout import
 //  ============================================================================
 (005)
-2015.08.21  Done: by handling wxTextCtrl wxEVT_KILL_FOCUS event
-//  ============================================================================
-(006)
-//  ============================================================================
-(007)
-2015.08.??  Done
-//  ============================================================================
-(008)
 2015.08.??  Done, installed in the tree
 //  ============================================================================
-(009)
-2015.09.02  - resizing the log window causes a cbEventEditorActivated
-//  ============================================================================
-(010)
+(006)
 2015.08.22  done
 //  ============================================================================
-(011)
-2015.08.23  done : flag OFLPPanel::a_allow_kill_focus_event
-//  ============================================================================
-(012)
+(007)
 2015.08.22  done
 //  ============================================================================
-(013)
+(008)
 2015.08.29  - bitmap identifiers as enum in OpenFilesListPlus
 //  ============================================================================
-(014)
+(009)
 //  ============================================================================
-(015)
-2015.08.30  Done
+(010)
 //  ============================================================================
-(016)
-//  ============================================================================
-(017)
-2015.08.30  Done : subclassing wxLogWindow and disallowing closing it directly
-//  ============================================================================
-(018)
-2015.08.30  Done : without doing nothing ! surely related to (019)
-//  ============================================================================
-(019)
-2015.08.30  Done : in OnAttach(), change the name of the CodeBlocksDockEvent - it
-            was the same as in OpenFilesListPlugin, that caused the bug
-//  ============================================================================
-(020)
+(011)
 2015.08.30  Done :
             * create xrc file -> symbolic names
             * zip png files & xrc file in plugin.zip
             * wxXmlResource::Get()->Load( symbolic name );
 //  ============================================================================
-(021)
-2015.09.01  Done : by replacing the wxLog...stuff by a wxFrame + wxTextCtrl
+(012)
+//  ============================================================================
+(013)
+//  ============================================================================
+(014)
+//  ============================================================================
+(015)
+//  ============================================================================
+(016)
+//  ============================================================================
+(017)
+//  ============================================================================
+(018)

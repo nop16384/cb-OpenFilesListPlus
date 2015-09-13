@@ -6,8 +6,8 @@
  * Copyright:
  * License:   GPL
  ******************************************************************************/
-#ifndef __OFLP_PLUGIN_H__
-#define __OFLP_PLUGIN_H__
+#ifndef __OFLP_PLUGIN_HH__
+#define __OFLP_PLUGIN_HH__
 //  ............................................................................
 #include    "oflp-common.hh"                                                    //  standard wx includes + OFLP log system
 //  ............................................................................
@@ -16,6 +16,7 @@
 #include    <wx/artprov.h>                                                      //  for OFPLPlugin::Gfx
 //  ............................................................................
 #include    "cbplugin.h"                                                        //  for "class cbPlugin"
+#include    "cbworkspace.h"                                                        //  for "class cbPlugin"
 /// ****************************************************************************
 //! \class  OpenFilesListPlus
 //!
@@ -120,8 +121,13 @@ class OpenFilesListPlus : public cbPlugin
         virtual void OnRelease(bool appShutDown);
 
         //  ====================================================================
-    friend class OpenFilesListPlusPanel;
-    friend class OpenFilesListPlusPanelBulk;
+    private:
+        class   Gfx;
+        class   Layout;
+
+        friend class OpenFilesListPlusPanel;
+        friend class OpenFilesListPlusPanelBulk;
+        friend class OpenFilesListPlus::Layout;
 
       private:
         static  OpenFilesListPlus   *   s_singleton;
@@ -155,10 +161,11 @@ class OpenFilesListPlus : public cbPlugin
         #include    "oflp-plugin-menus.hhi"
         #include    "oflp-plugin-panels.hhi"
         #include    "oflp-plugin-events.hhi"
+        #include    "oflp-plugin-layout.hhi"
         //  ====================================================================
 
     private:
         DECLARE_EVENT_TABLE();
 };
 
-#endif                                                                          // __OFLP_PLUGIN_H__
+#endif                                                                          // __OFLP_PLUGIN_HH__

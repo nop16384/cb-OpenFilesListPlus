@@ -6,7 +6,7 @@
 OFLPPanelDataObject::OFLPPanelDataObject()
 {
     wxDataFormat fmt;
-    fmt.SetId(_T("c::b/oflpp-item-drag"));
+    fmt.SetId(wxS("c::b/oflpp-item-drag"));
 
     SetFormat(fmt);
 
@@ -50,7 +50,7 @@ size_t      OFLPPanelDataObject::GetDataSize    ()                     const
 
 bool        OFLPPanelDataObject::GetDataHere    (void *buf)            const
 {
-    GWR_INF("%s", _T("OFLPPanelDataObject::GetDataHere():start") );
+    GWR_INF("%s", wxS("OFLPPanelDataObject::GetDataHere():start") );
     if ( ! a_data_size )
         return false;
 
@@ -82,9 +82,9 @@ EditorBase* OFLPPanelDataObject::GetDataEditor  ()
     return a_data_editor;
 }
 //  ============================================================================
-bool        OFLPPanelDataObject::SetData        (size_t len, const void *buf)   //  unformatted input serializer
+bool        OFLPPanelDataObject::SetData        (size_t len, const void *buf)   //  unformated input serializer
 {
-    GWR_INF("%s", _T("OFLPPanelDataObject::SetData(1):start") );
+    GWR_TKI("%s", wxS("OFLPPanelDataObject::SetData(1):start") );
     //  ........................................................................
     if ( len > GetDataCapacity() )
         return false;
@@ -98,9 +98,9 @@ bool        OFLPPanelDataObject::SetData        (size_t len, const void *buf)   
     return true;
 }
 
-bool        OFLPPanelDataObject::SetData        (int _panel_ix, int _item_ix, EditorBase* _editor)  //  formatted input serializer
+bool        OFLPPanelDataObject::SetData        (int _panel_ix, int _item_ix, EditorBase* _editor)  //  formated input serializer
 {
-    GWR_INF("%s", _T("OFLPPanelDataObject::SetData(2):start") );
+    GWR_TKI("%s", wxS("OFLPPanelDataObject::SetData(2):start") );
     //  ........................................................................
     //  input validity checks
     if ( ( _panel_ix < 0 ) || ( _panel_ix >= OFLPPanelDataObject::s_panel_index_max ) )
@@ -201,7 +201,7 @@ OpenFilesListPlusPanelDropTarget::       ~OpenFilesListPlusPanelDropTarget()
 
 bool OpenFilesListPlusPanelDropTarget::   OnDrop(wxCoord x, wxCoord y)
 {
-    GWR_INF("%s", _T("OFLPPanelDropTarget::OnDrop():start") );
+    GWR_INF("%s", wxS("OFLPPanelDropTarget::OnDrop():start") );
     return true;
 }
 
@@ -231,8 +231,8 @@ OpenFilesListPlusPanelDropTarget::        OnData(wxCoord x, wxCoord y, wxDragRes
     dres = wxDropTarget::OnData(x, y, defaultDragResult);
 
     GWR_TKI("OnData():suggested drag result[%s] returned[%s]"  ,
-        OpenFilesListPlusPanel::stringize_drag_result(defaultDragResult).c_str()  ,
-        OpenFilesListPlusPanel::stringize_drag_result(dres).c_str()               );
+        OpenFilesListPlusPanel::stringize_drag_result(defaultDragResult).wc_str()   ,
+        OpenFilesListPlusPanel::stringize_drag_result(dres).wc_str()                );
 
     if ( dres != defaultDragResult )
     {
@@ -247,7 +247,7 @@ OpenFilesListPlusPanelDropTarget::        OnData(wxCoord x, wxCoord y, wxDragRes
     GWR_INF("  data:spvix[%i] siix[%i] ed[%p]\n", spvix, siix, editor);
 
     #ifdef  GWR_OFLP_SANITY_CHECKS                                              //  _GWR_SANITY_CHECK_
-    cpanel  = OpenFilesListPlus::Instance()->panel_get(editor);                 //  get src panel from editor
+    cpanel  = OpenFilesListPlus::Instance()->panel_find(editor);                //  get src panel from editor
     GWR_INF("  panel:from editor[%p]", cpanel);
 
     cpvix   = OpenFilesListPlus::Instance()->panel_get_visual_index(cpanel);
@@ -263,6 +263,8 @@ OpenFilesListPlusPanelDropTarget::        OnData(wxCoord x, wxCoord y, wxDragRes
     }
     #endif                                                                      //  _GWR_TODO_ check item index too
 
+    //  item operations are done in the cbPlugin instance ; here just
+    //  memorize destination parameters
     OpenFilesListPlus::Instance()->dnd_dst_panel_set( opanel() );
     //  ........................................................................
 lab_return:

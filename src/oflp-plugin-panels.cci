@@ -3,23 +3,67 @@
 //                          PANELS OPERATIONS
 //
 //  ############################################################################
-void            OpenFilesListPlus::panels_reset             ()
+void            OpenFilesListPlus::p0_panel_items_transfer  (OFLPPanel* _dst, OFLPPanel* _src)
+{
+    EditorArray const   *   array   = _src->get_editors();
+    //  ........................................................................
+    for ( EditorArray::const_iterator it = array->begin() ; it != array->end() ; it++)
+    {
+        _dst->editor_add( *it );
+    }
+    _src->editors_del();
+}
+
+void            OpenFilesListPlus::p0_panel_reset           (OFLPPanel* _panel)
+{
+    _panel->editors_del();
+}
+
+void            OpenFilesListPlus::p0_panels_reset          (bool _update_layout_workspace_snapshot)
 {
     PanelArray::iterator        it;
     OFLPPanel               *   panel   =   NULL;
-    PanelArray                  tmp     = a_panels_array;
     //  ........................................................................
-    GWR_INF("%s", _T("OpenFilesListPlus::ResetPanels()"));
+    GWR_INF("%s", wxS("OpenFilesListPlus::p0_panels_reset()"));
     //  ........................................................................
-    // loop all panels
-    for ( it = tmp.begin() ; it != tmp.end() ; it++ )
+    // delete all panels
+    for ( it = a_panels_array.begin() ; it != a_panels_array.end() ; it++ )
     {
         panel = *(it);
+
         if ( ! panel->is_bulk() )
-            panel_del(panel);
+        {
+            dw_MainSizer->Detach(panel);
+            delete panel;
+        }
     }
+
+    p0_panel_reset( a_BulkPanel );
+
+    a_panels_array.Clear();
+    a_panels_array.Add( a_BulkPanel );
+
+    dw_MainSizer->Layout();
+
+    if ( _update_layout_workspace_snapshot )
+        layout()->xml_workspace_update_snapshot();
 }
 
+OFLPPanel*      OpenFilesListPlus::p0_panel_get_by_name     (wxString const & _panel_name)
+{
+    for ( PanelArray::iterator it = a_panels_array.begin() ; it != a_panels_array.end() ; it++ )
+    {
+        OFLPPanel* panel = *(it);
+
+        if ( ! panel->get_title().Cmp( _panel_name ) )
+        {
+            return ( *it);
+        }
+    }
+
+    return NULL;
+}
+//  ############################################################################
 int             OpenFilesListPlus::panel_get_visual_index   (OFLPPanel* _panel)
 {
     //  - wxWindowList is not re-ordered regarding layout changes, so use wxSizer
@@ -57,7 +101,7 @@ OFLPPanel*      OpenFilesListPlus::panel_add                (wxString _title, bo
 {
     OFLPPanel   *   panel   =   NULL;
     //  ........................................................................
-    GWR_INF("%s", _T("OpenFilesListPlus::AddPanel()"));
+    GWR_INF("%s", wxS("OpenFilesListPlus::AddPanel()"));
     //  ........................................................................
     panel   =   _bulk                                                           ?
                 new OpenFilesListPlusPanelBulk  ( this, dw_MainPanel, _title )  :
@@ -70,10 +114,7 @@ OFLPPanel*      OpenFilesListPlus::panel_add                (wxString _title, bo
 
     wxSizerItemList il = dw_MainSizer->GetChildren();
 
-    for ( wxSizerItemList::iterator it = il.begin() ; it != il.end() ; it++ )
-    {
-        GWR_INF("main sizer child [%p]", *it);
-    }
+    layout()->xml_workspace_update_snapshot();
 
     return panel;
 }
@@ -98,6 +139,8 @@ void            OpenFilesListPlus::panel_move_up            (OFLPPanel* _panel)
     dw_MainSizer->Detach(_panel);
     dw_MainSizer->Insert( prev_panel_ix, _panel, 1, wxEXPAND, 0);
     dw_MainSizer->Layout();
+
+    layout()->xml_workspace_update_snapshot();
 }
 
 void            OpenFilesListPlus::panel_move_dn            (OFLPPanel* _panel)
@@ -113,7 +156,7 @@ void            OpenFilesListPlus::panel_move_dn            (OFLPPanel* _panel)
     #endif
     if ( ( 1 + pix ) == a_panels_array.size() )
     {
-        GWR_INF("%s", _T("OFLPlugin::MovePanelDn():already the last"));
+        GWR_INF("%s", wxS("OFLPlugin::MovePanelDn():already the last"));
         return;
     }
 
@@ -122,18 +165,13 @@ void            OpenFilesListPlus::panel_move_dn            (OFLPPanel* _panel)
     dw_MainSizer->Detach(_panel);
     dw_MainSizer->Insert( next_panel_ix, _panel, 1, wxEXPAND, 0);
     dw_MainSizer->Layout();
+
+    layout()->xml_workspace_update_snapshot();
 }
 
-void            OpenFilesListPlus::panel_del                (OFLPPanel* _panel)
+void            OpenFilesListPlus::panel_sub                (OFLPPanel* _panel)
 {
-    EditorArray const   *   array   = _panel->get_editors();
-    //  ........................................................................
-    for ( EditorArray::const_iterator it = array->begin() ; it != array->end() ; it++)
-    {
-        a_BulkPanel->editor_add( *it );
-    }
-
-    _panel->editors_del();
+    p0_panel_items_transfer(a_BulkPanel, _panel);
 
     dw_MainSizer->Detach(_panel);
     dw_MainSizer->Layout();
@@ -141,14 +179,16 @@ void            OpenFilesListPlus::panel_del                (OFLPPanel* _panel)
     a_panels_array.Remove(_panel);
 
     delete _panel;
+
+    layout()->xml_workspace_update_snapshot();
 }
 
-OFLPPanel*      OpenFilesListPlus::panel_get                (EditorBase* _editor )
+OFLPPanel*      OpenFilesListPlus::panel_find               (EditorBase* _editor )
 {
     PanelArray::iterator        it;
     OFLPPanel               *   panel   =   NULL;
     //  ........................................................................
-    GWR_INF("%s", _T("OpenFilesListPlus::GetPanel()"));
+    //D GWR_INF("%s", wxS("OpenFilesListPlus::panel_find(Editor*)"));
     //  ........................................................................
     // loop all panels
     for ( it = a_panels_array.begin() ; it != a_panels_array.end() ; it++ )
@@ -160,9 +200,26 @@ OFLPPanel*      OpenFilesListPlus::panel_get                (EditorBase* _editor
     return NULL;
 }
 
+OFLPPanel*      OpenFilesListPlus::panel_find               (ProjectFile* _prf)
+{
+    PanelArray::iterator        it;
+    OFLPPanel               *   panel   =   NULL;
+    //  ........................................................................
+    //D GWR_INF("%s", wxS("OpenFilesListPlus::panel_find(wxString&)"));
+    //  ........................................................................
+    // loop all panels
+    for ( it = a_panels_array.begin() ; it != a_panels_array.end() ; it++ )
+    {
+        panel = *(it);
+        if ( panel->editor_index(_prf) != wxNOT_FOUND )
+            return panel;
+    }
+    return NULL;
+}
+
 void            OpenFilesListPlus::panels_unselect          (OFLPPanel* _panel)
 {
-    earlgreycb::Log_function_start( wxS("OpenFilesListPlus::panels_unselect()"));
+    earlgreycb::Log_function_mark( wxS("OpenFilesListPlus::panels_unselect()"));
     //  ........................................................................
     GWR_TKI(" *panel[%p]", _panel);
     for ( PanelArray::iterator it = a_panels_array.begin() ; it != a_panels_array.end() ; it++ )

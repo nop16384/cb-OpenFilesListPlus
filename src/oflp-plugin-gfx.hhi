@@ -3,6 +3,7 @@
     //!
     //! \brief  Contain all graphic stuff
     /// ************************************************************************
+  private:
     class Gfx
     {
         friend class OpenFilesListPlus;
@@ -66,10 +67,10 @@
             // load bitmaps
             d_img_list  =   new wxImageList(16, 16);
 
-            bitmap_add( OpenFilesListPlus::eBmpFolder       , _gfx_dir + _T("folder_open.png")     );              // 0 folder
-            bitmap_add( OpenFilesListPlus::eBmpFileAscii    , _gfx_dir + _T("ascii.png")           );              // 1 file
-            bitmap_add( OpenFilesListPlus::eBmpFileModified , _gfx_dir + _T("modified_file.png")   );              // 2 modified file
-            bitmap_add( OpenFilesListPlus::eBmpFileReadOnly , _gfx_dir + _T("file-readonly.png")   );              // 3 read only file
+            bitmap_add( OpenFilesListPlus::eBmpFolder       , _gfx_dir + wxS("folder_open.png")     );          // 0 folder
+            bitmap_add( OpenFilesListPlus::eBmpFileAscii    , _gfx_dir + wxS("ascii.png")           );          // 1 file
+            bitmap_add( OpenFilesListPlus::eBmpFileModified , _gfx_dir + wxS("modified_file.png")   );          // 2 modified file
+            bitmap_add( OpenFilesListPlus::eBmpFileReadOnly , _gfx_dir + wxS("file-readonly.png")   );          // 3 read only file
 
 
             bitmap_add( OpenFilesListPlus::eBmpBarGreen     , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBG")    ));     // add panel

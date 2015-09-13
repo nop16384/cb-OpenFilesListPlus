@@ -11,14 +11,22 @@
     #include "cbeditor.h"
     #include "sdk_events.h"
     #include "misctreeitemdata.h"
+
+    #include "cbworkspace.h"
+    #include "cbproject.h"
+    #include "projectmanager.h"
 #endif
 //  ............................................................................
 #include    "oflp-plugin.hh"
 #include    "oflp-panel.hh"
+
+#include "tinyxml/tinyxml.h"
+#include "tinyxml/tinywxuni.h"
 //  ............................................................................
 #define GWR_OFLP_SANITY_CHECKS
 #define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
 #define GWR_TKI(FORMAT, ...)    GWRCB_TKI(FORMAT, __VA_ARGS__);
+#define GWR_TKE(FORMAT, ...)    GWRCB_TKE(FORMAT, __VA_ARGS__);
 #define GWR_INF(FORMAT, ...)    GWRCB_INF(FORMAT, __VA_ARGS__);
 #define GWR_WNG(FORMAT, ...)    GWRCB_WNG(FORMAT, __VA_ARGS__);
 #define GWR_ERR(FORMAT, ...)    GWRCB_ERR(FORMAT, __VA_ARGS__);
@@ -42,6 +50,8 @@ END_EVENT_TABLE()
 // constructor
 OpenFilesListPlus::     OpenFilesListPlus()
 {
+    d_gfx       =   NULL;
+    d_layout    =   NULL;
     // Make sure our resources are available.
     // In the generated boilerplate code we have no resources but when
     // we add some, it will be nice that this code is in place already ;)
@@ -70,7 +80,10 @@ void OpenFilesListPlus::OnAttach()
     GWR_INF("OpenFilesListPlugin::OnAttach [%p][%p]", this, Instance());
     //  ........................................................................
     //  gfx
-    d_gfx = new Gfx(ConfigManager::GetDataFolder() + _T("/images/"));
+    d_gfx       =   new Gfx(ConfigManager::GetDataFolder() + wxS("/images/"));
+    //  ........................................................................
+    //  layout
+    d_layout    =   new Layout();
     //  ........................................................................
     //  menu options
     dw_menu_options =   new MenuOptions();
@@ -113,9 +126,17 @@ void OpenFilesListPlus::OnAttach()
     //  ........................................................................
     // register event sinks
     Manager* pm = Manager::Get();
+
+    //  workspace related, for layout
+    pm->RegisterEventSink(cbEVT_WORKSPACE_LOADING_COMPLETE  , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_workspace_loading_complete   ));
+    pm->RegisterEventSink(cbEVT_WORKSPACE_CHANGED           , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_workspace_changed            ));
+
+    //  projects related, for layout
+    pm->RegisterEventSink(cbEVT_PROJECT_OPEN    , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_project_open     ));
+    pm->RegisterEventSink(cbEVT_PROJECT_CLOSE   , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_project_close    ));
+    pm->RegisterEventSink(cbEVT_PROJECT_SAVE    , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_project_save     ));
+
     // basically everything editor related
-    //pm->RegisterEventSink(cbEVT_PROJECT_OPEN, new cbEventFunctor<OpenFilesListPlugin, CodeBlocksEvent>(this, &OpenFilesListPlugin::OnProjectOpened));
-    //pm->RegisterEventSink(cbEVT_PROJECT_ACTIVATE, new cbEventFunctor<OpenFilesListPlugin, CodeBlocksEvent>(this, &OpenFilesListPlugin::OnProjectOpened));
     pm->RegisterEventSink(cbEVT_EDITOR_OPEN     , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_editor_opened    ));
     pm->RegisterEventSink(cbEVT_EDITOR_CLOSE    , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_editor_closed    ));
     pm->RegisterEventSink(cbEVT_EDITOR_ACTIVATED, new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_editor_activated ));
@@ -241,8 +262,14 @@ void OpenFilesListPlus::RefreshOpenFilesTree    (EditorBase* ed, bool remove)
     //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OpenFilesListPlugin::RefreshOpenFilesTree()"));
     //  ........................................................................
-    if (Manager::IsAppShuttingDown() || !ed)
+    if ( Manager::IsAppShuttingDown() )
         return;
+
+    if ( ! ed )
+    {
+        GWR_TKE("%s", wxS("RefreshOpenFilesTree():activated editor NULL"));
+        return;
+    }
 
     EditorManager   * mgr   =   Manager::Get()->GetEditorManager();
     EditorBase      * aed   =   mgr->GetActiveEditor();
@@ -251,9 +278,13 @@ void OpenFilesListPlus::RefreshOpenFilesTree    (EditorBase* ed, bool remove)
 
     wxTreeItemIdValue   cookie      = 0;
     wxString            shortname   = ed->GetShortName();
+    panel                           = panel_find(ed);
+
+    GWR_TKI("RefreshOpenFilesTree():activated editor [%s]", shortname.wc_str());
+    GWR_TKI("RefreshOpenFilesTree():active    editor [%s]", aed ? aed->GetShortName().wc_str() : wxS("NULL"));
+    GWR_TKI("RefreshOpenFilesTree():panel            [%p]", panel);
 
     //  find panel from editor
-    panel = panel_get(ed);
     if ( panel )
     {
         if ( !remove )
@@ -266,8 +297,12 @@ void OpenFilesListPlus::RefreshOpenFilesTree    (EditorBase* ed, bool remove)
             {
                 if ( ! panel->editor_selected(ed) )
                 {
-                    GWR_TKI("%s", wxS("RefreshOpenFilesTree():editor_selected() optimization"));
+                    GWR_TKI("%s", wxS("RefreshOpenFilesTree():selecting"));
                     panel->editor_select(ed);
+                }
+                else
+                {
+                    GWR_TKI("%s", wxS("RefreshOpenFilesTree():not selecting - optimization"));
                 }
                 panels_unselect(panel);
             }
@@ -292,5 +327,6 @@ void OpenFilesListPlus::RefreshOpenFilesTree    (EditorBase* ed, bool remove)
 //  ############################################################################
 #include    "oflp-plugin-panels.cci"
 #include    "oflp-plugin-events.cci"
+#include    "oflp-plugin-layout.cci"
 
 

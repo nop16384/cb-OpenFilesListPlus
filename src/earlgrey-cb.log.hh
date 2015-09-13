@@ -22,7 +22,7 @@ extern          void            Log_spc_inc();
 extern          void            Log_spc_dec();
 extern  const   wxChar      *   Log_spc_wxc();
 
-extern          void            Log_function_start  (const wxChar*);
+extern          void            Log_function_mark   (const wxChar*);
 extern          void            Log_function_enter  (const wxChar*);
 extern          void            Log_function_exit   ();
 //  ............................................................................

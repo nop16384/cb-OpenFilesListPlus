@@ -53,6 +53,12 @@
 		<Compiler>
 			<Add option="-fPIC" />
 		</Compiler>
+		<Unit filename="src/bugs.h">
+			<Option virtualFolder="src/plugin/h/" />
+		</Unit>
+		<Unit filename="src/earlgrey-cb.hstring.hh">
+			<Option virtualFolder="src/common/" />
+		</Unit>
 		<Unit filename="src/earlgrey-cb.log.cc">
 			<Option virtualFolder="src/log/" />
 		</Unit>
@@ -60,6 +66,9 @@
 			<Option virtualFolder="src/log/" />
 		</Unit>
 		<Unit filename="src/manifest.xml">
+			<Option virtualFolder="src/common/" />
+		</Unit>
+		<Unit filename="src/notes.h">
 			<Option virtualFolder="src/common/" />
 		</Unit>
 		<Unit filename="src/oflp-common.hh">
@@ -90,6 +99,12 @@
 			<Option virtualFolder="src/plugin/h/" />
 		</Unit>
 		<Unit filename="src/oflp-plugin-gfx.hhi">
+			<Option virtualFolder="src/plugin/h/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-layout.cci">
+			<Option virtualFolder="src/plugin/c/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-layout.hhi">
 			<Option virtualFolder="src/plugin/h/" />
 		</Unit>
 		<Unit filename="src/oflp-plugin-menus.hhi">

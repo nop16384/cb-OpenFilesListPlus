@@ -13,7 +13,7 @@ bool OpenFilesListPlusPanelHeader::   p0_title_ctrl_replace       (wxWindow* _vn
 
     if ( ! dw_sizer->Replace( aw_txt, _vnew ) )
     {
-        GWR_ERR("%s", _T(" wxSizer::Replace() failed"));
+        GWR_TKE("%s", wxS(" wxSizer::Replace() failed"));
         return false;
     }
 
@@ -32,7 +32,7 @@ void OpenFilesListPlusPanelHeader::   title_switch_to_dynamic     ()
 {
     GWR_INF("%s", wxS("OFLPPanelHeader::title_switch_to_dynamic()"));
     //  ........................................................................
-    dw_txt_dyn = new wxTextCtrl( this, wxNewId(), a_title );
+    dw_txt_dyn = new wxTextCtrl( this, wxNewId(), a_title.get() );
     dw_txt_dyn->SetWindowStyle(wxTE_PROCESS_ENTER);                             //  allow wxEVT_COMMAND_TEXT_ENTER generation
 
     GWR_INF(" new ctrl[%p]", dw_txt_dyn);
@@ -61,7 +61,7 @@ void OpenFilesListPlusPanelHeader::   title_switch_to_static      ()
     GWR_INF("%s", wxS("OFLPPanelHeader::title_switch_to_static()"));
     //  ........................................................................
     a_title     = dw_txt_dyn->GetLineText(0);
-    dw_txt_sta  = new wxStaticText( this, wxNewId(), a_title );
+    dw_txt_sta  = new wxStaticText( this, wxNewId(), a_title.get() );
 
     GWR_INF(" new ctrl[%p]", dw_txt_sta);
 
@@ -148,7 +148,7 @@ OpenFilesListPlusPanelHeader::        OpenFilesListPlusPanelHeader(
                 aw_parent   (_parent)
 {
     //  ........................................................................
-    a_title         =   _title;
+    a_title.set(_title);
 
     dw_sizer        =   new wxBoxSizer(wxHORIZONTAL);
 

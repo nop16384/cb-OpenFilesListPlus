@@ -3,87 +3,177 @@
 //                          EDITOR EVENTS
 //
 //  ############################################################################
-/*
-void OpenFilesListPlus::OnProjectOpened   (cb_unused CodeBlocksEvent& event)
+void    OpenFilesListPlus:: evh_workspace_changed           (CodeBlocksEvent& _e)
 {
-    GWR_INF("%s", _T("########## OpenFilesListPlus::OnProjectOpened() ##########\n"));
-    //  ........................................................................
-    /*
-    if (m_EditorArray.IsEmpty())
-        return;
-
-    for (size_t i = 0; i < m_EditorArray.GetCount(); ++i)
-    {
-        EditorBase* eb = m_EditorArray[i];
-        if (eb)
-        {
-            RefreshOpenFilesTree(eb);
-        }
-    }
-    m_EditorArray.Clear();
-}
-*/
-void OpenFilesListPlus::evh_editor_opened       (CodeBlocksEvent& event)
-{
-    GWR_INF("%s", _T("########## OpenFilesListPlus::OnEditorOpened() ##########\n"));
-    //  ........................................................................
-    EditorBase  *   eb  =   event.GetEditor();
-    //  ........................................................................
-    if (Manager::Get()->GetProjectManager()->IsBusy() && eb && ( panel_get(eb) == NULL) )
-    {
-        a_BulkPanel->editor_add(eb);
-    }
-    else
-    {
-        RefreshOpenFilesTree(eb);
-    }
-    /*
-    EditorBase* eb = event.GetEditor();
-    if (Manager::Get()->GetProjectManager()->IsBusy() && eb && (m_EditorArray.Index(eb) == wxNOT_FOUND))
-    {
-        m_EditorArray.Add(eb);
-    }
-    else
-    {
-        RefreshOpenFilesTree(eb);
-    }
-    */
+    earlgreycb::Log_function_mark(wxS("evh_workspace_changed()"));
 }
 
-void OpenFilesListPlus::evh_editor_closed       (CodeBlocksEvent& event)
+void    OpenFilesListPlus:: evh_workspace_loading_complete  (CodeBlocksEvent& _e)
 {
-    GWR_INF("%s", _T("########## OpenFilesListPlus::OnEditorClosed() ##########"));
-    RefreshOpenFilesTree(event.GetEditor(), true);
-}
+    earlgreycb::Log_function_enter(wxS("evh_workspace_loading_complete()"));
 
-void OpenFilesListPlus::evh_editor_activated    (CodeBlocksEvent& event)        //  _GWR_KNO_   editors may be activated by tabs
-{
-    earlgreycb::Log_function_enter(wxS("OpenFilesListPlus::OnEditorActivated()"));
-    //  ........................................................................
-    GWR_TKI("OnEditorActivated():[%s]", event.GetEditor()->GetShortName().c_str());
-    //  ........................................................................
-    //  Manager::Get()->GetLogManager()->Log(_T("OnEditorActivated: ") + event.GetEditor()->GetFilename());
-    RefreshOpenFilesTree(event.GetEditor());
-    //  ........................................................................
+    p0_panels_reset(false);
+
+    layout()->on_workspace_loading_complete();
+
     earlgreycb::Log_function_exit();
 }
 
-void OpenFilesListPlus::evh_editor_deactivated  (CodeBlocksEvent& event)
+void    OpenFilesListPlus:: evh_project_open                (CodeBlocksEvent& _e)
+{
+    earlgreycb::Log_function_enter(wxS("evh_project_open()"));
+
+    layout()->on_project_opened( _e.GetProject() );
+
+    earlgreycb::Log_function_exit();
+}
+
+void    OpenFilesListPlus:: evh_project_close                (CodeBlocksEvent& _e)
+{
+    earlgreycb::Log_function_enter(wxS("evh_project_close()"));
+
+    //layout()->on_project_opened( _e.GetProject() );
+
+    earlgreycb::Log_function_exit();
+}
+
+void    OpenFilesListPlus:: evh_project_save                (CodeBlocksEvent& _e)
+{
+    earlgreycb::Log_function_enter(wxS("evh_project_save()"));
+
+    layout()->on_project_save( _e.GetProject() );
+
+    earlgreycb::Log_function_exit();
+}
+
+void    OpenFilesListPlus:: evh_editor_opened       (CodeBlocksEvent& event)
+{
+    earlgreycb::Log_function_enter(wxS("OpenFilesListPlus::evh_editor_opened()"));
+    //  ........................................................................
+    EditorBase  *   eb  =   event.GetEditor();
+    if ( ! eb )
+    {
+        GWR_TKE("%s", wxS("evh_editor_opened():editor is NULL"));
+        goto lab_exit;
+    }
+
+    GWR_TKI("evh_editor_opened():[%p][%s]", eb, eb->GetShortName().wc_str());
+
+    //  dont add the file if we are not loading, just refresh it                //  _GWR_CB_TRICK_
+    //  this is useful in productivity mode, when reloading the editor
+    if ( ! Manager::Get()->GetProjectManager()->IsBusy() )
+    {
+        GWR_TKI("%s", wxS("evh_editor_opened():Project manager not BUSY - refreshing"));
+        goto lab_refresh;
+    }
+
+    //  dont add the file if it has already a panel, just refresh it
+    //  this is useful in productivity mode, when reloading the editor
+    if ( panel_find(eb) )
+    {
+        GWR_TKI("%s", wxS("evh_editor_opened():already affected to a Panel - refreshing"));
+        goto lab_refresh;
+    }
+    //  ........................................................................
+    GWR_TKI("%s", wxS("evh_editor_opened():adding the opened file to panels"));
+    a_BulkPanel->editor_add(eb);
+    earlgreycb::Log_function_exit();
+    return;
+    //  ........................................................................
+lab_refresh:
+    RefreshOpenFilesTree(eb);
+    earlgreycb::Log_function_exit();
+    return;
+    //  ........................................................................
+lab_exit:
+    earlgreycb::Log_function_exit();
+    return;
+}
+
+void    OpenFilesListPlus:: evh_editor_closed       (CodeBlocksEvent& event)
+{
+    earlgreycb::Log_function_enter(wxS("OpenFilesListPlus::evh_editor_closed()"));
+    //  ........................................................................
+    EditorBase  *   eb  =   event.GetEditor();
+    if ( ! eb )
+    {
+        GWR_TKI("%s", wxS("evh_editor_closed():editor is NULL"));
+        goto lab_exit;
+    }
+
+    RefreshOpenFilesTree(event.GetEditor(), true);
+    //  ........................................................................
+lab_exit:
+    earlgreycb::Log_function_exit();
+    return;
+}
+
+void    OpenFilesListPlus:: evh_editor_activated    (CodeBlocksEvent& event)        //  _GWR_KNO_   editors may be activated by tabs
+{
+    EditorBase  *   eb  =   NULL;
+    wxString        sn;
+    //  ........................................................................
+    earlgreycb::Log_function_enter(wxS("OpenFilesListPlus::evh_editor_activated()"));
+
+    eb  =   event.GetEditor();
+    if ( ! eb )
+    {
+        GWR_TKE("%s", wxS("evh_editor_activated():editor is NULL"));
+        goto lab_exit;
+    }
+
+    //  if loading / closing workspace / project, skip RefreshOpenFilesTree()   //  _GWR_CB_TRICK_
+    //  call
+    if ( Manager::Get()->GetProjectManager()->IsBusy() )
+    {
+        GWR_TKI("%s", wxS("evh_editor_activated():Project manager is BUSY - dropping event"));
+        goto lab_exit;
+    }
+
+    sn  =   eb->GetShortName();
+    //  if no shortname, skip the RefreshOpenFilesTree() call ( C::B sends an   //  _GWR_CB_TRICK_
+    //  "activated" event with an empty-shortname before sending an "opened"
+    //  event with a non-empty-shortname when opening a file )
+    if ( sn.IsEmpty() )
+    {
+        GWR_TKI("%s", wxS("evh_editor_activated():shortname is EMPTY - dropping event"));
+        goto lab_exit;
+    }
+
+    GWR_TKI("evh_editor_activated():[%p][%s]", event.GetEditor(), event.GetEditor()->GetShortName().wc_str());
+    RefreshOpenFilesTree(event.GetEditor());
+    //  ........................................................................
+lab_exit:
+    earlgreycb::Log_function_exit();
+}
+
+void    OpenFilesListPlus:: evh_editor_deactivated  (CodeBlocksEvent& event)
 {
 //  Manager::Get()->GetLogManager()->Log(_T("OnEditorDeactivated: ") + event.GetEditor()->GetFilename());
     RefreshOpenFilesTree(event.GetEditor());
 }
 
-void OpenFilesListPlus::evh_editor_modified     (CodeBlocksEvent& event)
+void    OpenFilesListPlus:: evh_editor_modified     (CodeBlocksEvent& event)
 {
-    //GWR_INF("%s", _T("########## OpenFilesListPlus::OnEditorModified() ##########"));
+    //  we dont log the method calls, since typing a character is an editor
+    //  modification.
+    //  Editor name changing is also a modification ; log for this is done
+    //  in OFLPPanel::editor_sync()
+
+    //earlgreycb::Log_function_enter(wxS("OpenFilesListPlus::evh_editor_modified()"));
+
     RefreshOpenFilesTree(event.GetEditor());
+
+    //earlgreycb::Log_function_exit();
 }
 
-void OpenFilesListPlus::evh_editor_saved        (CodeBlocksEvent& event)
+void    OpenFilesListPlus:: evh_editor_saved        (CodeBlocksEvent& event)
 {
-    //GWR_INF("%s", _T("########## OpenFilesListPlus::OnEditorSaved() ##########"));
+    earlgreycb::Log_function_enter(wxS("OpenFilesListPlus::evh_editor_saved()"));
+
     RefreshOpenFilesTree(event.GetEditor());
+
+    earlgreycb::Log_function_exit();
 }
 //  ############################################################################
 //
@@ -129,7 +219,7 @@ void OpenFilesListPlus::evh_tree_item_right_click   (wxTreeEvent& event)
 {
     OFLPPanelItemInfo   inf( event );
     //  ........................................................................
-    //GWR_INF("%s", _T("########## OpenFilesListPlus::OnTreeItemRightClick() ##########"));
+    //GWR_INF("%s", wxS("########## OpenFilesListPlus::OnTreeItemRightClick() ##########"));
 
     if (Manager::IsAppShuttingDown())
         return;
@@ -197,7 +287,7 @@ void    OpenFilesListPlus::   evh_panel_header_button_clicked_del (wxCommandEven
     GWR_INF("OFLP::evh_panel_header_button_del_CLICKED():EventObject[%p] ClientData()[%p]",
         _e.GetEventObject(), panel);
     //  ........................................................................
-    panel_del(panel);
+    panel_sub(panel);
 }
 
 void    OpenFilesListPlus::   evh_panel_header_button_clicked_mm  (wxCommandEvent& _e)

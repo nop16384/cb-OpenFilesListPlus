@@ -2347,7 +2347,7 @@
 	<wx/wx.h>
 	"cbplugin.h"
 
-1441428681 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.cpp
+1442125557 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.cpp
 	"sdk.h"
 	"manager.h"
 	"configmanager.h"
@@ -2359,10 +2359,16 @@
 	"cbeditor.h"
 	"sdk_events.h"
 	"misctreeitemdata.h"
+	"cbworkspace.h"
+	"cbproject.h"
+	"projectmanager.h"
 	"oflp-plugin.hh"
 	"oflp-panel.hh"
+	"tinyxml/tinyxml.h"
+	"tinyxml/tinywxuni.h"
 	"oflp-plugin-panels.cci"
 	"oflp-plugin-events.cci"
+	"oflp-plugin-layout.cci"
 
 1440934526 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.h
 	"oflp-common.hh"
@@ -2379,9 +2385,9 @@
 
 1441130607 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-menus.hhi
 
-1440432199 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-panels.hhi
+1442157576 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-panels.hhi
 
-1441386180 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-events.hhi
+1442123286 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-events.hhi
 
 1440349072 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel.h
 	<wx/menu.h>
@@ -2397,7 +2403,7 @@
 
 1441302488 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-utils.hhi
 
-1441038038 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-header.hhi
+1441990480 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-header.hhi
 
 1440356337 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panels.cpp
 	"sdk.h"
@@ -2428,9 +2434,9 @@
 	<stdio.h>
 	<wx/log.h>
 
-1441130607 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-header.cci
+1442034378 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-header.cci
 
-1441386348 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-utils.cci
+1442125547 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-utils.cci
 
 1440615795 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-menus.cci
 
@@ -2438,9 +2444,9 @@
 
 1440675116 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-menus.hhi
 
-1441385583 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-events.cci
+1442128519 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-events.cci
 
-1441427453 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-panels.cci
+1442128084 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-panels.cci
 
 1440523629 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-icons.cci
 
@@ -2462,23 +2468,24 @@
 	<stdio.h>
 	<wx/log.h>
 
-1440936357 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-gfx.hhi
+1442068439 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-gfx.hhi
 
-1441429939 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/earlgrey-cb.log.cc
+1442128317 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/earlgrey-cb.log.cc
 	"earlgrey-cb.log.hh"
 	<wx/frame.h>
 	<wx/font.h>
 	<wx/textctrl.h>
 	<wx/sizer.h>
 
-1441429107 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/earlgrey-cb.log.hh
+1442128071 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/earlgrey-cb.log.hh
 	<stdio.h>
 	<wx/string.h>
 
-1440924016 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common.hh
+1442131088 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common.hh
 	<wx/wxprec.h>
 	<wx/wx.h>
 	"earlgrey-cb.log.hh"
+	"earlgrey-cb.hstring.hh"
 
 1440924276 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panels.cc
 	"sdk.h"
@@ -4492,7 +4499,7 @@
 1413563581 /usr/include/wx-3.0/wx/gtk/dnd.h
 	"wx/icon.h"
 
-1441386452 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel.cc
+1442127368 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel.cc
 	"sdk.h"
 	"manager.h"
 	"configmanager.h"
@@ -4509,20 +4516,33 @@
 	"oflp-panel-header.cci"
 	"oflp-panel-utils.cci"
 
-1441209862 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel.hh
+1442126990 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel.hh
 	"oflp-common.hh"
 	<wx/dnd.h>
 	"oflp-panel-header.hhi"
 	"oflp-panel-utils.hhi"
 
-1440954985 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.hh
+1442141569 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.hh
 	"oflp-common.hh"
 	<wx/imaglist.h>
 	<wx/xrc/xmlres.h>
 	<wx/artprov.h>
 	"cbplugin.h"
+	"cbworkspace.h"
 	"oflp-plugin-gfx.hhi"
 	"oflp-plugin-menus.hhi"
 	"oflp-plugin-panels.hhi"
 	"oflp-plugin-events.hhi"
+	"oflp-plugin-layout.hhi"
+
+1442033108 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/earlgrey-cb.hstring.hh
+	<stdio.h>
+	<wx/string.h>
+	<wx/strconv.h>
+
+1442157026 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-layout.hhi
+
+1438022506 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10373/trunk/src/include/tinyxml/tinywxuni.h
+
+1442131524 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-layout.cci
 

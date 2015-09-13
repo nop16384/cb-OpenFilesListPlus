@@ -1,0 +1,607 @@
+//  ############################################################################
+//
+//                      CB WORKSPACES & PROJECTS LAYOUTS
+//
+//  ############################################################################
+void    OpenFilesListPlus::Layout::     P0_filename_cb_to_oflp(
+    wxString        _in_filename    ,
+    wxString    &   _out_filename   ,
+    int             _type           )
+{
+    wxString            sfx     =   wxString::FromUTF8(".oflp.layout");
+    //  ........................................................................
+    _out_filename   =   _in_filename;
+    _out_filename.Append(sfx);
+}
+
+void    OpenFilesListPlus::Layout:: p0_dump_project_manager()
+{
+    earlgreycb::Log_function_mark( wxS("p0_dump_project_manager()"));
+
+    ProjectManager* pjm = Manager::Get()->GetProjectManager();
+
+    GWR_TKI("  Workspace loading:[%i]", pjm->IsLoadingWorkspace()   );
+    GWR_TKI("  Workspace closing:[%i]", pjm->IsClosingWorkspace()   );
+    GWR_TKI("  Project   loading:[%i]", pjm->IsLoadingProject()     );
+    GWR_TKI("  Project   closing:[%i]", pjm->IsClosingProject()     );
+    GWR_TKI("  Project   l/c    :[%i]", pjm->IsLoadingOrClosing()   );
+}
+//  ############################################################################
+OpenFilesListPlus::Layout::XmlWorkspaceSnapshot::XmlWorkspaceSnapshot(
+    cbWorkspace     *   _wsp    ,
+    TiXmlDocument   *   _doc    )
+        :   d_xml_doc   (_doc                   )   ,
+            a_title     (_wsp->GetTitle()       )
+{
+    OpenFilesListPlus::Layout::P0_filename_cb_to_oflp(
+        _wsp->GetFilename() ,
+        a_xml_filename      ,
+        1                   );
+}
+//  ############################################################################
+//                              XML stuff ( boring )
+//  ############################################################################
+bool    OpenFilesListPlus::Layout::     xml_load_document       (wxString& _filename, TiXmlDocument* _doc)
+{
+    if ( ! TinyXML::LoadDocument(_filename, _doc) )
+        return false;
+
+    return true;
+}
+
+bool    OpenFilesListPlus::Layout::     xml_load_workspace      (cbWorkspace* _wsp, TiXmlDocument* _doc)
+{
+    wxString    wspfn;
+    //  ........................................................................
+    //  build oflp workspace layout filename
+    P0_filename_cb_to_oflp( _wsp->GetFilename(), wspfn, 1 );
+
+    //  load the xml file & return it
+    return xml_load_document(wspfn, _doc);
+}
+
+bool    OpenFilesListPlus::Layout::     xml_load_project        (cbProject* _pro, TiXmlDocument* _doc)
+{
+    wxString    profn;
+    //  ........................................................................
+    //  build oflp workspace layout filename
+    P0_filename_cb_to_oflp( _pro->GetFilename(), profn, 2 );
+    //  ........................................................................
+    //  load the xml file & return it
+    return xml_load_document(profn, _doc);
+}
+
+
+OpenFilesListPlus::Layout::XmlWorkspaceSnapshot*
+        OpenFilesListPlus::Layout::     xml_workspace_take_snapshot     ()
+{
+    //  - no TiXml constructore are available in plugins ( why : ??? ). So      //  _GWR_KNO_
+    //    every TiXml object has to be new-allocated
+    //  ........................................................................
+    OpenFilesListPlus   *   THIS    =   OpenFilesListPlus::Instance();
+    cbWorkspace         *   wsp     =   Manager::Get()->GetProjectManager()->GetWorkspace();
+    OFLPPanel           *   panel   =   NULL;
+
+    const   char        *   ROOT_TAG    =  "CodeBlocks_workspace_oflp_file";
+            wxString        wspfn;
+            wxString        psix;
+
+    TiXmlDocument       *   doc         =   NULL;
+    TiXmlDeclaration    *   docdec      =   NULL;
+    TiXmlElement        *   rootnode    =   NULL;
+    TiXmlElement        *   panelsnode  =   NULL;
+    TiXmlElement        *   panelnode   =   NULL;
+    TiXmlElement        *   xe1         =   NULL;
+    TiXmlElement        *   xe2         =   NULL;
+    TiXmlElement        *   xe3         =   NULL;
+    TiXmlElement        *   xe4         =   NULL;
+    //  ........................................................................
+    //  build oflp workspace layout filename
+    P0_filename_cb_to_oflp( wsp->GetFilename(), wspfn, 1 );
+    //  ........................................................................
+    //  xml stuff - pre
+    doc     =   new TiXmlDocument();
+    docdec  =   new TiXmlDeclaration("1.0", "UTF-8", "yes");
+
+    doc->SetCondenseWhiteSpace(false);
+    doc->InsertEndChild(*docdec);
+
+    xe1         =   new TiXmlElement(ROOT_TAG);
+    rootnode    =   static_cast<TiXmlElement*>(doc->InsertEndChild(*xe1));
+    if ( ! rootnode )
+        goto lab_failure;
+
+    xe2         =   new TiXmlElement("FileVersion");
+    xe2->SetAttribute("major", OFLP_FILE_VERSION_MAJOR_STR);
+    xe2->SetAttribute("minor", OFLP_FILE_VERSION_MINOR_STR);
+    if ( ! rootnode->InsertEndChild(*xe2) )
+        goto lab_failure;
+
+    xe3         =   new TiXmlElement("Panels");
+    panelsnode  =   static_cast<TiXmlElement*>( rootnode->InsertEndChild(*xe3) );
+    if ( ! panelsnode )
+        goto lab_failure;
+    //  ........................................................................
+    //  xml stuff - layout
+    for ( PanelArray::iterator
+        it  =   THIS->a_panels_array.begin()    ;
+        it  !=  THIS->a_panels_array.end()      ;
+        it++                                    )
+    {
+        panel = (*it);
+
+        if ( panel == THIS->a_BulkPanel )
+            continue;
+
+        xe4         =   new TiXmlElement("Panel");
+        panelnode   =   static_cast< TiXmlElement* >( panelsnode->InsertEndChild(*xe4) );
+        if ( ! panelnode )
+            goto lab_failure;
+
+        psix.Clear();
+        psix << THIS->panel_get_visual_index(panel);
+
+        panelnode->SetAttribute( "name"  , cbU2C(panel->get_title() ));
+        panelnode->SetAttribute( "index" , cbU2C(psix               ));
+
+        delete xe4;
+    }
+    //  ........................................................................
+    if ( xe1 )  delete xe1;
+    if ( xe2 )  delete xe2;
+    if ( xe3 )  delete xe3;
+
+    return new XmlWorkspaceSnapshot(wsp, doc);
+    //  ........................................................................
+lab_failure:
+    if ( doc )  delete doc;
+    if ( xe1 )  delete xe1;
+    if ( xe2 )  delete xe2;
+    if ( xe3 )  delete xe3;
+    if ( xe4 )  delete xe4;
+
+    return NULL;
+}
+
+void    OpenFilesListPlus::Layout::     xml_workspace_update_snapshot   ()
+{
+    if ( d_xml_wsp_snapshot_1 ) delete d_xml_wsp_snapshot_1;
+
+    d_xml_wsp_snapshot_1 = xml_workspace_take_snapshot();
+
+    GWR_TKI("OFLP::Layout::xml_workspace_take_snapshot():wsp[%s] -> file[%s]",
+        d_xml_wsp_snapshot_1->wsp_title().wc_str()      ,
+        d_xml_wsp_snapshot_1->xml_filename().wc_str()   );
+}
+
+bool    OpenFilesListPlus::Layout::     xml_workspace_save_snapshot     ()
+{
+    wxString    wspfn;
+    //  ........................................................................
+    if ( ! d_xml_wsp_snapshot_1 )
+        return true;
+    //  ........................................................................
+    //  build oflp workspace layout filename
+    GWR_TKI("OFLP::Layout::xml_workspace_save_snapshot():wsp[%s] -> file[%s]",
+        d_xml_wsp_snapshot_1->wsp_title().wc_str()      ,
+        d_xml_wsp_snapshot_1->xml_filename().wc_str()   );
+
+    return cbSaveTinyXMLDocument(
+        d_xml_wsp_snapshot_1->xml_doc()         ,
+        d_xml_wsp_snapshot_1->xml_filename()    );
+}
+
+bool    OpenFilesListPlus::Layout::     xml_save_project        (cbProject* _pro)
+{
+    //  - no TiXml constructore are available in plugins ( why : ??? ). So      //  _GWR_KNO_
+    //    every TiXml object has to be new-allocated
+    //  ........................................................................
+    bool                bret        =   TRUE;
+    int i,c;
+    ProjectFile     *   prf         =   NULL;
+    OFLPPanel       *   panel       =   NULL;
+
+    const   char        *   ROOT_TAG    = "CodeBlocks_project_oflp_file";
+            wxString        profn;
+
+    TiXmlDocument   *   doc         =   NULL;
+    TiXmlDeclaration*   docdec      =   NULL;
+    TiXmlElement    *   rootnode    =   NULL;
+    TiXmlElement    *   filenode    =   NULL;
+    TiXmlElement    *   xe1         =   NULL;
+    TiXmlElement    *   xe2         =   NULL;
+    TiXmlElement    *   xe3         =   NULL;
+    //  ........................................................................
+    //  build oflp workspace layout filename
+    P0_filename_cb_to_oflp( _pro->GetFilename(), profn, 2 );
+    //  ........................................................................
+    //  xml stuff - pre
+    doc     =   new TiXmlDocument();
+    docdec  =   new TiXmlDeclaration("1.0", "UTF-8", "yes");
+
+    doc->SetCondenseWhiteSpace(false);
+    doc->InsertEndChild(*docdec);
+
+    xe1         =   new TiXmlElement(ROOT_TAG);
+    rootnode    =   static_cast<TiXmlElement*>(doc->InsertEndChild(*xe1));
+    if ( ! rootnode )
+        goto lab_failure;
+
+    xe2         =   new TiXmlElement("FileVersion");
+    xe2->SetAttribute("major", OFLP_FILE_VERSION_MAJOR_STR);
+    xe2->SetAttribute("minor", OFLP_FILE_VERSION_MINOR_STR);
+    if ( ! rootnode->InsertEndChild(*xe2) )
+        goto lab_failure;
+    //  ........................................................................
+    //  xml stuff - layout
+    c = _pro->GetFilesCount();
+
+    for ( i = 0 ; i != c ; i++ )
+    {
+        prf     =   _pro->GetFile(i);
+        panel   =   OpenFilesListPlus::Instance()->panel_find(prf);
+
+        if ( panel )
+        {
+            if ( panel != OpenFilesListPlus::Instance()->a_BulkPanel )
+            {
+                GWR_TKI("xml_save_project():file[%s] is in panel[%s]",
+                    prf->relativeFilename.wc_str()  ,
+                    panel->get_title().wc_str()     );
+
+                xe3 =   new TiXmlElement("File");
+                filenode = static_cast< TiXmlElement* >( rootnode->InsertEndChild(*xe3) );
+                if ( ! filenode )
+                    goto lab_failure;
+
+                filenode->SetAttribute( "name"  , cbU2C(prf->relativeFilename   ));
+                filenode->SetAttribute( "panel" , cbU2C(panel->get_title()      ));
+
+                delete xe3;
+            }
+        }
+        else
+        {
+            GWR_TKI("xml_save_project():file[%s] is _NOT_ in any panel",
+                prf->relativeFilename.wc_str()  );
+        }
+    }
+    //  ........................................................................
+    //  write file
+    bret    =   cbSaveTinyXMLDocument(doc, profn);
+    //  ........................................................................
+lab_exit:
+    if ( doc )  delete doc;
+    if ( xe1 )  delete xe1;
+    if ( xe2 )  delete xe2;
+
+    return bret;
+    //  ........................................................................
+lab_failure:
+    if ( doc )  delete doc;
+    if ( xe1 )  delete xe1;
+    if ( xe2 )  delete xe2;
+    if ( xe3 )  delete xe3;
+
+    return FALSE;
+}
+
+bool    OpenFilesListPlus::Layout::     xml_parse_workspace     (TiXmlDocument* _doc)
+{
+    TiXmlElement*   root    =   _doc->FirstChildElement("CodeBlocks_workspace_oflp_file");
+    if ( ! root )
+    {
+        //GetpMsg()->DebugLog(_T("Not a valid Code::Blocks workspace file..."));
+        return false;
+    }
+
+    TiXmlElement*   panels  =   root->FirstChildElement("Panels");
+    if ( ! panels )
+    {
+        //GetpMsg()->DebugLog(_T("No 'Panels' element in file..."));
+        return false;
+    }
+
+    TiXmlElement* panel     =   panels->FirstChildElement("Panel");
+    while ( panel )
+    {
+        long        u       =   0;
+        wxString    name    =   cbC2U( panel->Attribute("name") );
+        wxString    index   =   cbC2U( panel->Attribute("index") );
+
+        if ( ! index.ToLong(&u) )
+        {
+            GWR_TKE("xml_parse_workspace():panel[%s] index[%s] - index could not be transformed to int",
+                name.wc_str(), index.wc_str());
+            return false;
+        }
+        GWR_TKI("xml_parse_workspace():panel[%s] index[%s]", name.wc_str(), index.wc_str());
+
+        a_panel_assignments_array.Add( new PanelAssignment(name, static_cast< int >( u )) );
+
+                    panel   =   panel->NextSiblingElement("Panel");
+    }
+
+    return true;
+}
+
+bool    OpenFilesListPlus::Layout::     xml_parse_project       (cbProject* _project, TiXmlDocument* _doc)
+{
+    ProjectAssignments  *   pa  =   NULL;
+    //  ------------------------------------------------------------------------
+    //  first see if the project has not already been parsed :
+    //  - workspace loading : "project-opened" events are sent before
+    //    "workspace-loaded" event, but on_workspace_loading_complete() delete
+    //    all assignments
+    //  - reloading of project
+    for ( ProjectAssignmentsArray::iterator
+        it  =   a_project_assignments_array.begin() ;
+        it  !=  a_project_assignments_array.end()   ;
+        it++                                        )
+    {
+        pa  =   (*it);
+
+        if ( pa->project() == _project )
+        {
+            GWR_TKI("xml_parse_project():project[%s] already parsed", _project->GetTitle().wc_str());
+            return true;
+        }
+    }
+    //  ------------------------------------------------------------------------
+    //  parse
+    TiXmlElement*   root    =   _doc->FirstChildElement("CodeBlocks_project_oflp_file");
+    if ( ! root )
+    {
+        //GetpMsg()->DebugLog(_T("Not a valid Code::Blocks workspace file..."));
+        return false;;
+    }
+
+    pa = new ProjectAssignments(_project);
+
+    TiXmlElement*   file    =   root->FirstChildElement("File");
+    while ( file )
+    {
+        wxString    name    =   cbC2U( file->Attribute("name")  );
+        wxString    panel   =   cbC2U( file->Attribute("panel") );
+
+        GWR_TKI("xml_parse_project():file[%s] -> panel[%s]", name.wc_str(), panel.wc_str());
+
+        pa->add( name, panel );
+
+                    file    =   file->NextSiblingElement("File");
+    }
+
+    a_project_assignments_array.Add(pa);
+
+    return true;
+}
+//  ############################################################################
+//                              Assignments
+//  ############################################################################
+void        OpenFilesListPlus::Layout:: assignments_reset       ()
+{
+    for ( ProjectAssignmentsArray::iterator
+        it  =   a_project_assignments_array.begin() ;
+        it  !=  a_project_assignments_array.end()   ;
+        it++                                        )
+    {
+        delete (*it);
+    }
+    a_project_assignments_array.Clear();
+
+    for ( PanelAssignmentArray::iterator
+        it  =   a_panel_assignments_array.begin()   ;
+        it  !=  a_panel_assignments_array.end()     ;
+        it++                                        )
+    {
+        delete (*it);
+    }
+    a_panel_assignments_array.Clear();
+}
+
+wxString    OpenFilesListPlus::Layout:: assignment_file_find    (EditorBase* _editor)
+{
+    ProjectAssignments          *   pa      =   NULL;
+    FileAssignment              *   fa      =   NULL;
+
+    cbEditor                    *   cbed    =   reinterpret_cast< cbEditor* >( _editor );
+    ProjectFile                 *   pjf     =   cbed->GetProjectFile();
+    earlgreycb::HString::tHash      hash    =   earlgreycb::HString::Hash(pjf->relativeFilename);
+    //  ........................................................................
+    //D GWR_TKI("layout_assignment_file_find():searching for [%s][%lu]", pjf->relativeFilename.wc_str(), hash);
+    //  ........................................................................
+    for ( ProjectAssignmentsArray::iterator                                     //  iterates on all ProjectAssignemnts-s
+        i1  =   a_project_assignments_array.begin() ;
+        i1  !=  a_project_assignments_array.end()   ;
+        i1++                                        )
+    {
+        pa  =   (*i1);
+
+        for ( FileAssignmentArray::const_iterator                               //  iterates on all FileAssignment-s
+            i2  =   pa->array().begin() ;
+            i2  !=  pa->array().end()   ;
+            i2++                        )
+        {
+            fa  =   (*i2);
+            //D GWR_TKI("  testing [%s] [%lu]", (*it)->file().wc_str(), (*it)->hfile() );
+
+            if ( fa->hfile() != hash )
+                continue;
+
+            if ( fa->file().Cmp( pjf->relativeFilename ) )
+                continue;
+
+            //  ok, found
+            //D GWR_TKI("assignment_file_find():editor[%s] is assigned to panel[%s] by project[%s]",
+                //pjf->relativeFilename.wc_str()      ,
+                //fa->panel().wc_str()                ,
+                //pa->project()->GetTitle().wc_str()  );
+
+            return fa->panel();
+        }
+    }
+
+    GWR_TKI("assignment_file_find():editor[%s] is not assigned",
+        pjf->relativeFilename.wc_str()      );
+
+    return wxString();
+}
+//  ############################################################################
+//                              Actions
+//  ############################################################################
+void    OpenFilesListPlus::Layout::     p0_reset        ()
+{
+    assignments_reset();
+}
+
+void    OpenFilesListPlus::Layout::     create_panels   ()
+{
+    for ( PanelAssignmentArray::iterator
+        it  =   a_panel_assignments_array.begin()   ;
+        it  !=  a_panel_assignments_array.end()     ;
+        it++                                        )
+    {
+        OpenFilesListPlus::Instance()->panel_add( (*it)->name(), false );
+    }
+}
+
+void    OpenFilesListPlus::Layout::     apply           ()
+{
+    EditorManager   *   em      =   Manager::Get()->GetEditorManager();
+    OFLPPanel       *   panel   =   NULL;
+    //  ........................................................................
+    OpenFilesListPlus::Instance()->p0_freeze();
+
+    for ( int i = 0 ; i != em->GetEditorsCount() ; i++ )
+    {
+        EditorBase  *   ed      =   em->GetEditor(i);
+
+        wxString        pn      =   assignment_file_find( ed );
+
+        GWR_TKI("apply_projects():editor[%s] is assigned to panel[%s]",
+            ed->GetFilename().wc_str()  ,
+            pn.wc_str()                 );
+
+                        panel   =   OpenFilesListPlus::Instance()->p0_panel_get_by_name(pn);
+
+        if ( panel )
+        {
+            panel->editor_add( ed );
+        }
+        else
+        {
+            OpenFilesListPlus::Instance()->a_BulkPanel->editor_add( ed );
+        }
+    }
+
+    OpenFilesListPlus::Instance()->p0_thaw();
+}
+//  ############################################################################
+//                              Events
+//  ############################################################################
+void    OpenFilesListPlus::Layout::     on_workspace_loading_complete   ()
+{
+    earlgreycb::Log_function_enter(wxS("on_workspace_loading_complete()"));
+    //  ........................................................................
+    ProjectManager  *   pjm     =   NULL;
+    cbWorkspace     *   wsp     =   NULL;
+    ProjectsArray   *   pja     =   NULL;
+    cbProject       *   pro     =   NULL;
+    TiXmlDocument   *   doc_wsp =   NULL;
+    TiXmlDocument   *   doc_pro =   NULL;
+    //  ........................................................................
+    //  first save old workspace
+    xml_workspace_save_snapshot();
+    //  ........................................................................
+    //  get current workspace & projects
+    pjm = Manager::Get()->GetProjectManager();
+    wsp = pjm->GetWorkspace();
+    pja = pjm->GetProjects();
+    //  ........................................................................
+    assignments_reset();                                                        //  delete all current assignments
+    //  ........................................................................
+    //  load the oflp workspace layout
+    doc_wsp =   new TiXmlDocument();
+
+    if ( ! xml_load_workspace(wsp, doc_wsp) )
+    {
+        GWR_TKE("on_workspace_loading_complete():%s[%s]", wxS("oflp workspace xml layout _NOT_ loaded"), wsp->GetTitle().wc_str());
+        goto lab_exit;
+    }
+    GWR_TKI("on_workspace_loading_complete():%s[%s]", wxS("oflp workspace xml layout loaded"), wsp->GetTitle().wc_str());
+    //  ........................................................................
+    //  parse for workspace
+    xml_parse_workspace(doc_wsp);                                               //  add asignments for current workspace
+    //  ........................................................................
+    //  load the oflp project-s layout-s & parse them
+    for ( ProjectsArray::iterator it = pja->begin() ; it != pja->end() ; it ++ )
+    {
+        pro     =   (*it);
+        doc_pro =   new TiXmlDocument();
+
+        if ( ! xml_load_project(pro, doc_pro) )
+        {
+            GWR_TKE("on_workspace_loading_complete():%s[%s]", wxS("oflp project xml layout _NOT_ loaded"), pro->GetFilename().wc_str());
+            delete doc_pro; doc_pro = NULL;
+            continue;
+        }
+        GWR_TKI("on_workspace_loading_complete():%s[%s]", wxS("oflp project xml layout loaded"), pro->GetFilename().wc_str());
+
+        xml_parse_project(pro, doc_pro);                                        //  parse
+    }
+    //  ........................................................................
+    //  reset the view & apply
+    //OpenFilesListPlus::Instance()->reset();
+    create_panels();
+    xml_workspace_update_snapshot();
+    apply();
+    //  ........................................................................
+    //  now select the active editor, and we are finished !
+    //  ........................................................................
+lab_exit:
+    earlgreycb::Log_function_exit();
+}
+
+void    OpenFilesListPlus::Layout::     on_project_opened               (cbProject* _pro)
+{
+    earlgreycb::Log_function_enter(wxS("on_project_opened()"));
+    GWR_INF("project title[%s]", _pro->GetTitle().wc_str());
+    //  ........................................................................
+    TiXmlDocument   *   doc =   NULL;
+    //  ........................................................................
+    //  load the project's oflp-layout
+    doc =   new TiXmlDocument();
+
+    if ( ! xml_load_project(_pro, doc) )
+    {
+        GWR_TKE("on_project_opened():%s[%s]", wxS("oflp project xml layout _NOT_ loaded"), _pro->GetFilename().wc_str());
+        delete doc; doc = NULL;
+        goto lab_exit;
+    }
+    GWR_TKI("on_project_opened():%s[%s]", wxS("oflp project xml layout loaded"), _pro->GetFilename().wc_str());
+    //a_xml_pro_array.Add(doc);
+    //  ........................................................................
+    //  parse the layout, convert it to FileAssignments
+    xml_parse_project(_pro, doc);
+    //  ........................................................................
+    //  apply
+    apply();
+    //  ........................................................................
+    //  now select the active editor, and we are finished !
+    //  ........................................................................
+lab_exit:
+    earlgreycb::Log_function_exit();
+}
+
+void    OpenFilesListPlus::Layout::     on_project_save                 (cbProject* _pro)
+{
+    earlgreycb::Log_function_enter(wxS("on_project_save()"));
+
+    GWR_INF("project title[%s]", _pro->GetTitle().wc_str());
+
+    xml_save_project(_pro);
+    //  ........................................................................
+lab_exit:
+    earlgreycb::Log_function_exit();
+}
+

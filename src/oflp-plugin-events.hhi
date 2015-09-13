@@ -13,7 +13,11 @@
     void    evh_editor_modified     (CodeBlocksEvent& event);
     void    evh_editor_saved        (CodeBlocksEvent& event);
 
-    void    evh_ProjectOpened(CodeBlocksEvent& event);
+    void    evh_workspace_changed           (CodeBlocksEvent& event);
+    void    evh_workspace_loading_complete  (CodeBlocksEvent& event);
+    void    evh_project_open                (CodeBlocksEvent& event);
+    void    evh_project_close               (CodeBlocksEvent& event);
+    void    evh_project_save                (CodeBlocksEvent& event);
 
     void    evh_panel_header_button_clicked_add     (wxCommandEvent &);
     void    evh_panel_header_button_clicked_del     (wxCommandEvent &);

@@ -3,8 +3,8 @@
  * http://www.gnu.org/licenses/gpl-3.0.html
  */
 
-#ifndef __OFLP_PANELS_H__
-#define __OFLP_PANELS_H__
+#ifndef __OFLP_PANEL_HH__
+#define __OFLP_PANEL_HH__
 //  ............................................................................
 #include    "oflp-common.hh"                                                    //  standard wx includes + OFLP log system
 //  ............................................................................
@@ -20,8 +20,6 @@
 class OpenFilesListPlusPanel              : public wxPanel
 {
   protected:
-    OpenFilesListPlus *   a_ofl_plugin;
-
     bool                    a_bulk;
 
     bool                    a_allow_kill_focus_event;
@@ -35,7 +33,6 @@ class OpenFilesListPlusPanel              : public wxPanel
     OpenFilesListPlusPanelDropTarget  *   d_drop_target;
     //  ------------------------------------------------------------------------
   public:
-    OpenFilesListPlus   *   const   plugin()                    const   { return a_ofl_plugin;          }
     bool                            is_bulk()                   const   { return a_bulk;                }
     EditorArray const   *           get_editors()               const   { return &a_editors_array;      }
     wxTreeCtrl  const   *   const   tree()                      const   { return d_tree;                }
@@ -59,6 +56,7 @@ class OpenFilesListPlusPanel              : public wxPanel
     void                    reset();
 
     int                     editor_index    (EditorBase*);
+    int                     editor_index    (ProjectFile*);
     void                    editor_add      (EditorBase*);
     void                    editor_del      (EditorBase*);
     void                    editor_select   (EditorBase*);
@@ -110,5 +108,5 @@ class OpenFilesListPlusPanelBulk          : public OpenFilesListPlusPanel
     virtual ~OpenFilesListPlusPanelBulk();
 };
 
-#endif                                                                          // __OFLP_PANELS_H__
+#endif                                                                          // __OFLP_PANEL_HH__
 
