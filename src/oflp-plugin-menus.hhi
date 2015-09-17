@@ -9,18 +9,21 @@
       public:
         enum
         {
-            eMODE_STANDARD          =   0x0001  ,
-            eMODE_PRODUCTIVITY      =   0x0002  ,
+            eSAVE_WORKSPACE_LAYOUT  =   0x0001  ,
+
+            eMODE_STANDARD          =   0x0002  ,
+            eMODE_PRODUCTIVITY      =   0x0003  ,
 
             eENABLE_LOG_WINDOW      =   0x00fe  ,
             eENABLE_LOG_CONSOLE     =   0x00ff
         };
         //  ....................................................................
       private:
+        wxMenuItem  *       dw_i1_save_workspace_layout;
         wxMenu      *       dw_m1_mode;
         wxMenu      *       dw_m1_log;
-        wxMenuItem  *           dw_m1_log_console;
-        wxMenuItem  *           dw_m1_log_window;
+        wxMenuItem  *           dw_i2_log_console;
+        wxMenuItem  *           dw_i2_log_window;
         //  ....................................................................
         int                 a_mode;
         bool                a_log_console;
@@ -31,8 +34,8 @@
         wxMenu      *       m1log()     { return dw_m1_log;     }
         //  ....................................................................
       protected:
-        void                check_item_set_log_console  (bool _b)   { a_log_console = _b    ; dw_m1_log_console ->Check(_b); }
-        void                check_item_set_log_window   (bool _b)   { a_log_window = _b     ; dw_m1_log_window  ->Check(_b); }
+        void                check_item_set_log_console  (bool _b)   { a_log_console = _b    ; dw_i2_log_console ->Check(_b); }
+        void                check_item_set_log_window   (bool _b)   { a_log_window = _b     ; dw_i2_log_window  ->Check(_b); }
       public:
         bool                mode_standard()     { return ( a_mode ==  eMODE_STANDARD    );  }
         bool                mode_productivity() { return ( a_mode ==  eMODE_PRODUCTIVITY);  }
@@ -73,6 +76,10 @@
                 a_log_console   (false)             ,
                 a_log_window    (false)
             {
+                //dw_i1_save_workspace_layout = this->Append(eSAVE_WORKSPACE_LAYOUT, _("Save workspace layout"));
+
+                //this->AppendSeparator();
+
                 dw_m1_mode = new wxMenu();
                 dw_m1_mode->AppendRadioItem(eMODE_STANDARD    , wxS("Standard")       , _("Edit files by double-click"));
                 dw_m1_mode->AppendRadioItem(eMODE_PRODUCTIVITY, wxS("Productivity ")  , _("Edit files by single-click"));
@@ -82,8 +89,8 @@
                 this->AppendSeparator();
 
                 dw_m1_log = new wxMenu();
-                dw_m1_log_window    = dw_m1_log->AppendCheckItem(eENABLE_LOG_WINDOW  , wxS("wxLogWindow "));
-                dw_m1_log_console   = dw_m1_log->AppendCheckItem(eENABLE_LOG_CONSOLE , wxS("console "));
+                dw_i2_log_window    = dw_m1_log->AppendCheckItem(eENABLE_LOG_WINDOW  , wxS("wxLogWindow "));
+                dw_i2_log_console   = dw_m1_log->AppendCheckItem(eENABLE_LOG_CONSOLE , wxS("console "));
 
                 this->AppendSubMenu(dw_m1_log, wxS("Logs"));
             };

@@ -127,7 +127,6 @@ class OpenFilesListPlus : public cbPlugin
 
         friend class OpenFilesListPlusPanel;
         friend class OpenFilesListPlusPanelBulk;
-        friend class OpenFilesListPlus::Layout;
 
       private:
         static  OpenFilesListPlus   *   s_singleton;
@@ -155,7 +154,12 @@ class OpenFilesListPlus : public cbPlugin
         };
 
       protected:
-        void    RefreshOpenFilesTree(EditorBase* ed, bool remove = false);
+        void    reset();
+
+        void    AddAllOpenFiles         ();
+        void    RefreshOpenFileState    (EditorBase* _edb, bool _remove = false);
+        void    RefreshOpenFileLayout   (EditorBase* _edb);
+        void    RefreshOpenFilesLayout  ();
         //  ====================================================================
         #include    "oflp-plugin-gfx.hhi"
         #include    "oflp-plugin-menus.hhi"

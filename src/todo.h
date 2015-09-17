@@ -25,18 +25,22 @@
 
 +(012)  2015.09.06  Memory leaks ?
 
-+(013)  2015.09.12  Select active editor after workspace laoding
+ (013)  2015.09.12  Select active editor after workspace laoding
 
 +(014)  2015.09.12  Put up & down arrows near mini/maxi-mize button in OFLPPanelHeader
 
-+(015)  2015.09.13  Layout : apply() : rewrite for handling all cases
+ (015)  2015.09.13  Layout : apply() : rewrite for handling all cases
 
 +(016)  2015.09.13  Layout : C::B save everything relationships
 
 +(017)  2015.09.13  Layout : OFLPPanels ordering at loading
 
-+(018)  2015.09.13  OFLP::on_editor_modified() : DONT call refresh for
+ (018)  2015.09.13  OFLP::on_editor_modified() : DONT call refresh for
                     a letter typed !!!
+
++(019)  2015.09.13  Unique panel names / workspace
+
++(020)  2015.09.15  boolean return values check
 //  ############################################################################
 (001)
 2015.08.21  Done: call to SetFocus() )
@@ -79,13 +83,20 @@
 (012)
 //  ============================================================================
 (013)
+2015.09.17  Done : in cbEVT_EDITOR_ACTIVATED handler
 //  ============================================================================
 (014)
 //  ============================================================================
 (015)
+2015.09.17  Done : apply() stuff has been moved in OFLP event handlers
 //  ============================================================================
 (016)
 //  ============================================================================
 (017)
 //  ============================================================================
 (018)
+2015.09.17  Done
+//  ============================================================================
+(019)
+//  ============================================================================
+(020)

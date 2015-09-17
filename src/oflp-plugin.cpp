@@ -129,7 +129,8 @@ void OpenFilesListPlus::OnAttach()
 
     //  workspace related, for layout
     pm->RegisterEventSink(cbEVT_WORKSPACE_LOADING_COMPLETE  , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_workspace_loading_complete   ));
-    pm->RegisterEventSink(cbEVT_WORKSPACE_CHANGED           , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_workspace_changed            ));
+    pm->RegisterEventSink(cbEVT_WORKSPACE_CLOSE_BEGIN       , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_workspace_close_begin        ));
+    pm->RegisterEventSink(cbEVT_WORKSPACE_CLOSE_COMPLETE    , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_workspace_close_complete     ));
 
     //  projects related, for layout
     pm->RegisterEventSink(cbEVT_PROJECT_OPEN    , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_project_open     ));
@@ -246,7 +247,13 @@ void OpenFilesListPlus::evh_update_ui             (wxUpdateUIEvent& event)
     event.Skip();
 }
 //  ############################################################################
-//! \brief  RefreshOpenFilesTree
+//! \brief  Delete all OFLPPanels, forget about the layout
+void OpenFilesListPlus::reset()
+{
+    p0_panels_reset();
+    layout()->reset();
+}
+//! \brief  RefreshOpenFileState
 //!
 //! \detail Given an editor :
 //!     if have to remove : remove it
@@ -255,75 +262,170 @@ void OpenFilesListPlus::evh_update_ui             (wxUpdateUIEvent& event)
 //!         else                  : add a new wxTreeItem
 //!       - verify wxTreeItem icon
 //!       - verify wxTreeItem text
-void OpenFilesListPlus::RefreshOpenFilesTree    (EditorBase* ed, bool remove)
+void OpenFilesListPlus::RefreshOpenFileState    (EditorBase* _nn_edb, bool _remove)
 {
-    OFLPPanel                       *   panel   =   NULL;
-    wxTreeItemId                    iid;
+    EditorManager   *   emgr  =   Manager::Get()->GetEditorManager();
+    EditorBase      *   aedb  =   emgr->GetActiveEditor();
+
+    OFLPPanel       *   panel   =   NULL;
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OpenFilesListPlugin::RefreshOpenFilesTree()"));
+    earlgreycb::Log_function_enter(wxS("OFLP::RefreshOpenFileState()"));
     //  ........................................................................
     if ( Manager::IsAppShuttingDown() )
         return;
-
-    if ( ! ed )
-    {
-        GWR_TKE("%s", wxS("RefreshOpenFilesTree():activated editor NULL"));
-        return;
-    }
-
-    EditorManager   * mgr   =   Manager::Get()->GetEditorManager();
-    EditorBase      * aed   =   mgr->GetActiveEditor();
-
+    //  ........................................................................
     dw_MainPanel->Freeze();
+    //  ........................................................................
+    wxString            shortname   = _nn_edb->GetShortName();
+    panel                           = panel_find(_nn_edb);
 
-    wxTreeItemIdValue   cookie      = 0;
-    wxString            shortname   = ed->GetShortName();
-    panel                           = panel_find(ed);
-
-    GWR_TKI("RefreshOpenFilesTree():activated editor [%s]", shortname.wc_str());
-    GWR_TKI("RefreshOpenFilesTree():active    editor [%s]", aed ? aed->GetShortName().wc_str() : wxS("NULL"));
-    GWR_TKI("RefreshOpenFilesTree():panel            [%p]", panel);
-
-    //  find panel from editor
+    GWR_TKI("     ...editor         :[%p][%s]", _nn_edb, shortname.wc_str());
+    GWR_TKI("     ..._remove        :[%i]"    , _remove);
+    GWR_TKI("     ...panel          :[%p]"    , panel);
+    GWR_TKI("     ...active editor  :[%s]"    , aedb ? aedb->GetShortName().wc_str() : wxS("NULL"));
+    //  ........................................................................
+    //  we found the editor in an OFLPPanel
     if ( panel )
     {
-        if ( !remove )
+        //  ....................................................................
+        //  sync wxTreeItem infos - verify selection state
+        if ( ! _remove )
         {
-            //  ensure visual infos are correct ( icon, name + eventually re-sorting )
-            panel->editor_sync(ed);
+            //  sync wxTreeItem infos ( icon, name + eventually re-sorting )
+            panel->editor_sync(_nn_edb);
 
-            //  ensure selected if it is the active one
-            if ( ed == aed )
+            if ( _nn_edb == aedb )
             {
-                if ( ! panel->editor_selected(ed) )
+                if ( ! panel->editor_selected(_nn_edb) )
                 {
-                    GWR_TKI("%s", wxS("RefreshOpenFilesTree():selecting"));
-                    panel->editor_select(ed);
+                    GWR_TKI("%s", wxS("      ...selecting"));
+                    panel->editor_select(_nn_edb);
                 }
                 else
                 {
-                    GWR_TKI("%s", wxS("RefreshOpenFilesTree():not selecting - optimization"));
+                    GWR_TKI("%s", wxS("      ...not selecting (optimization)"));
                 }
                 panels_unselect(panel);
             }
         }
         else
         {
-            panel->editor_del(ed);
+            GWR_TKI("%s", wxS("      ...deleting"));
+            panel->editor_del(_nn_edb);
         }
     }
+    //  ........................................................................
+    //  editor was not found in any OFLPPanel - do nothing, we add editor
+    //  by another method
     else
     {
         // not found, not to-remove and valid name: add new editor
-        if ( !remove && ed->VisibleToTree() && !shortname.IsEmpty())
-        {
-            a_BulkPanel->editor_add(ed);
-        }
+        //if ( !remove && _edb->VisibleToTree() && !shortname.IsEmpty())
+        //{
+            //a_BulkPanel->editor_add(_edb);
+        //}
     }
+    //  ........................................................................
     dw_MainPanel->Thaw();
-
+    //  ........................................................................
     earlgreycb::Log_function_exit();
 }
+//! \brief  RefreshOpenFileLayout
+//!
+//! \detail Given an editor :
+//!     if have to remove : remove it
+//!     else
+//!       - if    editor in list  : ensure corresponding wxTreeItem is selected
+//!         else                  : add a new wxTreeItem
+//!       - verify wxTreeItem icon
+//!       - verify wxTreeItem text
+void OpenFilesListPlus::RefreshOpenFileLayout   (EditorBase* _nn_edb)
+{
+    ProjectManager  *   promgr      =   Manager::Get()->GetProjectManager();
+    EditorManager   *   emgr        =   Manager::Get()->GetEditorManager();
+    EditorBase      *   aedb        =   emgr->GetActiveEditor();
+
+    cbProject       *   pro     =   NULL;
+    ProjectFile     *   pjf     =   NULL;
+    OFLPPanel       *   psrc    =   NULL;
+    OFLPPanel       *   pdst    =   NULL;
+    //  ........................................................................
+    earlgreycb::Log_function_enter(wxS("OFLP::RefreshOpenFileLayout()"));
+    //  ........................................................................
+    if ( Manager::IsAppShuttingDown() )
+        return;
+    //  ........................................................................
+    //  get infos on editor
+    wxString            shortname   = _nn_edb->GetShortName();
+    psrc                            = panel_find(_nn_edb);
+    if ( ! psrc )
+    {
+        GWR_TKE("      ...editor [%p][%s] was _NOT_ found in any panel", _nn_edb, shortname.wc_str());
+        goto lab_exit;
+    }
+    GWR_TKI("      ...editor         :[%p][%s]", _nn_edb, shortname.wc_str());
+    GWR_TKI("      ...panel          :[%p]"    , psrc);
+    GWR_TKI("      ...active editor  :[%s]"    , aedb ? aedb->GetShortName().wc_str() : wxS("NULL"));
+    //  ........................................................................
+    //  find ProjectFile if it exists ; if not set dst to bulk
+    pro = promgr->FindProjectForFile(_nn_edb->GetFilename(), &pjf, false, false);
+    if ( ! pjf )
+    {
+        GWR_TKI("%s", wxS("      ...ProjectFile is NULL"));
+        pdst = a_BulkPanel;
+        goto lab_eventually_move;
+    }
+    //  ........................................................................
+    //  find file assignment ; if found, amove editor to its assigned panel
+    //  if it lays in another panel.
+    pdst = file_assignment_find_panel(pjf);
+
+    //  no assignment - set dst to bulk
+    if ( ! pdst )
+    {
+        GWR_TKI("%s", wxS("      ...not assigned"));
+        pdst    =   a_BulkPanel;
+    }
+    //  ........................................................................
+lab_eventually_move:
+    //  move if different panels
+    if ( psrc != pdst )
+    {
+        GWR_TKI("      ...moving editor to panel[%s]", pdst->get_title().wc_str());
+        p0_editor_move( pdst, psrc, _nn_edb );
+    }
+    //  ........................................................................
+lab_exit:
+    earlgreycb::Log_function_exit();
+}
+
+void OpenFilesListPlus::RefreshOpenFilesLayout  ()
+{
+    EditorManager   *   emgr  =   Manager::Get()->GetEditorManager();
+    //  ........................................................................
+    earlgreycb::Log_function_enter(wxS("OFLP::RefreshOpenFilesLayout()"));
+    //  ........................................................................
+    //  optim : if workspace loading, first calls to RefreshOpenFileLayout()    //  _GWR_OPTIM_
+    //  occurs _BEFORE_ panels are created. So if no panel exist, drop
+    if ( layout()->panel_assignment_array().size() == 0 )
+    {
+        GWR_TKI("%s", wxS("      ...no panel is present - dropping"));
+        goto lab_exit;
+    }
+    //  ........................................................................
+    dw_MainPanel->Freeze();
+
+    for ( int i = 0 ; i != emgr->GetEditorsCount() ; i++ )
+    {
+        RefreshOpenFileLayout( emgr->GetEditor(i) );
+    }
+
+    dw_MainPanel->Thaw();
+    //  ........................................................................
+lab_exit:
+    earlgreycb::Log_function_exit();
+}
+
 //  ############################################################################
 #include    "oflp-plugin-panels.cci"
 #include    "oflp-plugin-events.cci"

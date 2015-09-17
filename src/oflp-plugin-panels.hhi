@@ -12,10 +12,10 @@
     void                    p0_thaw()       { dw_MainPanel->Thaw();     }
 
     void                    p0_panel_items_transfer     (OFLPPanel* _dst, OFLPPanel* _src);
-    void                    p0_panel_reset              (OFLPPanel*);
-    void                    p0_panels_reset             (bool _update_layout_workspace_snapshot);
-
+    void                    p0_panels_reset             ();
     OFLPPanel           *   p0_panel_get_by_name        (wxString const & _name);
+
+    void                    p0_editor_move              (OFLPPanel* _dst, OFLPPanel* _src, EditorBase* _edb);
 
   public:
     void                    panels_unselect (OFLPPanel*);

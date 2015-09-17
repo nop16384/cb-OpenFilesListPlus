@@ -1,4 +1,4 @@
-+(001)  2015.08.21  When editor change from ofl, focus stay on ofl, is not given
++(001)  2015.08.21  When editor change from oflp, focus stay on oflp, is not given
                     to editor
 
  (002)  2015.08.21  When editing OFLPPanel title, the wxTextCtrl remains if
@@ -6,7 +6,7 @@
 
  (003)  2015.08.21  After DnD selection of item is lost
 
-+(004)  2015.08.21  Double loop : mouse -> activate editor -> select editor -> OnTreeItemSelected -> refresh -> select editor
+ (004)  2015.08.21  Double loop : mouse -> activate editor -> select editor -> OnTreeItemSelected -> refresh -> select editor
 
  (005)  2015.08.22  Double call to OFLPPanelHeader::switch_to_static()
                     because of TEXT_ENTER _AND_ KILL_FOCUS events
@@ -25,6 +25,9 @@
 
  (012)  2015.09.08  Bug : when error clicked on in "build log", file not selected
                     in any panel !
+
+ (013)  2015.09.08  In std mode, selecting item then using "save workspace layout" menu
+                    reset to old item selection ( i.e. active editor )
 //  ############################################################################
 (001)
 //  ============================================================================
@@ -36,6 +39,7 @@
 //  ============================================================================
 (004)
 2015.09.02  - resizing the log window causes a cbEventEditorActivated
+2015.09.17  Done : all has been rewrited ; anyway C::B sends 2 activated events
 //  ============================================================================
 (005)
 2015.08.23  done : flag OFLPPanel::a_allow_kill_focus_event
@@ -61,4 +65,7 @@
 //  ============================================================================
 (012)
 2015.09.08  Done : wxTreeCtrl->GetSelection() is buggy - removed all calls
+//  ============================================================================
+(013)
+2015.09.17  Done : all has been rewrited
 

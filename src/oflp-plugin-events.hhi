@@ -13,8 +13,9 @@
     void    evh_editor_modified     (CodeBlocksEvent& event);
     void    evh_editor_saved        (CodeBlocksEvent& event);
 
-    void    evh_workspace_changed           (CodeBlocksEvent& event);
     void    evh_workspace_loading_complete  (CodeBlocksEvent& event);
+    void    evh_workspace_close_begin       (CodeBlocksEvent& event);
+    void    evh_workspace_close_complete    (CodeBlocksEvent& event);
     void    evh_project_open                (CodeBlocksEvent& event);
     void    evh_project_close               (CodeBlocksEvent& event);
     void    evh_project_save                (CodeBlocksEvent& event);
@@ -25,6 +26,7 @@
     void    evh_panel_header_button_clicked_up      (wxCommandEvent &);
     void    evh_panel_header_button_clicked_down    (wxCommandEvent &);
     void    evh_panel_header_button_clicked_opt     (wxCommandEvent &);
+
 
   protected:
     OFLPPanel           *   a_dnd_destination_panel;
@@ -39,3 +41,9 @@
         {
             a_dnd_destination_panel = _panel;
         }
+
+  private:
+        void                cb_event_dump               (CodeBlocksEvent& _evt);
+        void                editor_dump                 (EditorBase* _edb);
+        OFLPPanel       *   file_assignment_find_panel  (ProjectFile* _nn_pjf);
+        void                editor_add                  (EditorBase* _edb);

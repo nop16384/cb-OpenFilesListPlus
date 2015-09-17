@@ -6,9 +6,9 @@
     /// ************************************************************************
     class   Layout
     {
-        friend class    OpenFilesListPlus;
+        //friend class    OpenFilesListPlus;
         //  --------------------------------------------------------------------
-      private:
+      public:
         class   FileAssignment;
         class   PanelAssignment;
         class   ProjectAssignments;
@@ -25,7 +25,7 @@
         //! \detail Filenames are stored as earlgreycb::HString so they have a
         //!     hash value.
         /// ********************************************************************
-      private:
+      public:
         class   FileAssignment
         {
           private:
@@ -53,7 +53,7 @@
         //!
         //! \brief  (OFLPPanel name, OFLPPanel index) couple
         /// ********************************************************************
-      private:
+      public:
         class   PanelAssignment
         {
           private:
@@ -79,7 +79,7 @@
         //!
         //! \brief  All FileAssignment-s for one project
         /// ********************************************************************
-      private:
+      public:
         class   ProjectAssignments
         {
           private:
@@ -116,89 +116,57 @@
                     a_assignments.Clear();
                 }
         };
-        /// ********************************************************************
-        //! \class  XmlWorkspaceSnapshot
-        //!
-        //! \brief  Memorize a workspace's layout
-        //!
-        //! \detail Due to uncomplete cbEvent framework, I am forced to do
-        //!     memorizations.
-        /// ********************************************************************
-      private:
-        class   XmlWorkspaceSnapshot
-        {
-          private:
-            TiXmlDocument   *   d_xml_doc;
-            wxString            a_title;
-            wxString            a_xml_filename;
-
-          public:
-            TiXmlDocument   *   xml_doc()       { return d_xml_doc;         }
-            wxString        &   xml_filename()  { return a_xml_filename;    }
-            wxString        &   wsp_title()     { return a_title;           }
-
-          public:
-            XmlWorkspaceSnapshot(cbWorkspace* _wsp, TiXmlDocument* _doc);
-            XmlWorkspaceSnapshot()                      :   d_xml_doc(NULL)     {}
-           ~XmlWorkspaceSnapshot()
-                {
-                    if ( d_xml_doc ) delete d_xml_doc;
-                }
-        };
         //  ====================================================================
       private:
-        static  void        P0_filename_cb_to_oflp  (wxString _in_filename, wxString& _out_filename, int _type);
-                void        p0_dump_project_manager ();
+        static  void        Filename_cb_to_oflp  (wxString _in_filename, wxString& _out_filename, int _type);
+                void        dump_project_manager ();
         //  ....................................................................
       private:
-        XmlWorkspaceSnapshot        *   d_xml_wsp_snapshot_1;
+        bool                    xml_load_document       (wxString   & _filename , TiXmlDocument*);
+        bool                    xml_load_workspace      (cbWorkspace*           , TiXmlDocument*);
+        bool                    xml_load_project        (cbProject  *           , TiXmlDocument*);
 
-      private:
-        bool        xml_load_document    (wxString   & _filename , TiXmlDocument*);
-        bool        xml_load_workspace   (cbWorkspace*           , TiXmlDocument*);
-        bool        xml_load_project     (cbProject  *           , TiXmlDocument*);
+        bool                    xml_save_workspace      ();
+        bool                    xml_save_project        (cbProject*);
 
-        XmlWorkspaceSnapshot    *   xml_workspace_take_snapshot     ();
-        void                        xml_workspace_update_snapshot   ();
-        bool                        xml_workspace_save_snapshot     ();
-        bool                        xml_workspace_snapshot_new      ();
-        bool                        xml_save_project                (cbProject  *);
-
-        bool        xml_parse_workspace     (TiXmlDocument*);
-        bool        xml_parse_project       (cbProject              * _project, TiXmlDocument*);
+        bool                    xml_parse_workspace     (TiXmlDocument*);
+        ProjectAssignments  *   xml_parse_project       (cbProject* _project, TiXmlDocument*);
         //  ....................................................................
       private:
-        PanelAssignmentArray            a_panel_assignments_array;
+        PanelAssignmentArray            a_panel_assignment_array;
         ProjectAssignmentsArray         a_project_assignments_array;
 
-        void                assignments_reset        ();
-        wxString            assignment_file_find     (EditorBase*);
-        //  ....................................................................
-      private:
-        void                p0_reset();
-
-        void                create_panels   ();
-        void                apply           ();
-
-        void                on_workspace_loading_complete   ();
-        void                on_project_opened               (cbProject*);
-
-        void                on_project_save                 (cbProject*);
+        void                reset_assignments           ();
+        void                project_assignments_add     (ProjectAssignments*);
+        void                project_assignments_sub     (cbProject*);
 
       public:
-        Layout()
-            :   d_xml_wsp_snapshot_1(NULL)                                      {}
-       ~Layout()
-            {
-                if ( d_xml_wsp_snapshot_1 ) delete d_xml_wsp_snapshot_1;
-            }
+        wxString                            file_assignment_find_panel_name (ProjectFile* _nn_pjf);
+        PanelAssignmentArray    const   &   panel_assignment_array      ()  { return a_panel_assignment_array;      }
+        ProjectAssignmentsArray const   &   project_assignments_array   ()  { return a_project_assignments_array;   }
+        //  ....................................................................
+      public:
+        void                reset               ();
+
+        void                workspace_load      ();
+        bool                workspace_close     ();
+        bool                workspace_save      ();
+
+        void                project_load        (cbProject*);
+        void                project_close       (cbProject*);
+        void                project_save        (cbProject*);
+        //  ....................................................................
+      public:
+        Layout()                                                                {}
+       ~Layout()                                                                {}
     };
     //  ========================================================================
   private:
     Layout              *   d_layout;                                           //!< OpenFilesListPlus layout stuff
-    //  ------------------------------------------------------------------------
+        //  ....................................................................
   public:
     Layout              *   layout()                                    const
         {
             return d_layout;
         }
+

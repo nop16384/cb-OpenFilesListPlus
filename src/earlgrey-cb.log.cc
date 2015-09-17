@@ -70,17 +70,49 @@ class   LogFrame : public wxFrame
                     dw_log_sizer->Add( dw_log_txt_ctrl, 1, wxEXPAND, 0);
                     this->SetSizer( dw_log_sizer );
 
+                    print_header();
+
+                    dw_log_txt_ctrl->Connect( wxEVT_KEY_UP, wxKeyEventHandler(LogFrame::evh_key_up), NULL, this);
+
                     this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler(LogFrame::evh_close_window), NULL, this);
                 }
-  public:
-    void    log(wxString& _wxs)
+  private:
+    void    print_header()
         {
-            dw_log_txt_ctrl->AppendText( _wxs + wxString::FromUTF8("\n") );
+            wxString    wxstr;
+
+            wxstr.assign(wxS("----------------------------------------"));
+            log(wxstr);
+
+            wxstr.assign(wxS("Close window:use OpenFilesListPlus menu"));
+            log(wxstr);
+            wxstr.assign(wxS("Clear text  :Ctrl-E"));
+            log(wxstr);
+
+            wxstr.assign(wxS("----------------------------------------"));
+            log(wxstr);
         }
 
     void    evh_close_window(wxCloseEvent& _e)
         {
+            //  avoid too complicated synchronization between LogFrame and
+            //  OFLP plugin menu : LogFrame closing has to be done in the
+            //  plugin menu, and thats all
             _e.Veto();
+        }
+
+    void    evh_key_up(wxKeyEvent& _e)
+        {
+            if ( _e.GetModifiers() & wxMOD_CONTROL )
+                if ( _e.GetKeyCode() == 'E' )
+                    dw_log_txt_ctrl->Clear();
+
+        }
+
+  public:
+    void    log(wxString& _wxs)
+        {
+            dw_log_txt_ctrl->AppendText( _wxs + wxString::FromUTF8("\n") );
         }
 
 };

@@ -14,12 +14,7 @@ void            OpenFilesListPlus::p0_panel_items_transfer  (OFLPPanel* _dst, OF
     _src->editors_del();
 }
 
-void            OpenFilesListPlus::p0_panel_reset           (OFLPPanel* _panel)
-{
-    _panel->editors_del();
-}
-
-void            OpenFilesListPlus::p0_panels_reset          (bool _update_layout_workspace_snapshot)
+void            OpenFilesListPlus::p0_panels_reset          ()
 {
     PanelArray::iterator        it;
     OFLPPanel               *   panel   =   NULL;
@@ -38,15 +33,12 @@ void            OpenFilesListPlus::p0_panels_reset          (bool _update_layout
         }
     }
 
-    p0_panel_reset( a_BulkPanel );
+    a_BulkPanel->editors_del();
 
     a_panels_array.Clear();
     a_panels_array.Add( a_BulkPanel );
 
     dw_MainSizer->Layout();
-
-    if ( _update_layout_workspace_snapshot )
-        layout()->xml_workspace_update_snapshot();
 }
 
 OFLPPanel*      OpenFilesListPlus::p0_panel_get_by_name     (wxString const & _panel_name)
@@ -62,6 +54,12 @@ OFLPPanel*      OpenFilesListPlus::p0_panel_get_by_name     (wxString const & _p
     }
 
     return NULL;
+}
+
+void            OpenFilesListPlus::p0_editor_move           (OFLPPanel* _dst, OFLPPanel* _src, EditorBase* _edb)
+{
+    _src->editor_del(_edb);
+    _dst->editor_add(_edb);
 }
 //  ############################################################################
 int             OpenFilesListPlus::panel_get_visual_index   (OFLPPanel* _panel)
@@ -114,8 +112,6 @@ OFLPPanel*      OpenFilesListPlus::panel_add                (wxString _title, bo
 
     wxSizerItemList il = dw_MainSizer->GetChildren();
 
-    layout()->xml_workspace_update_snapshot();
-
     return panel;
 }
 
@@ -139,8 +135,6 @@ void            OpenFilesListPlus::panel_move_up            (OFLPPanel* _panel)
     dw_MainSizer->Detach(_panel);
     dw_MainSizer->Insert( prev_panel_ix, _panel, 1, wxEXPAND, 0);
     dw_MainSizer->Layout();
-
-    layout()->xml_workspace_update_snapshot();
 }
 
 void            OpenFilesListPlus::panel_move_dn            (OFLPPanel* _panel)
@@ -165,8 +159,6 @@ void            OpenFilesListPlus::panel_move_dn            (OFLPPanel* _panel)
     dw_MainSizer->Detach(_panel);
     dw_MainSizer->Insert( next_panel_ix, _panel, 1, wxEXPAND, 0);
     dw_MainSizer->Layout();
-
-    layout()->xml_workspace_update_snapshot();
 }
 
 void            OpenFilesListPlus::panel_sub                (OFLPPanel* _panel)
@@ -179,8 +171,6 @@ void            OpenFilesListPlus::panel_sub                (OFLPPanel* _panel)
     a_panels_array.Remove(_panel);
 
     delete _panel;
-
-    layout()->xml_workspace_update_snapshot();
 }
 
 OFLPPanel*      OpenFilesListPlus::panel_find               (EditorBase* _editor )

@@ -417,7 +417,7 @@ void            OpenFilesListPlusPanel::  editor_add      (EditorBase* _editor)
     wxTreeItemId    iid;
     int             mod =   OpenFilesListPlus::Instance()->gfx()->icon(_editor);
     //  ........................................................................
-    //D GWR_TKI("OFLPPanel::editor_add():[%p][%p]", this, _editor);
+    GWR_TKI("OFLPPanel::editor_add():[%p][%p]", this, _editor);
     //  ........................................................................
     iid = item_append(_editor);
 
