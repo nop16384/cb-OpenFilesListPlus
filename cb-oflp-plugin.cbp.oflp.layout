@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_oflp_file>
 	<FileVersion major="1" minor="0" />
-	<File name="notes/todo.h" panel="Plugin" />
 	<File name="src/earlgrey-cb.hstring.hh" panel="Common" />
 	<File name="src/earlgrey-cb.log.cc" panel="Common" />
 	<File name="src/earlgrey-cb.log.hh" panel="Common" />
@@ -12,7 +11,7 @@
 	<File name="src/oflp-panel-utils.hhi" panel="Panels" />
 	<File name="src/oflp-panel.cc" panel="Panels" />
 	<File name="src/oflp-panel.hh" panel="Panels" />
-	<File name="src/oflp-plugin-actions.cci" panel="cbEVT_WORKSPACE_CLOSE_BEGIN" />
+	<File name="src/oflp-plugin-actions.cci" panel="Plugin" />
 	<File name="src/oflp-plugin-actions.hhi" panel="Plugin" />
 	<File name="src/oflp-plugin-dnd.hhi" panel="Plugin" />
 	<File name="src/oflp-plugin-events.cci" panel="Plugin" />

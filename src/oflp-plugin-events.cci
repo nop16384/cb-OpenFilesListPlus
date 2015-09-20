@@ -178,8 +178,6 @@ void    OpenFilesListPlus:: evh_editor_deactivated  (CodeBlocksEvent& event)
 
 void    OpenFilesListPlus:: evh_editor_modified     (CodeBlocksEvent& event)
 {
-    //  we dont log the method calls, since typing a character is an editor
-    //  modification.
     //  Editor name changing is also a modification ; log for this is done
     //  in OFLPPanel::editor_sync()
 
@@ -188,6 +186,9 @@ void    OpenFilesListPlus:: evh_editor_modified     (CodeBlocksEvent& event)
     //RefreshOpenFileState(event.GetEditor());
 
     //earlgreycb::Log_function_exit();
+
+    earlgreycb::Log_function_mark(wxS("OFLP::evh_editor_modified()"));
+    RefreshOpenFileState(event.GetEditor());
 }
 
 void    OpenFilesListPlus:: evh_editor_saved        (CodeBlocksEvent& event)
