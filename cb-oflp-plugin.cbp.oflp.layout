@@ -11,9 +11,9 @@
 	<File name="src/oflp-panel-utils.hhi" panel="Panels" />
 	<File name="src/oflp-panel.cc" panel="Panels" />
 	<File name="src/oflp-panel.hh" panel="Panels" />
-	<File name="src/oflp-plugin-actions.cci" panel="Plugin" />
-	<File name="src/oflp-plugin-actions.hhi" panel="Plugin" />
 	<File name="src/oflp-plugin-dnd.hhi" panel="Plugin" />
+	<File name="src/oflp-plugin-editors.cci" panel="Plugin" />
+	<File name="src/oflp-plugin-editors.hhi" panel="Plugin" />
 	<File name="src/oflp-plugin-events.cci" panel="Plugin" />
 	<File name="src/oflp-plugin-events.hhi" panel="Plugin" />
 	<File name="src/oflp-plugin-gfx.hhi" panel="Plugin" />

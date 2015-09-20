@@ -553,7 +553,7 @@ OFLPPanel*  OpenFilesListPlus::Layout:: file_assignment_find_panel_from_editor_b
         goto lab_exit;
     }
     //  ........................................................................
-    panel   =   panels()->p0_get_by_name( fa->pname() );
+    panel   =   panels()->get_by_name( fa->pname() );
     //  ........................................................................
 lab_exit:
     earlgreycb::Log_function_exit();
@@ -590,7 +590,7 @@ void        OpenFilesListPlus::Layout:: file_assignment_update                  
         goto lab_add;
     }
     //  ........................................................................
-    panel   =   panels()->p0_get_by_name( fa->pname() );
+    panel   =   panels()->get_by_name( fa->pname() );
 
     if ( ! panel )
     {

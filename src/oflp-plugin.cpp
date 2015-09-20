@@ -53,7 +53,7 @@ OpenFilesListPlus::     OpenFilesListPlus()
     d_gfx               =   NULL;
     d_layout            =   NULL;
     dw_menu_options     =   NULL;
-    d_actions           =   NULL;
+    d_editors           =   NULL;
     d_panels            =   NULL;
     // Make sure our resources are available.
     // In the generated boilerplate code we have no resources but when
@@ -83,15 +83,15 @@ void OpenFilesListPlus::OnAttach()
     //  create & init the modules
     d_gfx           =   new Gfx(ConfigManager::GetDataFolder() + wxS("/images/"));
     d_layout        =   new Layout();
-    d_actions       =   new Actions();
+    d_editors       =   new Editors();
     d_panels        =   new Panels();
     dw_menu_options =   new MenuOptions();
 
-    module_init(gfx());
-    module_init(layout());
-    module_init(actions());
-    module_init(panels());
-    module_init(menu_options());
+    gfx()           ->module_init();
+    layout()        ->module_init();
+    editors()       ->module_init();
+    panels()        ->module_init();
+    menu_options()  ->module_init();
     //  ........................................................................
     //  menu options
     menu_options()->check_item_set_log_console  (false);
@@ -429,6 +429,8 @@ void OpenFilesListPlus::RefreshOpenFilesLayout  ()
 
     panels()->p0_resize();
 
+    RefreshOpenFileState( emgr->GetActiveEditor() );
+
     panels()->p0_main()->Thaw();
     //  ........................................................................
 lab_exit:
@@ -439,6 +441,6 @@ lab_exit:
 #include    "oflp-plugin-panels.cci"
 #include    "oflp-plugin-events.cci"
 #include    "oflp-plugin-layout.cci"
-#include    "oflp-plugin-actions.cci"
+#include    "oflp-plugin-editors.cci"
 
 

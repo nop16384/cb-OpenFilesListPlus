@@ -75,6 +75,9 @@
 			<Option virtualFolder="notes/" />
 			<Option target="earlgrey-devel" />
 		</Unit>
+		<Unit filename="notes/changelog.h">
+			<Option virtualFolder="src/plugin/" />
+		</Unit>
 		<Unit filename="notes/new-list.h">
 			<Option virtualFolder="notes/" />
 			<Option target="earlgrey-devel" />
@@ -120,13 +123,13 @@
 		<Unit filename="src/oflp-panel.hh">
 			<Option virtualFolder="src/panels/h/" />
 		</Unit>
-		<Unit filename="src/oflp-plugin-actions.cci">
-			<Option virtualFolder="src/plugin/c/" />
-		</Unit>
-		<Unit filename="src/oflp-plugin-actions.hhi">
+		<Unit filename="src/oflp-plugin-dnd.hhi">
 			<Option virtualFolder="src/plugin/h/" />
 		</Unit>
-		<Unit filename="src/oflp-plugin-dnd.hhi">
+		<Unit filename="src/oflp-plugin-editors.cci">
+			<Option virtualFolder="src/plugin/c/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-editors.hhi">
 			<Option virtualFolder="src/plugin/h/" />
 		</Unit>
 		<Unit filename="src/oflp-plugin-events.cci">

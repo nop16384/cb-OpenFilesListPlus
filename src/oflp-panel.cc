@@ -424,7 +424,7 @@ EditorBase*     OpenFilesListPlusPanel::  editor_from_absolute_filepath (wxStrin
         i   !=  a_harray.size() ;
         i++                     )
     {
-        GWR_TKI("[%lu] ? [%lu][%s]", hash, a_harray.at(i), a_editors_array.Item(i)->GetFilename().wc_str());
+        //D GWR_TKI("[%lu] ? [%lu][%s]", hash, a_harray.at(i), a_editors_array.Item(i)->GetFilename().wc_str());
         if ( a_harray.at(i) == hash )
         {
             if ( a_editors_array.Item(i)->GetFilename().Cmp(_absolute_filepath) == 0 )

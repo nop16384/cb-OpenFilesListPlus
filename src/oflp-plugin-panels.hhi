@@ -14,7 +14,7 @@
 
         OpenFilesListPlusPanel      *   a_BulkPanel;                            //!< Bulk panel permanent access
         PanelArray                      a_panels_array;                         //!< All panels, including bulk panel
-
+        //  ....................................................................
       private:
         wxPanel                     *&  p0_main()   { return dw_MainPanel;  }
         wxBoxSizer                  *&  p0_sizer()  { return dw_MainSizer;  }
@@ -22,7 +22,7 @@
       public:
         OFLPPanel       const       *   bulk()      { return a_BulkPanel;       }
         PanelArray      const       &   array()     { return a_panels_array;    }
-        //  --------------------------------------------------------------------
+        //  ....................................................................
       private:
         void                    p0_reset            ();
 
@@ -34,19 +34,19 @@
         void                    p0_editors_mov      (OFLPPanel* _dst, OFLPPanel* _src);
         void                    p0_editor_mov       (OFLPPanel* _dst, OFLPPanel* _src, EditorBase* _edb);
 
-        OFLPPanel           *   p0_get_by_name      (wxString const & _name);
         void                    p0_unselect_except  (OFLPPanel*);
         OFLPPanel           *   p0_add              (wxString _title, bool _bulk = false);
         void                    p0_move_up          (OFLPPanel*);
         void                    p0_move_dn          (OFLPPanel*);
         void                    p0_sub              (OFLPPanel*);
-
+        //  ....................................................................
       public:
+        OFLPPanel           *   get_by_name                 (wxString const & _name);
         OFLPPanel           *   get_from_absolute_filepath  (wxString& _absolute_filepath);
         OFLPPanel           *   find                        (EditorBase*);
         int                     get_visual_index(OFLPPanel*);
-
-      private:
+        //  ....................................................................
+      public:
         Panels()    {}
        ~Panels()    {}
     };

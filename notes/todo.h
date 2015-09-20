@@ -5,7 +5,7 @@
 
 +(003)  2015.08.21  Rescan all old methods for compatibility
 
-+(004)  2015.08.21  Save layout & options
+ (004)  2015.08.21  Save layout & options
 
  (005)  2015.08.21  Verify icons
 
@@ -27,7 +27,7 @@
 
  (013)  2015.09.12  Select active editor after workspace laoding
 
-+(014)  2015.09.12  Put up & down arrows near mini/maxi-mize button in OFLPPanelHeader
+ (014)  2015.09.12  Put up & down arrows near mini/maxi-mize button in OFLPPanelHeader
 
  (015)  2015.09.13  Layout : apply() : rewrite for handling all cases
 
@@ -43,6 +43,9 @@
 +(020)  2015.09.15  boolean return values check
 
 +(021)  2015.09.19  oflp-plugin.hh : remove "friend class OFLPPanel" declaration
+
++(022)  2015.09.20  "An inner class is a friend of the class it is defined within."
+                    find something else, every module has access to everything !!!
 //  ############################################################################
 (001)
 2015.08.21  Done: call to SetFocus() )
@@ -59,6 +62,7 @@
 //  ============================================================================
 (004)
 2015.09.12  Done : layout import
+2015.09.20  Done : finished import / export
 //  ============================================================================
 (005)
 2015.08.??  Done, installed in the tree
@@ -75,6 +79,7 @@
 (009)
 //  ============================================================================
 (010)
+2015.09.2   Done first version of Panels::p0_resize()
 //  ============================================================================
 (011)
 2015.08.30  Done :
@@ -88,6 +93,7 @@
 2015.09.17  Done : in cbEVT_EDITOR_ACTIVATED handler
 //  ============================================================================
 (014)
+2015.09.20  Done
 //  ============================================================================
 (015)
 2015.09.17  Done : apply() stuff has been moved in OFLP event handlers
@@ -104,3 +110,5 @@
 (020)
 //  ============================================================================
 (021)
+//  ============================================================================
+(022)

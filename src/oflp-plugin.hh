@@ -128,61 +128,6 @@ class OpenFilesListPlus : public cbPlugin
       public:
         static  OpenFilesListPlus   *   Instance()  { return s_singleton; }
         //  ====================================================================
-    private:
-        class   Gfx;
-        class   Layout;
-        class   Panels;
-        class   Actions;
-        class   MenuOptions;
-        /// ********************************************************************
-        //! \class  Module
-        //!
-        //! \brief  OpenFilesListPlus is splitted in many inner-classes called
-        //!     modules, for code lisibility. Each module inherits from inner
-        //!     class Module, which allows inter-module & OpenFilesListPlus
-        //!     instance access.
-        /// ********************************************************************
-      private:
-        class  Module
-        {
-            friend class    OpenFilesListPlus;
-
-          private:
-            OpenFilesListPlus               *   a_instance;
-            OpenFilesListPlus::Gfx          *   a_module_gfx;
-            OpenFilesListPlus::Layout       *   a_module_layout;
-            OpenFilesListPlus::Panels       *   a_module_panels;
-            OpenFilesListPlus::Actions      *   a_module_actions;
-            OpenFilesListPlus::MenuOptions  *   a_module_menu_options;
-
-          protected:
-            OpenFilesListPlus           *   oflp()      { return a_instance;        }
-            OpenFilesListPlus::Layout   *   layout()    { return a_module_layout;   }
-            OpenFilesListPlus::Panels   *   panels()    { return a_module_panels;   }
-
-        };
-        //  ....................................................................
-        #define OFPL_MEMBER_MODULE(MODULE_NAME, MEMBER_NAME, GET_NAME)          \
-          private:                                                              \
-            MODULE_NAME *   MEMBER_NAME;                                        \
-          public:                                                               \
-            MODULE_NAME *   GET_NAME()                                          \
-                {                                                               \
-                    return MEMBER_NAME;                                         \
-                }
-        //  ....................................................................
-      private:
-        void    module_init(Module* _module)
-            {
-                _module->a_instance             =   this;
-
-                _module->a_module_gfx           =   this->gfx();
-                _module->a_module_layout        =   this->layout();
-                _module->a_module_panels        =   this->panels();
-                //_module->a_module_actions       =   this->actions();
-                _module->a_module_menu_options  =   this->menu_options();
-            }
-        //  ====================================================================
         friend class OpenFilesListPlusPanel;                                    //  _GWR_TODO_ only for evh handler
         friend class OpenFilesListPlusPanelBulk;                                //  ...remove friend stuff
 
@@ -196,6 +141,59 @@ class OpenFilesListPlus : public cbPlugin
         //  ====================================================================
         WX_DEFINE_ARRAY(OpenFilesListPlusPanel  *, PanelArray);
         //  ====================================================================
+        //  "An inner class is a friend of the class it is defined within."     //  _GWR_TODO_ find something else, every module has access to everything !!!
+    private:
+        class   Gfx;
+        class   Layout;
+        class   Panels;
+        class   Editors;
+        class   MenuOptions;
+        /// ********************************************************************
+        //! \class  Module
+        //!
+        //! \brief  OpenFilesListPlus is splitted in many inner-classes called
+        //!     modules, for code lisibility. Each module inherits from inner
+        //!     class Module, which allows inter-module & OpenFilesListPlus
+        //!     instance access.
+        /// ********************************************************************
+      private:
+        class  Module
+        {
+          private:
+            OpenFilesListPlus               *   a_instance;
+            OpenFilesListPlus::Gfx          *   a_module_gfx;
+            OpenFilesListPlus::Layout       *   a_module_layout;
+            OpenFilesListPlus::Panels       *   a_module_panels;
+            OpenFilesListPlus::Editors      *   a_module_editors;
+            OpenFilesListPlus::MenuOptions  *   a_module_menu_options;
+
+          protected:
+            OpenFilesListPlus           *   oflp()      { return a_instance;        }
+            OpenFilesListPlus::Layout   *   layout()    { return a_module_layout;   }
+            OpenFilesListPlus::Panels   *   panels()    { return a_module_panels;   }
+
+          public:
+            void                            module_init()
+                {
+                    a_instance             =   OpenFilesListPlus::Instance();
+
+                    a_module_gfx           =   oflp()->gfx();
+                    a_module_layout        =   oflp()->layout();
+                    a_module_panels        =   oflp()->panels();
+                    a_module_editors       =   oflp()->editors();
+                    a_module_menu_options  =   oflp()->menu_options();
+                }
+        };
+        //  ....................................................................
+        #define OFPL_MEMBER_MODULE(MODULE_NAME, MEMBER_NAME, GET_NAME)          \
+          private:                                                              \
+            MODULE_NAME *   MEMBER_NAME;                                        \
+          public:                                                               \
+            MODULE_NAME *   GET_NAME()                                          \
+                {                                                               \
+                    return MEMBER_NAME;                                         \
+                }
+        //  ====================================================================
         //  non-modularized stuff
         #include    "oflp-plugin-events.hhi"
         #include    "oflp-plugin-dnd.hhi"
@@ -204,13 +202,13 @@ class OpenFilesListPlus : public cbPlugin
         OFPL_MEMBER_MODULE(Gfx          , d_gfx             , gfx           );
         OFPL_MEMBER_MODULE(MenuOptions  , dw_menu_options   , menu_options  );
         OFPL_MEMBER_MODULE(Layout       , d_layout          , layout        );
-        OFPL_MEMBER_MODULE(Actions      , d_actions         , actions       );
+        OFPL_MEMBER_MODULE(Editors      , d_editors         , editors       );
         OFPL_MEMBER_MODULE(Panels       , d_panels          , panels        );
         #include    "oflp-plugin-gfx.hhi"
         #include    "oflp-plugin-menus.hhi"
         #include    "oflp-plugin-panels.hhi"
         #include    "oflp-plugin-layout.hhi"
-        #include    "oflp-plugin-actions.hhi"
+        #include    "oflp-plugin-editors.hhi"
         //  ====================================================================
     private:
         DECLARE_EVENT_TABLE();

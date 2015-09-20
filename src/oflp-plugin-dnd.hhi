@@ -24,8 +24,8 @@
   public:
     void    editor_drag_and_dropped()
         {
-            actions()->editor_mov( a_dnd_panel_dst, a_dnd_panel_src, a_dnd_editor_base );
+            editors()->mov( a_dnd_panel_dst, a_dnd_panel_src, a_dnd_editor_base );
 
-            panels()->p0_resize();
+            //panels()->p0_resize();
         }
 

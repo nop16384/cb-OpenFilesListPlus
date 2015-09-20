@@ -105,7 +105,7 @@ void    OpenFilesListPlus:: evh_editor_opened               (CodeBlocksEvent& ev
     }
     //  ........................................................................
     //  add the editor
-    actions()->editor_add(edb);
+    editors()->add(edb);
 
     panels()->p0_resize();
     //  ........................................................................
@@ -181,7 +181,7 @@ void    OpenFilesListPlus:: evh_editor_modified     (CodeBlocksEvent& event)
     //  Editor name changing is also a modification ; log for this is done
     //  in OFLPPanel::editor_sync()
 
-    //earlgreycb::Log_function_enter(wxS("OpenFilesListPlus::evh_editor_modified()"));
+    //earlgreycb::Log_function_enter(wxS("OFLP::evh_editor_modified()"));
 
     //RefreshOpenFileState(event.GetEditor());
 
@@ -297,6 +297,8 @@ lab_return:
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_add (wxCommandEvent& _e)
 {
     panels()->p0_add(wxString::FromUTF8("panel"), false);
+
+    panels()->p0_resize();
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_del (wxCommandEvent& _e)
@@ -312,6 +314,8 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_del (wxCommandEv
         _e.GetEventObject(), panel);
     //  ........................................................................
     panels()->p0_sub(panel);
+
+    panels()->p0_resize();
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_mm  (wxCommandEvent& _e)

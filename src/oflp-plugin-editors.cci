@@ -57,7 +57,7 @@ lab_dump:
     GWR_TKI("OFLP::editor_dump():[%p] bin[%s] shn[%s] rfn[%s]", _edb, sbin.wc_str(), shn.wc_str(), rfn.wc_str());
 }
 //  ############################################################################
-void    OpenFilesListPlus::Actions::    editor_add  (EditorBase* _nn_edb)
+void    OpenFilesListPlus::Editors::    add  (EditorBase* _nn_edb)
 {
     OFLPPanel       *   panel   =   NULL;
     //  ........................................................................
@@ -79,7 +79,7 @@ lab_exit:
     return;
 }
 
-bool    OpenFilesListPlus::Actions::    editor_mov  (
+bool    OpenFilesListPlus::Editors::    mov  (
     OFLPPanel   *   _dst    ,
     OFLPPanel   *   _src    ,
     EditorBase  *   _edb    )
