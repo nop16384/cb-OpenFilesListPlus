@@ -1,31 +1,52 @@
+    /// ************************************************************************
+    //! \class  Panels
+    //!
+    //! \brief  Contain all panel-s stuff
+    /// ************************************************************************
   private:
-    WX_DEFINE_ARRAY(OpenFilesListPlusPanel  *, PanelArray);
+    class Panels    :   public  Module
+    {
+        friend class OpenFilesListPlus;
+        //  ....................................................................
+      private:
+        wxPanel                     *   dw_MainPanel;
+        wxBoxSizer                  *   dw_MainSizer;
 
-    wxPanel                         *   dw_MainPanel;
-    wxBoxSizer                      *   dw_MainSizer;
+        OpenFilesListPlusPanel      *   a_BulkPanel;                            //!< Bulk panel permanent access
+        PanelArray                      a_panels_array;                         //!< All panels, including bulk panel
 
-    OpenFilesListPlusPanel          *   a_BulkPanel;                            //!< Bulk panel permanent access
-    PanelArray                          a_panels_array;                         //!< All panels, including bulk panel
-    //  ------------------------------------------------------------------------
-  private:
-    void                    p0_freeze()     { dw_MainPanel->Freeze();   }
-    void                    p0_thaw()       { dw_MainPanel->Thaw();     }
+      private:
+        wxPanel                     *&  p0_main()   { return dw_MainPanel;  }
+        wxBoxSizer                  *&  p0_sizer()  { return dw_MainSizer;  }
+        OFLPPanel                   *&  p0_bulk()   { return a_BulkPanel;   }
+      public:
+        OFLPPanel       const       *   bulk()      { return a_BulkPanel;       }
+        PanelArray      const       &   array()     { return a_panels_array;    }
+        //  --------------------------------------------------------------------
+      private:
+        void                    p0_reset            ();
 
-    void                    p0_panel_items_transfer     (OFLPPanel* _dst, OFLPPanel* _src);
-    void                    p0_panels_reset             ();
-    OFLPPanel           *   p0_panel_get_by_name        (wxString const & _name);
+        void                    p0_freeze()         { dw_MainPanel->Freeze();   }
+        void                    p0_thaw()           { dw_MainPanel->Thaw();     }
 
-    void                    p0_editor_move              (OFLPPanel* _dst, OFLPPanel* _src, EditorBase* _edb);
+        void                    p0_resize           ();
 
-  public:
-    void                    panels_unselect (OFLPPanel*);
+        void                    p0_editors_mov      (OFLPPanel* _dst, OFLPPanel* _src);
+        void                    p0_editor_mov       (OFLPPanel* _dst, OFLPPanel* _src, EditorBase* _edb);
 
-    OFLPPanel           *   panel_add       (wxString _title, bool _bulk = false);
-    void                    panel_move_up   (OFLPPanel*);
-    void                    panel_move_dn   (OFLPPanel*);
-    void                    panel_sub       (OFLPPanel*);
+        OFLPPanel           *   p0_get_by_name      (wxString const & _name);
+        void                    p0_unselect_except  (OFLPPanel*);
+        OFLPPanel           *   p0_add              (wxString _title, bool _bulk = false);
+        void                    p0_move_up          (OFLPPanel*);
+        void                    p0_move_dn          (OFLPPanel*);
+        void                    p0_sub              (OFLPPanel*);
 
-    OFLPPanel           *   panel_find              (EditorBase*);
-    OFLPPanel           *   panel_find              (ProjectFile*);
-    int                     panel_get_visual_index  (OFLPPanel*);
+      public:
+        OFLPPanel           *   get_from_absolute_filepath  (wxString& _absolute_filepath);
+        OFLPPanel           *   find                        (EditorBase*);
+        int                     get_visual_index(OFLPPanel*);
 
+      private:
+        Panels()    {}
+       ~Panels()    {}
+    };

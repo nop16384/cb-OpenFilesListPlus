@@ -162,7 +162,7 @@ OpenFilesListPlusPanelHeader::        OpenFilesListPlusPanelHeader(
 
     this->SetSizer(dw_sizer);
 
-    if ( ! aw_parent->is_bulk() )
+    if ( ! aw_parent->is_bulk() )                                               //  only bulk has the "menu" button
         dw_txt_sta->Connect(
             wxEVT_LEFT_DOWN                                             ,
             wxMouseEventHandler(OFLPPanel::evh_title_static_LEFT_DOWN)  ,

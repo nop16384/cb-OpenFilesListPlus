@@ -1,0 +1,100 @@
+//  ############################################################################
+//
+//                          ACTIONS
+//
+//  ############################################################################
+void    OpenFilesListPlus::     cb_event_dump(CodeBlocksEvent& _evt)
+{
+    GWR_TKI("evt:project[%p] editor[%p] plugin[%p]",
+        _evt.GetProject(), _evt.GetEditor(), _evt.GetPlugin());
+}
+
+void    OpenFilesListPlus::     editor_dump(EditorBase* _edb)
+{
+    wxString        shn;
+    wxString        rfn;
+    bool            bin;
+    wxString        sbin;
+    cbEditor    *   cbed    =   NULL;
+    ProjectFile *   pjf     =   NULL;
+    //  ........................................................................
+    bin =   _edb->IsBuiltinEditor();
+    sbin.assign( bin ? wxS("Y") : wxS("N") );
+    //  ........................................................................
+    if ( ! _edb )
+    {
+        shn.assign(wxS("EMPTY"));
+        rfn.assign(wxS("NULL"));
+        goto lab_dump;
+    }
+    //  ........................................................................
+    shn = _edb->GetShortName();
+    if ( shn.IsEmpty() )
+    {
+        shn.assign(wxS("EMPTY"));
+        rfn.assign(wxS("???"));
+        goto lab_dump;                                                          //  dont try to play with cbed if shn is empty
+    }
+    //  ........................................................................
+    if ( !bin )
+    {
+        rfn.assign(wxS("???"));
+        goto lab_dump;
+    }
+    //  ........................................................................
+    cbed    =   reinterpret_cast< cbEditor* >(_edb);
+    pjf     =   cbed->GetProjectFile();
+    if ( ! pjf )
+    {
+        rfn.assign(wxS("NULL"));
+    }
+    else
+    {
+        rfn = pjf->relativeFilename;
+    }
+
+lab_dump:
+    GWR_TKI("OFLP::editor_dump():[%p] bin[%s] shn[%s] rfn[%s]", _edb, sbin.wc_str(), shn.wc_str(), rfn.wc_str());
+}
+//  ############################################################################
+void    OpenFilesListPlus::Actions::    editor_add  (EditorBase* _nn_edb)
+{
+    OFLPPanel       *   panel   =   NULL;
+    //  ........................................................................
+    earlgreycb::Log_function_enter(wxS("OFLP::editor_add()"));
+    //  ........................................................................
+    panel = layout()->file_assignment_find_panel_from_editor_base(_nn_edb);
+
+    GWR_TKI("editor_add():[%p][%s] -> [%p][%s]" ,
+        _nn_edb , _nn_edb->GetShortName().wc_str()                  ,
+        panel   , panel ? panel->get_title().wc_str() : wxS("Bulk") );
+
+    if ( panel )
+        panel->editor_add(_nn_edb);
+    else
+        panels()->p0_bulk()->editor_add(_nn_edb);
+    //  ........................................................................
+lab_exit:
+    earlgreycb::Log_function_exit();
+    return;
+}
+
+bool    OpenFilesListPlus::Actions::    editor_mov  (
+    OFLPPanel   *   _dst    ,
+    OFLPPanel   *   _src    ,
+    EditorBase  *   _edb    )
+{
+    if ( ! _dst )
+        return false;
+
+    if ( ! _src )
+        return false;
+
+    if ( ! _edb )
+        return false;
+
+    _src->editor_del( _edb );
+    _dst->editor_add( _edb );
+    layout()->file_assignment_update( _edb, _dst );
+}
+

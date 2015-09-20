@@ -3,7 +3,8 @@
     //!
     //! \brief  Contain all oflp options
     /// ************************************************************************
-    class MenuOptions       : public wxMenu
+  private:
+    class MenuOptions       : public wxMenu, public Module
     {
         friend class OpenFilesListPlus;
       public:
@@ -101,15 +102,6 @@
             }
     };
     //  ========================================================================
-  private:
-    MenuOptions         *   dw_menu_options;                                    //!< OpenFilesListPlus options menu
-    //  ------------------------------------------------------------------------
-  public:
-    MenuOptions         *   menu_options()                              const
-        {
-            return dw_menu_options;
-        }
-
     void                    evh_menu_option_checked(wxCommandEvent &);
     //  ========================================================================
   private:

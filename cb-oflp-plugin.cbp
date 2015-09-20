@@ -5,7 +5,7 @@
 		<Option title="cb-oflp-plugin" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="src/;src/plugin/;src/panels/;src/panels/c/;src/panels/h/;src/plugin/c/;src/plugin/h/;src/log/;src/common/;" />
+		<Option virtualFolders="src/;src/plugin/;src/panels/;src/panels/c/;src/panels/h/;src/plugin/c/;src/plugin/h/;src/log/;src/common/;notes/;" />
 		<Build>
 			<Target title="earlgrey-devel">
 				<Option output="plugin/libOpenFilesListPlus" prefix_auto="0" extension_auto="1" />
@@ -71,8 +71,21 @@
 		<Compiler>
 			<Add option="-fPIC" />
 		</Compiler>
-		<Unit filename="src/bugs.h">
-			<Option virtualFolder="src/common/" />
+		<Unit filename="notes/bugs.h">
+			<Option virtualFolder="notes/" />
+			<Option target="earlgrey-devel" />
+		</Unit>
+		<Unit filename="notes/new-list.h">
+			<Option virtualFolder="notes/" />
+			<Option target="earlgrey-devel" />
+		</Unit>
+		<Unit filename="notes/notes.h">
+			<Option virtualFolder="notes/" />
+			<Option target="earlgrey-devel" />
+		</Unit>
+		<Unit filename="notes/todo.h">
+			<Option virtualFolder="notes/" />
+			<Option target="earlgrey-devel" />
 		</Unit>
 		<Unit filename="src/earlgrey-cb.hstring.hh">
 			<Option virtualFolder="src/common/" />
@@ -84,9 +97,6 @@
 			<Option virtualFolder="src/log/" />
 		</Unit>
 		<Unit filename="src/manifest.xml">
-			<Option virtualFolder="src/common/" />
-		</Unit>
-		<Unit filename="src/notes.h">
 			<Option virtualFolder="src/common/" />
 		</Unit>
 		<Unit filename="src/oflp-common.hh">
@@ -109,6 +119,15 @@
 		</Unit>
 		<Unit filename="src/oflp-panel.hh">
 			<Option virtualFolder="src/panels/h/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-actions.cci">
+			<Option virtualFolder="src/plugin/c/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-actions.hhi">
+			<Option virtualFolder="src/plugin/h/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-dnd.hhi">
+			<Option virtualFolder="src/plugin/h/" />
 		</Unit>
 		<Unit filename="src/oflp-plugin-events.cci">
 			<Option virtualFolder="src/plugin/c/" />
@@ -147,9 +166,6 @@
 			<Option virtualFolder="src/common/" />
 			<Option target="earlgrey-devel" />
 			<Option target="public" />
-		</Unit>
-		<Unit filename="src/todo.h">
-			<Option virtualFolder="src/common/" />
 		</Unit>
 		<Extensions>
 			<envvars />

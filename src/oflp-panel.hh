@@ -10,6 +10,8 @@
 //  ............................................................................
 #include    <wx/dnd.h>                                                          //  for OpenFilesListPlusPanelDropTarget
 //  ............................................................................
+#include    <wx/dynarray.h>
+
 #include    "oflp-panel-header.hhi"
 #include    "oflp-panel-utils.hhi"
 /// ****************************************************************************
@@ -28,7 +30,8 @@ class OpenFilesListPlusPanel              : public wxPanel
     wxTreeCtrl          *   d_tree;
     wxBoxSizer          *   dw_sizer;
 
-    EditorArray             a_editors_array;                                    //  speed up finding editors
+    EditorArray                 a_editors_array;                                //  speed up finding editors
+    earlgreycb::HString::HArray a_harray;
 
     OpenFilesListPlusPanelDropTarget  *   d_drop_target;
     //  ------------------------------------------------------------------------
@@ -55,8 +58,11 @@ class OpenFilesListPlusPanel              : public wxPanel
   public:
     void                    reset();
 
-    int                     editor_index    (EditorBase*);
-    int                     editor_index    (ProjectFile*);
+    void                    dump();
+
+    EditorBase  *           editor_from_absolute_filepath   (wxString& _absolute_filepath);
+
+    bool                    editor_has      (EditorBase*);
     void                    editor_add      (EditorBase*);
     void                    editor_del      (EditorBase*);
     void                    editor_select   (EditorBase*);

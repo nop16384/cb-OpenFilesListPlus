@@ -34,7 +34,6 @@ class OpenFilesListPlusPanelHeader        : public wxPanel
         }
 
   private:
-    void                    p0_create_buttons       ();
     bool                    p0_title_ctrl_replace   (wxWindow* _wnew);
     //  ------------------------------------------------------------------------
   public:

@@ -164,7 +164,7 @@ OpenFilesListPlusPanelItemInfo::OpenFilesListPlusPanelItemInfo(wxTreeEvent& _e)
     if ( ! a_editor )       goto lab_failure;
 
     #ifdef  GWR_OFLP_SANITY_CHECKS                                              //  _GWR_SANITY_CHECK_
-    if ( GetPanel()->editor_index(GetEditor()) == wxNOT_FOUND )
+    if ( ! GetPanel()->editor_has(GetEditor()) )
         goto lab_failure;
 
     if ( GetPanel()->tree() != a_tree )
@@ -223,7 +223,7 @@ OpenFilesListPlusPanelDropTarget::        OnData(wxCoord x, wxCoord y, wxDragRes
     earlgreycb::Log_function_enter(wxS("OFLPPanelDropTarget::OnData()"));
     //  ........................................................................
     //  reset destination panel for the end of OnDragInit()
-    OpenFilesListPlus::Instance()->dnd_dst_panel_set(NULL);
+    OpenFilesListPlus::Instance()->dnd_panel_dst_set(NULL);
 
     //  use predef wxWidgets object copy ; depending on ??? ( answer :
     //  dropSource.DoDragDrop() ) the drag result may differ from what the drop
@@ -240,17 +240,16 @@ OpenFilesListPlusPanelDropTarget::        OnData(wxCoord x, wxCoord y, wxDragRes
         goto lab_return;
     }
     //  ........................................................................
-    //  now insert item
     editor  = d_data_object->GetDataEditor();                                   //  get editor from unserialized data
     spvix   = d_data_object->GetDataPanelIx();                                  //  ...src panel visual index
     siix    = d_data_object->GetDataItemIx();                                   //  ...src item visual index
     GWR_INF("  data:spvix[%i] siix[%i] ed[%p]\n", spvix, siix, editor);
 
     #ifdef  GWR_OFLP_SANITY_CHECKS                                              //  _GWR_SANITY_CHECK_
-    cpanel  = OpenFilesListPlus::Instance()->panel_find(editor);                //  get src panel from editor
+    cpanel  = OpenFilesListPlus::Instance()->panels()->find(editor);            //  get src panel from editor
     GWR_INF("  panel:from editor[%p]", cpanel);
 
-    cpvix   = OpenFilesListPlus::Instance()->panel_get_visual_index(cpanel);
+    cpvix   = OpenFilesListPlus::Instance()->panels()->get_visual_index(cpanel);
     //iid     = dpanel->item_find(ed);
 
     GWR_TKI("  check:cpvix[%i] ciix[%i]", cpvix, ciix);
@@ -265,7 +264,7 @@ OpenFilesListPlusPanelDropTarget::        OnData(wxCoord x, wxCoord y, wxDragRes
 
     //  item operations are done in the cbPlugin instance ; here just
     //  memorize destination parameters
-    OpenFilesListPlus::Instance()->dnd_dst_panel_set( opanel() );
+    OpenFilesListPlus::Instance()->dnd_panel_dst_set( opanel() );
     //  ........................................................................
 lab_return:
     earlgreycb::Log_function_exit();

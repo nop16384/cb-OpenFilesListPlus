@@ -119,39 +119,72 @@ class OpenFilesListPlus : public cbPlugin
           *         behaviour is undefined...
           */
         virtual void OnRelease(bool appShutDown);
-
-        //  ====================================================================
-    private:
-        class   Gfx;
-        class   Layout;
-
-        friend class OpenFilesListPlusPanel;
-        friend class OpenFilesListPlusPanelBulk;
-
+        //  ####################################################################
+        //                      PLUGIN STUFF
+        //  ####################################################################
       private:
         static  OpenFilesListPlus   *   s_singleton;
 
       public:
         static  OpenFilesListPlus   *   Instance()  { return s_singleton; }
-
-
-      public:
-        enum
+        //  ====================================================================
+    private:
+        class   Gfx;
+        class   Layout;
+        class   Panels;
+        class   Actions;
+        class   MenuOptions;
+        /// ********************************************************************
+        //! \class  Module
+        //!
+        //! \brief  OpenFilesListPlus is splitted in many inner-classes called
+        //!     modules, for code lisibility. Each module inherits from inner
+        //!     class Module, which allows inter-module & OpenFilesListPlus
+        //!     instance access.
+        /// ********************************************************************
+      private:
+        class  Module
         {
-            eBmpFolder          =   0   ,
-            eBmpFileAscii       =   1   ,
-            eBmpFileModified    =   2   ,
-            eBmpFileReadOnly    =   3   ,
+            friend class    OpenFilesListPlus;
 
-            eBmpBarGreen        =   4   ,
-            eBmpBarRed          =   5   ,
-            eBmpBarBlue         =   6   ,
-            eBmpBarUp           =   7   ,
-            eBmpBarDown         =   8   ,
-            eBmpBarOrange       =   9   ,
+          private:
+            OpenFilesListPlus               *   a_instance;
+            OpenFilesListPlus::Gfx          *   a_module_gfx;
+            OpenFilesListPlus::Layout       *   a_module_layout;
+            OpenFilesListPlus::Panels       *   a_module_panels;
+            OpenFilesListPlus::Actions      *   a_module_actions;
+            OpenFilesListPlus::MenuOptions  *   a_module_menu_options;
 
-            eBmpNotFound        =  99
+          protected:
+            OpenFilesListPlus           *   oflp()      { return a_instance;        }
+            OpenFilesListPlus::Layout   *   layout()    { return a_module_layout;   }
+            OpenFilesListPlus::Panels   *   panels()    { return a_module_panels;   }
+
         };
+        //  ....................................................................
+        #define OFPL_MEMBER_MODULE(MODULE_NAME, MEMBER_NAME, GET_NAME)          \
+          private:                                                              \
+            MODULE_NAME *   MEMBER_NAME;                                        \
+          public:                                                               \
+            MODULE_NAME *   GET_NAME()                                          \
+                {                                                               \
+                    return MEMBER_NAME;                                         \
+                }
+        //  ....................................................................
+      private:
+        void    module_init(Module* _module)
+            {
+                _module->a_instance             =   this;
+
+                _module->a_module_gfx           =   this->gfx();
+                _module->a_module_layout        =   this->layout();
+                _module->a_module_panels        =   this->panels();
+                //_module->a_module_actions       =   this->actions();
+                _module->a_module_menu_options  =   this->menu_options();
+            }
+        //  ====================================================================
+        friend class OpenFilesListPlusPanel;                                    //  _GWR_TODO_ only for evh handler
+        friend class OpenFilesListPlusPanelBulk;                                //  ...remove friend stuff
 
       protected:
         void    reset();
@@ -161,13 +194,24 @@ class OpenFilesListPlus : public cbPlugin
         void    RefreshOpenFileLayout   (EditorBase* _edb);
         void    RefreshOpenFilesLayout  ();
         //  ====================================================================
+        WX_DEFINE_ARRAY(OpenFilesListPlusPanel  *, PanelArray);
+        //  ====================================================================
+        //  non-modularized stuff
+        #include    "oflp-plugin-events.hhi"
+        #include    "oflp-plugin-dnd.hhi"
+        //  ====================================================================
+        //  modularized stuff
+        OFPL_MEMBER_MODULE(Gfx          , d_gfx             , gfx           );
+        OFPL_MEMBER_MODULE(MenuOptions  , dw_menu_options   , menu_options  );
+        OFPL_MEMBER_MODULE(Layout       , d_layout          , layout        );
+        OFPL_MEMBER_MODULE(Actions      , d_actions         , actions       );
+        OFPL_MEMBER_MODULE(Panels       , d_panels          , panels        );
         #include    "oflp-plugin-gfx.hhi"
         #include    "oflp-plugin-menus.hhi"
         #include    "oflp-plugin-panels.hhi"
-        #include    "oflp-plugin-events.hhi"
         #include    "oflp-plugin-layout.hhi"
+        #include    "oflp-plugin-actions.hhi"
         //  ====================================================================
-
     private:
         DECLARE_EVENT_TABLE();
 };

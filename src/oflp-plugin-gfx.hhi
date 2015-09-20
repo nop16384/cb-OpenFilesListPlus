@@ -4,9 +4,27 @@
     //! \brief  Contain all graphic stuff
     /// ************************************************************************
   private:
-    class Gfx
+    class Gfx   :   public  Module
     {
         friend class OpenFilesListPlus;
+        //  ....................................................................
+      public:
+        enum
+        {
+            eBmpFolder          =   0   ,
+            eBmpFileAscii       =   1   ,
+            eBmpFileModified    =   2   ,
+            eBmpFileReadOnly    =   3   ,
+
+            eBmpBarGreen        =   4   ,
+            eBmpBarRed          =   5   ,
+            eBmpBarBlue         =   6   ,
+            eBmpBarUp           =   7   ,
+            eBmpBarDown         =   8   ,
+            eBmpBarOrange       =   9   ,
+
+            eBmpNotFound        =  99
+        };
         //  ....................................................................
       private:
         WX_DECLARE_HASH_MAP(    int                 ,
@@ -34,7 +52,7 @@
                 return d_img_list;
             }
 
-        int                     icon            (EditorBase* ed)
+        static  int             Icon            (EditorBase* ed)
             {
                 int mod = 1;          // ascii
                 if (ed->IsReadOnly())
@@ -67,20 +85,20 @@
             // load bitmaps
             d_img_list  =   new wxImageList(16, 16);
 
-            bitmap_add( OpenFilesListPlus::eBmpFolder       , _gfx_dir + wxS("folder_open.png")     );          // 0 folder
-            bitmap_add( OpenFilesListPlus::eBmpFileAscii    , _gfx_dir + wxS("ascii.png")           );          // 1 file
-            bitmap_add( OpenFilesListPlus::eBmpFileModified , _gfx_dir + wxS("modified_file.png")   );          // 2 modified file
-            bitmap_add( OpenFilesListPlus::eBmpFileReadOnly , _gfx_dir + wxS("file-readonly.png")   );          // 3 read only file
+            bitmap_add( eBmpFolder       , _gfx_dir + wxS("folder_open.png")     );          // 0 folder
+            bitmap_add( eBmpFileAscii    , _gfx_dir + wxS("ascii.png")           );          // 1 file
+            bitmap_add( eBmpFileModified , _gfx_dir + wxS("modified_file.png")   );          // 2 modified file
+            bitmap_add( eBmpFileReadOnly , _gfx_dir + wxS("file-readonly.png")   );          // 3 read only file
 
 
-            bitmap_add( OpenFilesListPlus::eBmpBarGreen     , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBG")    ));     // add panel
-            bitmap_add( OpenFilesListPlus::eBmpBarRed       , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBR")    ));     // del panel
-            bitmap_add( OpenFilesListPlus::eBmpBarBlue      , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBB")    ));     // options
-            bitmap_add( OpenFilesListPlus::eBmpBarOrange    , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBO")    ));     // (mini | maxi) mize panel
-            bitmap_add( OpenFilesListPlus::eBmpBarUp        , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBUP")   ));     // move panel up
-            bitmap_add( OpenFilesListPlus::eBmpBarDown      , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBDN")   ));     // move panel down
+            bitmap_add( eBmpBarGreen     , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBG")    ));     // add panel
+            bitmap_add( eBmpBarRed       , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBR")    ));     // del panel
+            bitmap_add( eBmpBarBlue      , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBB")    ));     // options
+            bitmap_add( eBmpBarOrange    , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBO")    ));     // (mini | maxi) mize panel
+            bitmap_add( eBmpBarUp        , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBUP")   ));     // move panel up
+            bitmap_add( eBmpBarDown      , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBDN")   ));     // move panel down
 
-            bitmap_add( OpenFilesListPlus::eBmpNotFound     , wxArtProvider::GetBitmap(wxART_ERROR, wxART_BUTTON) );
+            bitmap_add( eBmpNotFound     , wxArtProvider::GetBitmap(wxART_ERROR, wxART_BUTTON) );
 
             d_img_list->Add( bitmap(0) );
             d_img_list->Add( bitmap(1) );
@@ -103,16 +121,3 @@
 
         }
     };
-    //  ========================================================================
-  private:
-    Gfx                 *   d_gfx;                                              //!< OpenFilesListPlus gfx stuff
-    //  ------------------------------------------------------------------------
-  public:
-    Gfx                 *   gfx()                                       const
-        {
-            return d_gfx;
-        }
-
-
-
-

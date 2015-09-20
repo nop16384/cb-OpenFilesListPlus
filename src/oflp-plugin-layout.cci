@@ -59,14 +59,13 @@ bool    OpenFilesListPlus::Layout::     xml_load_project        (cbProject* _pro
     return xml_load_document(profn, _doc);
 }
 
-bool    OpenFilesListPlus::Layout::     xml_save_workspace   ()
+bool    OpenFilesListPlus::Layout::     xml_save_workspace      ()
 {
     //  - no TiXml constructore are available in plugins ( why : ??? ). So      //  _GWR_KNO_
     //    every TiXml object has to be new-allocated
     //  ........................................................................
     bool                    bret    =   TRUE;
 
-    OpenFilesListPlus   *   THIS    =   OpenFilesListPlus::Instance();
     cbWorkspace         *   wsp     =   Manager::Get()->GetProjectManager()->GetWorkspace();
     OFLPPanel           *   panel   =   NULL;
 
@@ -111,14 +110,14 @@ bool    OpenFilesListPlus::Layout::     xml_save_workspace   ()
         goto lab_failure;
     //  ........................................................................
     //  xml stuff - layout
-    for ( PanelArray::iterator
-        it  =   THIS->a_panels_array.begin()    ;
-        it  !=  THIS->a_panels_array.end()      ;
-        it++                                    )
+    for ( OpenFilesListPlus::PanelArray::const_iterator
+        it  =   panels()->array().begin()   ;
+        it  !=  panels()->array().end()     ;
+        it++                                )
     {
         panel = (*it);
 
-        if ( panel == THIS->a_BulkPanel )
+        if ( panel == panels()->bulk() )
             continue;
 
         xe4         =   new TiXmlElement("Panel");
@@ -127,7 +126,7 @@ bool    OpenFilesListPlus::Layout::     xml_save_workspace   ()
             goto lab_failure;
 
         psix.Clear();
-        psix << THIS->panel_get_visual_index(panel);
+        psix << panels()->get_visual_index(panel);
 
         panelnode->SetAttribute( "name"  , cbU2C(panel->get_title() ));
         panelnode->SetAttribute( "index" , cbU2C(psix               ));
@@ -154,14 +153,18 @@ lab_failure:
     return FALSE;
 }
 
-bool    OpenFilesListPlus::Layout::     xml_save_project     (cbProject* _pro)
+bool    OpenFilesListPlus::Layout::     xml_save_project        (cbProject* _pro)
 {
     //  - no TiXml constructore are available in plugins ( why : ??? ). So      //  _GWR_KNO_
     //    every TiXml object has to be new-allocated
     //  ........................................................................
     bool                bret        =   TRUE;
+    ProjectManager  *   promgr      =   Manager::Get()->GetProjectManager();
     int i,c;
-    ProjectFile     *   prf         =   NULL;
+    EditorBase      *   edb         =   NULL;
+    ProjectFile     *   pjf         =   NULL;
+    wxString            pjfn;
+    cbProject       *   pro         =   NULL;
     OFLPPanel       *   panel       =   NULL;
 
     const   char        *   ROOT_TAG    = "CodeBlocks_project_oflp_file";
@@ -197,36 +200,44 @@ bool    OpenFilesListPlus::Layout::     xml_save_project     (cbProject* _pro)
         goto lab_failure;
     //  ........................................................................
     //  xml stuff - layout
+    //  FindProjectForFile() inconsistency on project closing -> djb2 on complete filename
+    //  ........................................................................
+    //  xml stuff - layout
     c = _pro->GetFilesCount();
 
     for ( i = 0 ; i != c ; i++ )
     {
-        prf     =   _pro->GetFile(i);
-        panel   =   OpenFilesListPlus::Instance()->panel_find(prf);
+        pjf     =   _pro->GetFile(i);
 
-        if ( panel )
+        if ( pjf->editorOpen )
         {
-            if ( panel != OpenFilesListPlus::Instance()->a_BulkPanel )
+            pjfn    =   pjf->file.GetFullPath();
+            panel   =   panels()->get_from_absolute_filepath( pjfn );
+
+            if ( panel )
             {
-                GWR_TKI("xml_save_project():+[%s] -> [%s]",
-                    prf->relativeFilename.wc_str()  ,
-                    panel->get_title().wc_str()     );
+                if ( panel != panels()->bulk() )
+                {
+                    GWR_TKI("xml_save_project():+[%s] -> [%s]",
+                        pjf->relativeFilename.wc_str()  ,
+                        panel->get_title().wc_str()     );
 
-                xe3 =   new TiXmlElement("File");
-                filenode = static_cast< TiXmlElement* >( rootnode->InsertEndChild(*xe3) );
-                if ( ! filenode )
-                    goto lab_failure;
+                    xe3 =   new TiXmlElement("File");
+                    filenode = static_cast< TiXmlElement* >( rootnode->InsertEndChild(*xe3) );
+                    if ( ! filenode )
+                        goto lab_failure;
 
-                filenode->SetAttribute( "name"  , cbU2C(prf->relativeFilename   ));
-                filenode->SetAttribute( "panel" , cbU2C(panel->get_title()      ));
+                    filenode->SetAttribute( "name"  , cbU2C(pjf->relativeFilename   ));
+                    filenode->SetAttribute( "panel" , cbU2C(panel->get_title()      ));
 
-                delete xe3;
+                    delete xe3;
+                }
             }
         }
         else
         {
-            GWR_TKI("xml_save_project(): [%s]",
-                prf->relativeFilename.wc_str()  );
+            GWR_TKI("xml_save_project(): [%s] not found in any panel",
+                pjf->relativeFilename.wc_str()  );
         }
     }
     //  ........................................................................
@@ -328,9 +339,14 @@ OpenFilesListPlus::Layout::ProjectAssignments*
         wxString    name    =   cbC2U( file->Attribute("name")  );
         wxString    panel   =   cbC2U( file->Attribute("panel") );
 
+        wxString    wxfnstr(_project->GetBasePath());
+        wxfnstr.Append(wxS("/"));
+        wxfnstr.Append(name);
+        wxFileName  wxfn(wxfnstr);
+
         GWR_TKI("xml_parse_project():file[%s] -> panel[%s]", name.wc_str(), panel.wc_str());
 
-        pa->add( name, panel );
+        pa->add( wxfn, name, panel );
 
                     file    =   file->NextSiblingElement("File");
     }
@@ -361,12 +377,12 @@ void        OpenFilesListPlus::Layout:: reset_assignments               ()
     a_panel_assignment_array.Clear();
 }
 
-void        OpenFilesListPlus::Layout:: project_assignments_add         (ProjectAssignments* _pra)
+void        OpenFilesListPlus::Layout:: project_assignments_add             (ProjectAssignments* _pra)
 {
     a_project_assignments_array.Add(_pra);
 }
 
-void        OpenFilesListPlus::Layout:: project_assignments_sub         (cbProject* _pro)
+void        OpenFilesListPlus::Layout:: project_assignments_sub             (cbProject* _pro)
 {
     ProjectAssignments  *   pa  =   NULL;
     //  ........................................................................
@@ -384,7 +400,7 @@ void        OpenFilesListPlus::Layout:: project_assignments_sub         (cbProje
             a_project_assignments_array.Remove(pa);
             delete pa;
             GWR_TKI("              ...FileAssignment-s removed for project[%s]", _pro->GetTitle().wc_str());
-            return;
+            goto lab_exit;
         }
     }
     //  ........................................................................
@@ -392,23 +408,108 @@ lab_exit:
     earlgreycb::Log_function_exit();
 }
 
-wxString    OpenFilesListPlus::Layout:: file_assignment_find_panel_name (ProjectFile* _nn_pjf)
+bool        OpenFilesListPlus::Layout:: p0_project_assignments_get_from_editor_base (
+    EditorBase              *   _in_edb                     ,
+    ProjectAssignments      *&  _out_project_assignments    ,
+    ProjectFile             *&  _out_project_file           )
 {
-    ProjectAssignments          *   pa      =   NULL;
-    FileAssignment              *   fa      =   NULL;
+    bool                                bret        =   FALSE;
 
-    earlgreycb::HString::tHash      hash    =   0;
+    ProjectManager              *       promgr      =   Manager::Get()->GetProjectManager();
+    cbProject                   *       pro         =   NULL;
+
+    ProjectAssignments          *       pa          =   NULL;
     //  ........................................................................
-    //D GWR_TKI("layout_assignment_file_find():searching for [%s][%lu]", pjf->relativeFilename.wc_str(), hash);
+    earlgreycb::Log_function_enter(wxS("OFLP::Layout::p0_project_assignments_get_from_editor_base()"));
     //  ........................................................................
-    hash    =   earlgreycb::HString::Hash(_nn_pjf->relativeFilename);
+    //  init outputs
+    _out_project_assignments    =   NULL;
+    _out_project_file           =   NULL;
     //  ........................................................................
-    for ( ProjectAssignmentsArray::iterator                                     //  iterates on all ProjectAssignemnts-s
+    //  get the project the file belongs too ( if any )
+    pro = promgr->FindProjectForFile(_in_edb->GetFilename(), &_out_project_file, false, false);
+
+    if ( ! pro )
+    {
+        GWR_TKI("              ...no cbProject contains file[%s]", _in_edb->GetFilename().wc_str());
+        goto lab_exit;
+    }
+    //  ........................................................................
+    for ( ProjectAssignmentsArray::const_iterator                               //  iterates on all ProjectAssignments-s
         i1  =   a_project_assignments_array.begin() ;
         i1  !=  a_project_assignments_array.end()   ;
         i1++                                        )
     {
         pa  =   (*i1);
+
+        //GWR_TKI("              ...comparing with cbProject[%p][%s] #fa[%i]",pa->project(), pa->project()->GetTitle().wc_str(), pa->array().size());
+
+        if ( pa->project() != pro )
+            continue;
+
+        _out_project_assignments    =   pa;
+        bret                        =   TRUE;
+        break;
+    }
+    //  ........................................................................
+lab_exit:
+    earlgreycb::Log_function_exit();
+    return bret;
+}
+
+bool        OpenFilesListPlus::Layout:: p0_file_assignment_get_from_editor_base     (
+    EditorBase              *   _in_edb                     ,
+    ProjectAssignments      *&  _out_project_assignments    ,
+    FileAssignment          *&  _out_file_assignment        )
+{
+    bool                                bret        =   FALSE;
+
+    ProjectManager              *       promgr      =   Manager::Get()->GetProjectManager();
+    cbProject                   *       pro         =   NULL;
+    ProjectFile                 *       pjf         =   NULL;
+
+    ProjectAssignments          *       pa          =   NULL;
+    FileAssignment              *       fa          =   NULL;
+
+    OFLPPanel                   *       panel       =   NULL;
+
+    earlgreycb::HString::tHash          hrfp        =   0;
+    //  ........................................................................
+    earlgreycb::Log_function_enter(wxS("OFLP::Layout::p0_assignment_get_from_editor_base()"));
+    //  ........................................................................
+    //  init outputs
+    _out_project_assignments    =   NULL;
+    _out_file_assignment        =   NULL;
+    //  ........................................................................
+    //  get the project the file belongs too ( if any )
+    pro = promgr->FindProjectForFile(_in_edb->GetFilename(), &pjf, false, false);
+
+    if ( ! pro )
+    {
+        GWR_TKI("              ...no cbProject contains file[%s]", _in_edb->GetFilename().wc_str());
+        goto lab_exit;
+    }
+    GWR_TKI("              ...cbProject[%p][%s] contains file[%s]", pro, pro->GetTitle().wc_str(), _in_edb->GetFilename().wc_str());
+
+    if ( ! pjf )
+    {
+        GWR_TKE("%s", wxS("              ...no ProjectFile found"));
+        goto lab_exit;
+    }
+
+    hrfp    =   earlgreycb::HString::Hash( pjf->relativeFilename );
+    //  ........................................................................
+    for ( ProjectAssignmentsArray::const_iterator                               //  iterates on all ProjectAssignments-s
+        i1  =   a_project_assignments_array.begin() ;
+        i1  !=  a_project_assignments_array.end()   ;
+        i1++                                        )
+    {
+        pa  =   (*i1);
+
+        //GWR_TKI("              ...comparing with cbProject[%p][%s] #fa[%i]",pa->project(), pa->project()->GetTitle().wc_str(), pa->array().size());
+
+        if ( pa->project() != pro )
+            continue;
 
         for ( FileAssignmentArray::const_iterator                               //  iterates on all FileAssignment-s
             i2  =   pa->array().begin() ;
@@ -416,28 +517,104 @@ wxString    OpenFilesListPlus::Layout:: file_assignment_find_panel_name (Project
             i2++                        )
         {
             fa  =   (*i2);
-            //D GWR_TKI("  testing [%s] [%lu]", (*it)->file().wc_str(), (*it)->hfile() );
 
-            if ( fa->hfile() != hash )
+            //D GWR_TKI("              ...comparing [%lu] with FileAssignment[%lu][%s]", hrfp, fa->hrfp(), fa->afp().wc_str());
+
+            if ( fa->hrfp() != hrfp )
                 continue;
 
-            if ( fa->file().Cmp( _nn_pjf->relativeFilename ) )
+            if ( fa->rfp().Cmp( pjf->relativeFilename ) )
                 continue;
 
-            //  ok, found
-            GWR_TKI("assignment_file_find():editor[%s] is assigned to panel[%s] by project[%s]",
-                _nn_pjf->relativeFilename.wc_str()  ,
-                fa->panel().wc_str()                ,
-                pa->project()->GetTitle().wc_str()  );
-
-            return fa->panel();
+            //  here we are
+            _out_project_assignments    =   pa;
+            _out_file_assignment        =   fa;
+            bret                        =   true;
+            goto lab_exit;
         }
     }
+    //  ........................................................................
+lab_exit:
+    earlgreycb::Log_function_exit();
+    return bret;
+}
 
-    GWR_TKI("assignment_file_find():editor[%s] is not assigned",
-        _nn_pjf->relativeFilename.wc_str()  );
+OFLPPanel*  OpenFilesListPlus::Layout:: file_assignment_find_panel_from_editor_base (EditorBase* _nn_edb)
+{
+    ProjectAssignments  *   pa          =   NULL;
+    FileAssignment      *   fa          =   NULL;
 
-    return wxString();
+    OFLPPanel           *   panel       =   NULL;
+    //  ........................................................................
+    earlgreycb::Log_function_enter(wxS("OFLP::Layout::file_assignment_find_panel_from_editor_base()"));
+
+    if ( ! p0_file_assignment_get_from_editor_base( _nn_edb, pa, fa ) )
+    {
+        goto lab_exit;
+    }
+    //  ........................................................................
+    panel   =   panels()->p0_get_by_name( fa->pname() );
+    //  ........................................................................
+lab_exit:
+    earlgreycb::Log_function_exit();
+    return panel;
+}
+
+void        OpenFilesListPlus::Layout:: file_assignment_update                      (
+    EditorBase  *   _nn_edb         ,
+    OFLPPanel   *   _nn_dst_panel   )
+{
+    ProjectAssignments  *   pa          =   NULL;
+    FileAssignment      *   fa          =   NULL;
+    ProjectFile         *   pjf         =   NULL;
+
+    wxFileName              awxfn;
+    wxString                rfp;
+    OFLPPanel           *   panel       =   NULL;
+    //  ........................................................................
+    earlgreycb::Log_function_enter(wxS("OFLP::Layout::file_assignment_update()"));
+    //  ........................................................................
+    if ( ! p0_file_assignment_get_from_editor_base( _nn_edb, pa, fa ) )
+    {
+        GWR_TKI("              ...no file assignment found for file[%s]", _nn_edb->GetFilename().wc_str());
+
+        if ( ! p0_project_assignments_get_from_editor_base(_nn_edb, pa, pjf) )
+        {
+            GWR_TKI("              ...no project assignment found for file[%s]", _nn_edb->GetFilename().wc_str());
+            goto lab_exit;
+        }
+
+        awxfn   =   wxFileName(_nn_edb->GetFilename());
+        rfp     =   pjf->relativeFilename;
+
+        goto lab_add;
+    }
+    //  ........................................................................
+    panel   =   panels()->p0_get_by_name( fa->pname() );
+
+    if ( ! panel )
+    {
+        GWR_TKI("              ...assignment found, but OFLPPanel not found[%s]",fa->pname().wc_str());
+        goto lab_exit;
+    }
+
+    if ( panel == _nn_dst_panel )
+    {
+        GWR_TKI("              ...dst == src [%s], dropping !", panel->get_title().wc_str());
+    }
+    //  ........................................................................
+    //  remove old assignment
+    pa->sub(fa);
+    //  ........................................................................
+    awxfn   =   fa->awxfn();
+    rfp     =   fa->rfp();
+    //  ........................................................................
+    //  create new assignment
+lab_add:
+    pa->add( awxfn, rfp, _nn_dst_panel->get_title() );
+    //  ........................................................................
+lab_exit:
+    earlgreycb::Log_function_exit();
 }
 //  ############################################################################
 //                              Actions

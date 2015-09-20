@@ -20,14 +20,14 @@ class OpenFilesListPlusPanelItemData      : public wxTreeItemData
     virtual void                    p1_raz()    { a_editor = NULL; a_panel = NULL; }
 
   public:
-    EditorBase                  *   GetEditor() const   { return a_editor;  }
-    OpenFilesListPlusPanel      *   GetPanel()  const   { return a_panel;   }
+    EditorBase                          *   GetEditor()     const   { return a_editor;          }
+    OpenFilesListPlusPanel              *   GetPanel()      const   { return a_panel;           }
 };
 /// ****************************************************************************
 //! \class  OpenFilesListPlusPanelItemInfo
 //!
 //! \brief  Data stored in all tree items of panels + other datas  ; construct
-//!     only from a wxTeeeEvent : its for event handling coding lisibility
+//!     only from a wxTeeeEvent : its only for event handling coding lisibility
 //!
 //! \detail Points on the OFLPPanel, the EditorBase, has the wxTeeeItemId, and
 //!     the wxTreeCtrl

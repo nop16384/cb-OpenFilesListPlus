@@ -19,7 +19,8 @@ namespace   earlgreycb
 class   HString
 {
   public:
-    typedef     unsigned long   tHash;
+    typedef     unsigned long           tHash;
+    typedef     std::vector< tHash >    HArray;
 
   public:
     static  tHash   Hash(wxString const & _wxstr)
@@ -32,7 +33,7 @@ class   HString
             size_t              i       =   0;
             int                 c       =   0;
             //  ................................................................
-            if ( len > 16 ) len = 16;                                           //  limit hash computing to 16 bytes
+            //if ( len > 16 ) len = 16;                                           //  limit hash computing to 16 bytes
 
             while ( i != len )
             {
@@ -51,8 +52,8 @@ class   HString
     void                    p0_compute_djb2()               { a_hash = Hash(get()); }
 
   public:
-    tHash                   hash()                          { return a_hash;    }
-    wxString    const   &   get ()                          { return a_wxstr;   }
+    tHash                   hash()                          const   { return a_hash;    }
+    wxString    const   &   get ()                          const   { return a_wxstr;   }
     void                    set (wxString const& _wxstr)
         {
             a_wxstr =   _wxstr;

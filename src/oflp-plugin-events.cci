@@ -15,7 +15,7 @@ void    OpenFilesListPlus:: evh_workspace_loading_complete  (CodeBlocksEvent& _e
         it  !=  layout()->panel_assignment_array().end()    ;
         it++                                                )
     {
-        panel_add( (*it)->name(), false );
+        panels()->p0_add( (*it)->name(), false );
     }
 
     RefreshOpenFilesLayout();
@@ -56,6 +56,8 @@ void    OpenFilesListPlus:: evh_project_close               (CodeBlocksEvent& _e
 {
     earlgreycb::Log_function_enter(wxS("OFLP::evh_project_close()"));
 
+    GWR_TKI("project[%p] files:[%i]", _e.GetProject(), _e.GetProject()->GetFilesCount());
+
     layout()->project_close( _e.GetProject() );
 
     RefreshOpenFilesLayout();
@@ -79,7 +81,7 @@ void    OpenFilesListPlus:: evh_editor_opened               (CodeBlocksEvent& ev
     //  - file reloading
     //  ........................................................................
     EditorBase  *   edb     =   NULL;
-    OFLPPanel   *   panel   =   a_BulkPanel;
+    OFLPPanel   *   panel   =   panels()->p0_bulk();
     wxString        s;
     //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::evh_editor_opened()"));
@@ -95,7 +97,7 @@ void    OpenFilesListPlus:: evh_editor_opened               (CodeBlocksEvent& ev
     }
     //  ........................................................................
     //  check if editor is already open ( case of reload )
-    panel = panel_find(edb);
+    panel = panels()->find(edb);
     if ( panel )
     {
         GWR_TKI("      ...editor already open in panel[%s]", panel->get_title().wc_str());
@@ -103,7 +105,9 @@ void    OpenFilesListPlus:: evh_editor_opened               (CodeBlocksEvent& ev
     }
     //  ........................................................................
     //  add the editor
-    editor_add(edb);
+    actions()->editor_add(edb);
+
+    panels()->p0_resize();
     //  ........................................................................
 lab_exit:
     earlgreycb::Log_function_exit();
@@ -278,7 +282,7 @@ void OpenFilesListPlus::evh_tree_sel_changed        (wxTreeEvent &event)
     }
 
     //  deselect any other wxTreeCtrl's selected item
-    panels_unselect(inf.GetPanel());
+    panels()->p0_unselect_except(inf.GetPanel());
     //  ........................................................................
 lab_return:
     earlgreycb::Log_function_exit();
@@ -291,7 +295,7 @@ lab_return:
 //  ############################################################################
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_add (wxCommandEvent& _e)
 {
-    panel_add(wxString::FromUTF8("panel"), false);
+    panels()->p0_add(wxString::FromUTF8("panel"), false);
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_del (wxCommandEvent& _e)
@@ -306,7 +310,7 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_del (wxCommandEv
     GWR_INF("OFLP::evh_panel_header_button_del_CLICKED():EventObject[%p] ClientData()[%p]",
         _e.GetEventObject(), panel);
     //  ........................................................................
-    panel_sub(panel);
+    panels()->p0_sub(panel);
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_mm  (wxCommandEvent& _e)
@@ -317,7 +321,7 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_mm  (wxCommandEv
     (
         ( static_cast< wxButton* >( _e.GetEventObject() ) )->GetClientData()
     );
-    wxSizerItem *   sitem   = dw_MainSizer->GetItem(panel);
+    wxSizerItem *   sitem   = panels()->p0_sizer()->GetItem(panel);
     //  ........................................................................
     GWR_INF("OFLP::evh_panel_header_button_sh_CLICKED():EventObject[%p] ClientData()[%p] SizerItem[%p]",
         _e.GetEventObject(), panel, sitem);
@@ -342,7 +346,7 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_mm  (wxCommandEv
         panel->minimize();
         sitem->SetProportion(0);
     }
-    dw_MainSizer->Layout();
+    panels()->p0_sizer()->Layout();
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_up  (wxCommandEvent& _e)
@@ -357,7 +361,7 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_up  (wxCommandEv
     GWR_INF("OFLP::evh_panel_header_button_up_CLICKED():EventObject[%p] ClientData()[%p]",
         _e.GetEventObject(), panel);
 
-    panel_move_up(panel);
+    panels()->p0_move_up(panel);
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_down(wxCommandEvent& _e)
@@ -371,7 +375,7 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_down(wxCommandEv
     GWR_INF("OFLP::evh_panel_header_button_dn_CLICKED():EventObject[%p] ClientData()[%p]",
         _e.GetEventObject(), panel);
 
-    panel_move_dn(panel);
+    panels()->p0_move_dn(panel);
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_opt (wxCommandEvent& _e)
@@ -407,110 +411,4 @@ void    OpenFilesListPlus::     evh_menu_option_checked             (wxCommandEv
         earlgreycb::A_log_window =   false;
         earlgreycb::Log_window_close();
     }
-}
-//  ############################################################################
-//
-//                          ACTIONS
-//
-//  ############################################################################
-void    OpenFilesListPlus::     cb_event_dump(CodeBlocksEvent& _evt)
-{
-    GWR_TKI("evt:project[%p] editor[%p] plugin[%p]",
-        _evt.GetProject(), _evt.GetEditor(), _evt.GetPlugin());
-}
-
-void    OpenFilesListPlus::     editor_dump(EditorBase* _edb)
-{
-    wxString        shn;
-    wxString        rfn;
-    bool            bin;
-    wxString        sbin;
-    cbEditor    *   cbed    =   NULL;
-    ProjectFile *   pjf     =   NULL;
-    //  ........................................................................
-    bin =   _edb->IsBuiltinEditor();
-    sbin.assign( bin ? wxS("Y") : wxS("N") );
-    //  ........................................................................
-    if ( ! _edb )
-    {
-        shn.assign(wxS("EMPTY"));
-        rfn.assign(wxS("NULL"));
-        goto lab_dump;
-    }
-    //  ........................................................................
-    shn = _edb->GetShortName();
-    if ( shn.IsEmpty() )
-    {
-        shn.assign(wxS("EMPTY"));
-        rfn.assign(wxS("???"));
-        goto lab_dump;                                                          //  dont try to play with cbed if shn is empty
-    }
-    //  ........................................................................
-    if ( !bin )
-    {
-        rfn.assign(wxS("???"));
-        goto lab_dump;
-    }
-    //  ........................................................................
-    cbed    =   reinterpret_cast< cbEditor* >(_edb);
-    pjf     =   cbed->GetProjectFile();
-    if ( ! pjf )
-    {
-        rfn.assign(wxS("NULL"));
-    }
-    else
-    {
-        rfn = pjf->relativeFilename;
-    }
-
-lab_dump:
-    GWR_TKI("OFLP::editor_dump():[%p] bin[%s] shn[%s] rfn[%s]", _edb, sbin.wc_str(), shn.wc_str(), rfn.wc_str());
-}
-
-OFLPPanel*
-        OpenFilesListPlus::     file_assignment_find_panel(ProjectFile* _nn_pjf)
-{
-    wxString        s       =   layout()->file_assignment_find_panel_name(_nn_pjf);
-    if ( s.IsEmpty() )
-    {
-        return NULL;
-    }
-
-    OFLPPanel   *   panel   =   p0_panel_get_by_name(s);
-    return panel;
-}
-
-void    OpenFilesListPlus::     editor_add(EditorBase* _nn_edb)
-{
-    s;
-    ProjectManager  *   promgr  =   Manager::Get()->GetProjectManager();
-    cbProject       *   pro     =   NULL;
-    ProjectFile     *   pjf     =   NULL;
-    OFLPPanel       *   panel   =   NULL;
-    //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::editor_add()"));
-    //  ........................................................................
-    promgr->FindProjectForFile(_nn_edb->GetFilename(), &pjf, false, false);
-
-    if ( ! pjf )
-    {
-        GWR_TKI("%s", wxS("      ...ProjectFile is NULL"));
-        goto lab_01;
-    }
-
-    panel   =   file_assignment_find_panel(pjf);
-    //  ........................................................................
-lab_01:
-    GWR_TKI("editor_add():[%p][%s] -> [%p][%s]" ,
-        _nn_edb , _nn_edb->GetShortName().wc_str()                  ,
-        panel   , panel ? panel->get_title().wc_str() : wxS("Bulk") );
-
-    if ( panel )
-        panel->editor_add(_nn_edb);
-    else
-        a_BulkPanel->editor_add(_nn_edb);
-    //  ........................................................................
-lab_exit:
-    earlgreycb::Log_function_exit();
-    return;
 }

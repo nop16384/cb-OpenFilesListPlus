@@ -31,7 +31,8 @@ typedef OpenFilesListPlusPanel          OFLPPanel;
 typedef OpenFilesListPlusPanelItemData  OFLPPanelItemData;
 typedef OpenFilesListPlusPanelItemInfo  OFLPPanelItemInfo;
 typedef OpenFilesListPlusPanelHeader    OFLPPanelHeader;
+
 //  ............................................................................
-WX_DEFINE_ARRAY(EditorBase              *, EditorArray);
+WX_DEFINE_ARRAY(EditorBase*    , EditorArray);
 //  ............................................................................
 #endif                                                                          //  __OFLP_COMMON_HH__

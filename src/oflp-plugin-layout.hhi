@@ -1,10 +1,10 @@
-  private:
     /// ************************************************************************
     //! \class  Layout
     //!
     //! \brief  Save & Load OpenFilesListPlus panels & open files layout
     /// ************************************************************************
-    class   Layout
+  private:
+    class   Layout  :   public  Module
     {
         //friend class    OpenFilesListPlus;
         //  --------------------------------------------------------------------
@@ -17,37 +17,6 @@
         WX_DEFINE_ARRAY(PanelAssignment     *, PanelAssignmentArray );          //  panels of the workspace
         WX_DEFINE_ARRAY(FileAssignment      *, FileAssignmentArray );           //  per project : file -> panel assignment
         WX_DEFINE_ARRAY(ProjectAssignments  *, ProjectAssignmentsArray );
-        /// ********************************************************************
-        //! \class  FileAssignment
-        //!
-        //! \brief  (filename -> OFLPPanel) unidirectional association
-        //!
-        //! \detail Filenames are stored as earlgreycb::HString so they have a
-        //!     hash value.
-        /// ********************************************************************
-      public:
-        class   FileAssignment
-        {
-          private:
-            earlgreycb::HString     a_file;
-            earlgreycb::HString     a_panel;
-
-          public:
-            wxString                    const   &   file()      { return a_file.get();  }
-            earlgreycb::HString::tHash              hfile()     { return a_file.hash(); }
-            wxString                    const   &   panel()     { return a_panel.get(); }
-            earlgreycb::HString::tHash              hpanel()    { return a_panel.hash();}
-
-          public:
-            FileAssignment(wxString& _file_name, wxString& _panel_name)
-                {
-                    a_file.set  (_file_name );
-                    a_panel.set (_panel_name);
-                }
-           ~FileAssignment()
-                {
-                }
-        };
         /// ********************************************************************
         //! \class  PanelAssignment
         //!
@@ -75,6 +44,46 @@
                 }
         };
         /// ********************************************************************
+        //! \class  FileAssignment
+        //!
+        //! \brief  (filename -> OFLPPanel) unidirectional association
+        //!
+        //! \detail Using some earlgreycb::HString-s for accelerating access-s
+        /// ********************************************************************
+      public:
+        class   FileAssignment
+        {
+          private:
+            wxFileName                  a_absolute_filename;                    //! absolute filename
+            earlgreycb::HString         a_absolute_filepath;                    //! absolute filepath  + hash
+            earlgreycb::HString         a_relative_filepath;                    //! project-relative filepath + h
+            earlgreycb::HString         a_panel_name;                           //! assigned panel name + hash
+
+          public:
+            wxFileName                  const   &   awxfn()     { return a_absolute_filename;           }
+            wxString                    const   &   afp()       { return a_absolute_filepath.get();     }
+            earlgreycb::HString::tHash              hafp()      { return a_absolute_filepath.hash();    }
+            wxString                    const   &   rfp()       { return a_relative_filepath.get();     }
+            earlgreycb::HString::tHash              hrfp()      { return a_relative_filepath.hash();    }
+            wxString                    const   &   pname()     { return a_panel_name.get();            }
+            earlgreycb::HString::tHash              hpname()    { return a_panel_name.hash();           }
+
+          public:
+            FileAssignment(
+                wxFileName  const &   _absolute_filename  ,
+                wxString    const &   _relative_filepath  ,
+                wxString    const &   _panel_name         )
+                {
+                    a_absolute_filename     =   _absolute_filename;
+                    a_absolute_filepath     =   _absolute_filename.GetFullPath();
+                    a_relative_filepath.set ( _relative_filepath );
+                    a_panel_name.set        (_panel_name);
+                }
+           ~FileAssignment()
+                {
+                }
+        };
+        /// ********************************************************************
         //! \class  ProjectAssignments
         //!
         //! \brief  All FileAssignment-s for one project
@@ -97,9 +106,13 @@
                     return a_assignments;
                 }
 
-            void                    add(wxString& _filename, wxString& _panel_name)
+            void                    add(wxFileName const & _wx_filename, wxString const & _relative_filename, wxString const & _panel_name)
                 {
-                    a_assignments.Add( new FileAssignment(_filename, _panel_name) );
+                    a_assignments.Add( new FileAssignment(_wx_filename, _relative_filename, _panel_name) );
+                }
+            void                    sub(FileAssignment* _fa)
+                {
+                    a_assignments.Remove( _fa );
                 }
 
           public:
@@ -136,12 +149,17 @@
         PanelAssignmentArray            a_panel_assignment_array;
         ProjectAssignmentsArray         a_project_assignments_array;
 
-        void                reset_assignments           ();
-        void                project_assignments_add     (ProjectAssignments*);
-        void                project_assignments_sub     (cbProject*);
+        void                    reset_assignments           ();
+        void                    project_assignments_add     (ProjectAssignments*);
+        void                    project_assignments_sub     (cbProject*);
+
+        bool                    p0_project_assignments_get_from_editor_base (EditorBase*, ProjectAssignments*& _project_assignments, ProjectFile*& _out_project_file);
+        bool                    p0_file_assignment_get_from_editor_base     (EditorBase*, ProjectAssignments*& _project_assignments, FileAssignment*& _file_assignment);
 
       public:
-        wxString                            file_assignment_find_panel_name (ProjectFile* _nn_pjf);
+        OFLPPanel                       *   file_assignment_find_panel_from_editor_base     (EditorBase* _nn_edb);
+        void                                file_assignment_update                          (EditorBase* _nn_edb, OFLPPanel* _nn_dst_panel);
+
         PanelAssignmentArray    const   &   panel_assignment_array      ()  { return a_panel_assignment_array;      }
         ProjectAssignmentsArray const   &   project_assignments_array   ()  { return a_project_assignments_array;   }
         //  ....................................................................
@@ -160,13 +178,3 @@
         Layout()                                                                {}
        ~Layout()                                                                {}
     };
-    //  ========================================================================
-  private:
-    Layout              *   d_layout;                                           //!< OpenFilesListPlus layout stuff
-        //  ....................................................................
-  public:
-    Layout              *   layout()                                    const
-        {
-            return d_layout;
-        }
-

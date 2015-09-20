@@ -27,23 +27,6 @@
     void    evh_panel_header_button_clicked_down    (wxCommandEvent &);
     void    evh_panel_header_button_clicked_opt     (wxCommandEvent &);
 
-
-  protected:
-    OFLPPanel           *   a_dnd_destination_panel;
-
-  public:
-    OFLPPanel   const   *   dnd_dst_panel()
-        {
-            return a_dnd_destination_panel;
-        }
-
-    void                    dnd_dst_panel_set(OFLPPanel* _panel)
-        {
-            a_dnd_destination_panel = _panel;
-        }
-
   private:
         void                cb_event_dump               (CodeBlocksEvent& _evt);
         void                editor_dump                 (EditorBase* _edb);
-        OFLPPanel       *   file_assignment_find_panel  (ProjectFile* _nn_pjf);
-        void                editor_add                  (EditorBase* _edb);
