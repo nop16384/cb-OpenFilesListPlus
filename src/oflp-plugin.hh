@@ -17,6 +17,13 @@
 //  ............................................................................
 #include    "cbplugin.h"                                                        //  for "class cbPlugin"
 #include    "cbworkspace.h"                                                        //  for "class cbPlugin"
+//  ............................................................................
+#include    "oflp-plugin-module.hhi"
+#include    "oflp-plugin-mod-gfx.hhi"
+#include    "oflp-plugin-mod-menus.hhi"
+#include    "oflp-plugin-mod-layout.hhi"
+#include    "oflp-plugin-mod-editors.hhi"
+#include    "oflp-plugin-mod-panels.hhi"
 /// ****************************************************************************
 //! \class  OpenFilesListPlus
 //!
@@ -139,51 +146,6 @@ class OpenFilesListPlus : public cbPlugin
         void    RefreshOpenFileLayout   (EditorBase* _edb);
         void    RefreshOpenFilesLayout  ();
         //  ====================================================================
-        WX_DEFINE_ARRAY(OpenFilesListPlusPanel  *, PanelArray);
-        //  ====================================================================
-        //  "An inner class is a friend of the class it is defined within."     //  _GWR_TODO_ find something else, every module has access to everything !!!
-    private:
-        class   Gfx;
-        class   Layout;
-        class   Panels;
-        class   Editors;
-        class   MenuOptions;
-        /// ********************************************************************
-        //! \class  Module
-        //!
-        //! \brief  OpenFilesListPlus is splitted in many inner-classes called
-        //!     modules, for code lisibility. Each module inherits from inner
-        //!     class Module, which allows inter-module & OpenFilesListPlus
-        //!     instance access.
-        /// ********************************************************************
-      private:
-        class  Module
-        {
-          private:
-            OpenFilesListPlus               *   a_instance;
-            OpenFilesListPlus::Gfx          *   a_module_gfx;
-            OpenFilesListPlus::Layout       *   a_module_layout;
-            OpenFilesListPlus::Panels       *   a_module_panels;
-            OpenFilesListPlus::Editors      *   a_module_editors;
-            OpenFilesListPlus::MenuOptions  *   a_module_menu_options;
-
-          protected:
-            OpenFilesListPlus           *   oflp()      { return a_instance;        }
-            OpenFilesListPlus::Layout   *   layout()    { return a_module_layout;   }
-            OpenFilesListPlus::Panels   *   panels()    { return a_module_panels;   }
-
-          public:
-            void                            module_init()
-                {
-                    a_instance             =   OpenFilesListPlus::Instance();
-
-                    a_module_gfx           =   oflp()->gfx();
-                    a_module_layout        =   oflp()->layout();
-                    a_module_panels        =   oflp()->panels();
-                    a_module_editors       =   oflp()->editors();
-                    a_module_menu_options  =   oflp()->menu_options();
-                }
-        };
         //  ....................................................................
         #define OFPL_MEMBER_MODULE(MODULE_NAME, MEMBER_NAME, GET_NAME)          \
           private:                                                              \
@@ -199,16 +161,11 @@ class OpenFilesListPlus : public cbPlugin
         #include    "oflp-plugin-dnd.hhi"
         //  ====================================================================
         //  modularized stuff
-        OFPL_MEMBER_MODULE(Gfx          , d_gfx             , gfx           );
-        OFPL_MEMBER_MODULE(MenuOptions  , dw_menu_options   , menu_options  );
-        OFPL_MEMBER_MODULE(Layout       , d_layout          , layout        );
-        OFPL_MEMBER_MODULE(Editors      , d_editors         , editors       );
-        OFPL_MEMBER_MODULE(Panels       , d_panels          , panels        );
-        #include    "oflp-plugin-gfx.hhi"
-        #include    "oflp-plugin-menus.hhi"
-        #include    "oflp-plugin-panels.hhi"
-        #include    "oflp-plugin-layout.hhi"
-        #include    "oflp-plugin-editors.hhi"
+        OFPL_MEMBER_MODULE(OflpModGfx           , d_gfx             , gfx           );
+        OFPL_MEMBER_MODULE(OflpModMenuOptions   , dw_menu_options   , menu_options  );
+        OFPL_MEMBER_MODULE(OflpModLayout        , d_layout          , layout        );
+        OFPL_MEMBER_MODULE(OflpModEditors       , d_editors         , editors       );
+        OFPL_MEMBER_MODULE(OflpModPanels        , d_panels          , panels        );
         //  ====================================================================
     private:
         DECLARE_EVENT_TABLE();

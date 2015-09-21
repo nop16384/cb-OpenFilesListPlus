@@ -12,16 +12,17 @@
 	<File name="src/oflp-panel.cc" panel="Panels" />
 	<File name="src/oflp-panel.hh" panel="Panels" />
 	<File name="src/oflp-plugin-dnd.hhi" panel="Plugin" />
-	<File name="src/oflp-plugin-editors.cci" panel="Plugin" />
-	<File name="src/oflp-plugin-editors.hhi" panel="Plugin" />
 	<File name="src/oflp-plugin-events.cci" panel="Plugin" />
 	<File name="src/oflp-plugin-events.hhi" panel="Plugin" />
-	<File name="src/oflp-plugin-gfx.hhi" panel="Plugin" />
-	<File name="src/oflp-plugin-layout.cci" panel="Plugin" />
-	<File name="src/oflp-plugin-layout.hhi" panel="Plugin" />
-	<File name="src/oflp-plugin-menus.hhi" panel="Plugin" />
-	<File name="src/oflp-plugin-panels.cci" panel="Plugin" />
-	<File name="src/oflp-plugin-panels.hhi" panel="Plugin" />
+	<File name="src/oflp-plugin-mod-editors.cci" panel="Plugin" />
+	<File name="src/oflp-plugin-mod-editors.hhi" panel="Plugin" />
+	<File name="src/oflp-plugin-mod-gfx.hhi" panel="Plugin" />
+	<File name="src/oflp-plugin-mod-layout.cci" panel="Plugin" />
+	<File name="src/oflp-plugin-mod-layout.hhi" panel="Plugin" />
+	<File name="src/oflp-plugin-mod-menus.hhi" panel="Plugin" />
+	<File name="src/oflp-plugin-mod-panels.cci" panel="Plugin" />
+	<File name="src/oflp-plugin-mod-panels.hhi" panel="Plugin" />
+	<File name="src/oflp-plugin-module.hhi" panel="Plugin" />
 	<File name="src/oflp-plugin.cpp" panel="Plugin" />
 	<File name="src/oflp-plugin.hh" panel="Plugin" />
 </CodeBlocks_project_oflp_file>

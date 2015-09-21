@@ -89,8 +89,8 @@ class OpenFilesListPlusPanel              : public wxPanel
     void                    evh_title_dynamic_KILL_FOCUS            (wxFocusEvent   &);
     //  ------------------------------------------------------------------------
   public:
-    OpenFilesListPlusPanel();
-    OpenFilesListPlusPanel(OpenFilesListPlus* _ofl_plugin, wxWindow* _parent, wxString _title, bool _bulk = false);
+             OpenFilesListPlusPanel();
+             OpenFilesListPlusPanel(OpenFilesListPlus* _ofl_plugin, wxWindow* _parent, wxString _title, bool _bulk = false);
     virtual ~OpenFilesListPlusPanel();
 };
 /// ****************************************************************************
@@ -110,7 +110,7 @@ class OpenFilesListPlusPanelBulk          : public OpenFilesListPlusPanel
 
     //  ------------------------------------------------------------------------
   public:
-    OpenFilesListPlusPanelBulk(OpenFilesListPlus* _ofl_plugin, wxWindow* _parent, wxString _title);
+             OpenFilesListPlusPanelBulk(OpenFilesListPlus* _ofl_plugin, wxWindow* _parent, wxString _title);
     virtual ~OpenFilesListPlusPanelBulk();
 };
 

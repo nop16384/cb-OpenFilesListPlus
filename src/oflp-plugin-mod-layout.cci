@@ -3,7 +3,7 @@
 //                      CB WORKSPACES & PROJECTS LAYOUTS
 //
 //  ############################################################################
-void    OpenFilesListPlus::Layout::     Filename_cb_to_oflp(
+void    OflpModLayout::     Filename_cb_to_oflp(
     wxString        _in_filename    ,
     wxString    &   _out_filename   ,
     int             _type           )
@@ -14,7 +14,7 @@ void    OpenFilesListPlus::Layout::     Filename_cb_to_oflp(
     _out_filename.Append(sfx);
 }
 
-void    OpenFilesListPlus::Layout::     dump_project_manager()
+void    OflpModLayout::     dump_project_manager()
 {
     earlgreycb::Log_function_mark( wxS("p0_dump_project_manager()"));
 
@@ -29,7 +29,7 @@ void    OpenFilesListPlus::Layout::     dump_project_manager()
 //  ############################################################################
 //                              XML stuff ( boring )
 //  ############################################################################
-bool    OpenFilesListPlus::Layout::     xml_load_document       (wxString& _filename, TiXmlDocument* _doc)
+bool    OflpModLayout::     xml_load_document       (wxString& _filename, TiXmlDocument* _doc)
 {
     if ( ! TinyXML::LoadDocument(_filename, _doc) )
         return false;
@@ -37,7 +37,7 @@ bool    OpenFilesListPlus::Layout::     xml_load_document       (wxString& _file
     return true;
 }
 
-bool    OpenFilesListPlus::Layout::     xml_load_workspace      (cbWorkspace* _wsp, TiXmlDocument* _doc)
+bool    OflpModLayout::     xml_load_workspace      (cbWorkspace* _wsp, TiXmlDocument* _doc)
 {
     wxString    wspfn;
     //  ........................................................................
@@ -48,7 +48,7 @@ bool    OpenFilesListPlus::Layout::     xml_load_workspace      (cbWorkspace* _w
     return xml_load_document(wspfn, _doc);
 }
 
-bool    OpenFilesListPlus::Layout::     xml_load_project        (cbProject* _pro, TiXmlDocument* _doc)
+bool    OflpModLayout::     xml_load_project        (cbProject* _pro, TiXmlDocument* _doc)
 {
     wxString    profn;
     //  ........................................................................
@@ -59,7 +59,7 @@ bool    OpenFilesListPlus::Layout::     xml_load_project        (cbProject* _pro
     return xml_load_document(profn, _doc);
 }
 
-bool    OpenFilesListPlus::Layout::     xml_save_workspace      ()
+bool    OflpModLayout::     xml_save_workspace      ()
 {
     //  - no TiXml constructore are available in plugins ( why : ??? ). So      //  _GWR_KNO_
     //    every TiXml object has to be new-allocated
@@ -110,7 +110,7 @@ bool    OpenFilesListPlus::Layout::     xml_save_workspace      ()
         goto lab_failure;
     //  ........................................................................
     //  xml stuff - layout
-    for ( OpenFilesListPlus::PanelArray::const_iterator
+    for ( PanelArray::const_iterator
         it  =   panels()->array().begin()   ;
         it  !=  panels()->array().end()     ;
         it++                                )
@@ -153,22 +153,22 @@ lab_failure:
     return FALSE;
 }
 
-bool    OpenFilesListPlus::Layout::     xml_save_project        (cbProject* _pro)
+bool    OflpModLayout::     xml_save_project        (cbProject* _pro)
 {
     //  - no TiXml constructore are available in plugins ( why : ??? ). So      //  _GWR_KNO_
     //    every TiXml object has to be new-allocated
     //  ........................................................................
-    bool                bret        =   TRUE;
-    ProjectManager  *   promgr      =   Manager::Get()->GetProjectManager();
-    int i,c;
-    EditorBase      *   edb         =   NULL;
-    ProjectFile     *   pjf         =   NULL;
-    wxString            pjfn;
-    cbProject       *   pro         =   NULL;
-    OFLPPanel       *   panel       =   NULL;
+    bool                        bret        =   TRUE;
+    ProjectManager          *   promgr      =   Manager::Get()->GetProjectManager();
+    int                         i,c;
+    EditorBase              *   edb         =   NULL;
+    ProjectFile             *   pjf         =   NULL;
+    wxString                    pjfn;
+    cbProject               *   pro         =   NULL;
+    OFLPPanel       const   *   panel       =   NULL;
 
-    const   char        *   ROOT_TAG    = "CodeBlocks_project_oflp_file";
-            wxString        profn;
+    char            const   *   ROOT_TAG    = "CodeBlocks_project_oflp_file";
+    wxString                    profn;
 
     TiXmlDocument   *   doc         =   NULL;
     TiXmlDeclaration*   docdec      =   NULL;
@@ -260,7 +260,7 @@ lab_failure:
     return FALSE;
 }
 
-bool    OpenFilesListPlus::Layout::     xml_parse_workspace     (TiXmlDocument* _doc)
+bool    OflpModLayout::     xml_parse_workspace     (TiXmlDocument* _doc)
 {
     TiXmlElement*   root    =   _doc->FirstChildElement("CodeBlocks_workspace_oflp_file");
     if ( ! root )
@@ -299,8 +299,8 @@ bool    OpenFilesListPlus::Layout::     xml_parse_workspace     (TiXmlDocument* 
     return true;
 }
 
-OpenFilesListPlus::Layout::ProjectAssignments*
-        OpenFilesListPlus::Layout::     xml_parse_project       (cbProject* _project, TiXmlDocument* _doc)
+OflpModLayout::ProjectAssignments*
+        OflpModLayout::     xml_parse_project       (cbProject* _project, TiXmlDocument* _doc)
 {
     ProjectAssignments  *   pa  =   NULL;
     //  ------------------------------------------------------------------------
@@ -356,7 +356,7 @@ OpenFilesListPlus::Layout::ProjectAssignments*
 //  ############################################################################
 //                              Assignments
 //  ############################################################################
-void        OpenFilesListPlus::Layout:: reset_assignments               ()
+void        OflpModLayout:: reset_assignments               ()
 {
     for ( ProjectAssignmentsArray::iterator
         it  =   a_project_assignments_array.begin() ;
@@ -377,12 +377,12 @@ void        OpenFilesListPlus::Layout:: reset_assignments               ()
     a_panel_assignment_array.Clear();
 }
 
-void        OpenFilesListPlus::Layout:: project_assignments_add             (ProjectAssignments* _pra)
+void        OflpModLayout:: project_assignments_add             (ProjectAssignments* _pra)
 {
     a_project_assignments_array.Add(_pra);
 }
 
-void        OpenFilesListPlus::Layout:: project_assignments_sub             (cbProject* _pro)
+void        OflpModLayout:: project_assignments_sub             (cbProject* _pro)
 {
     ProjectAssignments  *   pa  =   NULL;
     //  ........................................................................
@@ -408,7 +408,7 @@ lab_exit:
     earlgreycb::Log_function_exit();
 }
 
-bool        OpenFilesListPlus::Layout:: p0_project_assignments_get_from_editor_base (
+bool        OflpModLayout:: p0_project_assignments_get_from_editor_base (
     EditorBase              *   _in_edb                     ,
     ProjectAssignments      *&  _out_project_assignments    ,
     ProjectFile             *&  _out_project_file           )
@@ -457,7 +457,7 @@ lab_exit:
     return bret;
 }
 
-bool        OpenFilesListPlus::Layout:: p0_file_assignment_get_from_editor_base     (
+bool        OflpModLayout:: p0_file_assignment_get_from_editor_base     (
     EditorBase              *   _in_edb                     ,
     ProjectAssignments      *&  _out_project_assignments    ,
     FileAssignment          *&  _out_file_assignment        )
@@ -539,7 +539,7 @@ lab_exit:
     return bret;
 }
 
-OFLPPanel*  OpenFilesListPlus::Layout:: file_assignment_find_panel_from_editor_base (EditorBase* _nn_edb)
+OFLPPanel*  OflpModLayout:: file_assignment_find_panel_from_editor_base (EditorBase* _nn_edb)
 {
     ProjectAssignments  *   pa          =   NULL;
     FileAssignment      *   fa          =   NULL;
@@ -560,7 +560,7 @@ lab_exit:
     return panel;
 }
 
-void        OpenFilesListPlus::Layout:: file_assignment_update                      (
+void        OflpModLayout:: file_assignment_update                      (
     EditorBase  *   _nn_edb         ,
     OFLPPanel   *   _nn_dst_panel   )
 {
@@ -570,7 +570,7 @@ void        OpenFilesListPlus::Layout:: file_assignment_update                  
 
     wxFileName              awxfn;
     wxString                rfp;
-    OFLPPanel           *   panel       =   NULL;
+    OFLPPanel const           *   panel       =   NULL;
     //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::Layout::file_assignment_update()"));
     //  ........................................................................
@@ -619,14 +619,14 @@ lab_exit:
 //  ############################################################################
 //                              Actions
 //  ############################################################################
-void    OpenFilesListPlus::Layout::     reset           ()
+void    OflpModLayout::     reset           ()
 {
     reset_assignments();
 }
 //  ############################################################################
 //                              Events
 //  ############################################################################
-void    OpenFilesListPlus::Layout::     workspace_load                  ()
+void    OflpModLayout::     workspace_load                  ()
 {
     earlgreycb::Log_function_enter(wxS("Layout::workspace_load()"));
     //  ........................................................................
@@ -684,7 +684,7 @@ lab_exit:
     earlgreycb::Log_function_exit();
 }
 
-bool    OpenFilesListPlus::Layout::     workspace_close                 ()
+bool    OflpModLayout::     workspace_close                 ()
 {
     earlgreycb::Log_function_enter(wxS("Layout::workspace_close()"));
 
@@ -695,7 +695,7 @@ bool    OpenFilesListPlus::Layout::     workspace_close                 ()
     return bret;
 }
 
-bool    OpenFilesListPlus::Layout::     workspace_save                  ()
+bool    OflpModLayout::     workspace_save                  ()
 {
     earlgreycb::Log_function_enter(wxS("Layout::workspace_save()"));
 
@@ -706,7 +706,7 @@ bool    OpenFilesListPlus::Layout::     workspace_save                  ()
     return bret;
 }
 
-void    OpenFilesListPlus::Layout::     project_load                (cbProject* _pro)
+void    OflpModLayout::     project_load                (cbProject* _pro)
 {
     ProjectAssignments  *   pa  =   NULL;
     TiXmlDocument       *   doc =   NULL;
@@ -735,7 +735,7 @@ lab_exit:
     earlgreycb::Log_function_exit();
 }
 
-void    OpenFilesListPlus::Layout::     project_close               (cbProject* _pro)
+void    OflpModLayout::     project_close               (cbProject* _pro)
 {
     earlgreycb::Log_function_enter(wxS("Layout::project_close()"));
 
@@ -747,7 +747,7 @@ lab_exit:
     earlgreycb::Log_function_exit();
 }
 
-void    OpenFilesListPlus::Layout::     project_save                (cbProject* _pro)
+void    OflpModLayout::     project_save                (cbProject* _pro)
 {
     earlgreycb::Log_function_enter(wxS("Layout::project_save()"));
 

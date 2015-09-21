@@ -33,6 +33,17 @@
 //  ............................................................................
 OpenFilesListPlus   *   OpenFilesListPlus::s_singleton  =   NULL;
 //  ............................................................................
+void    OflpModule::init()
+{
+    a_instance             =   OpenFilesListPlus::Instance();
+
+    a_module_gfx           =   oflp()->gfx();
+    a_module_layout        =   oflp()->layout();
+    a_module_panels        =   oflp()->panels();
+    a_module_editors       =   oflp()->editors();
+    a_module_menu_options  =   oflp()->menu_options();
+}
+//  ............................................................................
 namespace
 {
     // this auto-registers the plugin
@@ -81,17 +92,18 @@ void OpenFilesListPlus::OnAttach()
     GWR_INF("OpenFilesListPlugin::OnAttach [%p][%p]", this, Instance());
     //  ........................................................................
     //  create & init the modules
-    d_gfx           =   new Gfx(ConfigManager::GetDataFolder() + wxS("/images/"));
-    d_layout        =   new Layout();
-    d_editors       =   new Editors();
-    d_panels        =   new Panels();
-    dw_menu_options =   new MenuOptions();
+    d_gfx           =   new OflpModGfx(ConfigManager::GetDataFolder() + wxS("/images/"));
+    d_layout        =   new OflpModLayout();
+    d_editors       =   new OflpModEditors();
+    d_panels        =   new OflpModPanels();
+    dw_menu_options =   new OflpModMenuOptions();
 
-    gfx()           ->module_init();
-    layout()        ->module_init();
-    editors()       ->module_init();
-    panels()        ->module_init();
-    menu_options()  ->module_init();
+    //  once all modules are created, init them with pointers to each others
+    gfx()           ->OflpModule::init();
+    layout()        ->OflpModule::init();
+    editors()       ->OflpModule::init();
+    panels()        ->OflpModule::init();
+    menu_options()  ->OflpModule::init();
     //  ........................................................................
     //  menu options
     menu_options()->check_item_set_log_console  (false);
@@ -355,8 +367,8 @@ void OpenFilesListPlus::RefreshOpenFileLayout   (EditorBase* _nn_edb)
 
     //cbProject       *   pro     =   NULL;
     //ProjectFile     *   pjf     =   NULL;
-    OFLPPanel       *   psrc    =   NULL;
-    OFLPPanel       *   pdst    =   NULL;
+    OFLPPanel         *   psrc    =   NULL;
+    OFLPPanel         *   pdst    =   NULL;
     //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::RefreshOpenFileLayout()"));
     //  ........................................................................
@@ -364,7 +376,7 @@ void OpenFilesListPlus::RefreshOpenFileLayout   (EditorBase* _nn_edb)
         goto lab_exit;
     //  ........................................................................
     //  get infos on editor
-    psrc                            = panels()->find(_nn_edb);
+    psrc                            = panels()->p0_find(_nn_edb);
     if ( ! psrc )
     {
         GWR_TKE("      ...editor [%p][%s] was _NOT_ found in any panel", _nn_edb, shortname.wc_str());
@@ -438,9 +450,9 @@ lab_exit:
 }
 
 //  ############################################################################
-#include    "oflp-plugin-panels.cci"
 #include    "oflp-plugin-events.cci"
-#include    "oflp-plugin-layout.cci"
-#include    "oflp-plugin-editors.cci"
+#include    "oflp-plugin-mod-layout.cci"
+#include    "oflp-plugin-mod-editors.cci"
+#include    "oflp-plugin-mod-panels.cci"
 
 

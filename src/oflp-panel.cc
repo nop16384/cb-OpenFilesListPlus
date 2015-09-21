@@ -238,10 +238,10 @@ OpenFilesListPlusPanel::OpenFilesListPlusPanel(
 
     dw_header   =   new OpenFilesListPlusPanelHeader( this, _title );
 
-    dw_header->button_prepend   ( OpenFilesListPlus::Gfx::eBmpBarUp      );          //  2
-    dw_header->button_prepend   ( OpenFilesListPlus::Gfx::eBmpBarDown    );          //  1
-    dw_header->button_prepend   ( OpenFilesListPlus::Gfx::eBmpBarOrange  );          //  0
-    dw_header->button_append    ( OpenFilesListPlus::Gfx::eBmpBarRed     );          //  3
+    dw_header->button_prepend   ( OflpModGfx::eBmpBarUp      );          //  2
+    dw_header->button_prepend   ( OflpModGfx::eBmpBarDown    );          //  1
+    dw_header->button_prepend   ( OflpModGfx::eBmpBarOrange  );          //  0
+    dw_header->button_append    ( OflpModGfx::eBmpBarRed     );          //  3
 
     dw_header->button(0)->Connect(                                              //  (mini | maxi) mize
         wxEVT_COMMAND_BUTTON_CLICKED                                                    ,
@@ -315,7 +315,7 @@ wxTreeItemId    OpenFilesListPlusPanel::  item_find           (EditorBase* _edit
 wxTreeItemId    OpenFilesListPlusPanel::  item_append         (EditorBase* _editor)
 {
     wxTreeItemId        iid;
-    int                 mod = OpenFilesListPlus::Gfx::Icon(_editor);
+    int                 mod = OflpModGfx::Icon(_editor);
     //  ........................................................................
     //  ........................................................................
     iid = d_tree->AppendItem(
@@ -446,7 +446,7 @@ bool            OpenFilesListPlusPanel::  editor_has        (EditorBase* _editor
 void            OpenFilesListPlusPanel::  editor_add        (EditorBase* _editor)
 {
     wxTreeItemId    iid;
-    int             mod =   OpenFilesListPlus::Gfx::Icon(_editor);
+    int             mod =   OflpModGfx::Icon(_editor);
     //  ........................................................................
     GWR_TKI("OFLPPanel::editor_add():[%p][%s][%p]", this, get_title().wc_str(), _editor);
     //  ........................................................................
@@ -501,7 +501,7 @@ bool            OpenFilesListPlusPanel::  editor_selected   (EditorBase* _editor
 void            OpenFilesListPlusPanel::  editor_sync       (EditorBase* _editor)
 {
     wxTreeItemId    iid;
-    int             mod =   OpenFilesListPlus::Gfx::Icon(_editor);
+    int             mod =   OflpModGfx::Icon(_editor);
     //  ........................................................................
     GWR_INF("%s", wxS("OFLPPanel::editor_sync()") );
     //  ........................................................................
@@ -586,8 +586,8 @@ OpenFilesListPlusPanelBulk::OpenFilesListPlusPanelBulk(
 {
     dw_header   =   new OpenFilesListPlusPanelHeader( this, _title );
 
-    dw_header->button_prepend   ( OpenFilesListPlus::Gfx::eBmpBarBlue    );
-    dw_header->button_append    ( OpenFilesListPlus::Gfx::eBmpBarGreen   );
+    dw_header->button_prepend   ( OflpModGfx::eBmpBarBlue    );
+    dw_header->button_append    ( OflpModGfx::eBmpBarGreen   );
 
     dw_header->button(0)->Connect(                                              //  options
         wxEVT_COMMAND_BUTTON_CLICKED                                                    ,

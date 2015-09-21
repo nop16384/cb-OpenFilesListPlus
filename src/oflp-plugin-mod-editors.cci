@@ -1,6 +1,6 @@
 //  ############################################################################
 //
-//                          ACTIONS
+//                          EDITORS
 //
 //  ############################################################################
 void    OpenFilesListPlus::     cb_event_dump(CodeBlocksEvent& _evt)
@@ -57,7 +57,7 @@ lab_dump:
     GWR_TKI("OFLP::editor_dump():[%p] bin[%s] shn[%s] rfn[%s]", _edb, sbin.wc_str(), shn.wc_str(), rfn.wc_str());
 }
 //  ############################################################################
-void    OpenFilesListPlus::Editors::    add  (EditorBase* _nn_edb)
+void    OflpModEditors::    add  (EditorBase* _nn_edb)
 {
     OFLPPanel       *   panel   =   NULL;
     //  ........................................................................
@@ -79,7 +79,7 @@ lab_exit:
     return;
 }
 
-bool    OpenFilesListPlus::Editors::    mov  (
+bool    OflpModEditors::    mov (
     OFLPPanel   *   _dst    ,
     OFLPPanel   *   _src    ,
     EditorBase  *   _edb    )

@@ -27,6 +27,11 @@
     void    evh_panel_header_button_clicked_down    (wxCommandEvent &);
     void    evh_panel_header_button_clicked_opt     (wxCommandEvent &);
 
+
+    void                    evh_menu_option_checked(wxCommandEvent &);
+    wxMenu              *   aw_menu_view;                                       //!< c::b "View" menu
+
+
   private:
         void                cb_event_dump               (CodeBlocksEvent& _evt);
         void                editor_dump                 (EditorBase* _edb);

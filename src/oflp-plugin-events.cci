@@ -10,7 +10,7 @@ void    OpenFilesListPlus:: evh_workspace_loading_complete  (CodeBlocksEvent& _e
     layout()->workspace_load();
 
     //
-    for ( Layout::PanelAssignmentArray::const_iterator
+    for ( OflpModLayout::PanelAssignmentArray::const_iterator
         it  =   layout()->panel_assignment_array().begin()  ;
         it  !=  layout()->panel_assignment_array().end()    ;
         it++                                                )
