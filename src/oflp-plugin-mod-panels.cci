@@ -72,7 +72,7 @@ void            OflpModPanels:: p0_resize        ()
         }
         dw_MainSizer->GetItem( panel )->SetProportion( p );
 
-        GWR_TKI("              ...[%03i] for panel[%s]", p, panel->get_title().wc_str());
+        GWR_TKI("              ...[%03i] for panel[%s]", p, panel->title().wc_str());
 
     }
 
@@ -98,7 +98,7 @@ OFLPPanel*      OflpModPanels:: get_by_name      (wxString const & _panel_name)
     {
         OFLPPanel* panel = *(it);
 
-        if ( ! panel->get_title().Cmp( _panel_name ) )
+        if ( ! panel->title().Cmp( _panel_name ) )
         {
             return ( *it);
         }
@@ -146,7 +146,7 @@ int             OflpModPanels:: get_visual_index     (OFLPPanel* _panel)
     return wxNOT_FOUND;
 }
 
-OFLPPanel*      OflpModPanels:: p0_add               (wxString _title, bool _bulk)
+OFLPPanel*      OflpModPanels:: p0_add               (wxString const _title, bool _bulk)
 {
     OFLPPanel   *   panel   =   NULL;
     //  ........................................................................
@@ -224,12 +224,12 @@ void            OflpModPanels:: p0_sub               (OFLPPanel* _panel)
     delete _panel;
 }
 
-OFLPPanel*      OflpModPanels:: find                 (EditorBase* _editor )
+OFLPPanel*      OflpModPanels:: get                  (EditorBase* _editor )
 {
     PanelArray::iterator        it;
     OFLPPanel               *   panel   =   NULL;
     //  ........................................................................
-    //D GWR_INF("%s", wxS("OFLP::Panels::find(Editor*)"));
+    //D GWR_INF("%s", wxS("OFLP::Panels::get(Editor*)"));
     //  ........................................................................
     // loop all panels
     for ( it = a_panels_array.begin() ; it != a_panels_array.end() ; it++ )
@@ -241,21 +241,21 @@ OFLPPanel*      OflpModPanels:: find                 (EditorBase* _editor )
     return NULL;
 }
 
-OFLPPanel*      OflpModPanels:: get_from_absolute_filepath   (wxString& _absolute_filepath)
+OFLPPanel*      OflpModPanels:: get_from_abs_path   (wxString const & _abs_path)
 {
     PanelArray::const_iterator      it;
     OFLPPanel                   *   panel   =   NULL;
     //  ........................................................................
-    GWR_INF("OFLP::Panels::get(wxString&):[%s] panels[%i]", _absolute_filepath.wc_str(), a_panels_array.size());
+    GWR_INF("OFLP::Panels::get(wxString&):[%s] panels[%i]", _abs_path.wc_str(), a_panels_array.size());
     //  ........................................................................
     // loop all panels
     for ( it = a_panels_array.begin() ; it != a_panels_array.end() ; it++ )
     {
         panel = *it;
 
-        if ( panel->editor_from_absolute_filepath(_absolute_filepath) )
+        if ( panel->editor_from_absolute_filepath(_abs_path) )
         {
-            GWR_INF("              ...panel[%s]", panel->get_title().wc_str());
+            GWR_INF("              ...panel[%s]", panel->title().wc_str());
             return panel;
         }
     }

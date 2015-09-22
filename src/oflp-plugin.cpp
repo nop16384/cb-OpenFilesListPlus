@@ -58,9 +58,28 @@ BEGIN_EVENT_TABLE(OpenFilesListPlus, cbPlugin)
     EVT_MENU                        (idViewOpenFilesPlus, OpenFilesListPlus::evh_view_open_files_plus)
 END_EVENT_TABLE()
 //  ............................................................................
+void    OpenFilesListPlus:: dump_project_manager_state()
+{
+    earlgreycb::Log_function_mark( wxS("p0_dump_project_manager()"));
+
+    ProjectManager* pjm = Manager::Get()->GetProjectManager();
+
+    GWR_TKI("  Workspace loading:[%i]", pjm->IsLoadingWorkspace()   );
+    GWR_TKI("  Workspace closing:[%i]", pjm->IsClosingWorkspace()   );
+    GWR_TKI("  Project   loading:[%i]", pjm->IsLoadingProject()     );
+    GWR_TKI("  Project   closing:[%i]", pjm->IsClosingProject()     );
+    GWR_TKI("  Project   l/c    :[%i]", pjm->IsLoadingOrClosing()   );
+}
+//  ............................................................................
 // constructor
 OpenFilesListPlus::     OpenFilesListPlus()
 {
+    a_dnd_panel_src     =   NULL;
+    a_dnd_panel_dst     =   NULL;
+    a_dnd_editor_base   =   NULL;
+
+    aw_menu_view        =   NULL;
+
     d_gfx               =   NULL;
     d_layout            =   NULL;
     dw_menu_options     =   NULL;
@@ -247,14 +266,14 @@ bool OpenFilesListPlus::BuildToolBar(wxToolBar* toolBar)
 }
 //  ############################################################################
 // view menu toggle tree
-void OpenFilesListPlus::evh_view_open_files_plus  (wxCommandEvent& event)
+void OpenFilesListPlus::evh_view_open_files_plus    (wxCommandEvent& event)
 {
     CodeBlocksDockEvent evt(event.IsChecked() ? cbEVT_SHOW_DOCK_WINDOW : cbEVT_HIDE_DOCK_WINDOW);
     evt.pWindow = panels()->p0_main();
     Manager::Get()->ProcessEvent(evt);
 }
 
-void OpenFilesListPlus::evh_update_ui             (wxUpdateUIEvent& event)
+void OpenFilesListPlus::evh_update_ui               (wxUpdateUIEvent& event)
 {
     if (aw_menu_view)
     {
@@ -266,6 +285,15 @@ void OpenFilesListPlus::evh_update_ui             (wxUpdateUIEvent& event)
     event.Skip();
 }
 //  ############################################################################
+bool    OpenFilesListPlus:: FindCbProjectForFile    (wxString const & _abs_fpath, cbProject** _pro, ProjectFile** _pjf)
+{
+    *(_pro) = Manager::Get()->GetProjectManager()->FindProjectForFile(
+        _abs_fpath      ,
+        _pjf           ,
+        false, false    );
+
+    return ( (*_pro) != NULL );
+}
 //! \brief  Delete all OFLPPanels, forget about the layout
 void OpenFilesListPlus::reset()
 {
@@ -296,7 +324,7 @@ void OpenFilesListPlus::RefreshOpenFileState    (EditorBase* _nn_edb, bool _remo
     panels()->p0_main()->Freeze();
     //  ........................................................................
     wxString            shortname   = _nn_edb->GetShortName();
-    panel                           = panels()->find(_nn_edb);
+    panel                           = panels()->get(_nn_edb);
 
     GWR_TKI("     ...editor         :[%p][%s]", _nn_edb, shortname.wc_str());
     GWR_TKI("     ..._remove        :[%i]"    , _remove);
@@ -360,13 +388,10 @@ void OpenFilesListPlus::RefreshOpenFileState    (EditorBase* _nn_edb, bool _remo
 //!       - verify wxTreeItem text
 void OpenFilesListPlus::RefreshOpenFileLayout   (EditorBase* _nn_edb)
 {
-    //ProjectManager  *   promgr      =   Manager::Get()->GetProjectManager();
     EditorManager   *   emgr        =   Manager::Get()->GetEditorManager();
     EditorBase      *   aedb        =   emgr->GetActiveEditor();
     wxString            shortname   =   _nn_edb->GetShortName();
 
-    //cbProject       *   pro     =   NULL;
-    //ProjectFile     *   pjf     =   NULL;
     OFLPPanel         *   psrc    =   NULL;
     OFLPPanel         *   pdst    =   NULL;
     //  ........................................................................
@@ -376,7 +401,7 @@ void OpenFilesListPlus::RefreshOpenFileLayout   (EditorBase* _nn_edb)
         goto lab_exit;
     //  ........................................................................
     //  get infos on editor
-    psrc                            = panels()->p0_find(_nn_edb);
+    psrc                            = panels()->get(_nn_edb);
     if ( ! psrc )
     {
         GWR_TKE("      ...editor [%p][%s] was _NOT_ found in any panel", _nn_edb, shortname.wc_str());
@@ -385,15 +410,6 @@ void OpenFilesListPlus::RefreshOpenFileLayout   (EditorBase* _nn_edb)
     GWR_TKI("      ...editor         :[%p][%s]", _nn_edb, shortname.wc_str());
     GWR_TKI("      ...panel          :[%p]"    , psrc);
     GWR_TKI("      ...active editor  :[%s]"    , aedb ? aedb->GetShortName().wc_str() : wxS("NULL"));
-    //  ........................................................................
-    //  find ProjectFile if it exists ; if not set dst to bulk
-    //pro = promgr->FindProjectForFile(_nn_edb->GetFilename(), &pjf, false, false);
-    //if ( ! pjf )
-    //{
-        //GWR_TKI("%s", wxS("      ...ProjectFile is NULL"));
-        //pdst = panels()->p0_bulk();
-        //goto lab_eventually_move;
-    //}
     //  ........................................................................
     //  find file assignment ; if found, amove editor to its assigned panel
     //  if it lays in another panel.
@@ -410,7 +426,7 @@ lab_eventually_move:
     //  move if different panels
     if ( psrc != pdst )
     {
-        GWR_TKI("      ...moving editor to panel[%s]", pdst->get_title().wc_str());
+        GWR_TKI("      ...moving editor to panel[%s]", pdst->title().wc_str());
         panels()->p0_editor_mov( pdst, psrc, _nn_edb );
     }
     //  ........................................................................

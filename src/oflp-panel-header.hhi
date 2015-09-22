@@ -28,7 +28,7 @@ class OpenFilesListPlusPanelHeader        : public wxPanel
     ButtonsArray                    a_buttons_array;
 
   public:
-    wxString    const   &           get_title()
+    wxString    const   &           title()
         {
             return a_title.get();
         }

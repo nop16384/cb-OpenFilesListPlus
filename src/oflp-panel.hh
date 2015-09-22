@@ -21,25 +21,28 @@
 /// ****************************************************************************
 class OpenFilesListPlusPanel              : public wxPanel
 {
-  protected:
-    bool                    a_bulk;
-
-    bool                    a_allow_kill_focus_event;
-
-    OFLPPanelHeader     *   dw_header;
-    wxTreeCtrl          *   d_tree;
-    wxBoxSizer          *   dw_sizer;
-
-    EditorArray                 a_editors_array;                                //  speed up finding editors
-    earlgreycb::HString::HArray a_harray;
-
-    OpenFilesListPlusPanelDropTarget  *   d_drop_target;
+    friend class    OpenFilesListPlus;
+    friend class    OflpModPanels;
+    friend class    OflpModEditors;
     //  ------------------------------------------------------------------------
+  protected:
+    bool                                a_bulk;
+    bool                                a_allow_kill_focus_event;
+
+    OFLPPanelHeader                 *   dw_header;
+    wxTreeCtrl                      *   d_tree;
+    wxBoxSizer                      *   dw_sizer;
+
+    EditorArray                         a_editors_array;                        //  speed up finding editors
+    earlgreycb::HString::HArray         a_harray;
+
+    OpenFilesListPlusPanelDropTarget*   d_drop_target;
+    //  ........................................................................
   public:
     bool                            is_bulk()                   const   { return a_bulk;                }
     EditorArray const   *           get_editors()               const   { return &a_editors_array;      }
     wxTreeCtrl  const   *   const   tree()                      const   { return d_tree;                }
-    wxString    const   &           get_title()                 const   { return dw_header->get_title();}
+    wxString    const   &           title()                     const   { return dw_header->title();    }
     //  ------------------------------------------------------------------------
     static      wxString            stringize_drag_result(wxDragResult _dres);
     //  ------------------------------------------------------------------------
@@ -55,14 +58,9 @@ class OpenFilesListPlusPanel              : public wxPanel
     void                    items_deselect      ();
     void                    items_del           ();
     //  ------------------------------------------------------------------------
-  public:
+  protected:
     void                    reset();
 
-    void                    dump();
-
-    EditorBase  *           editor_from_absolute_filepath   (wxString& _absolute_filepath);
-
-    bool                    editor_has      (EditorBase*);
     void                    editor_add      (EditorBase*);
     void                    editor_del      (EditorBase*);
     void                    editor_select   (EditorBase*);
@@ -72,9 +70,16 @@ class OpenFilesListPlusPanel              : public wxPanel
     void                    editors_del     ();
     void                    editors_deselect();
 
-    bool                    is_minimized();
     void                    minimize();
     void                    maximize();
+    //  ........................................................................
+  public:
+    void                    dump();
+
+    bool                    editor_has                      (EditorBase*);
+    bool                    is_minimized                    ();
+
+    EditorBase  *           editor_from_absolute_filepath   (wxString const & _absolute_filepath);
     //  ------------------------------------------------------------------------
   protected:
     void                    OnSelect    (wxCommandEvent&);
@@ -83,6 +88,7 @@ class OpenFilesListPlusPanel              : public wxPanel
     //  ------------------------------------------------------------------------
   private:
     void                    p0_allow_kill_focus_event               (bool);
+
   public:
     void                    evh_title_static_LEFT_DOWN              (wxMouseEvent   &);
     void                    evh_title_dynamic_TEXT_ENTER            (wxCommandEvent &);

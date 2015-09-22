@@ -42,9 +42,9 @@
 
 +(020)  2015.09.15  boolean return values check
 
-+(021)  2015.09.19  oflp-plugin.hh : remove "friend class OFLPPanel" declaration
+ (021)  2015.09.19  oflp-plugin.hh : remove "friend class OFLPPanel" declaration
 
-+(022)  2015.09.20  "An inner class is a friend of the class it is defined within."
+ (022)  2015.09.20  "An inner class is a friend of the class it is defined within."
                     find something else, every module has access to everything !!!
 //  ############################################################################
 (001)
@@ -103,12 +103,15 @@
 (017)
 //  ============================================================================
 (018)
-2015.09.17  Done
+2015.09.17  Done : bad remark - "modified" event is not sent when a letter
+            is typed, but only when the file was modified
 //  ============================================================================
 (019)
 //  ============================================================================
 (020)
 //  ============================================================================
 (021)
+2015.09.??  Done
 //  ============================================================================
 (022)
+2015.09.21  Done

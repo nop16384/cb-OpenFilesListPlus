@@ -3,13 +3,7 @@
 //                          EDITORS
 //
 //  ############################################################################
-void    OpenFilesListPlus::     cb_event_dump(CodeBlocksEvent& _evt)
-{
-    GWR_TKI("evt:project[%p] editor[%p] plugin[%p]",
-        _evt.GetProject(), _evt.GetEditor(), _evt.GetPlugin());
-}
-
-void    OpenFilesListPlus::     editor_dump(EditorBase* _edb)
+void    OflpModEditors::    dump(EditorBase* _edb)
 {
     wxString        shn;
     wxString        rfn;
@@ -57,7 +51,7 @@ lab_dump:
     GWR_TKI("OFLP::editor_dump():[%p] bin[%s] shn[%s] rfn[%s]", _edb, sbin.wc_str(), shn.wc_str(), rfn.wc_str());
 }
 //  ############################################################################
-void    OflpModEditors::    add  (EditorBase* _nn_edb)
+void    OflpModEditors::    add (EditorBase* _nn_edb)
 {
     OFLPPanel       *   panel   =   NULL;
     //  ........................................................................
@@ -67,7 +61,7 @@ void    OflpModEditors::    add  (EditorBase* _nn_edb)
 
     GWR_TKI("editor_add():[%p][%s] -> [%p][%s]" ,
         _nn_edb , _nn_edb->GetShortName().wc_str()                  ,
-        panel   , panel ? panel->get_title().wc_str() : wxS("Bulk") );
+        panel   , panel ? panel->title().wc_str() : wxS("Bulk")     );
 
     if ( panel )
         panel->editor_add(_nn_edb);

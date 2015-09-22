@@ -6,21 +6,21 @@
 class OflpModLayout : public wxMenu, public OflpModule
 {
     //friend class    OpenFilesListPlus;
-    //  --------------------------------------------------------------------
+    //  ------------------------------------------------------------------------
   public:
     class   FileAssignment;
     class   PanelAssignment;
     class   ProjectAssignments;
-    //  --------------------------------------------------------------------
+    //  ------------------------------------------------------------------------
     WX_DEFINE_ARRAY(TiXmlDocument       *, TiXmlDocArray );                 //  temporary storage
     WX_DEFINE_ARRAY(PanelAssignment     *, PanelAssignmentArray );          //  panels of the workspace
     WX_DEFINE_ARRAY(FileAssignment      *, FileAssignmentArray );           //  per project : file -> panel assignment
     WX_DEFINE_ARRAY(ProjectAssignments  *, ProjectAssignmentsArray );
-    /// ********************************************************************
+    /// ************************************************************************
     //! \class  PanelAssignment
     //!
     //! \brief  (OFLPPanel name, OFLPPanel index) couple
-    /// ********************************************************************
+    /// ************************************************************************
   public:
     class   PanelAssignment
     {
@@ -42,13 +42,13 @@ class OflpModLayout : public wxMenu, public OflpModule
             {
             }
     };
-    /// ********************************************************************
+    /// ************************************************************************
     //! \class  FileAssignment
     //!
     //! \brief  (filename -> OFLPPanel) unidirectional association
     //!
     //! \detail Using some earlgreycb::HString-s for accelerating access-s
-    /// ********************************************************************
+    /// ************************************************************************
   public:
     class   FileAssignment
     {
@@ -82,11 +82,11 @@ class OflpModLayout : public wxMenu, public OflpModule
             {
             }
     };
-    /// ********************************************************************
+    /// ************************************************************************
     //! \class  ProjectAssignments
     //!
     //! \brief  All FileAssignment-s for one project
-    /// ********************************************************************
+    /// ************************************************************************
   public:
     class   ProjectAssignments
     {
@@ -100,11 +100,6 @@ class OflpModLayout : public wxMenu, public OflpModule
                 return a_project;
             }
 
-        FileAssignmentArray const   &   array()
-            {
-                return a_assignments;
-            }
-
         void                    add(wxFileName const & _wx_filename, wxString const & _relative_filename, wxString const & _panel_name)
             {
                 a_assignments.Add( new FileAssignment(_wx_filename, _relative_filename, _panel_name) );
@@ -113,6 +108,7 @@ class OflpModLayout : public wxMenu, public OflpModule
             {
                 a_assignments.Remove( _fa );
             }
+        bool                    fas_get_from_rel_fpath(wxString const & _rel_path, FileAssignment *& _fa);
 
       public:
         ProjectAssignments(cbProject* _project) :   a_project(_project) {}
@@ -128,11 +124,10 @@ class OflpModLayout : public wxMenu, public OflpModule
                 a_assignments.Clear();
             }
     };
-    //  ====================================================================
+    //  ########################################################################
   private:
-    static  void        Filename_cb_to_oflp  (wxString _in_filename, wxString& _out_filename, int _type);
-            void        dump_project_manager ();
-    //  ....................................................................
+    static  void            Filename_cb_to_oflp     (wxString _in_filename, wxString& _out_filename, int _type);
+    //  ------------------------------------------------------------------------
   private:
     bool                    xml_load_document       (wxString   & _filename , TiXmlDocument*);
     bool                    xml_load_workspace      (cbWorkspace*           , TiXmlDocument*);
@@ -143,25 +138,26 @@ class OflpModLayout : public wxMenu, public OflpModule
 
     bool                    xml_parse_workspace     (TiXmlDocument*);
     ProjectAssignments  *   xml_parse_project       (cbProject* _project, TiXmlDocument*);
-    //  ....................................................................
+    //  ------------------------------------------------------------------------
   private:
-    PanelAssignmentArray            a_panel_assignment_array;
-    ProjectAssignmentsArray         a_project_assignments_array;
+    PanelAssignmentArray    a_panel_assignment_array;
+    ProjectAssignmentsArray a_project_assignments_array;
 
-    void                    reset_assignments           ();
-    void                    project_assignments_add     (ProjectAssignments*);
-    void                    project_assignments_sub     (cbProject*);
+    bool                    p0_project_assignments_get_from_cbProject   (cbProject*, ProjectAssignments *&);
+
+    void                    p0_reset_assignments                        ();
+    void                    p0_project_assignments_add                  (ProjectAssignments*);
+    void                    p0_project_assignments_sub                  (cbProject*);
 
     bool                    p0_project_assignments_get_from_editor_base (EditorBase*, ProjectAssignments*& _project_assignments, ProjectFile*& _out_project_file);
-    bool                    p0_file_assignment_get_from_editor_base     (EditorBase*, ProjectAssignments*& _project_assignments, FileAssignment*& _file_assignment);
+    bool                    p0_file_assignment_get_from_editor_base     (EditorBase*, FileAssignment*& _file_assignment);
 
   public:
-    OFLPPanel                       *   file_assignment_find_panel_from_editor_base     (EditorBase* _nn_edb);
-    void                                file_assignment_update                          (EditorBase* _nn_edb, OFLPPanel* _nn_dst_panel);
+    OFLPPanel       *       file_assignment_find_panel_from_editor_base (EditorBase* _nn_edb);
+    void                    file_assignment_update                      (EditorBase* _nn_edb, OFLPPanel* _nn_dst_panel);
 
-    PanelAssignmentArray    const   &   panel_assignment_array      ()  { return a_panel_assignment_array;      }
-    ProjectAssignmentsArray const   &   project_assignments_array   ()  { return a_project_assignments_array;   }
-    //  ....................................................................
+    PanelAssignmentArray    const   &   panel_assignment_array          ()  { return a_panel_assignment_array;      }
+    //  ------------------------------------------------------------------------
   public:
     void                reset               ();
 
@@ -172,7 +168,7 @@ class OflpModLayout : public wxMenu, public OflpModule
     void                project_load        (cbProject*);
     void                project_close       (cbProject*);
     void                project_save        (cbProject*);
-    //  ....................................................................
+    //  ------------------------------------------------------------------------
   public:
     OflpModLayout()                                                             {}
    ~OflpModLayout()                                                             {}

@@ -81,12 +81,10 @@ void    OpenFilesListPlus:: evh_editor_opened               (CodeBlocksEvent& ev
     //  - file reloading
     //  ........................................................................
     EditorBase  *   edb     =   NULL;
-    OFLPPanel   *   panel   =   panels()->p0_bulk();
+    OFLPPanel   *   panel   =   NULL;
     wxString        s;
     //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::evh_editor_opened()"));
-    //  ........................................................................
-    //D cb_event_dump(event);
     //  ........................................................................
     edb = event.GetEditor();
     //D editor_dump(edb);
@@ -97,10 +95,10 @@ void    OpenFilesListPlus:: evh_editor_opened               (CodeBlocksEvent& ev
     }
     //  ........................................................................
     //  check if editor is already open ( case of reload )
-    panel = panels()->find(edb);
+    panel = panels()->get(edb);
     if ( panel )
     {
-        GWR_TKI("      ...editor already open in panel[%s]", panel->get_title().wc_str());
+        GWR_TKI("      ...editor already open in panel[%s]", panel->title().wc_str());
         goto lab_exit;
     }
     //  ........................................................................
@@ -138,7 +136,6 @@ void    OpenFilesListPlus:: evh_editor_activated    (CodeBlocksEvent& event)    
     ProjectFile *   pjf     =   NULL;
     //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::evh_editor_activated()"));
-    //D cb_event_dump(event);
     //  ........................................................................
     edb  =   event.GetEditor();
     //D editor_dump(edb);

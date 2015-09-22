@@ -39,7 +39,7 @@ void OpenFilesListPlusPanel::dump()
     earlgreycb::HString::tHash      hash    =   0;
     earlgreycb::HString::tHash      hash2   =   0;
 
-    GWR_TKI("panel[%p][%s] editors[%i] hashs[%u]", this, get_title().wc_str(), a_editors_array.size(), a_harray.size());
+    GWR_TKI("panel[%p][%s] editors[%i] hashs[%u]", this, title().wc_str(), a_editors_array.size(), a_harray.size());
 
     for ( size_t
         i  =   0                        ;
@@ -411,7 +411,7 @@ void            OpenFilesListPlusPanel::  items_del           ()
     d_tree->DeleteChildren(d_tree->GetRootItem());
 }
 //  ============================================================================
-EditorBase*     OpenFilesListPlusPanel::  editor_from_absolute_filepath (wxString& _absolute_filepath)
+EditorBase*     OpenFilesListPlusPanel::  editor_from_absolute_filepath (wxString const & _absolute_filepath)
 {
     earlgreycb::Log_function_mark(wxS("editor_from_absolute_filepath"));
     earlgreycb::HString::tHash      hash    =   earlgreycb::HString::Hash(_absolute_filepath);
@@ -448,7 +448,7 @@ void            OpenFilesListPlusPanel::  editor_add        (EditorBase* _editor
     wxTreeItemId    iid;
     int             mod =   OflpModGfx::Icon(_editor);
     //  ........................................................................
-    GWR_TKI("OFLPPanel::editor_add():[%p][%s][%p]", this, get_title().wc_str(), _editor);
+    GWR_TKI("OFLPPanel::editor_add():[%p][%s][%p]", this, title().wc_str(), _editor);
     //  ........................................................................
     iid = item_append(_editor);
 
@@ -466,7 +466,7 @@ void            OpenFilesListPlusPanel::  editor_add        (EditorBase* _editor
 void            OpenFilesListPlusPanel::  editor_del        (EditorBase* _editor)
 {
     //  ........................................................................
-    GWR_TKI("OFLPPanel::editor_del():[%p][%s][%p]", this, get_title().wc_str(), _editor);
+    GWR_TKI("OFLPPanel::editor_del():[%p][%s][%p]", this, title().wc_str(), _editor);
     //  ........................................................................
     item_del(_editor);
 

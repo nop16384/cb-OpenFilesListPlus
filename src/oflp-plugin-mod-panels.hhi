@@ -7,22 +7,21 @@ class OflpModPanels : public wxMenu, public OflpModule
 {
     friend class OpenFilesListPlus;
     friend class OflpModEditors;
-    //  ....................................................................
+    //  ------------------------------------------------------------------------
   private:
     wxPanel                     *   dw_MainPanel;
     wxBoxSizer                  *   dw_MainSizer;
 
     OpenFilesListPlusPanel      *   a_BulkPanel;                            //!< Bulk panel permanent access
     PanelArray                      a_panels_array;                         //!< All panels, including bulk panel
-    //  ....................................................................
+    //  ........................................................................
   private:
     wxPanel                     *&  p0_main()   { return dw_MainPanel;  }
     wxBoxSizer                  *&  p0_sizer()  { return dw_MainSizer;  }
     OFLPPanel                   *&  p0_bulk()   { return a_BulkPanel;   }
   public:
-    OFLPPanel       const       *   bulk()      { return a_BulkPanel;       }
     PanelArray      const       &   array()     { return a_panels_array;    }
-    //  ....................................................................
+    //  ------------------------------------------------------------------------
   private:
     void                    p0_reset            ();
 
@@ -35,23 +34,17 @@ class OflpModPanels : public wxMenu, public OflpModule
     void                    p0_editor_mov       (OFLPPanel* _dst, OFLPPanel* _src, EditorBase* _edb);
 
     void                    p0_unselect_except  (OFLPPanel*);
-    OFLPPanel           *   p0_add              (wxString _title, bool _bulk = false);
+    OFLPPanel           *   p0_add              (wxString const _title, bool _bulk = false);
     void                    p0_move_up          (OFLPPanel*);
     void                    p0_move_dn          (OFLPPanel*);
     void                    p0_sub              (OFLPPanel*);
-    //  ....................................................................
-  private:
-    OFLPPanel           *   p0_find             (EditorBase* _nn_edb)
-        {
-            return const_cast< OFLPPanel* >( find(_nn_edb) );
-        }
-    //  ....................................................................
+    //  ........................................................................
   public:
-    OFLPPanel           *   get_by_name                 (wxString const & _name);
-    OFLPPanel           *   get_from_absolute_filepath  (wxString& _absolute_filepath);
-    OFLPPanel           *   find                        (EditorBase*);
-    int                     get_visual_index            (OFLPPanel*);
-    //  ....................................................................
+    OFLPPanel           *   get_by_name         (wxString const & _name);
+    OFLPPanel           *   get_from_abs_path   (wxString const & _abs_path);
+    OFLPPanel           *   get                 (EditorBase*);
+    int                     get_visual_index    (OFLPPanel*);
+    //  ........................................................................
   public:
     OflpModPanels()    {}
    ~OflpModPanels()    {}

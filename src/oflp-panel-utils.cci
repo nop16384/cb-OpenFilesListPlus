@@ -246,7 +246,7 @@ OpenFilesListPlusPanelDropTarget::        OnData(wxCoord x, wxCoord y, wxDragRes
     GWR_INF("  data:spvix[%i] siix[%i] ed[%p]\n", spvix, siix, editor);
 
     #ifdef  GWR_OFLP_SANITY_CHECKS                                              //  _GWR_SANITY_CHECK_
-    cpanel  = OpenFilesListPlus::Instance()->panels()->find(editor);            //  get src panel from editor
+    cpanel  = OpenFilesListPlus::Instance()->panels()->get(editor);             //  get src panel from editor
     GWR_INF("  panel:from editor[%p]", cpanel);
 
     cpvix   = OpenFilesListPlus::Instance()->panels()->get_visual_index(cpanel);

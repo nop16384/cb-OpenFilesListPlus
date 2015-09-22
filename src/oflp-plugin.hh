@@ -141,10 +141,14 @@ class OpenFilesListPlus : public cbPlugin
       protected:
         void    reset();
 
-        void    AddAllOpenFiles         ();
-        void    RefreshOpenFileState    (EditorBase* _edb, bool _remove = false);
-        void    RefreshOpenFileLayout   (EditorBase* _edb);
-        void    RefreshOpenFilesLayout  ();
+        void    RefreshOpenFileState        (EditorBase* _edb, bool _remove = false);
+        void    RefreshOpenFileLayout       (EditorBase* _edb);
+        void    RefreshOpenFilesLayout      ();
+
+      public:
+        void    dump_project_manager_state  ();
+
+        bool    FindCbProjectForFile        (wxString const & _abs_fpath, cbProject** _pro, ProjectFile** _pjf);
         //  ====================================================================
         //  ....................................................................
         #define OFPL_MEMBER_MODULE(MODULE_NAME, MEMBER_NAME, GET_NAME)          \

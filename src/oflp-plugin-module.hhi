@@ -22,5 +22,5 @@ class OflpModule
     OflpModPanels           *   panels()    { return a_module_panels;   }
 
   public:
-    void                            init();
+    void                        init();
 };

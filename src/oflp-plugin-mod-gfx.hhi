@@ -6,7 +6,7 @@
 class OflpModGfx   :   public  OflpModule
 {
     //friend class OpenFilesListPlus;
-    //  ....................................................................
+    //  ------------------------------------------------------------------------
   public:
     enum
     {
@@ -24,7 +24,7 @@ class OflpModGfx   :   public  OflpModule
 
         eBmpNotFound        =  99
     };
-    //  ....................................................................
+    //  ------------------------------------------------------------------------
   private:
     WX_DECLARE_HASH_MAP(    int                 ,
                             wxBitmap*           ,
@@ -34,7 +34,7 @@ class OflpModGfx   :   public  OflpModule
 
     BitmapPointerHash           a_bitmap_hash;
     wxImageList         *       d_img_list;                                 //!< For wxTreeCtrl-s
-    //  ....................................................................
+    //  ........................................................................
   private:
     void                    bitmap_add(int _hash_key, wxBitmap _bmp)
         {
@@ -66,7 +66,7 @@ class OflpModGfx   :   public  OflpModule
 
             return *( a_bitmap_hash[_ix] );
         }
-    //  --------------------------------------------------------------------
+    //  ------------------------------------------------------------------------
   private:
     wxFont              *   d_fnt_8;
 
@@ -75,7 +75,7 @@ class OflpModGfx   :   public  OflpModule
         {
             return *d_fnt_8;
         }
-    //  --------------------------------------------------------------------
+    //  ------------------------------------------------------------------------
   public:
     OflpModGfx(wxString _gfx_dir)
     {

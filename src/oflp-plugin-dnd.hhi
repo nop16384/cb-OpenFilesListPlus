@@ -2,6 +2,7 @@
     OFLPPanel           *   a_dnd_panel_src;
     OFLPPanel           *   a_dnd_panel_dst;
     EditorBase          *   a_dnd_editor_base;
+
   public:
     OFLPPanel   const   *   dnd_panel_src() { return a_dnd_panel_src;   }
     OFLPPanel   const   *   dnd_panel_dst() { return a_dnd_panel_dst;   }
@@ -26,6 +27,6 @@
         {
             editors()->mov( a_dnd_panel_dst, a_dnd_panel_src, a_dnd_editor_base );
 
-            //panels()->p0_resize();
+            panels()->p0_resize();
         }
 

@@ -6,6 +6,7 @@
 class OflpModMenuOptions    : public wxMenu, public OflpModule
 {
     friend class OpenFilesListPlus;
+    //  ------------------------------------------------------------------------
   public:
     enum
     {
@@ -17,22 +18,22 @@ class OflpModMenuOptions    : public wxMenu, public OflpModule
         eENABLE_LOG_WINDOW      =   0x00fe  ,
         eENABLE_LOG_CONSOLE     =   0x00ff
     };
-    //  ....................................................................
+    //  ------------------------------------------------------------------------
   private:
     wxMenuItem  *       dw_i1_save_workspace_layout;
     wxMenu      *       dw_m1_mode;
     wxMenu      *       dw_m1_log;
     wxMenuItem  *           dw_i2_log_console;
     wxMenuItem  *           dw_i2_log_window;
-    //  ....................................................................
+    //  ........................................................................
     int                 a_mode;
     bool                a_log_console;
     bool                a_log_window;
-    //  ....................................................................
+    //  ........................................................................
   protected:
     wxMenu      *       m1mode()    { return dw_m1_mode;    }
     wxMenu      *       m1log()     { return dw_m1_log;     }
-    //  ....................................................................
+    //  ........................................................................
   protected:
     void                check_item_set_log_console  (bool _b)   { a_log_console = _b    ; dw_i2_log_console ->Check(_b); }
     void                check_item_set_log_window   (bool _b)   { a_log_window = _b     ; dw_i2_log_window  ->Check(_b); }
@@ -41,7 +42,7 @@ class OflpModMenuOptions    : public wxMenu, public OflpModule
     bool                mode_productivity() { return ( a_mode ==  eMODE_PRODUCTIVITY);  }
     bool                log_console()       { return a_log_console; }
     bool                log_window()        { return a_log_window;  }
-    //  ....................................................................
+    //  ------------------------------------------------------------------------
   protected:
     void    evh_menu_option_checked         (wxCommandEvent& _e)
     {
@@ -69,7 +70,7 @@ class OflpModMenuOptions    : public wxMenu, public OflpModule
         break;
         }
     }
-    //  ....................................................................
+    //  ------------------------------------------------------------------------
   public:
     OflpModMenuOptions()
         :   a_mode          (eMODE_STANDARD)    ,
