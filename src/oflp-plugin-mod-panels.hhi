@@ -3,7 +3,7 @@
 //!
 //! \brief  Contain all panel-s stuff
 /// ****************************************************************************
-class OflpModPanels : public wxMenu, public OflpModule
+class OflpModPanels : public OflpModule
 {
     friend class OpenFilesListPlus;
     friend class OflpModEditors;

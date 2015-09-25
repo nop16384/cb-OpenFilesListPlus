@@ -8,14 +8,18 @@ class OflpModLayout : public wxMenu, public OflpModule
     //friend class    OpenFilesListPlus;
     //  ------------------------------------------------------------------------
   public:
-    class   FileAssignment;
     class   PanelAssignment;
+    class   FileAssignment;
     class   ProjectAssignments;
+    class   Perspective;
     //  ------------------------------------------------------------------------
-    WX_DEFINE_ARRAY(TiXmlDocument       *, TiXmlDocArray );                 //  temporary storage
-    WX_DEFINE_ARRAY(PanelAssignment     *, PanelAssignmentArray );          //  panels of the workspace
-    WX_DEFINE_ARRAY(FileAssignment      *, FileAssignmentArray );           //  per project : file -> panel assignment
+    WX_DEFINE_ARRAY(TiXmlDocument       *, TiXmlDocArray );                     //  temporary storage
+
+    WX_DEFINE_ARRAY(PanelAssignment     *, PanelAssignmentArray );              //  panels of the workspace
+
+    WX_DEFINE_ARRAY(FileAssignment      *, FileAssignmentArray );
     WX_DEFINE_ARRAY(ProjectAssignments  *, ProjectAssignmentsArray );
+    WX_DEFINE_ARRAY(Perspective         *, PerspectiveArray );
     /// ************************************************************************
     //! \class  PanelAssignment
     //!
@@ -31,7 +35,7 @@ class OflpModLayout : public wxMenu, public OflpModule
       public:
         wxString                    const   &   name()      { return a_name;    }
         int                                     index()     { return a_index;   }
-
+        //  ....................................................................
       public:
         PanelAssignment(wxString& _panel_name, int _panel_index)
             {
@@ -66,7 +70,7 @@ class OflpModLayout : public wxMenu, public OflpModule
         earlgreycb::HString::tHash              hrfp()      { return a_relative_filepath.hash();    }
         wxString                    const   &   pname()     { return a_panel_name.get();            }
         earlgreycb::HString::tHash              hpname()    { return a_panel_name.hash();           }
-
+        //  ....................................................................
       public:
         FileAssignment(
             wxFileName  const &   _absolute_filename  ,
@@ -93,7 +97,7 @@ class OflpModLayout : public wxMenu, public OflpModule
       private:
         cbProject               *   a_project;
         FileAssignmentArray         a_assignments;
-
+        //  ....................................................................
       public:
         cbProject           const   *   project()
             {
@@ -109,7 +113,7 @@ class OflpModLayout : public wxMenu, public OflpModule
                 a_assignments.Remove( _fa );
             }
         bool                    fas_get_from_rel_fpath(wxString const & _rel_path, FileAssignment *& _fa);
-
+        //  ....................................................................
       public:
         ProjectAssignments(cbProject* _project) :   a_project(_project) {}
        ~ProjectAssignments()
@@ -122,6 +126,45 @@ class OflpModLayout : public wxMenu, public OflpModule
                     delete (*it);
                 }
                 a_assignments.Clear();
+            }
+    };
+    /// ************************************************************************
+    //! \class  Perspective
+    //!
+    //! \brief  Array of ProjectAssignments-s
+    /// ************************************************************************
+  public:
+    class   Perspective
+    {
+      private:
+        wxString                    a_title;
+        ProjectAssignmentsArray     a_project_assignments_array;
+
+      public:
+        wxString    const   &   title() { return a_title;   }
+        //  ....................................................................
+      public:
+        void                    add(ProjectAssignments* _pra)
+            {
+                a_project_assignments_array.Add( _pra );
+            }
+        void                    sub(ProjectAssignments* _pra)
+            {
+                a_project_assignments_array.Remove( _pra );
+            }
+        //  ....................................................................
+      public:
+        Perspective()                                                           {}
+      ~Perspective()
+            {
+                for ( ProjectAssignmentsArray::iterator
+                    it  =   a_project_assignments_array.begin()     ;
+                    it  !=  a_project_assignments_array.end()       ;
+                    it++                                            )
+                {
+                    delete (*it);
+                }
+                a_project_assignments_array.Clear();
             }
     };
     //  ########################################################################
@@ -138,10 +181,12 @@ class OflpModLayout : public wxMenu, public OflpModule
 
     bool                    xml_parse_workspace     (TiXmlDocument*);
     ProjectAssignments  *   xml_parse_project       (cbProject* _project, TiXmlDocument*);
+    //Perspective         *   xml_parse_perspective   (cbProject* _project, TiXmlDocument*);
     //  ------------------------------------------------------------------------
   private:
     PanelAssignmentArray    a_panel_assignment_array;
     ProjectAssignmentsArray a_project_assignments_array;
+    PerspectiveArray        a_perspective_array;
 
     bool                    p0_project_assignments_get_from_cbProject   (cbProject*, ProjectAssignments *&);
 

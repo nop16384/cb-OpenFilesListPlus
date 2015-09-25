@@ -7,6 +7,8 @@
 	<File name="src/oflp-panel-utils.hhi" panel="Panels" />
 	<File name="src/oflp-panel.cc" panel="Panels" />
 	<File name="src/oflp-panel.hh" panel="Panels" />
+	<File name="src/oflp-perspective-ctrl.cci" panel="Panels" />
+	<File name="src/oflp-perspective-ctrl.hhi" panel="Panels" />
 	<File name="src/oflp-plugin-dnd.hhi" panel="Plugin" />
 	<File name="src/oflp-plugin-events.cci" panel="Plugin" />
 	<File name="src/oflp-plugin-events.hhi" panel="Plugin" />

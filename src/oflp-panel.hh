@@ -12,6 +12,7 @@
 //  ............................................................................
 #include    <wx/dynarray.h>
 
+#include    "oflp-perspective-ctrl.hhi"
 #include    "oflp-panel-header.hhi"
 #include    "oflp-panel-utils.hhi"
 /// ****************************************************************************
@@ -29,7 +30,7 @@ class OpenFilesListPlusPanel              : public wxPanel
     bool                                a_bulk;
     bool                                a_allow_kill_focus_event;
 
-    OFLPPanelHeader                 *   dw_header;
+    OpenFilesListPlusPanelHeader    *   dw_header;
     wxTreeCtrl                      *   d_tree;
     wxBoxSizer                      *   dw_sizer;
 
@@ -38,11 +39,20 @@ class OpenFilesListPlusPanel              : public wxPanel
 
     OpenFilesListPlusPanelDropTarget*   d_drop_target;
     //  ........................................................................
+  protected:
+    OpenFilesListPlusPanelHeaderSimple  *   hs()                        const
+        {
+            return reinterpret_cast< OpenFilesListPlusPanelHeaderSimple* >
+            (
+                dw_header->window(0)
+            );
+        }
+    //  ........................................................................
   public:
     bool                            is_bulk()                   const   { return a_bulk;                }
     EditorArray const   *           get_editors()               const   { return &a_editors_array;      }
     wxTreeCtrl  const   *   const   tree()                      const   { return d_tree;                }
-    wxString    const   &           title()                     const   { return dw_header->title();    }
+    wxString    const   &           title()                     const   { return hs()->title();         }
     //  ------------------------------------------------------------------------
     static      wxString            stringize_drag_result(wxDragResult _dres);
     //  ------------------------------------------------------------------------
@@ -96,7 +106,7 @@ class OpenFilesListPlusPanel              : public wxPanel
     //  ------------------------------------------------------------------------
   public:
              OpenFilesListPlusPanel();
-             OpenFilesListPlusPanel(OpenFilesListPlus* _ofl_plugin, wxWindow* _parent, wxString _title, bool _bulk = false);
+             OpenFilesListPlusPanel(wxWindow* _parent, wxString _title, bool _bulk = false);
     virtual ~OpenFilesListPlusPanel();
 };
 /// ****************************************************************************
@@ -108,6 +118,7 @@ class OpenFilesListPlusPanel              : public wxPanel
 class OpenFilesListPlusPanelBulk          : public OpenFilesListPlusPanel
 {
   private:
+    OpenFilesListPlusPerspectiveCtrl    *   dw_perspective_ctrl;
     wxMenu      *   dw_menu_main;
 
     wxMenu      *       dw_menu_selection_mode;
@@ -116,7 +127,7 @@ class OpenFilesListPlusPanelBulk          : public OpenFilesListPlusPanel
 
     //  ------------------------------------------------------------------------
   public:
-             OpenFilesListPlusPanelBulk(OpenFilesListPlus* _ofl_plugin, wxWindow* _parent, wxString _title);
+             OpenFilesListPlusPanelBulk(wxWindow* _parent, wxString _title);
     virtual ~OpenFilesListPlusPanelBulk();
 };
 

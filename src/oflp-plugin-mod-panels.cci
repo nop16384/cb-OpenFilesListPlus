@@ -34,7 +34,7 @@ void            OflpModPanels:: p0_resize        ()
 {
     PanelArray::iterator        it;
     OFLPPanel               *   panel   =   NULL;
-    int                         s       =   0;
+    int                         s       =   0;                                  //  count of all open editors
     int                         p       =   0;
     int                         pmin    =   5;                                  //  minimum proportion for a panel
     int                         pdist   =   100;                                //  remaining proportion to distribute to panels
@@ -51,12 +51,15 @@ void            OflpModPanels:: p0_resize        ()
 
     //D GWR_TKI("              ...pdist[%i]", pdist);
 
+    if ( s == 0 )                                                               //  if no editor is open
+        s = 1;
+
     for ( it = a_panels_array.begin() ; it != a_panels_array.end() ; it++ )
     {
         panel = *(it);
 
-        //  after each anel has taken its pmin, it remains some : distribute it
-        //  following the # of editors per panel
+        //  after each anel has taken its pmin, it remains some proportion :
+        //  distribute it following the # of editors per panel
         if ( pdist > 0 )
         {
             p   =   pdist * panel->get_editors()->size();
@@ -152,16 +155,14 @@ OFLPPanel*      OflpModPanels:: p0_add               (wxString const _title, boo
     //  ........................................................................
     GWR_INF("%s", wxS("OFLP::Panels::p0_add()"));
     //  ........................................................................
-    panel   =   _bulk                                                           ?
-                new OpenFilesListPlusPanelBulk  ( OpenFilesListPlus::Instance(), dw_MainPanel, _title )  :
-                new OpenFilesListPlusPanel      ( OpenFilesListPlus::Instance(), dw_MainPanel, _title )  ;
+    panel   =   _bulk                                                     ?
+                new OpenFilesListPlusPanelBulk  ( dw_MainPanel, _title )  :
+                new OpenFilesListPlusPanel      ( dw_MainPanel, _title )  ;
 
     dw_MainSizer->Add(panel, 100, wxEXPAND, 0);
     dw_MainSizer->Layout();
 
     a_panels_array.Add( panel );
-
-    wxSizerItemList il = dw_MainSizer->GetChildren();
 
     return panel;
 }
@@ -185,7 +186,10 @@ void            OflpModPanels:: p0_move_up           (OFLPPanel* _panel)
 
     dw_MainSizer->Detach(_panel);
     dw_MainSizer->Insert( prev_panel_ix, _panel, 1, wxEXPAND, 0);
-    dw_MainSizer->Layout();
+
+    p0_resize();
+
+    //dw_MainSizer->Layout();
 }
 
 void            OflpModPanels:: p0_move_dn           (OFLPPanel* _panel)
@@ -209,7 +213,10 @@ void            OflpModPanels:: p0_move_dn           (OFLPPanel* _panel)
 
     dw_MainSizer->Detach(_panel);
     dw_MainSizer->Insert( next_panel_ix, _panel, 1, wxEXPAND, 0);
-    dw_MainSizer->Layout();
+
+    p0_resize();
+
+    //dw_MainSizer->Layout();
 }
 
 void            OflpModPanels:: p0_sub               (OFLPPanel* _panel)

@@ -24,6 +24,7 @@
 #define GWR_WNG(FORMAT, ...)    GWRCB_WNG(FORMAT, __VA_ARGS__);
 #define GWR_ERR(FORMAT, ...)    GWRCB_ERR(FORMAT, __VA_ARGS__);
 //  ############################################################################
+#include    "oflp-perspective-ctrl.cci"
 #include    "oflp-panel-header.cci"
 #include    "oflp-panel-utils.cci"
 //  ############################################################################
@@ -160,10 +161,10 @@ void OpenFilesListPlusPanel:: p0_allow_kill_focus_event           (bool _b)
 void OpenFilesListPlusPanel:: evh_title_static_LEFT_DOWN          (wxMouseEvent& _e)
 {
     //  let OFLPPanelHeader do his job
-    dw_header->title_switch_to_dynamic();
+    hs()->title_switch_to_dynamic();
 
     //  the header's events is connected to this ( OpenFilesListPlusPanel )
-    //  only for updating this's layout, because wxStaticText and WxwxTextCtrl
+    //  only for updating this's layout, because wxStaticText and wxTextCtrl
     //  dont have same vertical size
     dw_sizer->Layout();
 }
@@ -174,7 +175,7 @@ void OpenFilesListPlusPanel:: evh_title_dynamic_TEXT_ENTER        (wxCommandEven
 
     p0_allow_kill_focus_event(false);
 
-    dw_header   ->title_switch_to_static();
+    hs()        ->title_switch_to_static();
     dw_sizer    ->Layout();
 
     p0_allow_kill_focus_event(true);
@@ -192,7 +193,7 @@ void OpenFilesListPlusPanel:: evh_title_dynamic_KILL_FOCUS        (wxFocusEvent 
         return;
     }
 
-    dw_header   ->title_switch_to_static();
+    hs()        ->title_switch_to_static();
     dw_sizer    ->Layout();
 
     _e.Skip();
@@ -224,47 +225,53 @@ void OpenFilesListPlusPanel:: p0_create_tree()
 }
 //  ============================================================================
 OpenFilesListPlusPanel::OpenFilesListPlusPanel(
-        OpenFilesListPlus *   _ofl_plugin ,
         wxWindow            *   _parent ,
         wxString                _title  ,
         bool                    _bulk   )
-        :   wxPanel                     ( _parent, wxNewId()    )   ,
-            a_bulk                      ( _bulk         )   ,
-            a_allow_kill_focus_event    ( true          )
+        :   wxPanel                     ( _parent, wxNewId() )  ,
+            a_bulk                      ( _bulk )   ,
+            a_allow_kill_focus_event    ( true  )
 {
-    GWR_INF("OpenFilesListPlusPanel::OpenFilesListPlusPanel():[%p] plugin[%p]", this, _ofl_plugin);
+    GWR_INF("OpenFilesListPlusPanel::OpenFilesListPlusPanel():[%p]", this);
 
-    SetFont( OpenFilesListPlus::Instance()->gfx()->fnt8() );
+    //  ........................................................................
+    //  create header
+    dw_header   =   new OpenFilesListPlusPanelHeader(this);
+    //  ........................................................................
+    //  create header simple & add it to header
+    OpenFilesListPlusPanelHeaderSimple * simple =
+        new OpenFilesListPlusPanelHeaderSimple( dw_header, this, _title );
+    dw_header->add(simple);
 
-    dw_header   =   new OpenFilesListPlusPanelHeader( this, _title );
+    hs()->button_prepend   ( OflpModGfx::eBmpBarUp      );                      //  2
+    hs()->button_prepend   ( OflpModGfx::eBmpBarDown    );                      //  1
+    hs()->button_prepend   ( OflpModGfx::eBmpBarOrange  );                      //  0
+    hs()->button_append    ( OflpModGfx::eBmpBarRed     );                      //  3
 
-    dw_header->button_prepend   ( OflpModGfx::eBmpBarUp      );          //  2
-    dw_header->button_prepend   ( OflpModGfx::eBmpBarDown    );          //  1
-    dw_header->button_prepend   ( OflpModGfx::eBmpBarOrange  );          //  0
-    dw_header->button_append    ( OflpModGfx::eBmpBarRed     );          //  3
-
-    dw_header->button(0)->Connect(                                              //  (mini | maxi) mize
+    hs()->button(0)->Connect(                                                   //  (mini | maxi) mize
         wxEVT_COMMAND_BUTTON_CLICKED                                                    ,
-        wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_mm)  ,
-        NULL, _ofl_plugin                                                               );
+        wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_mm)    ,
+        NULL, OpenFilesListPlus::Instance()                                             );
 
-    dw_header->button(2)->Connect(                                              //  up
+    hs()->button(2)->Connect(                                                   //  up
         wxEVT_COMMAND_BUTTON_CLICKED                                                    ,
-        wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_up)  ,
-        NULL, _ofl_plugin                                                               );
+        wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_up)    ,
+        NULL, OpenFilesListPlus::Instance()                                             );
 
-    dw_header->button(1)->Connect(                                              //  down
+    hs()->button(1)->Connect(                                                   //  down
         wxEVT_COMMAND_BUTTON_CLICKED                                                    ,
         wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_down)  ,
-        NULL, _ofl_plugin                                                               );
+        NULL, OpenFilesListPlus::Instance()                                             );
 
-    dw_header->button(3)->Connect(                                              //  del
+    hs()->button(3)->Connect(                                                   //  del
         wxEVT_COMMAND_BUTTON_CLICKED                                                    ,
         wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_del)   ,
-        NULL, _ofl_plugin                                                               );
-
+        NULL, OpenFilesListPlus::Instance()                                             );
+    //  ........................................................................
+    //  wxTreeCtrl
     p0_create_tree();
-
+    //  ........................................................................
+    //  add header & wxTreeCtrl to main panel
     dw_sizer    =   new wxBoxSizer(wxVERTICAL);
 
     dw_sizer->Add( dw_header , 0, wxEXPAND, 0);
@@ -558,16 +565,20 @@ void            OpenFilesListPlusPanel::  minimize        ()
 {
     d_tree->Show(false);
 
-    dw_header->button_show( 1, false);
-    dw_header->button_show( 2, false);
+    hs()->button_show( 1, false);
+    hs()->button_show( 2, false);
+
+    dw_sizer->Layout();
 }
 
 void            OpenFilesListPlusPanel::  maximize        ()
 {
     d_tree->Show(true);
 
-    dw_header->button_show( 1, true);
-    dw_header->button_show( 2, true);
+    hs()->button_show( 1, true);
+    hs()->button_show( 2, true);
+
+    dw_sizer->Layout();
 }
 //  ############################################################################
 //
@@ -575,32 +586,51 @@ void            OpenFilesListPlusPanel::  maximize        ()
 //
 //  ############################################################################
 OpenFilesListPlusPanelBulk::OpenFilesListPlusPanelBulk(
-        OpenFilesListPlus *   _ofl_plugin ,
         wxWindow            *   _parent ,
         wxString                _title  )
-        :   OpenFilesListPlusPanel( _ofl_plugin, _parent, _title, true)   ,
+        :   OpenFilesListPlusPanel( _parent, _title, true)  ,
             dw_menu_main                            (NULL)  ,
                 dw_menu_selection_mode              (NULL)  ,
                     dw_item_selection_standard      (NULL)  ,
                     dw_item_selection_productivity  (NULL)
 {
-    dw_header   =   new OpenFilesListPlusPanelHeader( this, _title );
+    //  ........................................................................
+    //  create header
+    dw_header   =   new OpenFilesListPlusPanelHeader(this);
+    //  ........................................................................
+    //  create header simple & add it to header
+    OpenFilesListPlusPanelHeaderSimple * simple =
+        new OpenFilesListPlusPanelHeaderSimple( dw_header, this, _title, false );
+    dw_header->add(simple);
 
-    dw_header->button_prepend   ( OflpModGfx::eBmpBarBlue    );
-    dw_header->button_append    ( OflpModGfx::eBmpBarGreen   );
+    hs()->button_prepend   ( OflpModGfx::eBmpBarBlue    );
+    hs()->button_prepend   ( OflpModGfx::eBmpBarGreen   );
 
-    dw_header->button(0)->Connect(                                              //  options
+    hs()->button(1)->Connect(                                                   //  options
         wxEVT_COMMAND_BUTTON_CLICKED                                                    ,
-        wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_opt) ,
-        NULL, _ofl_plugin                                                               );
+        wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_opt)   ,
+        NULL, OpenFilesListPlus::Instance()                                             );
 
-    dw_header->button(1)->Connect(                                              //  add panel
+    hs()->button(0)->Connect(                                                   //  add panel
         wxEVT_COMMAND_BUTTON_CLICKED                                                    ,
-        wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_add) ,
-        NULL, _ofl_plugin                                                               );
-
+        wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_add)   ,
+        NULL, OpenFilesListPlus::Instance()                                             );
+    //  ........................................................................
+    //  create intermediate empty wxPanel for our layout & add it to header
+    wxPanel* dummy = new wxPanel(_parent, wxNewId());
+    dummy->SetMinSize(wxSize(-1,16));
+    dummy->SetMaxSize(wxSize(-1,16));
+    dw_header->add(dummy);
+    //  ........................................................................
+    //  create perspective & add it to header
+    OpenFilesListPlusPerspectiveCtrl * perspective =
+        new OpenFilesListPlusPerspectiveCtrl(dw_header);
+    dw_header->add(perspective);
+    //  ........................................................................
+    //  wxTreeCtrl
     p0_create_tree();
-
+    //  ........................................................................
+    //  add header & wxTreeCtrl to main panel
     dw_sizer    =   new wxBoxSizer(wxVERTICAL);
 
     dw_sizer->Add( dw_header , 0, wxEXPAND, 0);

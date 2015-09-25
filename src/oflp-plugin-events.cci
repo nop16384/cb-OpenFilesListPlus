@@ -340,15 +340,16 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_mm  (wxCommandEv
     {
         GWR_INF("%s", wxS("  maximizing"));
         panel->maximize();
-        sitem->SetProportion(1);
+        //sitem->SetProportion(1);
     }
     else
     {
         GWR_INF("%s", wxS("  minimizing"));
         panel->minimize();
-        sitem->SetProportion(0);
+        //sitem->SetProportion(0);
     }
     panels()->p0_sizer()->Layout();
+    //panels()->p0_resize();
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_up  (wxCommandEvent& _e)

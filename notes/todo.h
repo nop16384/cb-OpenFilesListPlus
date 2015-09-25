@@ -46,6 +46,8 @@
 
  (022)  2015.09.20  "An inner class is a friend of the class it is defined within."
                     find something else, every module has access to everything !!!
+
++(023)  2015.09.25  Do a pass for all Layout() calls, there are too much
 //  ############################################################################
 (001)
 2015.08.21  Done: call to SetFocus() )
@@ -115,3 +117,5 @@
 //  ============================================================================
 (022)
 2015.09.21  Done
+//  ============================================================================
+(023)

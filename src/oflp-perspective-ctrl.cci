@@ -1,0 +1,70 @@
+//  ############################################################################
+//
+//                          OPENFILESLISTPLUSPERSPECTIVECTRL
+//
+//  ############################################################################
+
+//  ============================================================================
+OpenFilesListPlusPerspectiveCtrl::      OpenFilesListPlusPerspectiveCtrl(wxWindow* _parent)
+    :   wxPanel(_parent, wxNewId())
+{
+    wxSize sz1(24,16);
+    wxSize sz2(-1,16);
+    //  ........................................................................
+    this->SetMinSize(sz2);
+    this->SetMaxSize(sz2);
+    //  ........................................................................
+    dw_button_perspective_menu  = new wxBitmapButton(
+        this, wxNewId()                                                         ,
+        OpenFilesListPlus::Instance()->gfx()->bitmap(OflpModGfx::eBmpBarDown)   ,
+        wxDefaultPosition, wxDefaultSize, wxBORDER_NONE |  wxBU_EXACTFIT        );
+
+    //  wxEventHandler's ClientData is a easy way to pass extra data
+    //  with the event
+    //bt->SetClientData( (void*)OpenFilesListPlus::INtsanc
+
+    dw_button_perspective_menu->SetMaxSize(sz1);
+    dw_button_perspective_menu->SetMinSize(sz1);
+    //  ........................................................................
+    dw_current_perspective_name =   new wxStaticText(this, wxNewId(), wxS("perspective"));
+
+    dw_current_perspective_name->SetMinSize(sz2);
+    dw_current_perspective_name->SetMaxSize(sz2);
+    //  ........................................................................
+    dw_sizer    =   new wxBoxSizer(wxHORIZONTAL);
+
+    this->SetSizer(dw_sizer);
+
+    dw_sizer->Add( dw_button_perspective_menu, 0, wxEXPAND, 0 );
+    dw_sizer->Add( dw_current_perspective_name , 1, wxEXPAND, 0);
+
+    dw_sizer->Layout();
+}
+
+OpenFilesListPlusPerspectiveCtrl::     ~OpenFilesListPlusPerspectiveCtrl()
+{
+}
+
+/*
+
+Note: If you want to use EVT_TEXT_ENTER(id,func) to receive wxEVT_COMMAND_TEXT_ENTER events,
+you have to add the wxTE_PROCESS_ENTER window style flag.
+
+If you create a wxComboBox with the flag wxTE_PROCESS_ENTER, the tab key won't jump
+to the next control anymore. To get the default tab-traversal behaviour back,
+you have to catch the KEY_DOWN events of the combo box and call Navigate() on the frame.
+
+
+wxComboBox* box = new wxComboBox(parent, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize,
+   0, NULL, wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB);
+
+box->GetEventHandler()->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(MainFrame::comboTabAction));
+
+void MainFrame::comboTabAction(wxKeyEvent& event)
+{
+   if (event.GetKeyCode() == WXK_TAB)
+      Navigate(wxNavigationKeyEvent::IsForward);
+   else
+      event.Skip();
+}
+*/

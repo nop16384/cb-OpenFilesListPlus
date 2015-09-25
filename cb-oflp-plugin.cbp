@@ -123,6 +123,12 @@
 		<Unit filename="src/oflp-panel.hh">
 			<Option virtualFolder="src/panels/h/" />
 		</Unit>
+		<Unit filename="src/oflp-perspective-ctrl.cci">
+			<Option virtualFolder="src/panels/c/" />
+		</Unit>
+		<Unit filename="src/oflp-perspective-ctrl.hhi">
+			<Option virtualFolder="src/panels/h/" />
+		</Unit>
 		<Unit filename="src/oflp-plugin-dnd.hhi">
 			<Option virtualFolder="src/plugin/h/" />
 		</Unit>
