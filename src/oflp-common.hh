@@ -16,6 +16,11 @@
 #define OFLP_FILE_VERSION_MAJOR_NUM     1
 #define OFLP_FILE_VERSION_MINOR_NUM     0
 //  ............................................................................
+#define GWR_ITERATE_V(C, V, IT)                                                 \
+    for ( C::iterator IT = (V).begin() ; IT != (V).end() ; IT++ )
+#define GWR_ITERATE_VC(V, IT)                                                   \
+    for ( C::const_iterator IT = (V).begin() ; IT != (V).end() ; IT++ )
+//  ............................................................................
 //  declare all classes ( and some aliases ) for header files
 class   EditorBase;
 

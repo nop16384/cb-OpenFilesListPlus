@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_oflp_file>
 	<FileVersion major="1" minor="0" />
+	<File name="src/oflp-common.hh" panel="Common" />
 	<File name="src/oflp-panel-header.cci" panel="Panels" />
 	<File name="src/oflp-panel-header.hhi" panel="Panels" />
 	<File name="src/oflp-panel-utils.cci" panel="Panels" />
 	<File name="src/oflp-panel-utils.hhi" panel="Panels" />
-	<File name="src/oflp-panel.cc" panel="Panels" />
 	<File name="src/oflp-panel.hh" panel="Panels" />
-	<File name="src/oflp-plugin-dnd.hhi" panel="Plugin" />
+	<File name="src/oflp-plugin-dnd.hhi" panel="cbEVT_WORKSPACE_CLOSE_BEGIN" />
 	<File name="src/oflp-plugin-events.cci" panel="Plugin" />
 	<File name="src/oflp-plugin-events.hhi" panel="Plugin" />
 	<File name="src/oflp-plugin-mod-editors.cci" panel="Plugin" />

@@ -34,6 +34,8 @@
 +(016)  2015.09.13  Layout : C::B save everything relationships
 
 +(017)  2015.09.13  Layout : OFLPPanels ordering at loading
+                    ( as long as panels are saved in the display order, unuseful
+                    but maybe later )
 
  (018)  2015.09.13  OFLP::on_editor_modified() : DONT call refresh for
                     a letter typed !!!
@@ -77,6 +79,7 @@
 2015.08.29  - bitmap identifiers as enum in OpenFilesListPlus
 //  ============================================================================
 (009)
+2015.09.26  - Seems to be impossible in wxWidgets 2.8.12
 //  ============================================================================
 (010)
 2015.09.2   Done first version of Panels::p0_resize()

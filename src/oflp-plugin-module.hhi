@@ -20,6 +20,7 @@ class OflpModule
     OpenFilesListPlus       *   oflp()      { return a_instance;        }
     OflpModLayout           *   layout()    { return a_module_layout;   }
     OflpModPanels           *   panels()    { return a_module_panels;   }
+    OflpModGfx              *   gfx()       { return a_module_gfx;      }
 
   public:
     void                        init();

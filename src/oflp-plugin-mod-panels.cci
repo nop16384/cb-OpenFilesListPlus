@@ -3,7 +3,27 @@
 //                          PANELS OPERATIONS
 //
 //  ############################################################################
-void            OflpModPanels:: p0_reset         ()
+                OflpModPanels:: OflpModPanels   ()
+{
+}
+
+                OflpModPanels::~OflpModPanels   ()
+{
+}
+
+void            OflpModPanels:: init            ()
+{
+    dw_main_panel   =   new wxPanel(Manager::Get()->GetAppWindow(), idMainPanel);
+    dw_main_panel->SetFont( gfx()->fnt8() );
+
+    dw_main_sizer   =   new wxBoxSizer(wxVERTICAL);
+    //dw_main_sizer->SetSizeHints(panels()->p0_main());
+    dw_main_panel->SetSizer(dw_main_sizer);
+
+    a_panel_bulk    =   p0_add( wxString::FromUTF8("bulk"), true );
+}
+//  ############################################################################
+void            OflpModPanels:: p0_reset        ()
 {
     PanelArray::iterator        it;
     OFLPPanel               *   panel   =   NULL;
@@ -17,71 +37,78 @@ void            OflpModPanels:: p0_reset         ()
 
         if ( ! panel->is_bulk() )
         {
-            dw_MainSizer->Detach(panel);
+            dw_main_sizer->Detach(panel);
             delete panel;
         }
     }
 
-    a_BulkPanel->editors_del();
+    a_panel_bulk->editors_del();
 
     a_panels_array.Clear();
-    a_panels_array.Add( a_BulkPanel );
+    a_panels_array.Add( a_panel_bulk );
 
-    dw_MainSizer->Layout();
+    dw_main_sizer->Layout();
 }
 
-void            OflpModPanels:: p0_resize        ()
+void            OflpModPanels:: p0_resize       ()                              //  _GWR_TODO_  broken algo, review that
 {
     PanelArray::iterator        it;
     OFLPPanel               *   panel   =   NULL;
-    int                         s       =   0;
+    int                         ned     =   0;                                  //  total # of open editors
+    int                         np      =   0;                                  //  total # of panels
     int                         p       =   0;
     int                         pmin    =   5;                                  //  minimum proportion for a panel
-    int                         pdist   =   100;                                //  remaining proportion to distribute to panels
+    int                         pdist   =   100;                                //  remaining proportion distribute-able to panels
     //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::Panels::p0_resize()"));
     //  ........................................................................
-    //  compute the total # of opened editors in the panels
     for ( it = a_panels_array.begin() ; it != a_panels_array.end() ; it++ )
-    {
-        panel = *(it);
-        s       =   s       +   panel->get_editors()->size();
-        pdist   =   pdist   -   pmin;
-    }
+        ned = ned + static_cast< int >( (*it)->get_editors()->size() );
 
+    np      =   static_cast< int >( a_panels_array.size() );
+
+    pdist   =   pdist - ( pmin * np );
     //D GWR_TKI("              ...pdist[%i]", pdist);
-
+    //  ........................................................................
     for ( it = a_panels_array.begin() ; it != a_panels_array.end() ; it++ )
     {
         panel = *(it);
 
-        //  after each anel has taken its pmin, it remains some : distribute it
-        //  following the # of editors per panel
+        //  after each panel has been attributed pmin %, it remains some % :
+        //  distribute it following the # of editors per panel
         if ( pdist > 0 )
         {
-            p   =   pdist * panel->get_editors()->size();
-            p   =   p / s;
-            p   =   p   +   pmin;
+            //  there are open editors
+            if ( ned != 0 )
+            {
+                p   =   pdist * panel->get_editors()->size();                   //  affect a part of the remaining %
+                p   =   p / ned;                                                //  ...following the # of open editors
+                p   =   p   +   pmin;                                           //  add the minimum
+            }
+            //  no editor is open
+            else
+            {
+                p   =   pdist   /   np;                                         //  affect the remainign % following the # of panels
+                p   =   p       +   pmin;                                       //  add the minimum
+            }
         }
-        //  after each anel has taken its pmin, it does not remain proportion ;
-        //  do a classical allocation ( panels will have vertical scrollbars ! )
+        //  after each panel has been attributed pmin %, it does not remain
+        //  any % ; do a classical allocation ( some panels will have vertical
+        //  scrollbars )
         else
         {
-            p   =   100 * panel->get_editors()->size();
-            p   =   p / s;
+            p   =   pmin;
         }
-        dw_MainSizer->GetItem( panel )->SetProportion( p );
+        dw_main_sizer->GetItem( panel )->SetProportion( p );
 
         GWR_TKI("              ...[%03i] for panel[%s]", p, panel->title().wc_str());
 
     }
 
-    dw_MainSizer->Layout();
-
     earlgreycb::Log_function_exit();
 }
 
-void            OflpModPanels:: p0_editors_mov   (OFLPPanel* _dst, OFLPPanel* _src)
+void            OflpModPanels:: p0_editors_mov  (OFLPPanel* _dst, OFLPPanel* _src)
 {
     EditorArray const   *   array   = _src->get_editors();
     //  ........................................................................
@@ -92,81 +119,43 @@ void            OflpModPanels:: p0_editors_mov   (OFLPPanel* _dst, OFLPPanel* _s
     _src->editors_del();
 }
 
-OFLPPanel*      OflpModPanels:: get_by_name      (wxString const & _panel_name)
-{
-    for ( PanelArray::iterator it = a_panels_array.begin() ; it != a_panels_array.end() ; it++ )
-    {
-        OFLPPanel* panel = *(it);
-
-        if ( ! panel->title().Cmp( _panel_name ) )
-        {
-            return ( *it);
-        }
-    }
-
-    return NULL;
-}
-
-void            OflpModPanels:: p0_editor_mov    (OFLPPanel* _dst, OFLPPanel* _src, EditorBase* _edb)
+void            OflpModPanels:: p0_editor_mov   (OFLPPanel* _dst, OFLPPanel* _src, EditorBase* _edb)
 {
     _src->editor_del(_edb);
     _dst->editor_add(_edb);
 }
-//  ############################################################################
-int             OflpModPanels:: get_visual_index     (OFLPPanel* _panel)
-{
-    //  - wxWindowList is not re-ordered regarding layout changes, so use wxSizer
-    //  - wxSizer 2.8.12 does not provide GetItemCount(), so use GetChildren()
-    //  ........................................................................
-    wxSizerItemList                 list;
-    wxSizerItemList::iterator       it;
-    wxWindow                    *   win     =   NULL;
-    int                             index   =   0;
-    //  ........................................................................
-    #ifdef  GWR_OFLP_SANITY_CHECKS                                              //  _GWR_SANITY_CHECK_
-    if ( a_panels_array.Index(_panel) == wxNOT_FOUND )
-        return wxNOT_FOUND;
-    #endif
 
-    list = dw_MainSizer->GetChildren();
-
-    for ( it = list.begin() ; it != list.end() ; it++ )
-    {
-        win =   (*it)->GetWindow();
-
-        //D GWR_INF("OFLPlugin::GetPanelVisualIndex(%p):ix[%02i] win[%p]",
-        //D   _panel, index, win );
-
-        if ( win == _panel )
-            return index;
-
-        index   =   index   +   1;
-    }
-
-    return wxNOT_FOUND;
-}
-
-OFLPPanel*      OflpModPanels:: p0_add               (wxString const _title, bool _bulk)
+OFLPPanel*      OflpModPanels:: p0_add          (wxString const _title, bool _bulk)
 {
     OFLPPanel   *   panel   =   NULL;
     //  ........................................................................
     GWR_INF("%s", wxS("OFLP::Panels::p0_add()"));
     //  ........................................................................
     panel   =   _bulk                                                           ?
-                new OpenFilesListPlusPanelBulk  ( OpenFilesListPlus::Instance(), dw_MainPanel, _title )  :
-                new OpenFilesListPlusPanel      ( OpenFilesListPlus::Instance(), dw_MainPanel, _title )  ;
+                new OpenFilesListPlusPanelBulk  ( OpenFilesListPlus::Instance(), dw_main_panel, _title )  :
+                new OpenFilesListPlusPanel      ( OpenFilesListPlus::Instance(), dw_main_panel, _title )  ;
 
-    dw_MainSizer->Add(panel, 100, wxEXPAND, 0);
-    dw_MainSizer->Layout();
+    dw_main_sizer->Add(panel, 100, wxEXPAND, 0);
 
     a_panels_array.Add( panel );
 
-    wxSizerItemList il = dw_MainSizer->GetChildren();
+    wxSizerItemList il = dw_main_sizer->GetChildren();
 
     return panel;
 }
 
-void            OflpModPanels:: p0_move_up           (OFLPPanel* _panel)
+void            OflpModPanels:: p0_sub          (OFLPPanel* _panel)
+{
+    p0_editors_mov(a_panel_bulk, _panel);
+
+    dw_main_sizer->Detach(_panel);
+
+    a_panels_array.Remove(_panel);
+
+    delete _panel;
+}
+
+void            OflpModPanels:: p0_move_up      (OFLPPanel* _panel)
 {
     size_t  prev_panel_ix   =   0;
     int     pix             =   get_visual_index(_panel);
@@ -183,12 +172,12 @@ void            OflpModPanels:: p0_move_up           (OFLPPanel* _panel)
 
     prev_panel_ix = static_cast< size_t >( pix - 1 );
 
-    dw_MainSizer->Detach(_panel);
-    dw_MainSizer->Insert( prev_panel_ix, _panel, 1, wxEXPAND, 0);
-    dw_MainSizer->Layout();
+    dw_main_sizer->Detach(_panel);
+    dw_main_sizer->Insert( prev_panel_ix, _panel, 1, wxEXPAND, 0);
+    dw_main_sizer->Layout();
 }
 
-void            OflpModPanels:: p0_move_dn           (OFLPPanel* _panel)
+void            OflpModPanels:: p0_move_dn      (OFLPPanel* _panel)
 {
     size_t  next_panel_ix   =   0;
     int     pix             =   get_visual_index(_panel);
@@ -207,24 +196,76 @@ void            OflpModPanels:: p0_move_dn           (OFLPPanel* _panel)
 
     next_panel_ix = static_cast< size_t >( pix + 1 );
 
-    dw_MainSizer->Detach(_panel);
-    dw_MainSizer->Insert( next_panel_ix, _panel, 1, wxEXPAND, 0);
-    dw_MainSizer->Layout();
+    dw_main_sizer->Detach(_panel);
+    dw_main_sizer->Insert( next_panel_ix, _panel, 1, wxEXPAND, 0);
+    dw_main_sizer->Layout();
 }
-
-void            OflpModPanels:: p0_sub               (OFLPPanel* _panel)
+//  ############################################################################
+void            OflpModPanels:: resize              ()
 {
-    p0_editors_mov(a_BulkPanel, _panel);
-
-    dw_MainSizer->Detach(_panel);
-    dw_MainSizer->Layout();
-
-    a_panels_array.Remove(_panel);
-
-    delete _panel;
+    p0_resize();
 }
 
-OFLPPanel*      OflpModPanels:: get                  (EditorBase* _editor )
+void            OflpModPanels:: layout              ()
+{
+    dw_main_sizer->Layout();
+}
+
+void            OflpModPanels:: resize_and_layout   ()
+{
+    resize();
+    layout();
+}
+
+int             OflpModPanels:: get_visual_index    (OFLPPanel* _panel)
+{
+    //  - wxWindowList is not re-ordered regarding layout changes, so use wxSizer
+    //  - wxSizer 2.8.12 does not provide GetItemCount(), so use GetChildren()
+    //  ........................................................................
+    wxSizerItemList                 list;
+    wxSizerItemList::iterator       it;
+    wxWindow                    *   win     =   NULL;
+    int                             index   =   0;
+    //  ........................................................................
+    #ifdef  GWR_OFLP_SANITY_CHECKS                                              //  _GWR_SANITY_CHECK_
+    if ( a_panels_array.Index(_panel) == wxNOT_FOUND )
+        return wxNOT_FOUND;
+    #endif
+
+    list = dw_main_sizer->GetChildren();
+
+    for ( it = list.begin() ; it != list.end() ; it++ )
+    {
+        win =   (*it)->GetWindow();
+
+        //D GWR_INF("OFLPlugin::GetPanelVisualIndex(%p):ix[%02i] win[%p]",
+        //D   _panel, index, win );
+
+        if ( win == _panel )
+            return index;
+
+        index   =   index   +   1;
+    }
+
+    return wxNOT_FOUND;
+}
+
+OFLPPanel*      OflpModPanels:: get_by_name         (wxString const & _panel_name)
+{
+    for ( PanelArray::iterator it = a_panels_array.begin() ; it != a_panels_array.end() ; it++ )
+    {
+        OFLPPanel* panel = *(it);
+
+        if ( ! panel->title().Cmp( _panel_name ) )
+        {
+            return ( *it);
+        }
+    }
+
+    return NULL;
+}
+
+OFLPPanel*      OflpModPanels:: get                 (EditorBase* _editor )
 {
     PanelArray::iterator        it;
     OFLPPanel               *   panel   =   NULL;
@@ -262,7 +303,7 @@ OFLPPanel*      OflpModPanels:: get_from_abs_path   (wxString const & _abs_path)
     return NULL;
 }
 
-void            OflpModPanels:: p0_unselect_except   (OFLPPanel* _panel)
+void            OflpModPanels:: p0_unselect_except  (OFLPPanel* _panel)
 {
     earlgreycb::Log_function_mark( wxS("OFLP::Panels::p0_unselect_except()"));
     //  ........................................................................

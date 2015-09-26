@@ -18,6 +18,8 @@ void    OpenFilesListPlus:: evh_workspace_loading_complete  (CodeBlocksEvent& _e
         panels()->p0_add( (*it)->name(), false );
     }
 
+    panels()->resize_and_layout();
+
     RefreshOpenFilesLayout();
 
     earlgreycb::Log_function_exit();
@@ -105,7 +107,7 @@ void    OpenFilesListPlus:: evh_editor_opened               (CodeBlocksEvent& ev
     //  add the editor
     editors()->add(edb);
 
-    panels()->p0_resize();
+    panels()->resize_and_layout();
     //  ........................................................................
 lab_exit:
     earlgreycb::Log_function_exit();
@@ -295,7 +297,7 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_add (wxCommandEv
 {
     panels()->p0_add(wxString::FromUTF8("panel"), false);
 
-    panels()->p0_resize();
+    panels()->resize_and_layout();
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_del (wxCommandEvent& _e)
@@ -312,7 +314,7 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_del (wxCommandEv
     //  ........................................................................
     panels()->p0_sub(panel);
 
-    panels()->p0_resize();
+    panels()->resize_and_layout();
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_mm  (wxCommandEvent& _e)
@@ -340,7 +342,7 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_mm  (wxCommandEv
     {
         GWR_INF("%s", wxS("  maximizing"));
         panel->maximize();
-        sitem->SetProportion(1);
+        panels()->resize();
     }
     else
     {
@@ -348,7 +350,7 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_mm  (wxCommandEv
         panel->minimize();
         sitem->SetProportion(0);
     }
-    panels()->p0_sizer()->Layout();
+    panels()->layout();
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_up  (wxCommandEvent& _e)
@@ -364,6 +366,7 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_up  (wxCommandEv
         _e.GetEventObject(), panel);
 
     panels()->p0_move_up(panel);
+    panels()->resize_and_layout();
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_down(wxCommandEvent& _e)
@@ -378,6 +381,7 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_down(wxCommandEv
         _e.GetEventObject(), panel);
 
     panels()->p0_move_dn(panel);
+    panels()->resize_and_layout();
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_opt (wxCommandEvent& _e)

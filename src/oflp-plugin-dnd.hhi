@@ -27,6 +27,6 @@
         {
             editors()->mov( a_dnd_panel_dst, a_dnd_panel_src, a_dnd_editor_base );
 
-            panels()->p0_resize();
+            panels()->resize_and_layout();
         }
 

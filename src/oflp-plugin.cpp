@@ -142,13 +142,14 @@ void OpenFilesListPlus::OnAttach()
         NULL, this                                                          );
     //  ........................................................................
     //  create main wxPanel & its sizer, "bulk" panel
-    panels()->p0_main()     =   new wxPanel(Manager::Get()->GetAppWindow(), idMainPanel);
-    panels()->p0_main()->SetFont( gfx()->fnt8() );
-    panels()->p0_sizer()    =   new wxBoxSizer(wxVERTICAL);
-    panels()->p0_bulk()     =   panels()->p0_add( wxString::FromUTF8("bulk"), true );
+    panels()->init();
+    //panels()->p0_main()     =   new wxPanel(Manager::Get()->GetAppWindow(), idMainPanel);
+    //panels()->p0_main()->SetFont( gfx()->fnt8() );
+    //panels()->p0_sizer()    =   new wxBoxSizer(wxVERTICAL);
+    //panels()->p0_bulk()     =   panels()->p0_add( wxString::FromUTF8("bulk"), true );
 
-    panels()->p0_sizer()->SetSizeHints(panels()->p0_main());
-    panels()->p0_main()->SetSizer(panels()->p0_sizer());
+    //panels()->p0_sizer()->SetSizeHints(panels()->p0_main());
+    //panels()->p0_main()->SetSizer(panels()->p0_sizer());
     //  ........................................................................
     // add the tree to the docking system
     CodeBlocksDockEvent evt(cbEVT_ADD_DOCK_WINDOW);
@@ -455,7 +456,7 @@ void OpenFilesListPlus::RefreshOpenFilesLayout  ()
         RefreshOpenFileLayout( emgr->GetEditor(i) );
     }
 
-    panels()->p0_resize();
+    panels()->resize_and_layout();
 
     RefreshOpenFileState( emgr->GetActiveEditor() );
 
