@@ -45,7 +45,7 @@ bool    OflpModLayout::     xml_load_project        (cbProject* _pro, TiXmlDocum
     //  load the xml file & return it
     return xml_load_document(profn, _doc);
 }
-
+//  ----------------------------------------------------------------------------
 bool    OflpModLayout::     xml_save_workspace      ()
 {
     //  - no TiXml constructore are available in plugins ( why : ??? ). So      //  _GWR_KNO_
@@ -139,7 +139,7 @@ lab_failure:
 
     return FALSE;
 }
-
+//  ----------------------------------------------------------------------------
 bool    OflpModLayout::     xml_save_project        (cbProject* _pro)
 {
     //  - no TiXml constructore are available in plugins ( why : ??? ). So      //  _GWR_KNO_
@@ -246,46 +246,89 @@ lab_failure:
 
     return FALSE;
 }
+//  ----------------------------------------------------------------------------
+void    OflpModLayout::     xml_parse_panel_assignment_s    (Perspective* _per, TiXmlElement* _node)
+{
+    PanelAssignmentArray            *   nas_array   =   NULL;
+    TiXmlElement                    *   xnas        =   NULL;
+    OflpModLayout::PanelAssignment  *   nas         =   NULL;
+    //  ........................................................................
+    xnas  =   _node->FirstChildElement("Panel");
+    while ( xnas )
+    {
+                    nas     =   NULL;
+        long        u       =   0;
+        wxString    name    =   cbC2U( _nas->Attribute("name") );
+        wxString    index   =   cbC2U( _pas->Attribute("index") );
+
+        if ( ! index.ToLong(&u) )
+        {
+            GWR_TKE("xml_parse_panel_assignment_s():panel[%s] index[%s] - index could not be transformed to int",
+                name.wc_str(), index.wc_str());
+        }
+        else
+        {
+            GWR_TKI("xml_parse_panel_assignment_s():panel[%s] index[%s]", name.wc_str(), index.wc_str());
+            nas =   new PanelAssignment(name, index);
+        }
+
+        if ( nas )
+        {
+            _per->nas_add(nas);
+        }
+
+        xnas    =   xnas->NextSiblingElement("Panel");
+    }
+}
 
 bool    OflpModLayout::     xml_parse_workspace     (TiXmlDocument* _doc)
 {
+    OflpModLayout::Perspective      *   per     =   NULL;
+    TiXmlElement                    *   xper    =   NULL;
+    wxString                            rname;
+
+    TiXmlElement                    *   xpanels =   NULL;
+    TiXmlElement                    *   xnas    =   NULL;
+    OflpModLayout::PanelAssignment  *   nas     =   NULL;
+    //  ........................................................................
     TiXmlElement*   root    =   _doc->FirstChildElement("CodeBlocks_workspace_oflp_file");
     if ( ! root )
     {
         //GetpMsg()->DebugLog(_T("Not a valid Code::Blocks workspace file..."));
         return false;
     }
+    //  ........................................................................
+    //  load default perspective
+    rname   =   cbC2U( pers->Attribute("default") );
+    GWR_TKI("xml_parse_workspace():adding Perspective [%s]", per->title().wc_str());
+    per     =   new OflpModLayout::Perspective(rname);
+    a_perspective_array.Add( per );
 
-    TiXmlElement*   panels  =   root->FirstChildElement("Panels");
-    if ( ! panels )
+    xml_parse_panel_assignment_s(per, root);
+    //  ........................................................................
+    //  load perspectives
+    xper    =   root->FirstChildElement("Perspective");
+    if ( xper )
     {
-        //GetpMsg()->DebugLog(_T("No 'Panels' element in file..."));
-        return false;
-    }
+        rname   =   cbC2U( pers->Attribute("name") );
+        GWR_TKI("xml_parse_workspace():adding Perspective [%s]", per->title().wc_str());
+        per     =   new OflpModLayout::Perspective(rname);
+        a_perspective_array.Add( per );
 
-    TiXmlElement* panel     =   panels->FirstChildElement("Panel");
-    while ( panel )
-    {
-        long        u       =   0;
-        wxString    name    =   cbC2U( panel->Attribute("name") );
-        wxString    index   =   cbC2U( panel->Attribute("index") );
-
-        if ( ! index.ToLong(&u) )
+        xpanels =   xpr->FirstChildElement("Panels");
+        if ( ! xpanels )
         {
-            GWR_TKE("xml_parse_workspace():panel[%s] index[%s] - index could not be transformed to int",
-                name.wc_str(), index.wc_str());
-            return false;
+            //GetpMsg()->DebugLog(_T("No 'Panels' element in file..."));
+            break;
         }
-        GWR_TKI("xml_parse_workspace():panel[%s] index[%s]", name.wc_str(), index.wc_str());
 
-        a_panel_assignment_array.Add( new PanelAssignment(name, static_cast< int >( u )) );
-
-                    panel   =   panel->NextSiblingElement("Panel");
+        xml_parse_panel_assignment_s(per, xpanels);
     }
+
 
     return true;
 }
-
+//  ----------------------------------------------------------------------------
 OflpModLayout::ProjectAssignments*
         OflpModLayout::     xml_parse_project       (cbProject* _project, TiXmlDocument* _doc)
 {
@@ -362,6 +405,7 @@ bool    OflpModLayout::ProjectAssignments::fas_get_from_rel_fpath(
     return FALSE;
 }
 //  ============================================================================
+/*
 void        OflpModLayout:: p0_reset_assignments                        ()
 {
     for ( ProjectAssignmentsArray::iterator
@@ -382,7 +426,7 @@ void        OflpModLayout:: p0_reset_assignments                        ()
     }
     a_panel_assignment_array.Clear();
 }
-
+*/
 bool        OflpModLayout:: p0_project_assignments_get_from_cbProject   (cbProject* _pro, ProjectAssignments*& _pra)
 {
     for ( ProjectAssignmentsArray::const_iterator                               //  iterates on all ProjectAssignments-s

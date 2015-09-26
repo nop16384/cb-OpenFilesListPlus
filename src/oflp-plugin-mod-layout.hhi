@@ -138,24 +138,37 @@ class OflpModLayout : public wxMenu, public OflpModule
     {
       private:
         wxString                    a_title;
+
+        PanelAssignmentArray        a_panel_assignment_array;
         ProjectAssignmentsArray     a_project_assignments_array;
 
       public:
         wxString    const   &   title() { return a_title;   }
         //  ....................................................................
       public:
-        void                    add(ProjectAssignments* _pra)
+        void                    nas_add(PanelAssignment* _nas)
             {
-                a_project_assignments_array.Add( _pra );
+                a_panel_assignment_array.Add( _nas );
             }
-        void                    sub(ProjectAssignments* _pra)
+        void                    nas_sub(PanelAssignment* _nas)
             {
-                a_project_assignments_array.Remove( _pra );
+                a_panel_assignment_array.Remove( _nas );
+            }
+        void                    pas_add(ProjectAssignments* _pas)
+            {
+                a_project_assignments_array.Add( _pas );
+            }
+        void                    pas_sub(ProjectAssignments* _pas)
+            {
+                a_project_assignments_array.Remove( _pas );
             }
         //  ....................................................................
       public:
-        Perspective()                                                           {}
-      ~Perspective()
+        Perspective(wxString const& _title)
+            {
+                a_title = _title;
+            }
+       ~Perspective()
             {
                 for ( ProjectAssignmentsArray::iterator
                     it  =   a_project_assignments_array.begin()     ;
@@ -165,32 +178,42 @@ class OflpModLayout : public wxMenu, public OflpModule
                     delete (*it);
                 }
                 a_project_assignments_array.Clear();
+
+                for ( PanelAssignmentArray::iterator
+                    it  =   a_panel_assignment_array.begin()    ;
+                    it  !=  a_panel_assignment_array.end()      ;
+                    it++                                        )
+                {
+                    delete (*it);
+                }
+                a_panel_assignment_array.Clear();
             }
     };
     //  ########################################################################
   private:
-    static  void            Filename_cb_to_oflp     (wxString _in_filename, wxString& _out_filename, int _type);
+    static  void            Filename_cb_to_oflp             (wxString _in_filename, wxString& _out_filename, int _type);
     //  ------------------------------------------------------------------------
   private:
-    bool                    xml_load_document       (wxString   & _filename , TiXmlDocument*);
-    bool                    xml_load_workspace      (cbWorkspace*           , TiXmlDocument*);
-    bool                    xml_load_project        (cbProject  *           , TiXmlDocument*);
+    bool                    xml_load_document               (wxString   & _filename , TiXmlDocument*);
+    bool                    xml_load_workspace              (cbWorkspace*           , TiXmlDocument*);
+    bool                    xml_load_project                (cbProject  *           , TiXmlDocument*);
 
-    bool                    xml_save_workspace      ();
-    bool                    xml_save_project        (cbProject*);
+    bool                    xml_save_workspace              ();
+    bool                    xml_save_project                (cbProject*);
 
-    bool                    xml_parse_workspace     (TiXmlDocument*);
-    ProjectAssignments  *   xml_parse_project       (cbProject* _project, TiXmlDocument*);
+    void                    xml_parse_panel_assignment_s    (Perspective* _per, TiXmlElement* _node);
+    bool                    xml_parse_workspace             (TiXmlDocument*);
+    ProjectAssignments  *   xml_parse_project               (cbProject* _project, TiXmlDocument*);
     //Perspective         *   xml_parse_perspective   (cbProject* _project, TiXmlDocument*);
     //  ------------------------------------------------------------------------
   private:
-    PanelAssignmentArray    a_panel_assignment_array;
-    ProjectAssignmentsArray a_project_assignments_array;
+    //PanelAssignmentArray    a_panel_assignment_array;
+    //ProjectAssignmentsArray a_project_assignments_array;
     PerspectiveArray        a_perspective_array;
 
     bool                    p0_project_assignments_get_from_cbProject   (cbProject*, ProjectAssignments *&);
 
-    void                    p0_reset_assignments                        ();
+    //void                    p0_reset_assignments                        ();
     void                    p0_project_assignments_add                  (ProjectAssignments*);
     void                    p0_project_assignments_sub                  (cbProject*);
 
@@ -201,7 +224,7 @@ class OflpModLayout : public wxMenu, public OflpModule
     OFLPPanel       *       file_assignment_find_panel_from_editor_base (EditorBase* _nn_edb);
     void                    file_assignment_update                      (EditorBase* _nn_edb, OFLPPanel* _nn_dst_panel);
 
-    PanelAssignmentArray    const   &   panel_assignment_array          ()  { return a_panel_assignment_array;      }
+    //PanelAssignmentArray    const   &   panel_assignment_array          ()  { return a_panel_assignment_array;      }
     //  ------------------------------------------------------------------------
   public:
     void                reset               ();
