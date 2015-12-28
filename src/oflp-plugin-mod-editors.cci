@@ -3,7 +3,13 @@
 //                          EDITORS
 //
 //  ############################################################################
-void    OflpModEditors::    dump(EditorBase* _edb)
+//  ============================================================================
+void    OflpModEditors::    dump(
+//  ============================================================================
+//! \fn     dump()
+//!
+//! \brief  Log all infos about an EditorBase.
+    EditorBase  *   _edb)
 {
     wxString        shn;
     wxString        rfn;
@@ -51,44 +57,71 @@ lab_dump:
     GWR_TKI("OFLP::editor_dump():[%p] bin[%s] shn[%s] rfn[%s]", _edb, sbin.wc_str(), shn.wc_str(), rfn.wc_str());
 }
 //  ############################################################################
-void    OflpModEditors::    add (EditorBase* _nn_edb)
+bool    OflpModEditors::    add (EditorBase* _nn_edb)
 {
     OFLPPanel       *   panel   =   NULL;
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::editor_add()"));
+    earlgreycb::Log_function_enter(wxS("OFLP::Editors::add()"));
+    //  ........................................................................
+    OFLP_EMERGENCY__NULL_POINTER__FAILURE(_nn_edb);
     //  ........................................................................
     panel = layout()->file_assignment_find_panel_from_editor_base(_nn_edb);
 
-    GWR_TKI("editor_add():[%p][%s] -> [%p][%s]" ,
+    GWR_TKI("  ...[%p][%s] -> [%p][%s]" ,
         _nn_edb , _nn_edb->GetShortName().wc_str()                  ,
         panel   , panel ? panel->title().wc_str() : wxS("Bulk")     );
 
     if ( panel )
-        panel->editor_add(_nn_edb);
+    {
+        if ( ! panel->editor_add(_nn_edb) )
+            goto lab_exit_failure;
+    }
     else
-        panels()->p0_bulk()->editor_add(_nn_edb);
+    {
+        if ( ! panels()->p0_bulk()->editor_add(_nn_edb) )
+            goto lab_exit_failure;
+    }
     //  ........................................................................
-lab_exit:
-    earlgreycb::Log_function_exit();
-    return;
+    GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
+}
+
+bool    OflpModEditors::    sub (EditorBase* _nn_edb)
+{
+    OFLPPanel       *   panel   =   NULL;
+    //  ........................................................................
+    earlgreycb::Log_function_enter(wxS("OFLP::Editors::sub()"));
+    //  ........................................................................
+    panel = panels()->get(_nn_edb);
+
+    GWR_TKI("  ...[%p][%s] from panel [%p][%s]" ,
+        _nn_edb , _nn_edb->GetShortName().wc_str()                  ,
+        panel   , panel ? panel->title().wc_str() : wxS("NULL")     );
+
+    if ( panel )
+    {
+        if ( ! panel->editor_del(_nn_edb) )
+            goto lab_exit_failure;
+    }
+    else
+    {
+        goto lab_exit_failure;
+    }
+    //  ........................................................................
+    GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
 
 bool    OflpModEditors::    mov (
-    OFLPPanel   *   _dst    ,
-    OFLPPanel   *   _src    ,
-    EditorBase  *   _edb    )
+    OFLPPanel   *   _nn_dst     ,
+    OFLPPanel   *   _nn_src     ,
+    EditorBase  *   _nn_edb     )
 {
-    if ( ! _dst )
+    if ( ! _nn_src->editor_del( _nn_edb ) )
         return false;
 
-    if ( ! _src )
+    if ( ! _nn_dst->editor_add( _nn_edb ) )
         return false;
 
-    if ( ! _edb )
-        return false;
-
-    _src->editor_del( _edb );
-    _dst->editor_add( _edb );
-    layout()->file_assignment_update( _edb, _dst );
+    layout()->file_assignment_update( _nn_edb, _nn_dst );
+    return true;
 }
 

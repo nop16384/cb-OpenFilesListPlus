@@ -385,12 +385,12 @@ void        OflpModLayout:: p0_reset_assignments                        ()
 
 bool        OflpModLayout:: p0_project_assignments_get_from_cbProject   (cbProject* _pro, ProjectAssignments*& _pra)
 {
-    for ( ProjectAssignmentsArray::const_iterator                               //  iterates on all ProjectAssignments-s
+    for ( ProjectAssignmentsArray::const_iterator                               //  iterates on all ProjectAssignments-s...
         i1  =   a_project_assignments_array.begin() ;
         i1  !=  a_project_assignments_array.end()   ;
         i1++                                        )
     {
-        if ( (*i1)->project() == _pro )
+        if ( (*i1)->project() == _pro )                                         //  until we find the one that points on the cbProject
         {
             _pra = (*i1);
             return TRUE;
@@ -437,8 +437,6 @@ bool        OflpModLayout:: p0_project_assignments_get_from_editor_base (
     ProjectAssignments      *&  _out_project_assignments    ,
     ProjectFile             *&  _out_project_file           )
 {
-    bool                                bret        =   FALSE;
-
     cbProject                   *       pro         =   NULL;
 
     ProjectAssignments          *       pa          =   NULL;
@@ -453,18 +451,16 @@ bool        OflpModLayout:: p0_project_assignments_get_from_editor_base (
     if ( ! oflp()->FindCbProjectForFile(_in_edb->GetFilename(), &pro, &_out_project_file) )
     {
         GWR_TKI("              ...no cbProject contains file[%s]", _in_edb->GetFilename().wc_str());
-        goto lab_exit;
+        goto lab_exit_failure;
     }
     //  ........................................................................
-    bret = p0_project_assignments_get_from_cbProject(pro, _out_project_assignments);
-    if ( ! bret )
+    if ( ! p0_project_assignments_get_from_cbProject(pro, _out_project_assignments) )
     {
         GWR_TKI("              ...no ProjectAssignments for cbProject[%s]", pro->GetTitle().wc_str());
+        goto lab_exit_failure;
     }
     //  ........................................................................
-lab_exit:
-    earlgreycb::Log_function_exit();
-    return bret;
+    GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
 
 bool        OflpModLayout:: p0_file_assignment_get_from_editor_base     (
@@ -620,18 +616,18 @@ void    OflpModLayout::     reset                       ()
 //  ############################################################################
 //                              Events
 //  ############################################################################
-void    OflpModLayout::     workspace_load              ()
+bool    OflpModLayout::     workspace_load              ()
 {
     earlgreycb::Log_function_enter(wxS("Layout::workspace_load()"));
     //  ........................................................................
-    ProjectManager  *   pjm     =   NULL;
-    cbWorkspace     *   wsp     =   NULL;
-    ProjectsArray   *   pja     =   NULL;
-    cbProject       *   pro     =   NULL;
-    TiXmlDocument   *   doc_wsp =   NULL;
-    TiXmlDocument   *   doc_pro =   NULL;
+    ProjectManager      *   pjm     =   NULL;
+    cbWorkspace         *   wsp     =   NULL;
+    ProjectsArray       *   pja     =   NULL;
+    cbProject           *   pro     =   NULL;
+    TiXmlDocument       *   doc_wsp =   NULL;
+    TiXmlDocument       *   doc_pro =   NULL;
 
-    ProjectAssignments  *   pas =   NULL;
+    ProjectAssignments  *   pas     =   NULL;
     //  ........................................................................
     //  get current workspace & projects
     pjm = Manager::Get()->GetProjectManager();
@@ -644,15 +640,15 @@ void    OflpModLayout::     workspace_load              ()
     if ( ! xml_load_workspace(wsp, doc_wsp) )
     {
         GWR_TKE("workspace_load():%s[%s]", wxS("oflp workspace xml layout _NOT_ loaded"), wsp->GetTitle().wc_str());
-        goto lab_exit;
+        goto lab_exit_failure;
     }
     GWR_TKI("workspace_load():%s[%s]", wxS("oflp workspace xml layout loaded"), wsp->GetTitle().wc_str());
     //  ........................................................................
     //  parse for workspace
-    xml_parse_workspace(doc_wsp);                                               //  add asignments for current workspace
+    if ( ! xml_parse_workspace(doc_wsp) )                                       //  add asignments for current workspace
+        goto lab_exit_failure;
     //  ........................................................................
-lab_exit:
-    earlgreycb::Log_function_exit();
+    GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
 
 bool    OflpModLayout::     workspace_close             ()
@@ -677,7 +673,7 @@ bool    OflpModLayout::     workspace_save              ()
     return bret;
 }
 
-void    OflpModLayout::     project_load                (cbProject* _pro)
+bool    OflpModLayout::     project_load                (cbProject* _pro)
 {
     ProjectAssignments  *   pa  =   NULL;
     TiXmlDocument       *   doc =   NULL;
@@ -692,7 +688,7 @@ void    OflpModLayout::     project_load                (cbProject* _pro)
     {
         GWR_TKE("project_load():%s[%s]", wxS("oflp project xml layout _NOT_ loaded"), _pro->GetFilename().wc_str());
         delete doc; doc = NULL;
-        goto lab_exit;
+        goto lab_exit_failure;
     }
     GWR_TKI("project_load():%s[%s]", wxS("oflp project xml layout loaded"), _pro->GetFilename().wc_str());
     //  ........................................................................
@@ -701,16 +697,17 @@ void    OflpModLayout::     project_load                (cbProject* _pro)
     pa = xml_parse_project(_pro, doc);
     if ( pa )
         p0_project_assignments_add(pa);
+    else
+        goto lab_exit_failure;
     //  ........................................................................
-lab_exit:
-    earlgreycb::Log_function_exit();
+    GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
 
-void    OflpModLayout::     project_close               (cbProject* _pro)
+bool    OflpModLayout::     project_close               (cbProject* _pro)
 {
     earlgreycb::Log_function_enter(wxS("Layout::project_close()"));
 
-    project_save(_pro);
+    project_save(_pro);                                                         //  _GWR_TODO_
 
     p0_project_assignments_sub(_pro);
     //  ........................................................................
@@ -718,16 +715,16 @@ lab_exit:
     earlgreycb::Log_function_exit();
 }
 
-void    OflpModLayout::     project_save                (cbProject* _pro)
+bool    OflpModLayout::     project_save                (cbProject* _pro)
 {
     earlgreycb::Log_function_enter(wxS("Layout::project_save()"));
 
     GWR_INF("project title[%s]", _pro->GetTitle().wc_str());
 
-    xml_save_project(_pro);
+    if ( ! xml_save_project(_pro) )
+        goto lab_exit_failure;
     //  ........................................................................
-lab_exit:
-    earlgreycb::Log_function_exit();
+    GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
 
 

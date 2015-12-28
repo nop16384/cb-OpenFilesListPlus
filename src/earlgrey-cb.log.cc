@@ -105,7 +105,10 @@ class   LogFrame : public wxFrame
         {
             if ( _e.GetModifiers() & wxMOD_CONTROL )
                 if ( _e.GetKeyCode() == 'E' )
+                {
                     dw_log_txt_ctrl->Clear();
+                    print_header();
+                }
 
         }
 

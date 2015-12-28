@@ -19,6 +19,7 @@
 //  ............................................................................
 #include    "oflp-plugin.hh"
 #include    "oflp-panel.hh"
+#include    "oflp-settings.hh"
 
 #include "tinyxml/tinyxml.h"
 #include "tinyxml/tinywxuni.h"
@@ -35,13 +36,13 @@ OpenFilesListPlus   *   OpenFilesListPlus::s_singleton  =   NULL;
 //  ............................................................................
 void    OflpModule::init()
 {
-    a_instance             =   OpenFilesListPlus::Instance();
+    a_instance              =   OpenFilesListPlus::Instance();
 
-    a_module_gfx           =   oflp()->gfx();
-    a_module_layout        =   oflp()->layout();
-    a_module_panels        =   oflp()->panels();
-    a_module_editors       =   oflp()->editors();
-    a_module_menu_options  =   oflp()->menu_options();
+    a_module_gfx            =   oflp()->gfx();
+    a_module_layout         =   oflp()->layout();
+    a_module_panels         =   oflp()->panels();
+    a_module_editors        =   oflp()->editors();
+    a_module_settings       =   oflp()->settings();
 }
 //  ............................................................................
 namespace
@@ -74,17 +75,17 @@ void    OpenFilesListPlus:: dump_project_manager_state()
 // constructor
 OpenFilesListPlus::     OpenFilesListPlus()
 {
+    a_mode_degraded     =   false;
+
     a_dnd_panel_src     =   NULL;
     a_dnd_panel_dst     =   NULL;
     a_dnd_editor_base   =   NULL;
 
-    aw_menu_view        =   NULL;
-
     d_gfx               =   NULL;
     d_layout            =   NULL;
-    dw_menu_options     =   NULL;
     d_editors           =   NULL;
     d_panels            =   NULL;
+    d_settings          =   NULL;
     // Make sure our resources are available.
     // In the generated boilerplate code we have no resources but when
     // we add some, it will be nice that this code is in place already ;)
@@ -104,8 +105,9 @@ void OpenFilesListPlus::OnAttach()
     s_singleton             =   this;
     aw_menu_view            =   NULL;
     //  ........................................................................
-    earlgreycb::A_log_console   =   false;
+    //  this is for debugging only : enable log window at very startup of plugin
     earlgreycb::A_log_window    =   true;                                       //  enable log window at start
+    earlgreycb::A_log_console   =   false;
     earlgreycb::Log_window_open( Manager::Get()->GetAppWindow() );              //  enable log window at start
 
     GWR_INF("OpenFilesListPlugin::OnAttach [%p][%p]", this, Instance());
@@ -115,43 +117,20 @@ void OpenFilesListPlus::OnAttach()
     d_layout        =   new OflpModLayout();
     d_editors       =   new OflpModEditors();
     d_panels        =   new OflpModPanels();
-    dw_menu_options =   new OflpModMenuOptions();
+    d_settings      =   new OflpModSettings();
 
     //  once all modules are created, init them with pointers to each others
     gfx()           ->OflpModule::init();
     layout()        ->OflpModule::init();
     editors()       ->OflpModule::init();
     panels()        ->OflpModule::init();
-    menu_options()  ->OflpModule::init();
+    settings()      ->OflpModule::init();
     //  ........................................................................
-    //  menu options
-    menu_options()->check_item_set_log_console  (false);
-    menu_options()->check_item_set_log_window   (true);                         //  cf enables log window above
-
-    menu_options()                      ->Connect(
-        wxEVT_COMMAND_MENU_SELECTED                                         ,
-        wxCommandEventHandler(OpenFilesListPlus::evh_menu_option_checked) ,
-        NULL, this                                                          );
-    menu_options()->m1mode()            ->Connect(
-        wxEVT_COMMAND_MENU_SELECTED                                         ,
-        wxCommandEventHandler(OpenFilesListPlus::evh_menu_option_checked) ,
-        NULL, this                                                          );
-    menu_options()->m1log()             ->Connect(
-        wxEVT_COMMAND_MENU_SELECTED                                         ,
-        wxCommandEventHandler(OpenFilesListPlus::evh_menu_option_checked) ,
-        NULL, this                                                          );
-    //  ........................................................................
-    //  create main wxPanel & its sizer, "bulk" panel
+    //  create main wxPanel & its sizer, create "bulk" panel
     panels()->init();
-    //panels()->p0_main()     =   new wxPanel(Manager::Get()->GetAppWindow(), idMainPanel);
-    //panels()->p0_main()->SetFont( gfx()->fnt8() );
-    //panels()->p0_sizer()    =   new wxBoxSizer(wxVERTICAL);
-    //panels()->p0_bulk()     =   panels()->p0_add( wxString::FromUTF8("bulk"), true );
-
-    //panels()->p0_sizer()->SetSizeHints(panels()->p0_main());
-    //panels()->p0_main()->SetSizer(panels()->p0_sizer());
     //  ........................................................................
     // add the tree to the docking system
+    #ifndef MEMLEAKS
     CodeBlocksDockEvent evt(cbEVT_ADD_DOCK_WINDOW);
     evt.name        = _T("OpenFilesListPlusPane");
     evt.title       = _("Open files list plus");
@@ -159,17 +138,18 @@ void OpenFilesListPlus::OnAttach()
     evt.minimumSize.Set(50, 50);
     evt.desiredSize.Set(150, 100);
     evt.floatingSize.Set(100, 150);
-    evt.dockSide    = CodeBlocksDockEvent::dsLeft;
+    evt.dockSide    = CodeBlocksDockEvent::dsRight;
     evt.stretch     = true;
     Manager::Get()->ProcessEvent(evt);
+    #endif
     //  ........................................................................
     // register event sinks
     Manager* pm = Manager::Get();
 
     //  workspace related, for layout
     pm->RegisterEventSink(cbEVT_WORKSPACE_LOADING_COMPLETE  , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_workspace_loading_complete   ));
-    pm->RegisterEventSink(cbEVT_WORKSPACE_CLOSE_BEGIN       , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_workspace_close_begin        ));
-    pm->RegisterEventSink(cbEVT_WORKSPACE_CLOSE_COMPLETE    , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_workspace_close_complete     ));
+    pm->RegisterEventSink(cbEVT_WORKSPACE_CLOSING_BEGIN     , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_workspace_close_begin        ));
+    pm->RegisterEventSink(cbEVT_WORKSPACE_CLOSING_COMPLETE  , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_workspace_close_complete     ));
 
     //  projects related, for layout
     pm->RegisterEventSink(cbEVT_PROJECT_OPEN    , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_project_open     ));
@@ -194,19 +174,22 @@ void OpenFilesListPlus::OnRelease(bool appShutDown)
     Manager::Get()->RemoveAllEventSinksFor(this);
 
     // remove tree from docking system
+    #ifndef MEMLEAKS
     CodeBlocksDockEvent evt(cbEVT_REMOVE_DOCK_WINDOW);
     evt.pWindow = panels()->p0_main();
     Manager::Get()->ProcessEvent(evt);
+    #endif
 
     // finally destroy the widgets
     earlgreycb::Log_window_close();
 
     panels()->p0_main()->Destroy();
-    panels()->p0_main() = nullptr;
+    panels()->p0_main() = NULL;
 }
 
 int OpenFilesListPlus:: Configure()
 {
+    #ifndef MEMLEAKS
     //create and display the configuration dialog for your plugin
     cbConfigurationDialog dlg(Manager::Get()->GetAppWindow(), wxID_ANY, _("Your dialog title"));
     cbConfigurationPanel* panel = GetConfigurationPanel(&dlg);
@@ -216,11 +199,14 @@ int OpenFilesListPlus:: Configure()
         PlaceWindow(&dlg);
         return dlg.ShowModal() == wxID_OK ? 0 : -1;
     }
+    #endif
     return -1;
 }
 
 void OpenFilesListPlus::BuildMenu(wxMenuBar* menuBar)
 {
+    #ifndef MEMLEAKS
+
     // if not attached, exit
     if (!IsAttached())
         return;
@@ -244,6 +230,8 @@ void OpenFilesListPlus::BuildMenu(wxMenuBar* menuBar)
     }
     // not found, just append
     aw_menu_view->AppendCheckItem(idViewOpenFilesPlus, _("&Open files list plus"), _("Toggle displaying the open files list"));
+
+    #endif
 }
 
 void OpenFilesListPlus::BuildModuleMenu(const ModuleType type, wxMenu* menu, const FileTreeData* data)
@@ -269,9 +257,11 @@ bool OpenFilesListPlus::BuildToolBar(wxToolBar* toolBar)
 // view menu toggle tree
 void OpenFilesListPlus::evh_view_open_files_plus    (wxCommandEvent& event)
 {
+    #ifndef MEMLEAKS
     CodeBlocksDockEvent evt(event.IsChecked() ? cbEVT_SHOW_DOCK_WINDOW : cbEVT_HIDE_DOCK_WINDOW);
     evt.pWindow = panels()->p0_main();
     Manager::Get()->ProcessEvent(evt);
+    #endif
 }
 
 void OpenFilesListPlus::evh_update_ui               (wxUpdateUIEvent& event)
@@ -290,7 +280,7 @@ bool    OpenFilesListPlus:: FindCbProjectForFile    (wxString const & _abs_fpath
 {
     *(_pro) = Manager::Get()->GetProjectManager()->FindProjectForFile(
         _abs_fpath      ,
-        _pjf           ,
+        _pjf            ,
         false, false    );
 
     return ( (*_pro) != NULL );
@@ -301,16 +291,37 @@ void OpenFilesListPlus::reset()
     panels()->p0_reset();
     layout()->reset();
 }
-//! \brief  RefreshOpenFileState
+
+//! \brief  Emergency @ runtime
+void OpenFilesListPlus::emergency()
+{
+    GWR_ERR( "%s", wxS("### EMERGENCY ###") );
+    degrade();
+}
+
+//! \brief  Set OFLP in degraded mode
+void OpenFilesListPlus::degrade()
+{
+    a_mode_degraded = true;
+
+    wxColour c( 0xd1, 0xcd, 0xce );
+    panels()->p0_set_bgs(c);
+}
+
+//! \brief  Tell if OFLP is in degraded mode
+bool OpenFilesListPlus::degraded()
+{
+    return a_mode_degraded;
+}
+
+//! \fn     RefreshOpenFileState
 //!
-//! \detail Given an editor :
-//!     if have to remove : remove it
-//!     else
+//! \brief  Given an editor :
 //!       - if    editor in list  : ensure corresponding wxTreeItem is selected
 //!         else                  : add a new wxTreeItem
 //!       - verify wxTreeItem icon
 //!       - verify wxTreeItem text
-void OpenFilesListPlus::RefreshOpenFileState    (EditorBase* _nn_edb, bool _remove)
+void OpenFilesListPlus::RefreshOpenFileState    (EditorBase* _nn_edb)
 {
     EditorManager   *   emgr  =   Manager::Get()->GetEditorManager();
     EditorBase      *   aedb  =   emgr->GetActiveEditor();
@@ -328,7 +339,6 @@ void OpenFilesListPlus::RefreshOpenFileState    (EditorBase* _nn_edb, bool _remo
     panel                           = panels()->get(_nn_edb);
 
     GWR_TKI("     ...editor         :[%p][%s]", _nn_edb, shortname.wc_str());
-    GWR_TKI("     ..._remove        :[%i]"    , _remove);
     GWR_TKI("     ...panel          :[%p]"    , panel);
     GWR_TKI("     ...active editor  :[%s]"    , aedb ? aedb->GetShortName().wc_str() : wxS("NULL"));
     //  ........................................................................
@@ -337,56 +347,39 @@ void OpenFilesListPlus::RefreshOpenFileState    (EditorBase* _nn_edb, bool _remo
     {
         //  ....................................................................
         //  sync wxTreeItem infos - verify selection state
-        if ( ! _remove )
-        {
-            //  sync wxTreeItem infos ( icon, name + eventually re-sorting )
-            panel->editor_sync(_nn_edb);
 
-            if ( _nn_edb == aedb )
-            {
-                if ( ! panel->editor_selected(_nn_edb) )
-                {
-                    GWR_TKI("%s", wxS("      ...selecting"));
-                    panel->editor_select(_nn_edb);
-                }
-                else
-                {
-                    GWR_TKI("%s", wxS("      ...not selecting (optimization)"));
-                }
-                panels()->p0_unselect_except(panel);
-            }
-        }
-        else
+        //  sync wxTreeItem infos ( icon, name + eventually re-sorting )
+        panel->editor_sync(_nn_edb);
+
+        if ( _nn_edb == aedb )
         {
-            GWR_TKI("%s", wxS("      ...deleting"));
-            panel->editor_del(_nn_edb);
+            if ( ! panel->editor_selected(_nn_edb) )
+            {
+                GWR_TKI("%s", wxS("      ...selecting"));
+                panel->editor_select(_nn_edb);
+            }
+            else
+            {
+                GWR_TKI("%s", wxS("      ...not selecting (optimization)"));
+            }
+            panels()->p0_unselect_except(panel);
         }
     }
     //  ........................................................................
-    //  editor was not found in any OFLPPanel - do nothing, we add editor
-    //  by another method
+    //  editor was not found in any OFLPPanel -> emergency
     else
     {
-        // not found, not to-remove and valid name: add new editor
-        //if ( !remove && _edb->VisibleToTree() && !shortname.IsEmpty())
-        //{
-            //a_BulkPanel->editor_add(_edb);
-        //}
+        //  emergency();                                                        //  _GWR_TODO_ "Start here" is not in any panel !
     }
     //  ........................................................................
     panels()->p0_main()->Thaw();
     //  ........................................................................
     earlgreycb::Log_function_exit();
 }
-//! \brief  RefreshOpenFileLayout
+
+//! \fn     RefreshOpenFileLayout
 //!
-//! \detail Given an editor :
-//!     if have to remove : remove it
-//!     else
-//!       - if    editor in list  : ensure corresponding wxTreeItem is selected
-//!         else                  : add a new wxTreeItem
-//!       - verify wxTreeItem icon
-//!       - verify wxTreeItem text
+//! \brief  Given an editor, put it in the right OFLPPanel
 void OpenFilesListPlus::RefreshOpenFileLayout   (EditorBase* _nn_edb)
 {
     EditorManager   *   emgr        =   Manager::Get()->GetEditorManager();
@@ -412,7 +405,7 @@ void OpenFilesListPlus::RefreshOpenFileLayout   (EditorBase* _nn_edb)
     GWR_TKI("      ...panel          :[%p]"    , psrc);
     GWR_TKI("      ...active editor  :[%s]"    , aedb ? aedb->GetShortName().wc_str() : wxS("NULL"));
     //  ........................................................................
-    //  find file assignment ; if found, amove editor to its assigned panel
+    //  find file assignment ; if found, move editor to its assigned panel
     //  if it lays in another panel.
     pdst = layout()->file_assignment_find_panel_from_editor_base(_nn_edb);
 
@@ -428,13 +421,16 @@ lab_eventually_move:
     if ( psrc != pdst )
     {
         GWR_TKI("      ...moving editor to panel[%s]", pdst->title().wc_str());
-        panels()->p0_editor_mov( pdst, psrc, _nn_edb );
+        panels()->p0_editor_mov( pdst, psrc, _nn_edb );                         //  _GWR_TODO_ needs panels()::resize() call here !!!
     }
     //  ........................................................................
 lab_exit:
     earlgreycb::Log_function_exit();
 }
 
+//! \fn     RefreshOpenFilesLayout
+//!
+//! \brief  RefreshOpenFileLayout() on all editors
 void OpenFilesListPlus::RefreshOpenFilesLayout  ()
 {
     EditorManager   *   emgr  =   Manager::Get()->GetEditorManager();
@@ -458,18 +454,28 @@ void OpenFilesListPlus::RefreshOpenFilesLayout  ()
 
     panels()->resize_and_layout();
 
-    RefreshOpenFileState( emgr->GetActiveEditor() );
+    if ( emgr->GetActiveEditor() )
+        RefreshOpenFileState( emgr->GetActiveEditor() );
+    else
+    {
+        GWR_TKE("%s", wxS("      ...editor is NULL"));
+    }
 
     panels()->p0_main()->Thaw();
     //  ........................................................................
 lab_exit:
     earlgreycb::Log_function_exit();
 }
-
 //  ############################################################################
 #include    "oflp-plugin-events.cci"
 #include    "oflp-plugin-mod-layout.cci"
 #include    "oflp-plugin-mod-editors.cci"
 #include    "oflp-plugin-mod-panels.cci"
+#include    "oflp-plugin-mod-settings.cci"
+
+// dont create a "oflp-plugin-gfx.cci" file for 2 lines
+BitmapPointerHash   OflpModGfx::A_bitmap_hash;
+wxImageList         OflpModGfx::A_img_list(16, 16);
+
 
 

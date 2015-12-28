@@ -27,6 +27,6 @@
     void    evh_panel_header_button_clicked_down    (wxCommandEvent &);
     void    evh_panel_header_button_clicked_opt     (wxCommandEvent &);
 
+    void    evh_settings_activated                  (wxActivateEvent& _e);
 
-    void                    evh_menu_option_checked (wxCommandEvent &);
-    wxMenu              *   aw_menu_view;                                       //!< c::b "View" menu
+

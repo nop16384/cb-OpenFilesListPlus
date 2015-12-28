@@ -1,6 +1,97 @@
 //  ############################################################################
 //
-//                          OPENFILESLISTPLUGINPANELHEADER
+//                          OPENFILESLISTPLUSPHEADER
+//
+//  ############################################################################
+/*
+wxSize          OpenFilesListPlusHeader::   sButtonsSize(24,16);
+//  ============================================================================
+wxButton    *   OpenFilesListPlusHeader::   button(int _ix)
+{
+    if ( _ix < 0 )
+        return NULL;
+
+    if ( _ix >= a_buttons_array.size() )
+        return NULL;
+
+    return a_buttons_array[ (size_t)_ix ];
+}
+
+void            OpenFilesListPlusHeader::   button_prepend  (int _bitmap_id, void* _client_data)
+{
+    wxButton    *   bt  =   NULL;
+    //  ........................................................................
+    bt  = new wxBitmapButton(this, wxNewId()                                ,
+        OpenFilesListPlus::Instance()->gfx()->bitmap(_bitmap_id)            ,
+        wxDefaultPosition, wxDefaultSize, wxBORDER_NONE |  wxBU_EXACTFIT    );
+
+    //  wxEventHandler's ClientData is a easy way to pass extra data
+    //  with the event
+    bt->SetClientData(_client_data);
+
+    bt->SetMaxSize(OpenFilesListPlusHeader::sButtonsSize);
+    bt->SetMinSize(OpenFilesListPlusHeader::sButtonsSize);
+
+    a_buttons_array.insert( a_buttons_array.begin(), bt );
+
+    dw_sizer->Prepend( bt, 0, wxEXPAND, 0 );
+}
+
+void            OpenFilesListPlusHeader::   button_append   (int _bitmap_id, void* _client_data)
+{
+    wxButton    *   bt  =   NULL;
+    //  ........................................................................
+    bt  = new wxBitmapButton(this, wxNewId()                                ,
+        OpenFilesListPlus::Instance()->gfx()->bitmap(_bitmap_id)            ,
+        wxDefaultPosition, wxDefaultSize, wxBORDER_NONE |  wxBU_EXACTFIT    );
+
+    //  wxEventHandler's ClientData is a easy way to pass extra data
+    //  with the event
+    bt->SetClientData( _client_data );
+
+    bt->SetMaxSize(OpenFilesListPlusHeader::sButtonsSize);
+    bt->SetMinSize(OpenFilesListPlusHeader::sButtonsSize);
+
+    a_buttons_array.push_back( bt );
+
+    dw_sizer->Add( bt, 0, wxEXPAND, 0 );
+}
+
+void            OpenFilesListPlusHeader::   button_show     (int _ix, bool _b)
+{
+    wxButton    *   bt  =   button(_ix);
+
+    if ( ! bt )
+        return;
+
+    bt->Show(_b);
+}
+//  ============================================================================
+                OpenFilesListPlusHeader::   OpenFilesListPlusHeader(
+        wxWindow    *   _parent ,
+        wxString        _title  )
+            :   wxPanel     (_parent, wxNewId())
+{
+    //  ........................................................................
+    a_title.set(_title);
+
+    dw_sizer        =   new wxBoxSizer(wxHORIZONTAL);
+
+    dw_txt_sta      =   new wxStaticText( this, wxNewId(), _title );            //  at fist display, static text displayed
+
+    dw_sizer->Add( dw_txt_sta, 1, wxEXPAND, 0);
+
+    this->SetSizer(dw_sizer);
+}
+
+                OpenFilesListPlusHeader::   ~OpenFilesListPlusHeader()
+{
+    // dont delete child widgets else double free-s
+}
+*/
+//  ############################################################################
+//
+//                          OPENFILESLISTPLUSPANELHEADER
 //
 //  ############################################################################
 bool OpenFilesListPlusPanelHeader::   p0_title_ctrl_replace       (wxWindow* _vnew)
@@ -96,7 +187,7 @@ void OpenFilesListPlusPanelHeader::   button_prepend  (int _bitmap_id)
     //  ........................................................................
     //  ........................................................................
     bt  = new wxBitmapButton(this, wxNewId()                                ,
-        OpenFilesListPlus::Instance()->gfx()->bitmap(_bitmap_id)            ,
+        OflpModGfx::Bitmap(_bitmap_id)                                      ,
         wxDefaultPosition, wxDefaultSize, wxBORDER_NONE |  wxBU_EXACTFIT    );
 
     //  wxEventHandler's ClientData is a easy way to pass extra data
@@ -117,7 +208,7 @@ void OpenFilesListPlusPanelHeader::   button_append   (int _bitmap_id)
     //  ........................................................................
     //  ........................................................................
     bt  = new wxBitmapButton(this, wxNewId()                                ,
-        OpenFilesListPlus::Instance()->gfx()->bitmap(_bitmap_id)            ,
+        OflpModGfx::Bitmap(_bitmap_id)                                      ,
         wxDefaultPosition, wxDefaultSize, wxBORDER_NONE |  wxBU_EXACTFIT    );
 
     //  wxEventHandler's ClientData is a easy way to pass extra data

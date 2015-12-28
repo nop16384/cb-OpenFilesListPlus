@@ -33,7 +33,7 @@
 
 +(016)  2015.09.13  Layout : C::B save everything relationships
 
-+(017)  2015.09.13  Layout : OFLPPanels ordering at loading
+ (017)  2015.09.13  Layout : OFLPPanels ordering at loading
                     ( as long as panels are saved in the display order, unuseful
                     but maybe later )
 
@@ -48,6 +48,17 @@
 
  (022)  2015.09.20  "An inner class is a friend of the class it is defined within."
                     find something else, every module has access to everything !!!
+
+ (023)  2015.10.03  replace _panel by _nn_panel in mod-panels.cci
+
++(024)  2015.10.05  bulk panel cant be minimized !!!
+
+ (024)  2015.12.24  show options in a panel that replace temporary the bulk
+                    panel ; menu are not ergonomic if more options appears
+
+ (025)  2015.12.27  Ensure panel indexes are not out of bounds in
+                    OpenFilesListPlus::evh_workspace_loading_complete() when
+                    sorting
 //  ############################################################################
 (001)
 2015.08.21  Done: call to SetFocus() )
@@ -104,6 +115,7 @@
 (016)
 //  ============================================================================
 (017)
+2015.12.27  Done, see bugs#16
 //  ============================================================================
 (018)
 2015.09.17  Done : bad remark - "modified" event is not sent when a letter
@@ -118,3 +130,10 @@
 //  ============================================================================
 (022)
 2015.09.21  Done
+//  ============================================================================
+(023)   Done in bug#15
+//  ============================================================================
+(024)
+ 2015.12.27 Done, with a little frame
+//  ============================================================================
+(025)

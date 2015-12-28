@@ -15,12 +15,14 @@ class OflpModule
     OflpModPanels           *   a_module_panels;
     OflpModEditors          *   a_module_editors;
     OflpModMenuOptions      *   a_module_menu_options;
+    OflpModSettings         *   a_module_settings;
 
   protected:
     OpenFilesListPlus       *   oflp()      { return a_instance;        }
     OflpModLayout           *   layout()    { return a_module_layout;   }
     OflpModPanels           *   panels()    { return a_module_panels;   }
     OflpModGfx              *   gfx()       { return a_module_gfx;      }
+    OflpModSettings         *   settings()  { return a_module_settings; }
 
   public:
     void                        init();

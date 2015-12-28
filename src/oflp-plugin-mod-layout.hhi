@@ -3,10 +3,8 @@
 //!
 //! \brief  Save & Load OpenFilesListPlus panels & open files layout
 /// ****************************************************************************
-class OflpModLayout : public wxMenu, public OflpModule
+class OflpModLayout : public OflpModule
 {
-    //friend class    OpenFilesListPlus;
-    //  ------------------------------------------------------------------------
   public:
     class   FileAssignment;
     class   PanelAssignment;
@@ -25,17 +23,18 @@ class OflpModLayout : public wxMenu, public OflpModule
     class   PanelAssignment
     {
       private:
-        wxString    a_name;
-        int         a_index;
+        earlgreycb::HString     a_name;
+        int                     a_index;
 
       public:
-        wxString                    const   &   name()      { return a_name;    }
-        int                                     index()     { return a_index;   }
+        wxString                    const   &   name()      const   { return a_name.get();  }
+        earlgreycb::HString::tHash              hname()     const   { return a_name.hash(); }
+        int                                     index()     const   { return a_index;       }
 
       public:
         PanelAssignment(wxString& _panel_name, int _panel_index)
             {
-                a_name  =   _panel_name;
+                a_name.set(_panel_name);
                 a_index =   _panel_index;
             }
        ~PanelAssignment()
@@ -53,10 +52,10 @@ class OflpModLayout : public wxMenu, public OflpModule
     class   FileAssignment
     {
       private:
-        wxFileName                  a_absolute_filename;                    //! absolute filename
-        earlgreycb::HString         a_absolute_filepath;                    //! absolute filepath  + hash
-        earlgreycb::HString         a_relative_filepath;                    //! project-relative filepath + h
-        earlgreycb::HString         a_panel_name;                           //! assigned panel name + hash
+        wxFileName                  a_absolute_filename;                        //! absolute filename
+        earlgreycb::HString         a_absolute_filepath;                        //! absolute filepath  + hash
+        earlgreycb::HString         a_relative_filepath;                        //! project-relative filepath + hash
+        earlgreycb::HString         a_panel_name;                               //! assigned panel name + hash
 
       public:
         wxFileName                  const   &   awxfn()     { return a_absolute_filename;           }
@@ -153,21 +152,21 @@ class OflpModLayout : public wxMenu, public OflpModule
     bool                    p0_file_assignment_get_from_editor_base     (EditorBase*, FileAssignment*& _file_assignment);
 
   public:
-    OFLPPanel       *       file_assignment_find_panel_from_editor_base (EditorBase* _nn_edb);
-    void                    file_assignment_update                      (EditorBase* _nn_edb, OFLPPanel* _nn_dst_panel);
+    OFLPPanel       *       file_assignment_find_panel_from_editor_base (EditorBase*    _nn_edb);
+    void                    file_assignment_update                      (EditorBase*    _nn_edb, OFLPPanel* _nn_dst_panel);
 
     PanelAssignmentArray    const   &   panel_assignment_array          ()  { return a_panel_assignment_array;      }
     //  ------------------------------------------------------------------------
   public:
     void                reset               ();
 
-    void                workspace_load      ();
+    bool                workspace_load      ();
     bool                workspace_close     ();
     bool                workspace_save      ();
 
-    void                project_load        (cbProject*);
-    void                project_close       (cbProject*);
-    void                project_save        (cbProject*);
+    bool                project_load        (cbProject*);
+    bool                project_close       (cbProject*);
+    bool                project_save        (cbProject*);
     //  ------------------------------------------------------------------------
   public:
     OflpModLayout()                                                             {}

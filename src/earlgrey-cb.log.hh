@@ -13,10 +13,11 @@ namespace   earlgreycb
 extern  bool    A_log_console;
 extern  bool    A_log_window;
 //  ............................................................................
-extern  void    Log_console     (wxString&);
-extern  void    Log_window      (wxString&);
-extern  void    Log_window_open (wxWindow*);
-extern  void    Log_window_close();
+extern  void    Log_console         (wxString&);
+extern  void    Log_window          (wxString&);
+extern  bool    Log_window_opened   ();
+extern  void    Log_window_open     (wxWindow*);
+extern  void    Log_window_close    ();
 
 extern          void            Log_spc_inc();
 extern          void            Log_spc_dec();

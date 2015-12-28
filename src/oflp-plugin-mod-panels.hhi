@@ -9,16 +9,18 @@ class OflpModPanels : public OflpModule
     friend class OflpModEditors;
     //  ------------------------------------------------------------------------
   private:
-    wxPanel                     *   dw_main_panel;
-    wxBoxSizer                  *   dw_main_sizer;
+    wxPanel                         *   dw_main_panel;
+    wxBoxSizer                      *   dw_main_sizer;
 
-    OpenFilesListPlusPanel      *   a_panel_bulk;                               //!< Bulk panel permanent access
-    PanelArray                      a_panels_array;                             //!< All panels, including bulk panel
+    OpenFilesListPlusPanelOptions   *   a_panel_options;                        //!< Options panel
+    OpenFilesListPlusPanel          *   a_panel_bulk;                           //!< Bulk panel permanent access
+    PanelArray                          a_panels_array;                         //!< All panels, including bulk panel
     //  ........................................................................
   private:
-    wxPanel                     *&  p0_main()   { return dw_main_panel; }
-    wxBoxSizer                  *   p0_sizer()  { return dw_main_sizer; }
-    OFLPPanel                   *   p0_bulk()   { return a_panel_bulk;  }
+    wxPanel                     *&  p0_main()   { return dw_main_panel;     }
+    wxBoxSizer                  *   p0_sizer()  { return dw_main_sizer;     }
+    OFLPPanel                   *   p0_bulk()   { return a_panel_bulk;      }
+    OFLPPanelOptions            *   p0_options(){ return a_panel_options;   }
   public:
     PanelArray      const       &   array()     { return a_panels_array;    }
     //  ------------------------------------------------------------------------
@@ -28,22 +30,24 @@ class OflpModPanels : public OflpModule
     void                    p0_freeze()         { dw_main_panel->Freeze();      }
     void                    p0_thaw()           { dw_main_panel->Thaw();        }
 
-    void                    p0_resize           ();
+    void                    p0_set_bgs          (wxColour&);
 
-    void                    p0_editors_mov      (OFLPPanel* _dst, OFLPPanel* _src);
-    void                    p0_editor_mov       (OFLPPanel* _dst, OFLPPanel* _src, EditorBase* _edb);
+    void                    p0_resize           ();
+    void                    p0_layout           ();
+
+    bool                    p0_editors_mov      (OFLPPanel* _nn_dst, OFLPPanel* _nn_src);
+    bool                    p0_editor_mov       (OFLPPanel* _nn_dst, OFLPPanel* _nn_src, EditorBase* _nn_edb);
 
     void                    p0_unselect_except  (OFLPPanel*);
     OFLPPanel           *   p0_add              (wxString const _title, bool _bulk = false);
-    void                    p0_sub              (OFLPPanel*);
-    void                    p0_move_up          (OFLPPanel*);
-    void                    p0_move_dn          (OFLPPanel*);
+    bool                    p0_sub              (OFLPPanel*);                                           //  x
+    bool                    p0_move_up          (OFLPPanel*);                                           //  x
+    bool                    p0_move_dn          (OFLPPanel*);                                           //  x
+    bool                    p0_minmax           (OFLPPanel*);                                           //  x
     //  ........................................................................
   public:
     void                    init();
     void                    resize_and_layout   ();
-    void                    resize              ();
-    void                    layout();
 
     OFLPPanel           *   get_by_name         (wxString const & _name);
     OFLPPanel           *   get_from_abs_path   (wxString const & _abs_path);

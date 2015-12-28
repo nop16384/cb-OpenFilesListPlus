@@ -5,8 +5,6 @@
 /// ****************************************************************************
 class OflpModGfx   :   public  OflpModule
 {
-    //friend class OpenFilesListPlus;
-    //  ------------------------------------------------------------------------
   public:
     enum
     {
@@ -21,24 +19,19 @@ class OflpModGfx   :   public  OflpModule
         eBmpBarUp           =   7   ,
         eBmpBarDown         =   8   ,
         eBmpBarOrange       =   9   ,
+        eBmpBarPadding      =  10   ,
 
         eBmpNotFound        =  99
     };
     //  ------------------------------------------------------------------------
   private:
-    WX_DECLARE_HASH_MAP(    int                 ,
-                            wxBitmap*           ,
-                            wxIntegerHash       ,
-                            wxIntegerEqual      ,
-                            BitmapPointerHash   );
-
-    BitmapPointerHash           a_bitmap_hash;
-    wxImageList         *       d_img_list;                                 //!< For wxTreeCtrl-s
+    static  BitmapPointerHash       A_bitmap_hash;
+    static  wxImageList             A_img_list;                                 //!< For wxTreeCtrl-s
     //  ........................................................................
   private:
     void                    bitmap_add(int _hash_key, wxBitmap _bmp)
         {
-            a_bitmap_hash[_hash_key] = new wxBitmap( _bmp );
+            A_bitmap_hash[_hash_key] = new wxBitmap( _bmp );
         }
     void                    bitmap_add(int _hash_key, wxString _bitmap_file)
         {
@@ -48,7 +41,7 @@ class OflpModGfx   :   public  OflpModule
   public:
     wxImageList const   *   image_list      ()
         {
-            return d_img_list;
+            return & A_img_list;
         }
 
     static  int             Icon            (EditorBase* ed)
@@ -61,10 +54,10 @@ class OflpModGfx   :   public  OflpModule
             return mod;
         }
 
-    wxBitmap                bitmap(int _ix)
+    static  wxBitmap        Bitmap          (int _ix)
         {
 
-            return *( a_bitmap_hash[_ix] );
+            return *( A_bitmap_hash[_ix] );
         }
     //  ------------------------------------------------------------------------
   private:
@@ -82,8 +75,6 @@ class OflpModGfx   :   public  OflpModule
         wxBitmap    bmp;
         //  ................................................................
         // load bitmaps
-        d_img_list  =   new wxImageList(16, 16);
-
         bitmap_add( eBmpFolder       , _gfx_dir + wxS("folder_open.png")     );          // 0 folder
         bitmap_add( eBmpFileAscii    , _gfx_dir + wxS("ascii.png")           );          // 1 file
         bitmap_add( eBmpFileModified , _gfx_dir + wxS("modified_file.png")   );          // 2 modified file
@@ -96,24 +87,23 @@ class OflpModGfx   :   public  OflpModule
         bitmap_add( eBmpBarOrange    , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBO")    ));     // (mini | maxi) mize panel
         bitmap_add( eBmpBarUp        , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBUP")   ));     // move panel up
         bitmap_add( eBmpBarDown      , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBDN")   ));     // move panel down
+        bitmap_add( eBmpBarPadding   , wxXmlResource::Get()->LoadBitmap( wxString::FromUTF8("OFLPPH-BBPD")   ));     // empty graphic for padding
 
         bitmap_add( eBmpNotFound     , wxArtProvider::GetBitmap(wxART_ERROR, wxART_BUTTON) );
 
-        d_img_list->Add( bitmap(0) );
-        d_img_list->Add( bitmap(1) );
-        d_img_list->Add( bitmap(2) );
-        d_img_list->Add( bitmap(3) );
+        A_img_list.Add( Bitmap(0) );
+        A_img_list.Add( Bitmap(1) );
+        A_img_list.Add( Bitmap(2) );
+        A_img_list.Add( Bitmap(3) );
         //  ................................................................
         //  fonts
         d_fnt_8 =   new wxFont(8, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxString::FromUTF8("monospace") );
     }
    ~OflpModGfx()
     {
-        delete  d_img_list;
-
         delete  d_fnt_8;
 
-        for( BitmapPointerHash::iterator it = a_bitmap_hash.begin(); it != a_bitmap_hash.end(); ++it )
+        for( BitmapPointerHash::iterator it = A_bitmap_hash.begin(); it != A_bitmap_hash.end(); ++it )
         {
            delete ( it->second );
         }

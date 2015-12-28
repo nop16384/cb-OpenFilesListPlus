@@ -1,0 +1,139 @@
+//  ############################################################################
+//
+//                          SETTINGS
+//
+//  ############################################################################
+void    OflpModSettings::   action                      (wxCommandEvent &   _e)
+{
+    //  ........................................................................
+    earlgreycb::Log_function_enter(wxS("OFLP::Settings::action()"));
+    //  ........................................................................
+    //  ........................................................................
+    //  widget is shown,
+    if ( ! dw_settings )
+        popup(_e);
+    else
+        popout(_e);
+
+    earlgreycb::Log_function_exit();
+}
+
+void    OflpModSettings::   settings_window_activated   (bool _b)
+{
+    if ( _b )
+    {
+        GWR_INF( "%s", wxS("SETTINGS ACTIVATED") );
+    }
+    else
+    {
+        GWR_INF( "%s", wxS("SETTINGS DE-ACTIVATED") );
+
+        //  if we close the settings window and user clicked on options
+        //  button( which caused the deactivation ), the button_clicked callback
+        //  will be called just after us, and the settings window will
+        //  re-appear ! So we dont close if mouse is over the opt button
+        //  ( thanks to the ::wxGetMousePosition() which avoid event connection
+        //    overload )
+        wxRect r = dw_settings->parent_screen_rect();
+        if ( r.Contains( ::wxGetMousePosition() ) )
+            return;
+
+        popout();
+
+        //  cf bugs#18
+        if ( Manager::Get()->GetEditorManager()->GetActiveEditor() )
+            oflp()->RefreshOpenFileState( Manager::Get()->GetEditorManager()->GetActiveEditor() );
+    }
+}
+
+void    OflpModSettings::   popup                   (wxCommandEvent &   _e)
+{
+    //  ........................................................................
+    //  ........................................................................
+    //  ........................................................................
+    //  create widget
+    wxWindow    *   w   =   reinterpret_cast<wxWindow*>(_e.GetEventObject());
+    wxRect          r   =   w->GetScreenRect();
+
+    r.Offset( 0, r.GetHeight() );
+
+    wxPoint         p   =   r.GetPosition();
+    wxSize          s   =   r.GetSize();
+
+    dw_settings = new OpenFilesListPlusSettings(w, p, s, a_opt_log, a_opt_sel);
+
+    dw_settings->Connect(
+        wxEVT_ACTIVATE                                                      ,
+        wxActivateEventHandler(OpenFilesListPlus::evh_settings_activated)   ,
+        NULL, oflp());
+
+    //dw_settings->SetPosition(p);
+
+    dw_settings->Show();
+    //  ........................................................................
+    //GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
+}
+
+void    OflpModSettings::   popout                  (wxCommandEvent &   _e)
+{
+    popout();
+}
+
+void    OflpModSettings::   popout                  ()
+{
+    //  ........................................................................
+    //  ........................................................................
+    //  ........................................................................
+    dw_settings->output(a_opt_log, a_opt_sel);
+
+    delete dw_settings;
+    dw_settings = NULL;
+    //  ........................................................................
+    //  act accordingly to options
+    update_from_user_input();
+    //  ........................................................................
+    //GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
+}
+
+void    OflpModSettings::   update_from_user_input  ()
+{
+    if ( log_enabled() )
+    {
+        earlgreycb::A_log_window    =   log_window();
+        earlgreycb::A_log_console   =   log_console();
+
+        if ( log_window() )
+        {
+            GWR_INF( "%s", wxS("+log window") );
+            earlgreycb::Log_window_open( Manager::Get()->GetAppWindow() );
+        }
+        if ( ! log_window() )
+        {
+            GWR_INF( "%s", wxS("-log window") );
+            earlgreycb::Log_window_close();
+        }
+    }
+    else
+    {
+        earlgreycb::A_log_window    =   false;
+        earlgreycb::A_log_console   =   false;
+
+        earlgreycb::Log_window_close();
+    }
+}
+//  ############################################################################
+        OflpModSettings::   OflpModSettings()/*
+    :   a_file_selection_mode   (eFILE_SELECTION_MODE_STANDARD)    ,
+        a_logs_enabled          (true )     ,
+            a_log_console       (false)     ,
+            a_log_window        (false)     ,
+            dw_settings         (NULL )*/
+{
+    a_opt_log.enabled    = true;
+    a_opt_log.window     = true;
+    a_opt_log.console    = false;
+
+    a_opt_sel.set_dclick(true);
+
+    dw_settings = NULL;
+}

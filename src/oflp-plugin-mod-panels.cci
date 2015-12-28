@@ -20,7 +20,7 @@ void            OflpModPanels:: init            ()
     //dw_main_sizer->SetSizeHints(panels()->p0_main());
     dw_main_panel->SetSizer(dw_main_sizer);
 
-    a_panel_bulk    =   p0_add( wxString::FromUTF8("bulk"), true );
+    a_panel_bulk    =   p0_add( wxString::FromUTF8("Bulk"), true );
 }
 //  ############################################################################
 void            OflpModPanels:: p0_reset        ()
@@ -50,7 +50,7 @@ void            OflpModPanels:: p0_reset        ()
     dw_main_sizer->Layout();
 }
 
-void            OflpModPanels:: p0_resize       ()                              //  _GWR_TODO_  broken algo, review that
+void            OflpModPanels:: p0_resize       ()
 {
     PanelArray::iterator        it;
     OFLPPanel               *   panel   =   NULL;
@@ -63,7 +63,11 @@ void            OflpModPanels:: p0_resize       ()                              
     earlgreycb::Log_function_enter(wxS("OFLP::Panels::p0_resize()"));
     //  ........................................................................
     for ( it = a_panels_array.begin() ; it != a_panels_array.end() ; it++ )
-        ned = ned + static_cast< int >( (*it)->get_editors()->size() );
+    {
+        panel = *it;
+        if ( ! panel->is_minimized() )
+            ned = ned + static_cast< int >( (*it)->get_editors()->size() );
+    }
 
     np      =   static_cast< int >( a_panels_array.size() );
 
@@ -81,9 +85,16 @@ void            OflpModPanels:: p0_resize       ()                              
             //  there are open editors
             if ( ned != 0 )
             {
-                p   =   pdist * panel->get_editors()->size();                   //  affect a part of the remaining %
-                p   =   p / ned;                                                //  ...following the # of open editors
-                p   =   p   +   pmin;                                           //  add the minimum
+                if ( panel->is_minimized() )
+                {
+                    p   =   0;
+                }
+                else
+                {
+                    p   =   pdist * panel->get_editors()->size();               //  affect a part of the remaining %...
+                    p   =   p / ned;                                            //  ...following the # of open editors
+                    p   =   p   +   pmin;                                       //  add the minimum
+                }
             }
             //  no editor is open
             else
@@ -97,7 +108,14 @@ void            OflpModPanels:: p0_resize       ()                              
         //  scrollbars )
         else
         {
-            p   =   pmin;
+            if ( panel->is_minimized() )
+            {
+                p   =   0;
+            }
+            else
+            {
+                p   =   pmin;
+            }
         }
         dw_main_sizer->GetItem( panel )->SetProportion( p );
 
@@ -108,21 +126,44 @@ void            OflpModPanels:: p0_resize       ()                              
     earlgreycb::Log_function_exit();
 }
 
-void            OflpModPanels:: p0_editors_mov  (OFLPPanel* _dst, OFLPPanel* _src)
+void            OflpModPanels:: p0_layout       ()
 {
-    EditorArray const   *   array   = _src->get_editors();
+    dw_main_sizer->Layout();
+}
+
+void            OflpModPanels:: p0_set_bgs      (wxColour& _c)
+{
+    PanelArray::iterator        it;
+    OFLPPanel               *   panel   =   NULL;
+    //  ........................................................................
+    for ( it = a_panels_array.begin() ; it != a_panels_array.end() ; it++ )
+    {
+        panel   =   *it;
+        panel->set_bg(_c);
+    }
+}
+
+bool            OflpModPanels:: p0_editors_mov  (OFLPPanel* _nn_dst, OFLPPanel* _nn_src)
+{
+    EditorArray const   *   array   = _nn_src->get_editors();
     //  ........................................................................
     for ( EditorArray::const_iterator it = array->begin() ; it != array->end() ; it++)
     {
-        _dst->editor_add( *it );
+        if ( ! _nn_dst->editor_add( *it ) )
+            return false;
     }
-    _src->editors_del();
+
+    _nn_src->editors_del();
+    return true;
 }
 
-void            OflpModPanels:: p0_editor_mov   (OFLPPanel* _dst, OFLPPanel* _src, EditorBase* _edb)
+bool            OflpModPanels:: p0_editor_mov   (OFLPPanel* _nn_dst, OFLPPanel* _nn_src, EditorBase* _nn_edb)
 {
-    _src->editor_del(_edb);
-    _dst->editor_add(_edb);
+    if ( ! _nn_src->editor_del(_nn_edb) )
+        return false;
+
+    if ( ! _nn_dst->editor_add(_nn_edb) )
+        return false;
 }
 
 OFLPPanel*      OflpModPanels:: p0_add          (wxString const _title, bool _bulk)
@@ -139,82 +180,100 @@ OFLPPanel*      OflpModPanels:: p0_add          (wxString const _title, bool _bu
 
     a_panels_array.Add( panel );
 
-    wxSizerItemList il = dw_main_sizer->GetChildren();
-
     return panel;
 }
 
-void            OflpModPanels:: p0_sub          (OFLPPanel* _panel)
+bool            OflpModPanels:: p0_sub          (OFLPPanel* _nn_panel)
 {
-    p0_editors_mov(a_panel_bulk, _panel);
+    p0_editors_mov(a_panel_bulk, _nn_panel);
 
-    dw_main_sizer->Detach(_panel);
+    dw_main_sizer->Detach(_nn_panel);                                           //  _GWR_NO_RCHECK_
 
-    a_panels_array.Remove(_panel);
+    a_panels_array.Remove(_nn_panel);
 
-    delete _panel;
+    delete _nn_panel;
+
+    return true;
 }
 
-void            OflpModPanels:: p0_move_up      (OFLPPanel* _panel)
+bool            OflpModPanels:: p0_move_up      (OFLPPanel* _nn_panel)
 {
     size_t  prev_panel_ix   =   0;
-    int     pix             =   get_visual_index(_panel);
+    int     pix             =   get_visual_index(_nn_panel);
     //  ........................................................................
     GWR_INF("OFLP::Panels::p0_move_up():ix[%i]", pix);
     //  ........................................................................
     #ifdef  GWR_OFLP_SANITY_CHECKS                                              //  _GWR_SANITY_CHECK_
     if ( pix == wxNOT_FOUND )
-        return;
-
-    if ( pix <= 1 )
-        return;
+        return false;
     #endif
+
+    if ( pix == 1 )
+        return true;
 
     prev_panel_ix = static_cast< size_t >( pix - 1 );
 
-    dw_main_sizer->Detach(_panel);
-    dw_main_sizer->Insert( prev_panel_ix, _panel, 1, wxEXPAND, 0);
-    dw_main_sizer->Layout();
+    dw_main_sizer->Detach(_nn_panel);                                           //  _GWR_NO_RCHECK_
+    dw_main_sizer->Insert( prev_panel_ix, _nn_panel, 1, wxEXPAND, 0);
+    return true;
 }
 
-void            OflpModPanels:: p0_move_dn      (OFLPPanel* _panel)
+bool            OflpModPanels:: p0_move_dn      (OFLPPanel* _nn_panel)
 {
     size_t  next_panel_ix   =   0;
-    int     pix             =   get_visual_index(_panel);
+    int     pix             =   get_visual_index(_nn_panel);
     //  ........................................................................
     GWR_INF("OFLP::Panels::p0_move_dn():ix[%i]", pix);
     //  ........................................................................
     #ifdef  GWR_OFLP_SANITY_CHECKS                                              //  _GWR_SANITY_CHECK_
     if ( pix == wxNOT_FOUND )
-        return;
+        return false;
     #endif
+
     if ( ( 1 + pix ) == a_panels_array.size() )
     {
         GWR_INF("%s", wxS("              ...already the last"));
-        return;
+        return true;
     }
 
     next_panel_ix = static_cast< size_t >( pix + 1 );
 
-    dw_main_sizer->Detach(_panel);
-    dw_main_sizer->Insert( next_panel_ix, _panel, 1, wxEXPAND, 0);
-    dw_main_sizer->Layout();
+    dw_main_sizer->Detach(_nn_panel);                                           //  _GWR_NO_RCHECK
+    dw_main_sizer->Insert( next_panel_ix, _nn_panel, 1, wxEXPAND, 0);
+    return true;
+}
+
+bool            OflpModPanels:: p0_minmax       (OFLPPanel* _nn_panel)
+{
+    wxSizerItem *   sitem   = panels()->p0_sizer()->GetItem(_nn_panel);
+    //  ........................................................................
+    #ifdef  GWR_OFLP_SANITY_CHECKS                                              //  _GWR_SANITY_CHECK_
+    if ( ! sitem )
+    {
+        GWR_ERR("%s", wxS("  NULL wxSizerItem"));
+        return false;
+    }
+    #endif
+    //  ........................................................................
+    if ( _nn_panel->is_minimized() )
+    {
+        GWR_INF("%s", wxS("  maximizing"));
+        _nn_panel->maximize();
+    }
+    else
+    {
+        GWR_INF("%s", wxS("  minimizing"));
+        _nn_panel->minimize();
+        sitem->SetProportion(0);
+    }
+
+    return true;
 }
 //  ############################################################################
-void            OflpModPanels:: resize              ()
-{
-    p0_resize();
-}
-
-void            OflpModPanels:: layout              ()
-{
-    dw_main_sizer->Layout();
-}
-
 void            OflpModPanels:: resize_and_layout   ()
 {
-    resize();
-    layout();
+    p0_resize();
+    p0_layout();
 }
 
 int             OflpModPanels:: get_visual_index    (OFLPPanel* _panel)

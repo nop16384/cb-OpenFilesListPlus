@@ -49,9 +49,9 @@ class OpenFilesListPlusPanel              : public wxPanel
   protected:
     void                    p0_create_tree      ();
 
-    wxTreeItemId            item_append         (EditorBase*);
-    wxTreeItemId            item_find           (EditorBase*);
-    bool                    item_del            (EditorBase*);
+    wxTreeItemId            item_append         (EditorBase*);                  //  x
+    wxTreeItemId            item_find           (EditorBase*);                  //  x
+    bool                    item_del            (EditorBase*);                  //  x
     bool                    item_select         (EditorBase*);
     bool                    item_selected       (EditorBase*);
 
@@ -61,14 +61,17 @@ class OpenFilesListPlusPanel              : public wxPanel
   protected:
     void                    reset();
 
-    void                    editor_add      (EditorBase*);
-    void                    editor_del      (EditorBase*);
+    bool                    editor_add      (EditorBase*);                      //  x
+    bool                    editor_del      (EditorBase*);                      //  x
     void                    editor_select   (EditorBase*);
     bool                    editor_selected (EditorBase*);
     void                    editor_sync     (EditorBase*);
 
     void                    editors_del     ();
     void                    editors_deselect();
+
+    wxButton        *       button(int _ix);
+    wxBitmapButton  *       bitmap_button(int _ix);
 
     void                    minimize();
     void                    maximize();
@@ -80,6 +83,9 @@ class OpenFilesListPlusPanel              : public wxPanel
     bool                    is_minimized                    ();
 
     EditorBase  *           editor_from_absolute_filepath   (wxString const & _absolute_filepath);
+    //  ------------------------------------------------------------------------
+  public:
+    void                    set_bg      (wxColour& _c);
     //  ------------------------------------------------------------------------
   protected:
     void                    OnSelect    (wxCommandEvent&);
@@ -107,18 +113,27 @@ class OpenFilesListPlusPanel              : public wxPanel
 /// ****************************************************************************
 class OpenFilesListPlusPanelBulk          : public OpenFilesListPlusPanel
 {
-  private:
-    wxMenu      *   dw_menu_main;
-
-    wxMenu      *       dw_menu_selection_mode;
-    wxMenuItem  *           dw_item_selection_standard;
-    wxMenuItem  *           dw_item_selection_productivity;
-
     //  ------------------------------------------------------------------------
   public:
              OpenFilesListPlusPanelBulk(OpenFilesListPlus* _ofl_plugin, wxWindow* _parent, wxString _title);
     virtual ~OpenFilesListPlusPanelBulk();
 };
+/*
+/// ****************************************************************************
+//! \class  OpenFilesListPlusPanelOptions
+//!
+//! \brief  Options for the plugin
+/// ****************************************************************************
+class OpenFilesListPlusPanelOptions       : public wxPanel
+{
+  private:
+    OFLPHeader      *   dw_header;
+    wxBoxSizer      *   dw_sizer;
 
+  public:
+             OpenFilesListPlusPanelOptions(OpenFilesListPlus* _ofl_plugin, wxWindow* _parent);
+    virtual ~OpenFilesListPlusPanelOptions();
+};
+*/
 #endif                                                                          // __OFLP_PANEL_HH__
 

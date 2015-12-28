@@ -1,40 +1,48 @@
 /// ****************************************************************************
-//! \class  OflpModMenuOptions
+//! \class  OflpModSettings
 //!
 //! \brief  Contain all OFLP options
 /// ****************************************************************************
-class OflpModMenuOptions    : public wxMenu, public OflpModule
+class OflpModSettings       : public OflpModule
 {
     friend class OpenFilesListPlus;
     //  ------------------------------------------------------------------------
   public:
     enum
     {
-        eSAVE_WORKSPACE_LAYOUT  =   0x0001  ,
-
-        eMODE_STANDARD          =   0x0002  ,
-        eMODE_PRODUCTIVITY      =   0x0003  ,
-
-        eENABLE_LOG_WINDOW      =   0x00fe  ,
-        eENABLE_LOG_CONSOLE     =   0x00ff
+        eFILE_SELECTION_MODE_STANDARD          =   0x0001  ,
+        eFILE_SELECTION_MODE_PRODUCTIVITY      =   0x0002
     };
     //  ------------------------------------------------------------------------
   private:
-    wxMenuItem  *       dw_i1_save_workspace_layout;
-    wxMenu      *       dw_m1_mode;
-    wxMenu      *       dw_m1_log;
-    wxMenuItem  *           dw_i2_log_console;
-    wxMenuItem  *           dw_i2_log_window;
-    //  ........................................................................
-    int                 a_mode;
-    bool                a_log_console;
-    bool                a_log_window;
+    struct  OflpOptLog  a_opt_log;
+    struct  OflpOptSel  a_opt_sel;
+    /*
+    int                 a_file_selection_mode;
+
+    bool                a_logs_enabled;
+    bool                    a_log_console;
+    bool                    a_log_window;
+    */
+  protected:
+    bool                mode_standard       ()  { return a_opt_sel.dclick();    }
+    bool                mode_productivity   ()  { return a_opt_sel.sclick();    }
+    bool                log_enabled         ()  { return a_opt_log.enabled;     }
+    bool                log_console         ()  { return a_opt_log.console;     }
+    bool                log_window          ()  { return a_opt_log.window;      }
+    //  ------------------------------------------------------------------------
+  private:
+    OFLPSettings    *   dw_settings;
     //  ........................................................................
   protected:
-    wxMenu      *       m1mode()    { return dw_m1_mode;    }
-    wxMenu      *       m1log()     { return dw_m1_log;     }
-    //  ........................................................................
-  protected:
+    void                action                      (wxCommandEvent&);
+    void                settings_window_activated   (bool _b);
+
+    void                popup   (wxCommandEvent&);
+    void                popout  (wxCommandEvent&);
+    void                popout  ();
+    void                update_from_user_input();
+    /*
     void                check_item_set_log_console  (bool _b)   { a_log_console = _b    ; dw_i2_log_console ->Check(_b); }
     void                check_item_set_log_window   (bool _b)   { a_log_window = _b     ; dw_i2_log_window  ->Check(_b); }
   public:
@@ -70,32 +78,11 @@ class OflpModMenuOptions    : public wxMenu, public OflpModule
         break;
         }
     }
+    */
     //  ------------------------------------------------------------------------
   public:
-    OflpModMenuOptions()
-        :   a_mode          (eMODE_STANDARD)    ,
-            a_log_console   (false)             ,
-            a_log_window    (false)
-        {
-            //dw_i1_save_workspace_layout = this->Append(eSAVE_WORKSPACE_LAYOUT, _("Save workspace layout"));
-
-            //this->AppendSeparator();
-
-            dw_m1_mode = new wxMenu();
-            dw_m1_mode->AppendRadioItem(eMODE_STANDARD    , wxS("Standard")       , _("Edit files by double-click"));
-            dw_m1_mode->AppendRadioItem(eMODE_PRODUCTIVITY, wxS("Productivity ")  , _("Edit files by single-click"));
-
-            this->AppendSubMenu(dw_m1_mode, wxS("Mode"));
-
-            this->AppendSeparator();
-
-            dw_m1_log = new wxMenu();
-            dw_i2_log_window    = dw_m1_log->AppendCheckItem(eENABLE_LOG_WINDOW  , wxS("wxLogWindow "));
-            dw_i2_log_console   = dw_m1_log->AppendCheckItem(eENABLE_LOG_CONSOLE , wxS("console "));
-
-            this->AppendSubMenu(dw_m1_log, wxS("Logs"));
-        };
-   ~OflpModMenuOptions()
+    OflpModSettings();
+   ~OflpModSettings()
         {
             //delete dw_m1_mode;
             //delete dw_m1_log;

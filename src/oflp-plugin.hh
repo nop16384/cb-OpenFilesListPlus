@@ -20,10 +20,10 @@
 //  ............................................................................
 #include    "oflp-plugin-module.hhi"
 #include    "oflp-plugin-mod-gfx.hhi"
-#include    "oflp-plugin-mod-menus.hhi"
 #include    "oflp-plugin-mod-layout.hhi"
 #include    "oflp-plugin-mod-editors.hhi"
 #include    "oflp-plugin-mod-panels.hhi"
+#include    "oflp-plugin-mod-settings.hhi"
 /// ****************************************************************************
 //! \class  OpenFilesListPlus
 //!
@@ -51,7 +51,7 @@ class OpenFilesListPlus : public cbPlugin
           * Notice that you can logically OR more than one configuration groups,
           * so you could set it, for example, as "cgCompiler | cgContribPlugin".
           */
-        virtual int GetConfigurationGroup() const { return cgUnknown; }
+        //virtual int GetConfigurationGroup() const { return cgUnknown; }
 
         /** Return plugin's configuration panel.
           * @param parent The parent window.
@@ -131,21 +131,31 @@ class OpenFilesListPlus : public cbPlugin
         //  ####################################################################
       private:
         static  OpenFilesListPlus   *   s_singleton;
+        wxMenu                      *   aw_menu_view;
 
       public:
         static  OpenFilesListPlus   *   Instance()  { return s_singleton; }
         //  ====================================================================
+      protected:
+        bool    a_mode_degraded;
+        //  ====================================================================
         friend class OpenFilesListPlusPanel;                                    //  _GWR_TODO_ only for evh handler
         friend class OpenFilesListPlusPanelBulk;                                //  ...remove friend stuff
+        friend class OpenFilesListModSettings;
+        friend class OflpModSettings;
 
       protected:
         void    reset();
+        void    degrade();
+        bool    degraded();
 
-        void    RefreshOpenFileState        (EditorBase* _edb, bool _remove = false);
+        void    RefreshOpenFileState        (EditorBase* _edb);
         void    RefreshOpenFileLayout       (EditorBase* _edb);
         void    RefreshOpenFilesLayout      ();
 
       public:
+        void    emergency();
+
         void    dump_project_manager_state  ();
 
         bool    FindCbProjectForFile        (wxString const & _abs_fpath, cbProject** _pro, ProjectFile** _pjf);
@@ -166,10 +176,10 @@ class OpenFilesListPlus : public cbPlugin
         //  ====================================================================
         //  modularized stuff
         OFPL_MEMBER_MODULE(OflpModGfx           , d_gfx             , gfx           );
-        OFPL_MEMBER_MODULE(OflpModMenuOptions   , dw_menu_options   , menu_options  );
         OFPL_MEMBER_MODULE(OflpModLayout        , d_layout          , layout        );
         OFPL_MEMBER_MODULE(OflpModEditors       , d_editors         , editors       );
         OFPL_MEMBER_MODULE(OflpModPanels        , d_panels          , panels        );
+        OFPL_MEMBER_MODULE(OflpModSettings      , d_settings        , settings      );
         //  ====================================================================
     private:
         DECLARE_EVENT_TABLE();

@@ -6,4 +6,5 @@
 	<object class="wxBitmap" name="OFLPPH-BBO">oflp-panel-header-button-bar-orange.png</object>
 	<object class="wxBitmap" name="OFLPPH-BBUP">oflp-panel-header-button-bar-up.png</object>
 	<object class="wxBitmap" name="OFLPPH-BBDN">oflp-panel-header-button-bar-down.png</object>
+	<object class="wxBitmap" name="OFLPPH-BBPD">oflp-panel-header-button-bar-padding.png</object>
 </resource>

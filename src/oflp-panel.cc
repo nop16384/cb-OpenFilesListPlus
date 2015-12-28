@@ -224,13 +224,13 @@ void OpenFilesListPlusPanel:: p0_create_tree()
 }
 //  ============================================================================
 OpenFilesListPlusPanel::OpenFilesListPlusPanel(
-        OpenFilesListPlus *   _ofl_plugin ,
-        wxWindow            *   _parent ,
-        wxString                _title  ,
-        bool                    _bulk   )
-        :   wxPanel                     ( _parent, wxNewId()    )   ,
-            a_bulk                      ( _bulk         )   ,
-            a_allow_kill_focus_event    ( true          )
+        OpenFilesListPlus   *   _ofl_plugin ,
+        wxWindow            *   _parent     ,
+        wxString                _title      ,
+        bool                    _bulk       )
+        :   wxPanel                     ( _parent, wxNewId())   ,
+            a_bulk                      ( _bulk             )   ,
+            a_allow_kill_focus_event    ( true              )
 {
     GWR_INF("OpenFilesListPlusPanel::OpenFilesListPlusPanel():[%p] plugin[%p]", this, _ofl_plugin);
 
@@ -243,22 +243,26 @@ OpenFilesListPlusPanel::OpenFilesListPlusPanel(
     dw_header->button_prepend   ( OflpModGfx::eBmpBarOrange  );          //  0
     dw_header->button_append    ( OflpModGfx::eBmpBarRed     );          //  3
 
-    dw_header->button(0)->Connect(                                              //  (mini | maxi) mize
+    //  set disabled bitmap to padding will pseudo-hide the button
+    bitmap_button(1)->SetBitmapDisabled( OflpModGfx::Bitmap(OflpModGfx::eBmpBarPadding) );
+    bitmap_button(2)->SetBitmapDisabled( OflpModGfx::Bitmap(OflpModGfx::eBmpBarPadding) );
+
+    button(0)->Connect(                                                         //  (mini | maxi) mize
         wxEVT_COMMAND_BUTTON_CLICKED                                                    ,
         wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_mm)  ,
         NULL, _ofl_plugin                                                               );
 
-    dw_header->button(2)->Connect(                                              //  up
+    button(2)->Connect(                                                         //  up
         wxEVT_COMMAND_BUTTON_CLICKED                                                    ,
         wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_up)  ,
         NULL, _ofl_plugin                                                               );
 
-    dw_header->button(1)->Connect(                                              //  down
+    button(1)->Connect(                                                         //  down
         wxEVT_COMMAND_BUTTON_CLICKED                                                    ,
         wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_down)  ,
         NULL, _ofl_plugin                                                               );
 
-    dw_header->button(3)->Connect(                                              //  del
+    button(3)->Connect(                                                         //  del
         wxEVT_COMMAND_BUTTON_CLICKED                                                    ,
         wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_del)   ,
         NULL, _ofl_plugin                                                               );
@@ -284,11 +288,11 @@ OpenFilesListPlusPanel::~OpenFilesListPlusPanel()
     //delete  dw_sizer;
 }
 //  ============================================================================
-void            OpenFilesListPlusPanel::  reset()
+void            OpenFilesListPlusPanel::    reset()
 {
 }
 //  ============================================================================
-wxTreeItemId    OpenFilesListPlusPanel::  item_find           (EditorBase* _editor)
+wxTreeItemId    OpenFilesListPlusPanel::    item_find           (EditorBase* _editor)
 {
     wxTreeItemIdValue   cookie  =   0;
     wxTreeItemId        iid     = d_tree->GetFirstChild( d_tree->GetRootItem(), cookie );
@@ -312,7 +316,7 @@ wxTreeItemId    OpenFilesListPlusPanel::  item_find           (EditorBase* _edit
     return iid;
 }
 
-wxTreeItemId    OpenFilesListPlusPanel::  item_append         (EditorBase* _editor)
+wxTreeItemId    OpenFilesListPlusPanel::    item_append         (EditorBase* _editor)
 {
     wxTreeItemId        iid;
     int                 mod = OflpModGfx::Icon(_editor);
@@ -338,7 +342,7 @@ wxTreeItemId    OpenFilesListPlusPanel::  item_append         (EditorBase* _edit
     return iid;
 }
 
-bool            OpenFilesListPlusPanel::  item_del            (EditorBase* _editor)
+bool            OpenFilesListPlusPanel::    item_del            (EditorBase* _editor)
 {
     wxTreeItemId    iid = item_find(_editor);
     //  ........................................................................
@@ -353,7 +357,7 @@ bool            OpenFilesListPlusPanel::  item_del            (EditorBase* _edit
     return true;
 }
 
-bool            OpenFilesListPlusPanel::  item_select         (EditorBase* _editor)
+bool            OpenFilesListPlusPanel::    item_select         (EditorBase* _editor)
 {
     wxTreeItemId    iid = item_find(_editor);
     //  ........................................................................
@@ -369,13 +373,13 @@ bool            OpenFilesListPlusPanel::  item_select         (EditorBase* _edit
     return true;
 }
 
-bool            OpenFilesListPlusPanel::  item_selected       (EditorBase* _editor)
+bool            OpenFilesListPlusPanel::    item_selected       (EditorBase* _editor)
 {
     wxTreeItemId    iid = item_find(_editor);
     //  ........................................................................
     if ( ! iid.IsOk() )
     {
-        return false;
+        return false;                                                           //  _GWR_TODO_ no error propagation from here !
     }
 
     return ( d_tree->IsSelected(iid) );
@@ -401,17 +405,17 @@ bool            OpenFilesListPlusPanel::  item_selected       (EditorBase* _edit
     */
 }
 
-void            OpenFilesListPlusPanel::  items_deselect      ()
+void            OpenFilesListPlusPanel::    items_deselect      ()
 {
     d_tree->UnselectAll();
 }
 
-void            OpenFilesListPlusPanel::  items_del           ()
+void            OpenFilesListPlusPanel::    items_del           ()
 {
     d_tree->DeleteChildren(d_tree->GetRootItem());
 }
 //  ============================================================================
-EditorBase*     OpenFilesListPlusPanel::  editor_from_absolute_filepath (wxString const & _absolute_filepath)
+EditorBase*     OpenFilesListPlusPanel::    editor_from_absolute_filepath (wxString const & _absolute_filepath)
 {
     earlgreycb::Log_function_mark(wxS("editor_from_absolute_filepath"));
     earlgreycb::HString::tHash      hash    =   earlgreycb::HString::Hash(_absolute_filepath);
@@ -438,12 +442,12 @@ EditorBase*     OpenFilesListPlusPanel::  editor_from_absolute_filepath (wxStrin
     return ed;
 }
 
-bool            OpenFilesListPlusPanel::  editor_has        (EditorBase* _editor)
+bool            OpenFilesListPlusPanel::    editor_has          (EditorBase* _editor)
 {
     return ( a_editors_array.Index(_editor) != wxNOT_FOUND );
 }
 
-void            OpenFilesListPlusPanel::  editor_add        (EditorBase* _editor)
+bool            OpenFilesListPlusPanel::    editor_add          (EditorBase* _editor)
 {
     wxTreeItemId    iid;
     int             mod =   OflpModGfx::Icon(_editor);
@@ -454,29 +458,29 @@ void            OpenFilesListPlusPanel::  editor_add        (EditorBase* _editor
 
     if ( ! iid.IsOk() )
     {
-        return;
+        return false;
     }
 
     a_editors_array.Add(_editor);
     a_harray.push_back( earlgreycb::HString::Hash(_editor->GetFilename()) );
-
-    //D dump();
+    return true;
 }
 
-void            OpenFilesListPlusPanel::  editor_del        (EditorBase* _editor)
+bool            OpenFilesListPlusPanel::    editor_del          (EditorBase* _editor)
 {
     //  ........................................................................
     GWR_TKI("OFLPPanel::editor_del():[%p][%s][%p]", this, title().wc_str(), _editor);
     //  ........................................................................
-    item_del(_editor);
+    if ( ! item_del(_editor) )
+        return false;
 
     a_harray.erase( a_harray.begin() + a_editors_array.Index(_editor) );
     a_editors_array.Remove(_editor);
 
-    //D dump();
+    return true;
 }
 
-void            OpenFilesListPlusPanel::  editor_select     (EditorBase* _editor)
+void            OpenFilesListPlusPanel::    editor_select       (EditorBase* _editor)
 {
     //  ........................................................................
     GWR_TKI("OFLPPanel::editor_select():[%p][%p]", this, _editor);
@@ -484,7 +488,7 @@ void            OpenFilesListPlusPanel::  editor_select     (EditorBase* _editor
     item_select(_editor);
 }
 
-bool            OpenFilesListPlusPanel::  editor_selected   (EditorBase* _editor)
+bool            OpenFilesListPlusPanel::    editor_selected     (EditorBase* _editor)
 {
     //  ........................................................................
     GWR_INF("%s", wxS("OFLPPanel::editor_selected()"));
@@ -498,7 +502,7 @@ bool            OpenFilesListPlusPanel::  editor_selected   (EditorBase* _editor
     return b;
 }
 
-void            OpenFilesListPlusPanel::  editor_sync       (EditorBase* _editor)
+void            OpenFilesListPlusPanel::    editor_sync         (EditorBase* _editor)
 {
     wxTreeItemId    iid;
     int             mod =   OflpModGfx::Icon(_editor);
@@ -531,7 +535,7 @@ void            OpenFilesListPlusPanel::  editor_sync       (EditorBase* _editor
     }
 }
 
-void            OpenFilesListPlusPanel::  editors_del       ()
+void            OpenFilesListPlusPanel::    editors_del         ()
 {
     //  ........................................................................
     GWR_INF("OFLPPanel::editors_del([%p])", this);
@@ -541,7 +545,7 @@ void            OpenFilesListPlusPanel::  editors_del       ()
     items_del();
 }
 
-void            OpenFilesListPlusPanel::  editors_deselect  ()
+void            OpenFilesListPlusPanel::    editors_deselect    ()
 {
     //  ........................................................................
     GWR_INF("OFLPPanel::editors_deselect([%p])", this);
@@ -549,25 +553,45 @@ void            OpenFilesListPlusPanel::  editors_deselect  ()
     items_deselect();
 }
 //  ============================================================================
-bool            OpenFilesListPlusPanel::  is_minimized    ()
+wxButton        *   OpenFilesListPlusPanel::    button          (int _ix)
+{
+    return dw_header->button(_ix);
+}
+
+wxBitmapButton  *   OpenFilesListPlusPanel::    bitmap_button   (int _ix)
+{
+    return reinterpret_cast< wxBitmapButton* >( button(_ix) );
+}
+
+bool                OpenFilesListPlusPanel::    is_minimized    ()
 {
     return ! d_tree->IsShown();
 }
 
-void            OpenFilesListPlusPanel::  minimize        ()
+void                OpenFilesListPlusPanel::    minimize        ()
 {
     d_tree->Show(false);
 
-    dw_header->button_show( 1, false);
-    dw_header->button_show( 2, false);
+    button(1)->Enable(false);
+    button(2)->Enable(false);
+
+    dw_sizer->Layout();
 }
 
-void            OpenFilesListPlusPanel::  maximize        ()
+void                OpenFilesListPlusPanel::    maximize        ()
 {
     d_tree->Show(true);
 
-    dw_header->button_show( 1, true);
-    dw_header->button_show( 2, true);
+    button(1)->Enable();
+    button(2)->Enable();
+
+    dw_sizer->Layout();
+}
+
+void                OpenFilesListPlusPanel::    set_bg          (wxColour& _c)
+{
+    this->d_tree->SetBackgroundColour(_c);
+
 }
 //  ############################################################################
 //
@@ -575,28 +599,29 @@ void            OpenFilesListPlusPanel::  maximize        ()
 //
 //  ############################################################################
 OpenFilesListPlusPanelBulk::OpenFilesListPlusPanelBulk(
-        OpenFilesListPlus *   _ofl_plugin ,
-        wxWindow            *   _parent ,
-        wxString                _title  )
-        :   OpenFilesListPlusPanel( _ofl_plugin, _parent, _title, true)   ,
-            dw_menu_main                            (NULL)  ,
-                dw_menu_selection_mode              (NULL)  ,
-                    dw_item_selection_standard      (NULL)  ,
-                    dw_item_selection_productivity  (NULL)
+        OpenFilesListPlus   *   _ofl_plugin ,
+        wxWindow            *   _parent     ,
+        wxString                _title      )
+        :   OpenFilesListPlusPanel( _ofl_plugin, _parent, _title, true)
 {
     dw_header   =   new OpenFilesListPlusPanelHeader( this, _title );
 
+    dw_header->button_prepend   ( OflpModGfx::eBmpBarPadding );
+    dw_header->button_prepend   ( OflpModGfx::eBmpBarPadding );
     dw_header->button_prepend   ( OflpModGfx::eBmpBarBlue    );
     dw_header->button_append    ( OflpModGfx::eBmpBarGreen   );
 
-    dw_header->button(0)->Connect(                                              //  options
+    button(1)->Enable(false);
+    button(2)->Enable(false);
+
+    button(0)->Connect(                                                         //  options
         wxEVT_COMMAND_BUTTON_CLICKED                                                    ,
-        wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_opt) ,
+        wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_opt)   ,
         NULL, _ofl_plugin                                                               );
 
-    dw_header->button(1)->Connect(                                              //  add panel
+    button(3)->Connect(                                                         //  add panel
         wxEVT_COMMAND_BUTTON_CLICKED                                                    ,
-        wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_add) ,
+        wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_add)   ,
         NULL, _ofl_plugin                                                               );
 
     p0_create_tree();
@@ -612,3 +637,38 @@ OpenFilesListPlusPanelBulk::OpenFilesListPlusPanelBulk(
 OpenFilesListPlusPanelBulk::~OpenFilesListPlusPanelBulk()
 {
 }
+//  ############################################################################
+//
+//                          OPENFILESLISTPLUGINPANELOPTIONS
+//
+//  ############################################################################
+/*
+OpenFilesListPlusPanelOptions::OpenFilesListPlusPanelOptions(
+        OpenFilesListPlus   *   _ofl_plugin ,
+        wxWindow            *   _parent     )
+        :   wxPanel                     ( _parent, wxNewId())
+{
+    GWR_INF("OpenFilesListPlusPanelOptions::OpenFilesListPlusPanelOptions():[%p] plugin[%p]", this, _ofl_plugin);
+
+    SetFont( OpenFilesListPlus::Instance()->gfx()->fnt8() );
+
+    dw_header   =   new OpenFilesListPlusHeader( this, wxString::FromUTF8("options") );
+
+    dw_header->button_prepend   ( OflpModGfx::eBmpBarPadding, NULL );           //  2
+    dw_header->button_prepend   ( OflpModGfx::eBmpBarPadding, NULL );           //  1
+    dw_header->button_prepend   ( OflpModGfx::eBmpBarPadding, NULL );           //  0
+    dw_header->button_append    ( OflpModGfx::eBmpBarRed    , NULL );           //  3
+
+    //dw_header->button(3)->Connect(                                              //  del
+    //    wxEVT_COMMAND_BUTTON_CLICKED                                                    ,
+    //    wxCommandEventHandler(OpenFilesListPlus::evh_panel_header_button_clicked_del)   ,
+    //    NULL, _ofl_plugin                                                               );
+
+
+    dw_sizer    =   new wxBoxSizer(wxVERTICAL);
+
+    dw_sizer->Add( dw_header , 0, wxEXPAND, 0);
+
+    this->SetSizer(dw_sizer);
+}
+*/

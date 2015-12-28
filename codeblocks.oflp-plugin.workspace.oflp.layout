@@ -2,9 +2,9 @@
 <CodeBlocks_workspace_oflp_file>
 	<FileVersion major="1" minor="0" />
 	<Panels>
-		<Panel name="cbEVT_WORKSPACE_CLOSE_BEGIN" index="1" />
-		<Panel name="Plugin" index="2" />
-		<Panel name="Panels" index="3" />
-		<Panel name="Common" index="4" />
+		<Panel name="Plugin" index="1" />
+		<Panel name="Panels" index="2" />
+		<Panel name="Common" index="3" />
+		<Panel name="fake sdk" index="4" />
 	</Panels>
 </CodeBlocks_workspace_oflp_file>

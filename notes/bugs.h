@@ -28,6 +28,23 @@
 
  (013)  2015.09.08  In std mode, selecting item then using "save workspace layout" menu
                     reset to old item selection ( i.e. active editor )
+
+ (014)  2015.10.22  When minimizing, panel name is no more aligned ( vertically )
+                    with other panels's names
+
+ (015)  2015.11.29  in OpenFilesListPlus::RefreshOpenFileState(EditorBase* _nn_edb),
+                    in limit cases there is no active editor ,_nn_edb is NULL -> segfault
+                    ( call from void OpenFilesListPlus::RefreshOpenFilesLayout() )
+
+ (016)  2015.12.24  Panel order is not respected @ workspace loading
+                    ( cf todo#17 )
+
++(017)  2015.12.24  Experienced a project.oflp.layout not saved ( files not
+                    assigned to any panel )
+
+ (018)  2015.12.27  Select a file in dclick mode. single click another file.
+                    Switch to sclick mode. Exit settings panel by single click
+                    on the seconf file. First file stay edited, Second is selected.
 //  ############################################################################
 (001)
 //  ============================================================================
@@ -67,5 +84,47 @@
 2015.09.08  Done : wxTreeCtrl->GetSelection() is buggy - removed all calls
 //  ============================================================================
 (013)
-2015.09.17  Done : all has been rewrited
+2015.09.17  Done : all has been rewritten
+//  ============================================================================
+(014)
+2015.12.28  Done : setting a "disabled state" bitmap to an empty one ( eBmpBarPadding )
+            So for minimizing / maximizing, we dont wxWidgets::Show() the buttons,
+            we just wxWidgets::Enable() them.
+//  ============================================================================
+(015)
+2015.11.30  Done, verified all calls to methods intaking a _nn parameter :
 
+    # = OK - verified
+    $ = intaked parameter, previous caller should have been verified
+
+01#     bool        OflpModEditors::    add (EditorBase* _nn_edb)
+02#     bool        OflpModEditors::    sub (EditorBase* _nn_edb)
+03#     bool        OflpModEditors::    mov (
+                        OFLPPanel   *   _nn_dst     ,
+                        OFLPPanel   *   _nn_src     ,
+                        EditorBase  *   _nn_edb     )
+
+04$     OFLPPanel*  OflpModLayout::     file_assignment_find_panel_from_editor_base(EditorBase* _nn_edb)
+05$     void        OflpModLayout::     file_assignment_update(
+                        EditorBase  *   _nn_edb         ,
+                        OFLPPanel   *   _nn_dst_panel   )
+
+06$     bool        OflpModPanels::     p0_editors_mov  (OFLPPanel* _nn_dst, OFLPPanel* _nn_src)
+07#$    bool        OflpModPanels::     p0_editor_mov   (OFLPPanel* _nn_dst, OFLPPanel* _nn_src, EditorBase* _nn_edb)
+08#     bool        OflpModPanels::     p0_sub          (OFLPPanel* _nn_panel)
+09#     bool        OflpModPanels::     p0_move_up      (OFLPPanel* _nn_panel)
+10?     bool        OflpModPanels::     p0_move_dn      (OFLPPanel* _nn_panel)         from GetClientData() - TODO ?
+11#     bool        OflpModPanels::     p0_minmax       (OFLPPanel* _nn_panel)
+
+12#     void        OpenFilesListPlus:: RefreshOpenFileState    (EditorBase* _nn_edb)
+13#     void        OpenFilesListPlus:: RefreshOpenFileLayout   (EditorBase* _nn_edb)
+//  ============================================================================
+(016)
+2015.12.27  Done : in OpenFilesListPlus::evh_workspace_loading_complete(), a
+            sort is done on PanelAssignment-s before adding panels
+//  ============================================================================
+(017)
+//  ============================================================================
+(018)
+2015.12.28  Done : call RefreshOpenFileState() on active editor after settings
+            window has been closed in OflpModSettings::settings_window_activated()

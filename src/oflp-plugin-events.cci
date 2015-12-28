@@ -5,17 +5,32 @@
 //  ############################################################################
 void    OpenFilesListPlus:: evh_workspace_loading_complete  (CodeBlocksEvent& _e)
 {
+    size_t                                          s   =   0;                  //  # of panels ( not including bulk )
+    std::vector< OflpModLayout::PanelAssignment* >  v;
+    //  ........................................................................
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::evh_workspace_loading_complete()"));
 
     layout()->workspace_load();
 
-    //
+    s = layout()->panel_assignment_array().size();
+    v.resize(s);                                                                //  dimension the vector
+    //  ........................................................................
+    //  We sort PanelAssignments-by inserting them in a vector following
+    //  their index.
     for ( OflpModLayout::PanelAssignmentArray::const_iterator
         it  =   layout()->panel_assignment_array().begin()  ;
         it  !=  layout()->panel_assignment_array().end()    ;
         it++                                                )
     {
-        panels()->p0_add( (*it)->name(), false );
+        v[ (*it)->index() - 1 ] = (*it);
+    }
+    //  ........................................................................
+    //  Now we can add them
+    for ( size_t i = 0 ; i != s ; i++ )
+    {
+        panels()->p0_add( v[i]->name(), false );
     }
 
     panels()->resize_and_layout();
@@ -27,6 +42,8 @@ void    OpenFilesListPlus:: evh_workspace_loading_complete  (CodeBlocksEvent& _e
 
 void    OpenFilesListPlus:: evh_workspace_close_begin       (CodeBlocksEvent &_e)
 {
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::evh_workspace_close_begin()"));
 
     layout()->workspace_close();
@@ -36,6 +53,8 @@ void    OpenFilesListPlus:: evh_workspace_close_begin       (CodeBlocksEvent &_e
 
 void    OpenFilesListPlus:: evh_workspace_close_complete    (CodeBlocksEvent &_e)
 {
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::evh_workspace_close_complete()"));
 
     reset();
@@ -45,6 +64,8 @@ void    OpenFilesListPlus:: evh_workspace_close_complete    (CodeBlocksEvent &_e
 
 void    OpenFilesListPlus:: evh_project_open                (CodeBlocksEvent& _e)
 {
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::evh_project_open()"));
 
     layout()->project_load( _e.GetProject() );
@@ -56,6 +77,8 @@ void    OpenFilesListPlus:: evh_project_open                (CodeBlocksEvent& _e
 
 void    OpenFilesListPlus:: evh_project_close               (CodeBlocksEvent& _e)
 {
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::evh_project_close()"));
 
     GWR_TKI("project[%p] files:[%i]", _e.GetProject(), _e.GetProject()->GetFilesCount());
@@ -69,6 +92,8 @@ void    OpenFilesListPlus:: evh_project_close               (CodeBlocksEvent& _e
 
 void    OpenFilesListPlus:: evh_project_save                (CodeBlocksEvent& _e)
 {
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::evh_project_save()"));
 
     layout()->project_save( _e.GetProject() );
@@ -78,26 +103,27 @@ void    OpenFilesListPlus:: evh_project_save                (CodeBlocksEvent& _e
 
 void    OpenFilesListPlus:: evh_editor_opened               (CodeBlocksEvent& event)
 {
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     //  this callback can be called when :
     //  - file opening
     //  - file reloading
     //  ........................................................................
-    EditorBase  *   edb     =   NULL;
+    EditorBase  *   nn_edb  =   event.GetEditor();
     OFLPPanel   *   panel   =   NULL;
     wxString        s;
     //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::evh_editor_opened()"));
     //  ........................................................................
-    edb = event.GetEditor();
     //D editor_dump(edb);
-    if ( ! edb )
+    if ( ! nn_edb )
     {
         GWR_TKE("%s", wxS("      ...editor is NULL"));
         goto lab_exit;
     }
     //  ........................................................................
     //  check if editor is already open ( case of reload )
-    panel = panels()->get(edb);
+    panel = panels()->get(nn_edb);
     if ( panel )
     {
         GWR_TKI("      ...editor already open in panel[%s]", panel->title().wc_str());
@@ -105,7 +131,7 @@ void    OpenFilesListPlus:: evh_editor_opened               (CodeBlocksEvent& ev
     }
     //  ........................................................................
     //  add the editor
-    editors()->add(edb);
+    editors()->add(nn_edb);
 
     panels()->resize_and_layout();
     //  ........................................................................
@@ -116,16 +142,22 @@ lab_exit:
 
 void    OpenFilesListPlus:: evh_editor_closed       (CodeBlocksEvent& event)
 {
+    EditorBase  *   nn_edb  =   event.GetEditor();
+    //  ........................................................................
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::evh_editor_closed()"));
     //  ........................................................................
-    EditorBase  *   edb  =   event.GetEditor();
-    if ( ! edb )
+    if ( ! nn_edb )
     {
         GWR_TKI("%s", wxS("      ...editor is NULL"));
         goto lab_exit;
     }
+    //  ........................................................................
+    //  sub the editor
+    editors()->sub(nn_edb);
 
-    RefreshOpenFileState(edb, true);
+    panels()->resize_and_layout();
     //  ........................................................................
 lab_exit:
     earlgreycb::Log_function_exit();
@@ -134,14 +166,15 @@ lab_exit:
 
 void    OpenFilesListPlus:: evh_editor_activated    (CodeBlocksEvent& event)    //  _GWR_KNO_   editors may be activated by tabs
 {
-    EditorBase  *   edb     =   NULL;
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
+    EditorBase  *   nn_edb  =   event.GetEditor();
     ProjectFile *   pjf     =   NULL;
     //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::evh_editor_activated()"));
     //  ........................................................................
-    edb  =   event.GetEditor();
     //D editor_dump(edb);
-    if ( ! edb )
+    if ( ! nn_edb )
     {
         GWR_TKE("%s", wxS("      ...editor is NULL"));
         goto lab_exit;
@@ -158,13 +191,13 @@ void    OpenFilesListPlus:: evh_editor_activated    (CodeBlocksEvent& event)    
     //  if no shortname, skip the RefreshOpenFileState() call ( C::B sends an   //  _GWR_CB_TRICK_  _GWR_OPTIM_
     //  "activated" event with an empty-shortname before sending an "opened"
     //  event with a non-empty-shortname when opening a file )
-    if ( edb->GetShortName().IsEmpty() )
+    if ( nn_edb->GetShortName().IsEmpty() )
     {
         GWR_TKI("%s", wxS("      ...shortname is EMPTY - dropping"));
         goto lab_exit;
     }
     //  ........................................................................
-    RefreshOpenFileState(edb);
+    RefreshOpenFileState(nn_edb);
     //  ........................................................................
 lab_exit:
     earlgreycb::Log_function_exit();
@@ -172,30 +205,45 @@ lab_exit:
 
 void    OpenFilesListPlus:: evh_editor_deactivated  (CodeBlocksEvent& event)
 {
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     //RefreshOpenFileState(event.GetEditor());
 }
 
 void    OpenFilesListPlus:: evh_editor_modified     (CodeBlocksEvent& event)
 {
-    //  Editor name changing is also a modification ; log for this is done
-    //  in OFLPPanel::editor_sync()
-
-    //earlgreycb::Log_function_enter(wxS("OFLP::evh_editor_modified()"));
-
-    //RefreshOpenFileState(event.GetEditor());
-
-    //earlgreycb::Log_function_exit();
-
+    EditorBase  *   nn_edb  =   event.GetEditor();
+    //  ........................................................................
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     earlgreycb::Log_function_mark(wxS("OFLP::evh_editor_modified()"));
-    RefreshOpenFileState(event.GetEditor());
+
+    if ( ! nn_edb )
+    {
+        GWR_TKE("%s", wxS("      ...editor is NULL"));
+        return;
+    }
+
+    RefreshOpenFileState(nn_edb);
 }
 
 void    OpenFilesListPlus:: evh_editor_saved        (CodeBlocksEvent& event)
 {
+    EditorBase  *   nn_edb  =   event.GetEditor();
+    //  ........................................................................
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::evh_editor_saved()"));
+    //  ........................................................................
+    if ( ! nn_edb )
+    {
+        GWR_TKE("%s", wxS("      ...editor is NULL"));
+        goto lab_exit;
+    }
 
-    RefreshOpenFileState(event.GetEditor());
-
+    RefreshOpenFileState(nn_edb);
+    //  ........................................................................
+lab_exit:
     earlgreycb::Log_function_exit();
 }
 //  ############################################################################
@@ -203,8 +251,10 @@ void    OpenFilesListPlus:: evh_editor_saved        (CodeBlocksEvent& event)
 //                          TREE ITEM EVENTS
 //
 //  ############################################################################
-void OpenFilesListPlus::evh_tree_item_activated     (wxTreeEvent& event)
+void    OpenFilesListPlus:: evh_tree_item_activated     (wxTreeEvent& event)
 {
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     OFLPPanelItemInfo   inf( event );
     //  ........................................................................
     earlgreycb::Log_function_enter(wxS("OFLP::OnTreeItemActivated()"));
@@ -213,21 +263,24 @@ void OpenFilesListPlus::evh_tree_item_activated     (wxTreeEvent& event)
         goto lab_return;
 
     if ( ! inf.IsOk() )
+    {
+        GWR_TKI("      ...invalid OFLPPanelDataObject for panel[%p]", event.GetEventObject());
         goto lab_return;
+    }
 
     //  In productivity mode, activation :
     //  - makes the corresponding editor the active editor ; since activation in
     //  wxWidgets correspond to a double click, that editor has already been
     //  made the active one.
     //  - reload the file
-    if ( menu_options()->mode_productivity() )
+    if ( settings()->mode_productivity() )
     {
         //  reload the file
         Manager::Get()->GetEditorManager()->GetBuiltinEditor(inf.GetEditor())->Reload();
     }
     //  In standard mode, activation :
     //  - makes the corresponding editor the active editor
-    if ( menu_options()->mode_standard() )
+    if ( settings()->mode_standard() )
     {
         //  active selected editor
         Manager::Get()->GetEditorManager()->SetActiveEditor(inf.GetEditor());
@@ -237,9 +290,11 @@ lab_return:
     earlgreycb::Log_function_exit();
 }
 
-// tree item right-clicked
-void OpenFilesListPlus::evh_tree_item_right_click   (wxTreeEvent& event)
+void    OpenFilesListPlus:: evh_tree_item_right_click   (wxTreeEvent& event)
 {
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
+    wxPoint             pt;
     OFLPPanelItemInfo   inf( event );
     //  ........................................................................
     //GWR_INF("%s", wxS("########## OpenFilesListPlus::OnTreeItemRightClick() ##########"));
@@ -247,35 +302,44 @@ void OpenFilesListPlus::evh_tree_item_right_click   (wxTreeEvent& event)
     if (Manager::IsAppShuttingDown())
         return;
 
-    if ( ! inf.IsOk() )
-        return;
+    #ifndef  MEMLEAKS
 
-    wxPoint pt = inf.GetTree()->ClientToScreen(event.GetPoint());
+    if ( ! inf.IsOk() )
+    {
+        GWR_TKI("      ...invalid OFLPPanelDataObject for panel[%p]", event.GetEventObject());
+        goto lab_return;
+    }
+
+    pt = inf.GetTree()->ClientToScreen(event.GetPoint());
     inf.GetEditor()->DisplayContextMenu(pt,mtOpenFilesList);
+
+    #endif
+    //  ........................................................................
+lab_return:
+    return;
 }
 
-// tree sel changed
-void OpenFilesListPlus::evh_tree_sel_changed        (wxTreeEvent &event)
+void    OpenFilesListPlus:: evh_tree_sel_changed        (wxTreeEvent &event)
 {
-    earlgreycb::Log_function_enter(wxS("OFLP::OnTreeSelChanged()"));
-    //  ........................................................................
+    OFLP_ON_DEGRADED__RET();
     //  ........................................................................
     OFLPPanelItemInfo   inf( event );
     //  ........................................................................
+    earlgreycb::Log_function_enter(wxS("OFLP::OnTreeSelChanged()"));
 
     if(Manager::IsAppShuttingDown())
         goto lab_return;
 
     if ( ! inf.IsOk() )
     {
-        GWR_TKI("OnTreeSelChanged():invalid OFLPPanelDataObject for panel[%p]", event.GetEventObject());
+        GWR_TKI("      ...invalid OFLPPanelDataObject for panel[%p]", event.GetEventObject());
         goto lab_return;
     }
-    GWR_TKI("OnTreeSelChanged():[%p][%s]", inf.GetPanel(), inf.GetEditor()->GetShortName().wc_str());
+    GWR_TKI("      ...[%p][%s]", inf.GetPanel(), inf.GetEditor()->GetShortName().wc_str());
 
     //  in productivity mode, selecting a file makes the corresponding editor
     //  the active editor
-    if ( menu_options()->mode_productivity() )
+    if ( settings()->mode_productivity() )
     {
         //  active selected editor
         Manager::Get()->GetEditorManager()->SetActiveEditor(inf.GetEditor());
@@ -286,7 +350,6 @@ void OpenFilesListPlus::evh_tree_sel_changed        (wxTreeEvent &event)
     //  ........................................................................
 lab_return:
     earlgreycb::Log_function_exit();
-
 }
 //  ############################################################################
 //
@@ -295,6 +358,8 @@ lab_return:
 //  ############################################################################
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_add (wxCommandEvent& _e)
 {
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     panels()->p0_add(wxString::FromUTF8("panel"), false);
 
     panels()->resize_and_layout();
@@ -302,6 +367,8 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_add (wxCommandEv
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_del (wxCommandEvent& _e)
 {
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     //  fasten your seatbelt for the cast
     //  event -> wxObject -> wxButton -> GetClientData() -> OFLPPanel*
     OFLPPanel   *   panel   = static_cast< OFLPPanel* >
@@ -311,50 +378,39 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_del (wxCommandEv
     //  ........................................................................
     GWR_INF("OFLP::evh_panel_header_button_del_CLICKED():EventObject[%p] ClientData()[%p]",
         _e.GetEventObject(), panel);
+
+    OFLP_EMERGENCY__NULL_POINTER__RET( panel );
     //  ........................................................................
-    panels()->p0_sub(panel);
+    OFLP_EMERGENCY__CALL__RET( panels()->p0_sub(panel) );
 
     panels()->resize_and_layout();
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_mm  (wxCommandEvent& _e)
 {
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     //  fasten your seatbelt for the cast
     //  event -> wxObject -> wxButton -> GetClientData() -> OFLPPanel*
     OFLPPanel   *   panel   = static_cast< OFLPPanel* >
     (
         ( static_cast< wxButton* >( _e.GetEventObject() ) )->GetClientData()
     );
-    wxSizerItem *   sitem   = panels()->p0_sizer()->GetItem(panel);
     //  ........................................................................
-    GWR_INF("OFLP::evh_panel_header_button_sh_CLICKED():EventObject[%p] ClientData()[%p] SizerItem[%p]",
-        _e.GetEventObject(), panel, sitem);
+    GWR_INF("OFLP::evh_panel_header_button_up_CLICKED():EventObject[%p] ClientData()[%p]",
+        _e.GetEventObject(), panel);
+
+    OFLP_EMERGENCY__NULL_POINTER__RET( panel );
     //  ........................................................................
-    #ifdef  GWR_OFLP_SANITY_CHECKS                                              //  _GWR_SANITY_CHECK_
-    if ( ! sitem )
-    {
-        GWR_ERR("%s", wxS("  NULL wxSizerItem"));
-        return;
-    }
-    #endif
-    //  ........................................................................
-    if ( panel->is_minimized() )
-    {
-        GWR_INF("%s", wxS("  maximizing"));
-        panel->maximize();
-        panels()->resize();
-    }
-    else
-    {
-        GWR_INF("%s", wxS("  minimizing"));
-        panel->minimize();
-        sitem->SetProportion(0);
-    }
-    panels()->layout();
+    OFLP_EMERGENCY__CALL__RET( panels()->p0_minmax(panel) );
+
+    panels()->resize_and_layout();
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_up  (wxCommandEvent& _e)
 {
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     //  fasten your seatbelt for the cast
     //  event -> wxObject -> wxButton -> GetClientData() -> OFLPPanel*
     OFLPPanel   *   panel = static_cast< OFLPPanel* >
@@ -365,12 +421,16 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_up  (wxCommandEv
     GWR_INF("OFLP::evh_panel_header_button_up_CLICKED():EventObject[%p] ClientData()[%p]",
         _e.GetEventObject(), panel);
 
-    panels()->p0_move_up(panel);
+    OFLP_EMERGENCY__NULL_POINTER__RET( panel );
+    //  ........................................................................
+    OFLP_EMERGENCY__CALL__RET( panels()->p0_move_up(panel) );
     panels()->resize_and_layout();
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_down(wxCommandEvent& _e)
 {
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     //  fasten your seatbelt for the cast
     //  event -> wxObject -> wxButton -> GetClientData() -> OFLPPanel*
     OFLPPanel   *   panel = static_cast< OFLPPanel* >
@@ -381,23 +441,31 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_down(wxCommandEv
         _e.GetEventObject(), panel);
 
     panels()->p0_move_dn(panel);
+
     panels()->resize_and_layout();
 }
 
 void    OpenFilesListPlus::     evh_panel_header_button_clicked_opt (wxCommandEvent& _e)
 {
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
+    settings()->action(_e);
+    //  ........................................................................
     //  this handler is connect to a wxButton, so
     //  - _e.GetEventObject() is not NULL
     //  - _e.GetEventObject() can be casted to a wxWindow
-    static_cast< wxWindow* >( _e.GetEventObject() )->PopupMenu(menu_options());
+    //  static_cast< wxWindow* >( _e.GetEventObject() )->PopupMenu(menu_options());
 }
 //  ############################################################################
 //
 //                          MENU EVENTS
 //
 //  ############################################################################
+/*
 void    OpenFilesListPlus::     evh_menu_option_checked             (wxCommandEvent& _e)
 {
+    OFLP_ON_DEGRADED__RET();
+    //  ........................................................................
     bool    lc  =   menu_options()->log_console();
     bool    lw  =   menu_options()->log_window();
 
@@ -405,16 +473,12 @@ void    OpenFilesListPlus::     evh_menu_option_checked             (wxCommandEv
 
     menu_options()->evh_menu_option_checked(_e);                                //  process event
 
-    if ( ( ! lw ) &&     menu_options()->log_window()   )
-    {
-        GWR_INF( "%s", wxS("+log window") );
-        earlgreycb::A_log_window =   true;
-        earlgreycb::Log_window_open( Manager::Get()->GetAppWindow() );
-    }
-    if ( (   lw ) && ( ! menu_options()->log_window() ) )
-    {
-        GWR_INF( "%s", wxS("-log window") );
-        earlgreycb::A_log_window =   false;
-        earlgreycb::Log_window_close();
-    }
+}
+*/
+void    OpenFilesListPlus::     evh_settings_activated              (wxActivateEvent& _e)
+{
+    if ( _e.GetEventObject() != settings()->dw_settings )
+        return;
+
+    settings()->settings_window_activated( _e.GetActive() );
 }

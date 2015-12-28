@@ -33,7 +33,7 @@ class   HString
             size_t              i       =   0;
             int                 c       =   0;
             //  ................................................................
-            //if ( len > 16 ) len = 16;                                           //  limit hash computing to 16 bytes
+            //if ( len > 16 ) len = 16;                                         //  limit hash computing to 16 bytes
 
             while ( i != len )
             {
