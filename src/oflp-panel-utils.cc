@@ -1,9 +1,27 @@
+/*
+ * This file is licensed under the GNU General Public License, version 3
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ */
+
+#include    "oflp-plugin.hh"
+
+#include    "oflp-plugin-mod-panels.hh"
+
+#include    "oflp-panel.hh"
+//  ............................................................................
+#define GWR_OFLP_SANITY_CHECKS
+#define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
+#define GWR_TKI(FORMAT, ...)    GWRCB_TKI(FORMAT, __VA_ARGS__);
+#define GWR_TKE(FORMAT, ...)    GWRCB_TKE(FORMAT, __VA_ARGS__);
+#define GWR_INF(FORMAT, ...)    GWRCB_INF(FORMAT, __VA_ARGS__);
+#define GWR_WNG(FORMAT, ...)    GWRCB_WNG(FORMAT, __VA_ARGS__);
+#define GWR_ERR(FORMAT, ...)    GWRCB_ERR(FORMAT, __VA_ARGS__);
 //  ############################################################################
 //
-//                          OFLPPanelDataObject
+//                          OflpPanelDataObject
 //
 //  ############################################################################
-OFLPPanelDataObject::OFLPPanelDataObject()
+OflpPanelDataObject::OflpPanelDataObject()
 {
     wxDataFormat fmt;
     fmt.SetId(wxS("c::b/oflpp-item-drag"));
@@ -13,7 +31,7 @@ OFLPPanelDataObject::OFLPPanelDataObject()
     a_data_size = 0;
 }
 //  ============================================================================
-bool        OFLPPanelDataObject::p0_serialize   ()
+bool        OflpPanelDataObject::p0_serialize   ()
 {
     a_data[0]                           =   a_data_panel_index;
     a_data[1]                           =   a_data_item_index;
@@ -23,17 +41,17 @@ bool        OFLPPanelDataObject::p0_serialize   ()
 
     return true;
 }
-bool        OFLPPanelDataObject::p0_deserialize ()
+bool        OflpPanelDataObject::p0_deserialize ()
 {
     a_data_panel_index  =   a_data[0];
     a_data_item_index   =   a_data[1];
     a_data_editor       =   *( p0_serialized_editor_pointer() );
     //  ........................................................................
     //  validity checks
-    if ( a_data_panel_index >= OFLPPanelDataObject::s_panel_index_max )
+    if ( a_data_panel_index >= OflpPanelDataObject::s_panel_index_max )
         return false;
 
-    if ( a_data_item_index  >= OFLPPanelDataObject::s_item_index_max  )
+    if ( a_data_item_index  >= OflpPanelDataObject::s_item_index_max  )
         return false;
 
     if ( ! a_data_editor )
@@ -42,15 +60,15 @@ bool        OFLPPanelDataObject::p0_deserialize ()
     return true;
 }
 //  ============================================================================
-size_t      OFLPPanelDataObject::GetDataSize    ()                     const
+size_t      OflpPanelDataObject::GetDataSize    ()                     const
 {
-    GWR_INF("OFLPPanelDataObject::GetDataSize():[%i]", GWR_SIZE_T_TO_INT(a_data_size));
+    GWR_INF("OflpPanelDataObject::GetDataSize():[%i]", oflp::Log_szt2int(a_data_size));
     return a_data_size;
 }
 
-bool        OFLPPanelDataObject::GetDataHere    (void *buf)            const
+bool        OflpPanelDataObject::GetDataHere    (void *buf)            const
 {
-    GWR_INF("%s", wxS("OFLPPanelDataObject::GetDataHere():start") );
+    GWR_INF("%s", wxS("OflpPanelDataObject::GetDataHere():start") );
     if ( ! a_data_size )
         return false;
 
@@ -58,7 +76,7 @@ bool        OFLPPanelDataObject::GetDataHere    (void *buf)            const
     return true;
 }
 
-int         OFLPPanelDataObject::GetDataPanelIx ()
+int         OflpPanelDataObject::GetDataPanelIx ()
 {
     if ( ! a_data_size )
         return wxNOT_FOUND;
@@ -66,7 +84,7 @@ int         OFLPPanelDataObject::GetDataPanelIx ()
     return static_cast< int >( a_data_panel_index );
 }
 
-int         OFLPPanelDataObject::GetDataItemIx  ()
+int         OflpPanelDataObject::GetDataItemIx  ()
 {
     if ( ! a_data_size )
         return wxNOT_FOUND;
@@ -74,7 +92,7 @@ int         OFLPPanelDataObject::GetDataItemIx  ()
     return static_cast< int >( a_data_item_index );
 }
 
-EditorBase* OFLPPanelDataObject::GetDataEditor  ()
+EditorBase* OflpPanelDataObject::GetDataEditor  ()
 {
     if ( ! a_data_size )
         return NULL;
@@ -82,9 +100,9 @@ EditorBase* OFLPPanelDataObject::GetDataEditor  ()
     return a_data_editor;
 }
 //  ============================================================================
-bool        OFLPPanelDataObject::SetData        (size_t len, const void *buf)   //  unformated input serializer
+bool        OflpPanelDataObject::SetData        (size_t len, const void *buf)   //  unformated input serializer
 {
-    GWR_TKI("%s", wxS("OFLPPanelDataObject::SetData(1):start") );
+    GWR_TKI("%s", wxS("OflpPanelDataObject::SetData(1):start") );
     //  ........................................................................
     if ( len > GetDataCapacity() )
         return false;
@@ -98,15 +116,15 @@ bool        OFLPPanelDataObject::SetData        (size_t len, const void *buf)   
     return true;
 }
 
-bool        OFLPPanelDataObject::SetData        (int _panel_ix, int _item_ix, EditorBase* _editor)  //  formated input serializer
+bool        OflpPanelDataObject::SetData        (int _panel_ix, int _item_ix, EditorBase* _editor)  //  formated input serializer
 {
-    GWR_TKI("%s", wxS("OFLPPanelDataObject::SetData(2):start") );
+    GWR_TKI("%s", wxS("OflpPanelDataObject::SetData(2):start") );
     //  ........................................................................
     //  input validity checks
-    if ( ( _panel_ix < 0 ) || ( _panel_ix >= OFLPPanelDataObject::s_panel_index_max ) )
+    if ( ( _panel_ix < 0 ) || ( _panel_ix >= OflpPanelDataObject::s_panel_index_max ) )
         return false;
 
-    if ( ( _item_ix < 0  ) || ( _item_ix >= OFLPPanelDataObject::s_item_index_max   ) )
+    if ( ( _item_ix < 0  ) || ( _item_ix >= OflpPanelDataObject::s_item_index_max   ) )
         return false;
 
     if ( ! _editor )
@@ -137,9 +155,9 @@ OpenFilesListPlusPanelItemInfo::OpenFilesListPlusPanelItemInfo(wxTreeEvent& _e)
     :   OpenFilesListPlusPanelItemData      (NULL, NULL )   ,
         a_is_ok                             (false      )
 {
-    OFLPPanelItemData   *   data;
+    OflpPanelItemData   *   data;
     //  ........................................................................
-    //D GWR_INF("%s", wxS("OFLPPanelItemInfo::()"));
+    //D GWR_INF("%s", wxS("OflpPanelItemInfo::()"));
     //  ........................................................................
     a_iid   =   _e.GetItem();
     //D GWR_INF("  iid   [%p]", a_iid);
@@ -151,7 +169,7 @@ OpenFilesListPlusPanelItemInfo::OpenFilesListPlusPanelItemInfo(wxTreeEvent& _e)
 
     //  when DnD ended, OnTreeSelChanged is called on the source ; we land
     //  here with a valid iid but a NULL data, since the item was removed !
-    data    = static_cast< OFLPPanelItemData* >( a_tree->GetItemData(a_iid) );
+    data    = static_cast< OflpPanelItemData* >( a_tree->GetItemData(a_iid) );
     //D GWR_INF("  data  [%p]", data);
     if ( ! data )           goto lab_failure;
 
@@ -185,11 +203,11 @@ lab_failure:
 //                          OPENFILESLISTPLUGINPANELDROPTARGET
 //
 //  ############################################################################
-OpenFilesListPlusPanelDropTarget::        OpenFilesListPlusPanelDropTarget(wxTreeCtrl* _owner, OFLPPanel* _owner_panel)
+OpenFilesListPlusPanelDropTarget::        OpenFilesListPlusPanelDropTarget(wxTreeCtrl* _owner, OflpPanel* _owner_panel)
 {
     a_owner         =   _owner;
     a_owner_panel   =   _owner_panel;
-    d_data_object   =   new OFLPPanelDataObject();
+    d_data_object   =   new OflpPanelDataObject();
 
     SetDataObject( d_data_object );
 }
@@ -201,7 +219,7 @@ OpenFilesListPlusPanelDropTarget::       ~OpenFilesListPlusPanelDropTarget()
 
 bool OpenFilesListPlusPanelDropTarget::   OnDrop(wxCoord x, wxCoord y)
 {
-    GWR_INF("%s", wxS("OFLPPanelDropTarget::OnDrop():start") );
+    GWR_INF("%s", wxS("OflpPanelDropTarget::OnDrop():start") );
     return true;
 }
 
@@ -211,16 +229,16 @@ OpenFilesListPlusPanelDropTarget::        OnData(wxCoord x, wxCoord y, wxDragRes
     wxDragResult        dres;
 
     EditorBase      *   editor;
-    OFLPPanel       *   spanel  =   NULL;
+    OflpPanel       *   spanel  =   NULL;
     int                 spvix   =   0;
     int                 siix    =   0;
 
-    OFLPPanel       *   cpanel  =   NULL;
+    OflpPanel       *   cpanel  =   NULL;
     int                 cpvix   =   0;
     int                 ciix    =   0;
     wxTreeItemId        ciid;
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLPPanelDropTarget::OnData()"));
+    OFLP_FUNC_ENTER_LOG("OflpPanelDropTarget::OnData()");
     //  ........................................................................
     //  reset destination panel for the end of OnDragInit()
     OpenFilesListPlus::Instance()->dnd_panel_dst_set(NULL);
@@ -267,6 +285,6 @@ OpenFilesListPlusPanelDropTarget::        OnData(wxCoord x, wxCoord y, wxDragRes
     OpenFilesListPlus::Instance()->dnd_panel_dst_set( opanel() );
     //  ........................................................................
 lab_return:
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
     return dres;
 }

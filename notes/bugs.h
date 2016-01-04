@@ -1,14 +1,14 @@
 +(001)  2015.08.21  When editor change from oflp, focus stay on oflp, is not given
                     to editor
 
- (002)  2015.08.21  When editing OFLPPanel title, the wxTextCtrl remains if
+ (002)  2015.08.21  When editing OflpPanel title, the wxTextCtrl remains if
                     user click anywhere else ; should switch back to wxStaticText
 
  (003)  2015.08.21  After DnD selection of item is lost
 
  (004)  2015.08.21  Double loop : mouse -> activate editor -> select editor -> OnTreeItemSelected -> refresh -> select editor
 
- (005)  2015.08.22  Double call to OFLPPanelHeader::switch_to_static()
+ (005)  2015.08.22  Double call to OflpPanelHeader::switch_to_static()
                     because of TEXT_ENTER _AND_ KILL_FOCUS events
 
  (006)  2015.08.29  libxxx.so vs xxx.so in zip file & lib loading
@@ -45,6 +45,13 @@
  (018)  2015.12.27  Select a file in dclick mode. single click another file.
                     Switch to sclick mode. Exit settings panel by single click
                     on the seconf file. First file stay edited, Second is selected.
+
+ (019)  2015.12.31  File open but not belonging to any project is removed from
+                    bulk @ close_workspace_complete -> editor is open, but
+                    not in any panel
+
++(020)  2015.12.31  When installing OpenFilesListPlus.cbplugin, current open
+                    editors are simply ignored :)
 //  ############################################################################
 (001)
 //  ============================================================================
@@ -59,7 +66,7 @@
 2015.09.17  Done : all has been rewrited ; anyway C::B sends 2 activated events
 //  ============================================================================
 (005)
-2015.08.23  done : flag OFLPPanel::a_allow_kill_focus_event
+2015.08.23  done : flag OflpPanel::a_allow_kill_focus_event
 //  ============================================================================
 (006)
 2015.08.30  Done
@@ -78,7 +85,7 @@
 2015.09.01  Done : by replacing the wxLog...stuff by a wxFrame + wxTextCtrl
 //  ============================================================================
 (011)
-2015.09.12  Done : item name verification was commented in OFLPPanel::editor_sync()
+2015.09.12  Done : item name verification was commented in OflpPanel::editor_sync()
 //  ============================================================================
 (012)
 2015.09.08  Done : wxTreeCtrl->GetSelection() is buggy - removed all calls
@@ -100,21 +107,21 @@
 01#     bool        OflpModEditors::    add (EditorBase* _nn_edb)
 02#     bool        OflpModEditors::    sub (EditorBase* _nn_edb)
 03#     bool        OflpModEditors::    mov (
-                        OFLPPanel   *   _nn_dst     ,
-                        OFLPPanel   *   _nn_src     ,
+                        OflpPanel   *   _nn_dst     ,
+                        OflpPanel   *   _nn_src     ,
                         EditorBase  *   _nn_edb     )
 
-04$     OFLPPanel*  OflpModLayout::     file_assignment_find_panel_from_editor_base(EditorBase* _nn_edb)
+04$     OflpPanel*  OflpModLayout::     file_assignment_find_panel_from_editor_base(EditorBase* _nn_edb)
 05$     void        OflpModLayout::     file_assignment_update(
                         EditorBase  *   _nn_edb         ,
-                        OFLPPanel   *   _nn_dst_panel   )
+                        OflpPanel   *   _nn_dst_panel   )
 
-06$     bool        OflpModPanels::     p0_editors_mov  (OFLPPanel* _nn_dst, OFLPPanel* _nn_src)
-07#$    bool        OflpModPanels::     p0_editor_mov   (OFLPPanel* _nn_dst, OFLPPanel* _nn_src, EditorBase* _nn_edb)
-08#     bool        OflpModPanels::     p0_sub          (OFLPPanel* _nn_panel)
-09#     bool        OflpModPanels::     p0_move_up      (OFLPPanel* _nn_panel)
-10?     bool        OflpModPanels::     p0_move_dn      (OFLPPanel* _nn_panel)         from GetClientData() - TODO ?
-11#     bool        OflpModPanels::     p0_minmax       (OFLPPanel* _nn_panel)
+06$     bool        OflpModPanels::     p0_editors_mov  (OflpPanel* _nn_dst, OflpPanel* _nn_src)
+07#$    bool        OflpModPanels::     p0_editor_mov   (OflpPanel* _nn_dst, OflpPanel* _nn_src, EditorBase* _nn_edb)
+08#     bool        OflpModPanels::     p0_sub          (OflpPanel* _nn_panel)
+09#     bool        OflpModPanels::     p0_move_up      (OflpPanel* _nn_panel)
+10?     bool        OflpModPanels::     p0_move_dn      (OflpPanel* _nn_panel)         from GetClientData() - TODO ?
+11#     bool        OflpModPanels::     p0_minmax       (OflpPanel* _nn_panel)
 
 12#     void        OpenFilesListPlus:: RefreshOpenFileState    (EditorBase* _nn_edb)
 13#     void        OpenFilesListPlus:: RefreshOpenFileLayout   (EditorBase* _nn_edb)
@@ -128,3 +135,9 @@
 (018)
 2015.12.28  Done : call RefreshOpenFileState() on active editor after settings
             window has been closed in OflpModSettings::settings_window_activated()
+//  ============================================================================
+(019)
+2015.12.28  Done : OflpModPanels::p0_reset() was hard remove of everything -
+            was not properly coded yet
+//  ============================================================================
+(020)

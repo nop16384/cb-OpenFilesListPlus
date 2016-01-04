@@ -1,3 +1,24 @@
+/*
+ * This file is licensed under the GNU General Public License, version 3
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ */
+
+#include    "oflp-plugin-mod-layout.hh"
+
+#include    "oflp-plugin.hh"
+
+#include    "oflp-plugin-mod-panels.hh"
+
+#include    "oflp-panel.hh"
+//  ............................................................................
+//  specific to this file oflp defines
+#define GWR_OFLP_SANITY_CHECKS
+#define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
+#define GWR_TKI(FORMAT, ...)    GWRCB_TKI(FORMAT, __VA_ARGS__);
+#define GWR_TKE(FORMAT, ...)    GWRCB_TKE(FORMAT, __VA_ARGS__);
+#define GWR_INF(FORMAT, ...)    GWRCB_INF(FORMAT, __VA_ARGS__);
+#define GWR_WNG(FORMAT, ...)    GWRCB_WNG(FORMAT, __VA_ARGS__);
+#define GWR_ERR(FORMAT, ...)    GWRCB_ERR(FORMAT, __VA_ARGS__);
 //  ############################################################################
 //
 //                      CB WORKSPACES & PROJECTS LAYOUTS
@@ -54,7 +75,7 @@ bool    OflpModLayout::     xml_save_workspace      ()
     bool                    bret    =   TRUE;
 
     cbWorkspace         *   wsp     =   Manager::Get()->GetProjectManager()->GetWorkspace();
-    OFLPPanel           *   panel   =   NULL;
+    OflpPanel   const   *   panel   =   NULL;
 
     const   char        *   ROOT_TAG    =  "CodeBlocks_workspace_oflp_file";
             wxString        wspfn;
@@ -97,12 +118,9 @@ bool    OflpModLayout::     xml_save_workspace      ()
         goto lab_failure;
     //  ........................................................................
     //  xml stuff - layout
-    for ( PanelArray::const_iterator
-        it  =   panels()->array().begin()   ;
-        it  !=  panels()->array().end()     ;
-        it++                                )
+    for ( size_t i = 0 ; i != panels()->size() ; i++ )
     {
-        panel = (*it);
+        panel = panels()->panel(i);
 
         if ( panel->is_bulk() )
             continue;
@@ -152,7 +170,7 @@ bool    OflpModLayout::     xml_save_project        (cbProject* _pro)
     ProjectFile             *   pjf         =   NULL;
     wxString                    pjfn;
     cbProject               *   pro         =   NULL;
-    OFLPPanel       const   *   panel       =   NULL;
+    OflpPanel       const   *   panel       =   NULL;
 
     char            const   *   ROOT_TAG    = "CodeBlocks_project_oflp_file";
     wxString                    profn;
@@ -337,65 +355,60 @@ bool    OflpModLayout::ProjectAssignments::fas_get_from_rel_fpath(
     FileAssignment          *&  _fas        )
 {
     FileAssignment                  *   fas     =   NULL;
-    earlgreycb::HString::tHash          hash    =   earlgreycb::HString::Hash(_rel_path);
+    oflp::HString::tHash                hash    =   oflp::HString::Hash(_rel_path);
     //  ........................................................................
-    for ( FileAssignmentArray::const_iterator                                   //  iterates on all FileAssignment-s
-            i1  =   a_assignments.begin()   ;
-            i1  !=  a_assignments.end()     ;
-            i1++                            )
-        {
-            fas = (*i1);
+    OFLP_STL_CFOR( FileAssignmentArray, a_assignments, it )
+    {
+        fas = (*it);
 
-            //D GWR_TKI("              ...comparing [%lu] with FileAssignment[%lu][%s]", hash, fas->hrfp(), fas->afp().wc_str());
+        //D GWR_TKI("              ...comparing [%lu] with FileAssignment[%lu][%s]", hash, fas->hrfp(), fas->afp().wc_str());
 
-            if ( fas->hrfp() != hash )
-                continue;
+        if ( fas->hrfp() != hash )
+            continue;
 
-            if ( fas->rfp().Cmp( _rel_path ) )
-                continue;
+        if ( fas->rfp().Cmp( _rel_path ) )
+            continue;
 
-            //  here we are
-            _fas = fas;
-            return TRUE;
-        }
+        //  here we are
+        _fas = fas;
+        return true;
+    }
+    OFLP_STL_CNEXT( a_assignments )
+
     _fas = NULL;
     return FALSE;
 }
 //  ============================================================================
 void        OflpModLayout:: p0_reset_assignments                        ()
 {
-    for ( ProjectAssignmentsArray::iterator
-        it  =   a_project_assignments_array.begin() ;
-        it  !=  a_project_assignments_array.end()   ;
-        it++                                        )
+    OFLP_STL_CFOR( ProjectAssignmentsArray, a_project_assignments_array, it )
     {
         delete (*it);
     }
+    OFLP_STL_CNEXT(a_project_assignments_array)
+
     a_project_assignments_array.Clear();
 
-    for ( PanelAssignmentArray::iterator
-        it  =   a_panel_assignment_array.begin()    ;
-        it  !=  a_panel_assignment_array.end()      ;
-        it++                                        )
+    OFLP_STL_CFOR( PanelAssignmentArray, a_panel_assignment_array, it )
     {
         delete (*it);
     }
+    OFLP_STL_CNEXT(a_project_assignments_array)
+
     a_panel_assignment_array.Clear();
 }
 
 bool        OflpModLayout:: p0_project_assignments_get_from_cbProject   (cbProject* _pro, ProjectAssignments*& _pra)
 {
-    for ( ProjectAssignmentsArray::const_iterator                               //  iterates on all ProjectAssignments-s...
-        i1  =   a_project_assignments_array.begin() ;
-        i1  !=  a_project_assignments_array.end()   ;
-        i1++                                        )
+    OFLP_STL_CFOR( ProjectAssignmentsArray, a_project_assignments_array, it )
     {
-        if ( (*i1)->project() == _pro )                                         //  until we find the one that points on the cbProject
+        if ( (*it)->project() == _pro )                                         //  until we find the one that points on the cbProject
         {
-            _pra = (*i1);
-            return TRUE;
+            _pra = (*it);
+            return true;
         }
     }
+    OFLP_STL_CNEXT(a_project_assignments_array)
 
     _pra = NULL;
     return FALSE;
@@ -410,12 +423,9 @@ void        OflpModLayout:: p0_project_assignments_sub                  (cbProje
 {
     ProjectAssignments  *   pa  =   NULL;
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::Layout::project_assignments_sub()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::Layout::project_assignments_sub()");
     //  ........................................................................
-    for ( ProjectAssignmentsArray::iterator
-        it  =   a_project_assignments_array.begin() ;
-        it  !=  a_project_assignments_array.end()   ;
-        it++                                        )
+    OFLP_STL_CFOR( ProjectAssignmentsArray, a_project_assignments_array, it )
     {
         pa  =   (*it);
 
@@ -427,9 +437,10 @@ void        OflpModLayout:: p0_project_assignments_sub                  (cbProje
             goto lab_exit;
         }
     }
+    OFLP_STL_CNEXT(a_project_assignments_array)
     //  ........................................................................
 lab_exit:
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 }
 
 bool        OflpModLayout:: p0_project_assignments_get_from_editor_base (
@@ -441,7 +452,7 @@ bool        OflpModLayout:: p0_project_assignments_get_from_editor_base (
 
     ProjectAssignments          *       pa          =   NULL;
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::Layout::p0_project_assignments_get_from_editor_base()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::Layout::p0_project_assignments_get_from_editor_base()");
     //  ........................................................................
     //  init outputs
     _out_project_assignments    =   NULL;
@@ -471,7 +482,7 @@ bool        OflpModLayout:: p0_file_assignment_get_from_editor_base     (
     ProjectFile                 *       pjf         =   NULL;
     ProjectAssignments          *       pas         =   NULL;
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::Layout::p0_file_assignment_get_from_editor_base()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::Layout::p0_file_assignment_get_from_editor_base()");
     //  ........................................................................
     //  init output
     _out_file_assignment        =   NULL;
@@ -505,21 +516,21 @@ bool        OflpModLayout:: p0_file_assignment_get_from_editor_base     (
     }
     //  ........................................................................
 lab_exit_success:
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
     return TRUE;
     //  ........................................................................
 lab_exit_failure:
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
     return FALSE;
 }
 
-OFLPPanel*  OflpModLayout:: file_assignment_find_panel_from_editor_base (EditorBase* _nn_edb)
+OflpPanel*  OflpModLayout:: file_assignment_find_panel_from_editor_base (EditorBase* _nn_edb)
 {
     FileAssignment      *   fa          =   NULL;
 
-    OFLPPanel           *   panel       =   NULL;
+    OflpPanel           *   panel       =   NULL;
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::Layout::file_assignment_find_panel_from_editor_base()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::Layout::file_assignment_find_panel_from_editor_base()");
 
     if ( ! p0_file_assignment_get_from_editor_base( _nn_edb, fa ) )
     {
@@ -529,13 +540,13 @@ OFLPPanel*  OflpModLayout:: file_assignment_find_panel_from_editor_base (EditorB
     panel   =   panels()->get_by_name( fa->pname() );
     //  ........................................................................
 lab_exit:
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
     return panel;
 }
 
 void        OflpModLayout:: file_assignment_update                      (
     EditorBase  *   _nn_edb         ,
-    OFLPPanel   *   _nn_dst_panel   )
+    OflpPanel   *   _nn_dst_panel   )
 {
     ProjectAssignments  *   pas         =   NULL;
     FileAssignment      *   fas         =   NULL;
@@ -543,9 +554,9 @@ void        OflpModLayout:: file_assignment_update                      (
 
     wxFileName              awxfn;
     wxString                rfp;
-    OFLPPanel const     *   panel       =   NULL;
+    OflpPanel const     *   panel       =   NULL;
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::Layout::file_assignment_update()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::Layout::file_assignment_update()");
     //  ........................................................................
     //  ProjectAssignments found
     if ( p0_project_assignments_get_from_editor_base(_nn_edb, pas, pjf) )
@@ -559,7 +570,7 @@ void        OflpModLayout:: file_assignment_update                      (
 
             if ( ! panel )
             {
-                GWR_TKI("              ...assignment found, but OFLPPanel not found[%s]",fas->pname().wc_str());
+                GWR_TKI("              ...assignment found, but OflpPanel not found[%s]",fas->pname().wc_str());
                 goto lab_exit;
             }
 
@@ -604,7 +615,7 @@ lab_add:
     pas->add( awxfn, rfp, _nn_dst_panel->title() );
     //  ........................................................................
 lab_exit:
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 }
 //  ############################################################################
 //                              Actions
@@ -618,7 +629,7 @@ void    OflpModLayout::     reset                       ()
 //  ############################################################################
 bool    OflpModLayout::     workspace_load              ()
 {
-    earlgreycb::Log_function_enter(wxS("Layout::workspace_load()"));
+    OFLP_FUNC_ENTER_LOG("Layout::workspace_load()");
     //  ........................................................................
     ProjectManager      *   pjm     =   NULL;
     cbWorkspace         *   wsp     =   NULL;
@@ -653,22 +664,22 @@ bool    OflpModLayout::     workspace_load              ()
 
 bool    OflpModLayout::     workspace_close             ()
 {
-    earlgreycb::Log_function_enter(wxS("Layout::workspace_close()"));
+    OFLP_FUNC_ENTER_LOG("Layout::workspace_close()");
 
     bool bret = workspace_save();
 
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 
     return bret;
 }
 
 bool    OflpModLayout::     workspace_save              ()
 {
-    earlgreycb::Log_function_enter(wxS("Layout::workspace_save()"));
+    OFLP_FUNC_ENTER_LOG("Layout::workspace_save()");
 
     bool bret = xml_save_workspace();
 
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 
     return bret;
 }
@@ -678,7 +689,7 @@ bool    OflpModLayout::     project_load                (cbProject* _pro)
     ProjectAssignments  *   pa  =   NULL;
     TiXmlDocument       *   doc =   NULL;
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("Layout::project_load()"));
+    OFLP_FUNC_ENTER_LOG("Layout::project_load()");
     GWR_INF("project title[%s]", _pro->GetTitle().wc_str());
     //  ........................................................................
     //  load the project's oflp-layout
@@ -705,19 +716,19 @@ bool    OflpModLayout::     project_load                (cbProject* _pro)
 
 bool    OflpModLayout::     project_close               (cbProject* _pro)
 {
-    earlgreycb::Log_function_enter(wxS("Layout::project_close()"));
+    OFLP_FUNC_ENTER_LOG("Layout::project_close()");
 
     project_save(_pro);                                                         //  _GWR_TODO_
 
     p0_project_assignments_sub(_pro);
     //  ........................................................................
 lab_exit:
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 }
 
 bool    OflpModLayout::     project_save                (cbProject* _pro)
 {
-    earlgreycb::Log_function_enter(wxS("Layout::project_save()"));
+    OFLP_FUNC_ENTER_LOG("Layout::project_save()");
 
     GWR_INF("project title[%s]", _pro->GetTitle().wc_str());
 

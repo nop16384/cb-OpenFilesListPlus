@@ -1,6 +1,6 @@
 earlgrey-cb.log.cc|40|      dw_log_window   = new LogWindow( _parent, _T(" OpenFilesList"), true, false );|
 
-oflp-panel.cc|273|          new OFLPPanelItemData(this, _editor)   );|
+oflp-panel.cc|273|          new OflpPanelItemData(this, _editor)   );|
 
 oflp-plugin-gfx.hhi|23|     a_bitmap_hash[_hash_key] = new wxBitmap( _bmp );|
 oflp-plugin-gfx.hhi|67|     d_img_list  =   new wxImageList(16, 16);|
@@ -34,7 +34,7 @@ oflp-panel-header.cci|119|  bt  = new wxBitmapButton(this, wxNewId()            
 
 oflp-panel-header.cci|155|  dw_sizer        =   new wxBoxSizer(wxHORIZONTAL);|
 //  ############################################################################
-oflp-panel-utils.cci|192|   d_data_object   =   new OFLPPanelDataObject();|
+oflp-panel-utils.cci|192|   d_data_object   =   new OflpPanelDataObject();|
 //  ############################################################################
 oflp-panel.cc|156|          d_tree          =   new wxTreeCtrl( this, wxNewId(), wxDefaultPosition, wxSize(150, 100),|
 oflp-panel.cc|175|          d_drop_target   =   new OpenFilesListPlusPanelDropTarget(d_tree, this);|

@@ -6,14 +6,14 @@
 #ifndef __OFLP_PANEL_HH__
 #define __OFLP_PANEL_HH__
 //  ............................................................................
-#include    "oflp-common.hh"                                                    //  standard wx includes + OFLP log system
+#include    "oflp-common.hh"
 //  ............................................................................
 #include    <wx/dnd.h>                                                          //  for OpenFilesListPlusPanelDropTarget
 //  ............................................................................
 #include    <wx/dynarray.h>
 
-#include    "oflp-panel-header.hhi"
-#include    "oflp-panel-utils.hhi"
+#include    "oflp-panel-header.hh"
+#include    "oflp-panel-utils.hh"
 /// ****************************************************************************
 //! \class  OpenFilesListPlusPanel
 //!
@@ -29,12 +29,12 @@ class OpenFilesListPlusPanel              : public wxPanel
     bool                                a_bulk;
     bool                                a_allow_kill_focus_event;
 
-    OFLPPanelHeader                 *   dw_header;
+    OflpPanelHeader                 *   dw_header;
     wxTreeCtrl                      *   d_tree;
     wxBoxSizer                      *   dw_sizer;
 
     EditorArray                         a_editors_array;                        //  speed up finding editors
-    earlgreycb::HString::HArray         a_harray;
+    oflp::HString::HArray               a_harray;
 
     OpenFilesListPlusPanelDropTarget*   d_drop_target;
     //  ........................................................................

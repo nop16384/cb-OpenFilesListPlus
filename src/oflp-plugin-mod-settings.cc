@@ -1,3 +1,21 @@
+/*
+ * This file is licensed under the GNU General Public License, version 3
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ */
+
+#include    "oflp-plugin-mod-settings.hh"
+
+#include    "oflp-settings.hh"
+
+#include    "oflp-plugin.hh"
+//  ............................................................................
+#define GWR_OFLP_SANITY_CHECKS
+#define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
+#define GWR_TKI(FORMAT, ...)    GWRCB_TKI(FORMAT, __VA_ARGS__);
+#define GWR_TKE(FORMAT, ...)    GWRCB_TKE(FORMAT, __VA_ARGS__);
+#define GWR_INF(FORMAT, ...)    GWRCB_INF(FORMAT, __VA_ARGS__);
+#define GWR_WNG(FORMAT, ...)    GWRCB_WNG(FORMAT, __VA_ARGS__);
+#define GWR_ERR(FORMAT, ...)    GWRCB_ERR(FORMAT, __VA_ARGS__);
 //  ############################################################################
 //
 //                          SETTINGS
@@ -6,7 +24,7 @@
 void    OflpModSettings::   action                      (wxCommandEvent &   _e)
 {
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::Settings::action()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::Settings::action()");
     //  ........................................................................
     //  ........................................................................
     //  widget is shown,
@@ -15,18 +33,18 @@ void    OflpModSettings::   action                      (wxCommandEvent &   _e)
     else
         popout(_e);
 
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 }
 
 void    OflpModSettings::   settings_window_activated   (bool _b)
 {
     if ( _b )
     {
-        GWR_INF( "%s", wxS("SETTINGS ACTIVATED") );
+        GWRCB_INF( "%s", wxS("SETTINGS ACTIVATED") );
     }
     else
     {
-        GWR_INF( "%s", wxS("SETTINGS DE-ACTIVATED") );
+        GWRCB_INF( "%s", wxS("SETTINGS DE-ACTIVATED") );
 
         //  if we close the settings window and user clicked on options
         //  button( which caused the deactivation ), the button_clicked callback
@@ -46,7 +64,7 @@ void    OflpModSettings::   settings_window_activated   (bool _b)
     }
 }
 
-void    OflpModSettings::   popup                   (wxCommandEvent &   _e)
+void    OflpModSettings::   popup                       (wxCommandEvent &   _e)
 {
     //  ........................................................................
     //  ........................................................................
@@ -74,12 +92,12 @@ void    OflpModSettings::   popup                   (wxCommandEvent &   _e)
     //GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
 
-void    OflpModSettings::   popout                  (wxCommandEvent &   _e)
+void    OflpModSettings::   popout                      (wxCommandEvent &   _e)
 {
     popout();
 }
 
-void    OflpModSettings::   popout                  ()
+void    OflpModSettings::   popout                      ()
 {
     //  ........................................................................
     //  ........................................................................
@@ -95,39 +113,34 @@ void    OflpModSettings::   popout                  ()
     //GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
 
-void    OflpModSettings::   update_from_user_input  ()
+void    OflpModSettings::   update_from_user_input      ()
 {
     if ( log_enabled() )
     {
-        earlgreycb::A_log_window    =   log_window();
-        earlgreycb::A_log_console   =   log_console();
+        oflp::A_log_window    =   log_window();
+        oflp::A_log_console   =   log_console();
 
         if ( log_window() )
         {
             GWR_INF( "%s", wxS("+log window") );
-            earlgreycb::Log_window_open( Manager::Get()->GetAppWindow() );
+            oflp::Log_window_open( Manager::Get()->GetAppWindow() );
         }
         if ( ! log_window() )
         {
             GWR_INF( "%s", wxS("-log window") );
-            earlgreycb::Log_window_close();
+            oflp::Log_window_close();
         }
     }
     else
     {
-        earlgreycb::A_log_window    =   false;
-        earlgreycb::A_log_console   =   false;
+        oflp::A_log_window    =   false;
+        oflp::A_log_console   =   false;
 
-        earlgreycb::Log_window_close();
+        oflp::Log_window_close();
     }
 }
 //  ############################################################################
-        OflpModSettings::   OflpModSettings()/*
-    :   a_file_selection_mode   (eFILE_SELECTION_MODE_STANDARD)    ,
-        a_logs_enabled          (true )     ,
-            a_log_console       (false)     ,
-            a_log_window        (false)     ,
-            dw_settings         (NULL )*/
+        OflpModSettings::   OflpModSettings()
 {
     a_opt_log.enabled    = true;
     a_opt_log.window     = true;

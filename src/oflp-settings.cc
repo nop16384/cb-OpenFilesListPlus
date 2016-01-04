@@ -1,20 +1,11 @@
-#include "sdk.h"                                                                // Code::Blocks SDK
-//  ............................................................................
-#ifndef CB_PRECOMP
-    #include "manager.h"
-    #include "configmanager.h"
-    #include "configurationpanel.h"
-    #include "editormanager.h"
-    #include "projectmanager.h"
-    #include "logmanager.h"
-    #include "editorbase.h"
-    #include "cbeditor.h"
-    #include "sdk_events.h"
-    #include "misctreeitemdata.h"
-#endif
-//  ............................................................................
+/*
+ * This file is licensed under the GNU General Public License, version 3
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ */
+
 #include    "oflp-settings.hh"
 //  ............................................................................
+//  specific to this file oflp defines
 #define GWR_OFLP_SANITY_CHECKS
 #define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
 #define GWR_TKI(FORMAT, ...)    GWRCB_TKI(FORMAT, __VA_ARGS__);
@@ -22,12 +13,6 @@
 #define GWR_INF(FORMAT, ...)    GWRCB_INF(FORMAT, __VA_ARGS__);
 #define GWR_WNG(FORMAT, ...)    GWRCB_WNG(FORMAT, __VA_ARGS__);
 #define GWR_ERR(FORMAT, ...)    GWRCB_ERR(FORMAT, __VA_ARGS__);
-//  ############################################################################
-//  ############################################################################
-//
-//                          OPENFILESLISTPLUGINPANEL
-//
-//  ############################################################################
 //  ############################################################################
 //
 //                          OPENFILESLISTPLUSSETTINGS
@@ -167,7 +152,7 @@ void            OpenFilesListPlusSettings:: evh_check_box_clicked(wxCommandEvent
     //  a range of ids, so only one Connect() call is needed in the code.
     this->Connect(
         idb + 0, idb + 4,
-         wxEVT_COMMAND_CHECKBOX_CLICKED                                         ,
+        wxEVT_COMMAND_CHECKBOX_CLICKED                                          ,
         wxCommandEventHandler(OpenFilesListPlusSettings::evh_check_box_clicked) ,
         NULL, this                                                              );
     //  ........................................................................

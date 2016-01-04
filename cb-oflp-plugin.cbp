@@ -7,7 +7,28 @@
 		<Option compiler="gcc" />
 		<Option virtualFolders="src/;src/plugin/;src/panels/;src/panels/c/;src/panels/h/;src/plugin/c/;src/plugin/h/;src/log/;src/common/;src/devel-memleaks/;src/settings/;cb-fake-sdk/include/;notes/;cb-fake-sdk/;" />
 		<Build>
-			<Target title="public">
+			<Target title="Release">
+				<Option output="plugin/libOpenFilesListPlus" prefix_auto="0" extension_auto="1" />
+				<Option object_output="obj" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option host_application="codeblocks" />
+				<Option run_host_application_in_terminal="0" />
+				<Compiler>
+					<Add option="-ansi" />
+					<Add option="`wx-config  --cflags`" />
+					<Add option="-DOFLP_COMPILE_TARGET_PROD" />
+					<Add directory="/home/gwr/Src/C-C++/gwr.codeblocks/src/svn10373/trunk/src/include" />
+				</Compiler>
+				<Linker>
+					<Add option="`wx-config --libs`" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="chmod u=rwx ./src/post-build.bash" />
+					<Add after="./src/post-build.bash" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Debug">
 				<Option output="plugin/libOpenFilesListPlus" prefix_auto="0" extension_auto="1" />
 				<Option object_output="obj" />
 				<Option type="3" />
@@ -18,14 +39,22 @@
 					<Add option="-ansi" />
 					<Add option="-g" />
 					<Add option="`wx-config  --cflags`" />
-					<Add option="-fPIC" />
+					<Add option="-DOFLP_DEBUG" />
+					<Add option="-DOFLP_COMPILE_TARGET_PROD" />
 					<Add directory="/home/gwr/Src/C-C++/gwr.codeblocks/src/svn10373/trunk/src/include" />
 				</Compiler>
+				<ResourceCompiler>
+					<Add option="-DOFLP_DEBUG" />
+				</ResourceCompiler>
 				<Linker>
 					<Add option="`wx-config --libs`" />
 				</Linker>
+				<ExtraCommands>
+					<Add after="chmod u=rwx ./src/post-build.bash" />
+					<Add after="./src/post-build.bash" />
+				</ExtraCommands>
 			</Target>
-			<Target title="10373 - devel">
+			<Target title="devel">
 				<Option output="plugin/libOpenFilesListPlus" prefix_auto="0" extension_auto="1" />
 				<Option object_output="obj" />
 				<Option type="3" />
@@ -36,9 +65,16 @@
 					<Add option="-ansi" />
 					<Add option="-g" />
 					<Add option="`wx-config --cflags`" />
-					<Add option="-fPIC" />
-					<Add directory="/home/gwr/Src/C-C++/gwr.codeblocks/src/svn10373/trunk/src/include" />
+					<Add option="-DOFLP_DEBUG" />
+					<Add option="-DOFLP_LOG_FUNCTIONS" />
+					<Add option="-DOFLP_LOG" />
+					<Add option="-DOFLP_COMPILE_TARGET_DEVEL" />
 				</Compiler>
+				<ResourceCompiler>
+					<Add option="-DOFLP_DEBUG" />
+					<Add option="-DOFLP_LOG_FUNCTIONS" />
+					<Add option="-DOFLP_LOG" />
+				</ResourceCompiler>
 				<Linker>
 					<Add option="`wx-config --libs`" />
 				</Linker>
@@ -104,58 +140,16 @@
 					<Add option="-g" />
 					<Add option="`wx-config --cflags`" />
 					<Add option="-fPIC" />
-					<Add directory="/home/gwr/Src/C-C++/gwr.codeblocks/src/svn10373/trunk/src/include" />
 				</Compiler>
+				<ResourceCompiler>
+					<Add option="-DOFLP_DEBUG" />
+					<Add option="-DOFLP_LOG_FUNCTIONS" />
+					<Add option="-DOFLP_LOG" />
+				</ResourceCompiler>
 				<Linker>
 					<Add option="`wx-config --libs`" />
 					<Add option="-Wl,-z,defs" />
 				</Linker>
-			</Target>
-			<Target title="devel+xport10373">
-				<Option output="plugin/libOpenFilesListPlus" prefix_auto="0" extension_auto="1" />
-				<Option object_output="obj" />
-				<Option type="3" />
-				<Option compiler="gcc" />
-				<Option host_application="codeblocks" />
-				<Option run_host_application_in_terminal="0" />
-				<Compiler>
-					<Add option="-ansi" />
-					<Add option="-g" />
-					<Add option="`wx-config --cflags`" />
-					<Add option="-fPIC" />
-					<Add directory="/home/gwr/Src/C-C++/gwr.codeblocks/src/svn10373/trunk/src/include" />
-				</Compiler>
-				<Linker>
-					<Add option="`wx-config --libs`" />
-				</Linker>
-				<ExtraCommands>
-					<Add after="chmod u=rwx ./src/post-build.bash" />
-					<Add after="./src/post-build.bash" />
-					<Mode after="always" />
-				</ExtraCommands>
-			</Target>
-			<Target title="10627 - devel">
-				<Option output="plugin/libOpenFilesListPlus" prefix_auto="0" extension_auto="1" />
-				<Option object_output="obj" />
-				<Option type="3" />
-				<Option compiler="gcc" />
-				<Option host_application="codeblocks" />
-				<Option run_host_application_in_terminal="0" />
-				<Compiler>
-					<Add option="-ansi" />
-					<Add option="-g" />
-					<Add option="`wx-config --cflags`" />
-					<Add option="-fPIC" />
-					<Add directory="/home/gwr/Src/C-C++/gwr.codeblocks/src/svn10627/trunk/src/include" />
-				</Compiler>
-				<Linker>
-					<Add option="`wx-config --libs`" />
-				</Linker>
-				<ExtraCommands>
-					<Add after="chmod u=rwx ./src/post-build.bash" />
-					<Add after="./src/post-build.bash" />
-					<Mode after="always" />
-				</ExtraCommands>
 			</Target>
 		</Build>
 		<Compiler>
@@ -230,271 +224,154 @@
 			<Option target="devel-memleaks" />
 		</Unit>
 		<Unit filename="cb-fake-sdk/manager.cpp">
+			<Option compile="0" />
+			<Option link="0" />
 			<Option virtualFolder="cb-fake-sdk/" />
 			<Option target="devel-memleaks" />
 		</Unit>
 		<Unit filename="notes/bugs.h">
 			<Option virtualFolder="notes/" />
-			<Option target="10373 - devel" />
+			<Option target="devel" />
 			<Option target="devel-memleaks" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
 		</Unit>
 		<Unit filename="notes/changelog.h">
 			<Option virtualFolder="notes/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
+			<Option target="Debug" />
+			<Option target="devel" />
 			<Option target="devel-memleaks" />
 			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
+			<Option target="Release" />
 		</Unit>
 		<Unit filename="notes/new-list.h">
 			<Option virtualFolder="notes/" />
-			<Option target="10373 - devel" />
+			<Option target="devel" />
 			<Option target="devel-memleaks" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
 		</Unit>
 		<Unit filename="notes/notes.h">
 			<Option virtualFolder="notes/" />
-			<Option target="10373 - devel" />
+			<Option target="devel" />
 			<Option target="devel-memleaks" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
 		</Unit>
 		<Unit filename="notes/todo.h">
 			<Option virtualFolder="notes/" />
-			<Option target="10373 - devel" />
+			<Option target="devel" />
 			<Option target="devel-memleaks" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
 		</Unit>
 		<Unit filename="src/devel-memleaks/devel-memleaks.cc">
 			<Option virtualFolder="src/devel-memleaks/" />
 			<Option target="devel-memleaks" />
 		</Unit>
-		<Unit filename="src/earlgrey-cb.hstring.hh">
-			<Option virtualFolder="src/common/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
-		</Unit>
-		<Unit filename="src/earlgrey-cb.log.cc">
-			<Option virtualFolder="src/log/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
-		</Unit>
-		<Unit filename="src/earlgrey-cb.log.hh">
-			<Option virtualFolder="src/log/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
-		</Unit>
 		<Unit filename="src/manifest.xml">
 			<Option virtualFolder="src/common/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
+			<Option target="Debug" />
+			<Option target="devel" />
 			<Option target="devel-memleaks" />
 			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src/oflp-common-macros.hh">
+			<Option virtualFolder="src/common/" />
+		</Unit>
+		<Unit filename="src/oflp-common-stl-devel.hhi">
+			<Option virtualFolder="src/common/" />
+		</Unit>
+		<Unit filename="src/oflp-common-stl-prod.hhi">
+			<Option virtualFolder="src/common/" />
 		</Unit>
 		<Unit filename="src/oflp-common.hh">
 			<Option virtualFolder="src/common/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
+			<Option target="Debug" />
+			<Option target="devel" />
 			<Option target="devel-memleaks" />
 			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
+			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/oflp-panel-header.cci">
+		<Unit filename="src/oflp-hstring.hh">
+			<Option virtualFolder="src/common/" />
+		</Unit>
+		<Unit filename="src/oflp-log.cc">
+			<Option virtualFolder="src/log/" />
+		</Unit>
+		<Unit filename="src/oflp-log.hh">
+			<Option virtualFolder="src/log/" />
+		</Unit>
+		<Unit filename="src/oflp-panel-header.cc">
 			<Option virtualFolder="src/panels/c/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
 		</Unit>
-		<Unit filename="src/oflp-panel-header.hhi">
+		<Unit filename="src/oflp-panel-header.hh">
 			<Option virtualFolder="src/panels/h/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
 		</Unit>
-		<Unit filename="src/oflp-panel-utils.cci">
+		<Unit filename="src/oflp-panel-utils.cc">
 			<Option virtualFolder="src/panels/c/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
 		</Unit>
-		<Unit filename="src/oflp-panel-utils.hhi">
+		<Unit filename="src/oflp-panel-utils.hh">
 			<Option virtualFolder="src/panels/h/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
 		</Unit>
 		<Unit filename="src/oflp-panel.cc">
 			<Option virtualFolder="src/panels/c/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
+			<Option target="Debug" />
+			<Option target="devel" />
 			<Option target="devel-memleaks" />
 			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
+			<Option target="Release" />
 		</Unit>
 		<Unit filename="src/oflp-panel.hh">
 			<Option virtualFolder="src/panels/h/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
+			<Option target="Debug" />
+			<Option target="devel" />
 			<Option target="devel-memleaks" />
 			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
+			<Option target="Release" />
 		</Unit>
-		<Unit filename="src/oflp-plugin-dnd.hhi">
-			<Option virtualFolder="src/plugin/h/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
-		</Unit>
-		<Unit filename="src/oflp-plugin-events.cci">
-			<Option virtualFolder="src/plugin/c/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
-		</Unit>
-		<Unit filename="src/oflp-plugin-events.hhi">
-			<Option virtualFolder="src/plugin/h/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
-		</Unit>
-		<Unit filename="src/oflp-plugin-mod-editors.cci">
-			<Option virtualFolder="src/plugin/c/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
-		</Unit>
-		<Unit filename="src/oflp-plugin-mod-editors.hhi">
-			<Option virtualFolder="src/plugin/h/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
-		</Unit>
-		<Unit filename="src/oflp-plugin-mod-gfx.hhi">
-			<Option virtualFolder="src/plugin/h/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
-		</Unit>
-		<Unit filename="src/oflp-plugin-mod-layout.cci">
-			<Option virtualFolder="src/plugin/c/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
-		</Unit>
-		<Unit filename="src/oflp-plugin-mod-layout.hhi">
-			<Option virtualFolder="src/plugin/h/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
-		</Unit>
-		<Unit filename="src/oflp-plugin-mod-panels.cci">
-			<Option virtualFolder="src/plugin/c/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
-		</Unit>
-		<Unit filename="src/oflp-plugin-mod-panels.hhi">
-			<Option virtualFolder="src/plugin/h/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
-		</Unit>
-		<Unit filename="src/oflp-plugin-mod-settings.cci">
+		<Unit filename="src/oflp-plugin-dnd.cc">
 			<Option virtualFolder="src/plugin/c/" />
 		</Unit>
-		<Unit filename="src/oflp-plugin-mod-settings.hhi">
-			<Option virtualFolder="src/plugin/h/" />
-		</Unit>
-		<Unit filename="src/oflp-plugin-module.hhi">
-			<Option virtualFolder="src/plugin/h/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
-		</Unit>
-		<Unit filename="src/oflp-plugin.cpp">
+		<Unit filename="src/oflp-plugin-events.cc">
 			<Option virtualFolder="src/plugin/c/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
-			<Option target="devel-memleaks" />
-			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-mod-editors.cc">
+			<Option virtualFolder="src/plugin/c/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-mod-editors.hh">
+			<Option virtualFolder="src/plugin/h/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-mod-gfx.hh">
+			<Option virtualFolder="src/plugin/h/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-mod-layout.cc">
+			<Option virtualFolder="src/plugin/c/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-mod-layout.hh">
+			<Option virtualFolder="src/plugin/h/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-mod-panels.cc">
+			<Option virtualFolder="src/plugin/c/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-mod-panels.hh">
+			<Option virtualFolder="src/plugin/h/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-mod-settings.cc">
+			<Option virtualFolder="src/plugin/c/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-mod-settings.hh">
+			<Option virtualFolder="src/plugin/h/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin-module.hh">
+			<Option virtualFolder="src/plugin/h/" />
+		</Unit>
+		<Unit filename="src/oflp-plugin.cc">
+			<Option virtualFolder="src/plugin/c/" />
 		</Unit>
 		<Unit filename="src/oflp-plugin.hh">
 			<Option virtualFolder="src/plugin/h/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
+			<Option target="Debug" />
+			<Option target="devel" />
 			<Option target="devel-memleaks" />
 			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src/oflp-settings-options.hh">
+			<Option virtualFolder="src/settings/" />
 		</Unit>
 		<Unit filename="src/oflp-settings.cc">
 			<Option virtualFolder="src/settings/" />
@@ -504,20 +381,18 @@
 		</Unit>
 		<Unit filename="src/oflp.xrc">
 			<Option virtualFolder="src/common/" />
-			<Option target="public" />
-			<Option target="10373 - devel" />
+			<Option target="Debug" />
+			<Option target="devel" />
 			<Option target="devel-memleaks" />
 			<Option target="devel-symbols" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
+			<Option target="Release" />
 		</Unit>
 		<Unit filename="src/post-build.bash">
 			<Option virtualFolder="src/common/" />
-			<Option target="10373 - devel" />
-			<Option target="public" />
+			<Option target="devel" />
+			<Option target="Debug" />
 			<Option target="devel-memleaks" />
-			<Option target="devel+xport10373" />
-			<Option target="10627 - devel" />
+			<Option target="Release" />
 		</Unit>
 		<Extensions>
 			<envvars />

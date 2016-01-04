@@ -1,3 +1,24 @@
+/*
+ * This file is licensed under the GNU General Public License, version 3
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ */
+
+#include    "oflp-plugin-mod-editors.hh"
+
+#include    "oflp-plugin.hh"
+
+#include    "oflp-plugin-mod-panels.hh"
+#include    "oflp-plugin-mod-layout.hh"
+
+#include    "oflp-panel.hh"
+//  ............................................................................
+#define GWR_OFLP_SANITY_CHECKS
+#define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
+#define GWR_TKI(FORMAT, ...)    GWRCB_TKI(FORMAT, __VA_ARGS__);
+#define GWR_TKE(FORMAT, ...)    GWRCB_TKE(FORMAT, __VA_ARGS__);
+#define GWR_INF(FORMAT, ...)    GWRCB_INF(FORMAT, __VA_ARGS__);
+#define GWR_WNG(FORMAT, ...)    GWRCB_WNG(FORMAT, __VA_ARGS__);
+#define GWR_ERR(FORMAT, ...)    GWRCB_ERR(FORMAT, __VA_ARGS__);
 //  ############################################################################
 //
 //                          EDITORS
@@ -59,9 +80,9 @@ lab_dump:
 //  ############################################################################
 bool    OflpModEditors::    add (EditorBase* _nn_edb)
 {
-    OFLPPanel       *   panel   =   NULL;
+    OflpPanel       *   panel   =   NULL;
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::Editors::add()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::Editors::add()");
     //  ........................................................................
     OFLP_EMERGENCY__NULL_POINTER__FAILURE(_nn_edb);
     //  ........................................................................
@@ -87,9 +108,9 @@ bool    OflpModEditors::    add (EditorBase* _nn_edb)
 
 bool    OflpModEditors::    sub (EditorBase* _nn_edb)
 {
-    OFLPPanel       *   panel   =   NULL;
+    OflpPanel       *   panel   =   NULL;
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::Editors::sub()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::Editors::sub()");
     //  ........................................................................
     panel = panels()->get(_nn_edb);
 
@@ -111,8 +132,8 @@ bool    OflpModEditors::    sub (EditorBase* _nn_edb)
 }
 
 bool    OflpModEditors::    mov (
-    OFLPPanel   *   _nn_dst     ,
-    OFLPPanel   *   _nn_src     ,
+    OflpPanel   *   _nn_dst     ,
+    OflpPanel   *   _nn_src     ,
     EditorBase  *   _nn_edb     )
 {
     if ( ! _nn_src->editor_del( _nn_edb ) )

@@ -2347,26 +2347,26 @@
 	<wx/wx.h>
 	"cbplugin.h"
 
-1451290243 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.cpp
-	"sdk.h"
-	"manager.h"
-	"configmanager.h"
-	"configurationpanel.h"
-	"editormanager.h"
-	"projectmanager.h"
-	"logmanager.h"
-	"editorbase.h"
-	"cbeditor.h"
-	"sdk_events.h"
-	"misctreeitemdata.h"
-	"cbworkspace.h"
-	"cbproject.h"
-	"projectmanager.h"
+1451468714 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.cpp
+	<codeblocks/sdk.h>
+	<codeblocks/manager.h>
+	<codeblocks/configmanager.h>
+	<codeblocks/configurationpanel.h>
+	<codeblocks/editormanager.h>
+	<codeblocks/projectmanager.h>
+	<codeblocks/logmanager.h>
+	<codeblocks/editorbase.h>
+	<codeblocks/cbeditor.h>
+	<codeblocks/sdk_events.h>
+	<codeblocks/misctreeitemdata.h>
+	<codeblocks/cbworkspace.h>
+	<codeblocks/cbproject.h>
+	<codeblocks/projectmanager.h>
 	"oflp-plugin.hh"
 	"oflp-panel.hh"
 	"oflp-settings.hh"
-	"tinyxml/tinyxml.h"
-	"tinyxml/tinywxuni.h"
+	<codeblocks/tinyxml/tinyxml.h>
+	<codeblocks/tinyxml/tinywxuni.h>
 	"oflp-plugin-events.cci"
 	"oflp-plugin-mod-layout.cci"
 	"oflp-plugin-mod-editors.cci"
@@ -2404,9 +2404,9 @@
 	"oflp-panel-header.hhi"
 	"oflp-panel-utils.hhi"
 
-1442601363 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-utils.hhi
+1451598436 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-utils.hhi
 
-1450990048 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-header.hhi
+1451598436 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-header.hhi
 
 1440356337 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panels.cpp
 	"sdk.h"
@@ -2437,9 +2437,9 @@
 	<stdio.h>
 	<wx/log.h>
 
-1451287902 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-header.cci
+1451598436 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-header.cci
 
-1442859204 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-utils.cci
+1451598436 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-utils.cci
 
 1440615795 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-menus.cci
 
@@ -2447,7 +2447,7 @@
 
 1440675116 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-menus.hhi
 
-1451233459 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-events.cci
+1451595922 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-events.cci
 
 1442733643 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-panels.cci
 
@@ -2473,22 +2473,42 @@
 
 1442644582 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-gfx.hhi
 
-1451223571 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/earlgrey-cb.log.cc
+1451462332 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/earlgrey-cb.log.cc
 	"earlgrey-cb.log.hh"
 	<wx/frame.h>
 	<wx/font.h>
 	<wx/textctrl.h>
 	<wx/sizer.h>
 
-1451220600 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/earlgrey-cb.log.hh
+1451377709 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/earlgrey-cb.log.hh
 	<stdio.h>
 	<wx/string.h>
+	<wx/colour.h>
+	<wx/textctrl.h>
 
-1451288666 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common.hh
+1451836334 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common.hh
 	<wx/wxprec.h>
 	<wx/wx.h>
-	"earlgrey-cb.log.hh"
-	"earlgrey-cb.hstring.hh"
+	<codeblocks/sdk.h>
+	<codeblocks/manager.h>
+	<codeblocks/configmanager.h>
+	<codeblocks/configurationpanel.h>
+	<codeblocks/editormanager.h>
+	<codeblocks/projectmanager.h>
+	<codeblocks/logmanager.h>
+	<codeblocks/editorbase.h>
+	<codeblocks/cbeditor.h>
+	<codeblocks/sdk_events.h>
+	<codeblocks/misctreeitemdata.h>
+	<codeblocks/cbworkspace.h>
+	<codeblocks/cbproject.h>
+	<codeblocks/projectmanager.h>
+	"oflp-log.hh"
+	"oflp-hstring.hh"
+	"oflp-common-macros.hh"
+	"oflp-common-classes.hh"
+	"oflp-common-stl-devel.hhi"
+	"oflp-common-stl-prod.hhi"
 
 1440924276 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panels.cc
 	"sdk.h"
@@ -4502,50 +4522,29 @@
 1413563581 /usr/include/wx-3.0/wx/gtk/dnd.h
 	"wx/icon.h"
 
-1451289662 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel.cc
-	"sdk.h"
-	"manager.h"
-	"configmanager.h"
-	"configurationpanel.h"
-	"editormanager.h"
-	"projectmanager.h"
-	"logmanager.h"
-	"editorbase.h"
-	"cbeditor.h"
-	"sdk_events.h"
-	"misctreeitemdata.h"
-	"oflp-panel.hh"
+1451863005 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel.cc
 	"oflp-plugin.hh"
-	"oflp-panel-header.cci"
-	"oflp-panel-utils.cci"
+	"oflp-plugin-mod-panels.hh"
+	"oflp-plugin-mod-gfx.hh"
+	"oflp-panel.hh"
 
-1451288991 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel.hh
+1451835974 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel.hh
 	"oflp-common.hh"
 	<wx/dnd.h>
 	<wx/dynarray.h>
-	"oflp-panel-header.hhi"
-	"oflp-panel-utils.hhi"
+	"oflp-panel-header.hh"
+	"oflp-panel-utils.hh"
 
-1451219950 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.hh
+1451836814 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.hh
 	"oflp-common.hh"
-	<wx/imaglist.h>
-	<wx/xrc/xmlres.h>
-	<wx/artprov.h>
-	"cbplugin.h"
-	"cbworkspace.h"
-	"oflp-plugin-module.hhi"
-	"oflp-plugin-mod-gfx.hhi"
-	"oflp-plugin-mod-layout.hhi"
-	"oflp-plugin-mod-editors.hhi"
-	"oflp-plugin-mod-panels.hhi"
-	"oflp-plugin-mod-settings.hhi"
-	"oflp-plugin-events.hhi"
-	"oflp-plugin-dnd.hhi"
+	<codeblocks/cbplugin.h>
+	<codeblocks/cbworkspace.h>
 
-1444457793 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/earlgrey-cb.hstring.hh
+1451727395 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/earlgrey-cb.hstring.hh
 	<stdio.h>
 	<wx/string.h>
 	<wx/strconv.h>
+	<vector>
 
 1442694594 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-layout.hhi
 
@@ -4553,7 +4552,7 @@
 
 1442731352 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-layout.cci
 
-1448908403 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-dnd.hhi
+1451598436 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-dnd.hhi
 
 1442677370 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-actions.hhi
 
@@ -4565,17 +4564,17 @@
 
 1449322839 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-menus.hhi
 
-1451252781 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-layout.hhi
+1451662460 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-layout.hhi
 
-1449322802 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-editors.hhi
+1451598436 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-editors.hhi
 
-1451233094 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-panels.hhi
+1451648399 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-panels.hhi
 
-1451244579 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-layout.cci
+1451586847 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-layout.cci
 
 1448815079 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-editors.cci
 
-1451285475 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-panels.cci
+1451593202 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-panels.cci
 
 1445532869 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/cb-fake-sdk/include/sdk.h
 	<vector>
@@ -4718,27 +4717,20 @@
 	<memory>
 	<tr1/memory>
 
-1451251583 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings.cc
-	"sdk.h"
-	"manager.h"
-	"configmanager.h"
-	"configurationpanel.h"
-	"editormanager.h"
-	"projectmanager.h"
-	"logmanager.h"
-	"editorbase.h"
-	"cbeditor.h"
-	"sdk_events.h"
-	"misctreeitemdata.h"
+1451896357 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings.cc
 	"oflp-settings.hh"
 
-1451223344 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings.hh
+1451835979 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings.hh
 	"oflp-common.hh"
+	"oflp-plugin-module.hh"
+	"oflp-settings-options.hh"
+	<wx/sizer.h>
+	<wx/checkbox.h>
 	<wx/minifram.h>
 
-1451243303 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-settings.hhi
+1451598154 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-settings.hhi
 
-1451290852 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-settings.cci
+1451290878 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-settings.cci
 
 1451245356 /home/gwr/Src/C-C++/gwr.codeblocks/src/15.12-10627/trunk/src/include/sdk.h
 	"sdk_common.h"
@@ -5699,4 +5691,628 @@
 	<wx/string.h>
 
 1451245356 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10627/trunk/src/include/tinyxml/tinywxuni.h
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/sdk.h
+	"sdk_common.h"
+	"sdk_precomp.h"
+
+1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/sdk_common.h
+	<wx/wxprec.h>
+	"prep.h"
+	<wx/app.h>
+	<wx/arrstr.h>
+	<wx/bmpbuttn.h>
+	<wx/button.h>
+	<wx/checkbox.h>
+	<wx/checklst.h>
+	<wx/choice.h>
+	<wx/choicdlg.h>
+	<wx/colordlg.h>
+	<wx/combobox.h>
+	<wx/confbase.h>
+	<wx/datetime.h>
+	<wx/dcclient.h>
+	<wx/dialog.h>
+	<wx/dir.h>
+	<wx/dynarray.h>
+	<wx/event.h>
+	<wx/file.h>
+	<wx/filedlg.h>
+	<wx/filename.h>
+	<wx/font.h>
+	<wx/frame.h>
+	<wx/fs_zip.h>
+	<wx/hashmap.h>
+	<wx/image.h>
+	<wx/imaglist.h>
+	<wx/intl.h>
+	<wx/list.h>
+	<wx/listbox.h>
+	<wx/listctrl.h>
+	<wx/log.h>
+	<wx/menu.h>
+	<wx/menuitem.h>
+	<wx/msgdlg.h>
+	<wx/notebook.h>
+	<wx/panel.h>
+	<wx/print.h>
+	<wx/process.h>
+	<wx/radiobox.h>
+	<wx/radiobut.h>
+	<wx/regex.h>
+	<wx/sizer.h>
+	<wx/slider.h>
+	<wx/socket.h>
+	<wx/spinctrl.h>
+	<wx/splitter.h>
+	<wx/statbmp.h>
+	<wx/stattext.h>
+	<wx/string.h>
+	<wx/textdlg.h>
+	<wx/textctrl.h>
+	<wx/thread.h>
+	<wx/timer.h>
+	<wx/toolbar.h>
+	<wx/treectrl.h>
+	<wx/txtstrm.h>
+	<wx/utils.h>
+	<wx/wfstream.h>
+	<wx/wxscintilla.h>
+	<wx/xrc/xmlres.h>
+	"settings.h"
+	"globals.h"
+	"sdk_events.h"
+	"cbexception.h"
+	"logger.h"
+	"editorbase.h"
+	"cbeditor.h"
+	"compileoptionsbase.h"
+	"compiletargetbase.h"
+	"projectbuildtarget.h"
+	"projectfile.h"
+	"cbplugin.h"
+	"cbproject.h"
+	"cbtool.h"
+	"cbworkspace.h"
+	"compilerfactory.h"
+	"compiler.h"
+	"workspaceloader.h"
+	"editorcolourset.h"
+	"pipedprocess.h"
+	"scrollingdialog.h"
+	"cbauibook.h"
+	"manager.h"
+	"configmanager.h"
+	"editormanager.h"
+	"logmanager.h"
+	"projectmanager.h"
+	"menuitemsmanager.h"
+	"scriptingmanager.h"
+	"toolsmanager.h"
+	"templatemanager.h"
+	"macrosmanager.h"
+	"pluginmanager.h"
+	"personalitymanager.h"
+	"uservarmanager.h"
+	"filemanager.h"
+	"xtra_res.h"
+	"safedelete.h"
+	"infowindow.h"
+	"licenses.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/prep.h
+	<stdint.h>
+	<wx/defs.h>
+	<wx/version.h>
+	<ciso646>
+	<memory>
+	<tr1/memory>
+
+1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/settings.h
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/globals.h
+	<vector>
+	<wx/string.h>
+	<wx/treectrl.h>
+	<wx/file.h>
+	<wx/filename.h>
+	<wx/intl.h>
+	<wx/msgdlg.h>
+	<wx/bitmap.h>
+	"settings.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/sdk_events.h
+	<wx/event.h>
+	<wx/intl.h>
+	"settings.h"
+	"prep.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/cbexception.h
+	<wx/string.h>
+	<wx/log.h>
+	"globals.h"
+	<csignal>
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/logger.h
+	"prep.h"
+	<wx/string.h>
+	"settings.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/editorbase.h
+	"prep.h"
+	<wx/hashmap.h>
+	<wx/frame.h>
+	<wx/panel.h>
+	"globals.h"
+	"settings.h"
+	"cbexception.h"
+
+1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/cbeditor.h
+	<wx/hashmap.h>
+	<wx/datetime.h>
+	<wx/fontmap.h>
+	<wx/timer.h>
+	"settings.h"
+	"editorbase.h"
+	"printing_types.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/printing_types.h
+	"settings.h"
+	<wx/print.h>
+
+1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/compileoptionsbase.h
+	"globals.h"
+	<wx/hashmap.h>
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/compiletargetbase.h
+	"compileoptionsbase.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/projectbuildtarget.h
+	"settings.h"
+	"globals.h"
+	"compiletargetbase.h"
+	"projectfile.h"
+	<wx/dynarray.h>
+	<wx/filename.h>
+	<wx/list.h>
+	<wx/treectrl.h>
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/projectfile.h
+	<vector>
+	"settings.h"
+	"globals.h"
+	"prep.h"
+	<wx/dynarray.h>
+	<wx/filename.h>
+	<wx/treectrl.h>
+	<wx/hashset.h>
+
+1451427366 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/cbplugin.h
+	<wx/arrstr.h>
+	<wx/event.h>
+	<wx/intl.h>
+	<wx/string.h>
+	"settings.h"
+	"globals.h"
+	"logger.h"
+	"manager.h"
+	"pluginmanager.h"
+	"prep.h"
+
+1451427366 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/manager.h
+	<map>
+	<vector>
+	<wx/msw/wrapwin.h>
+	<wx/event.h>
+	<wx/cmdline.h>
+	"settings.h"
+	"sdk_events.h"
+	"cbfunctor.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/cbfunctor.h
+	<typeinfo>
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/pluginmanager.h
+	<vector>
+	<map>
+	<set>
+	<wx/dynarray.h>
+	"globals.h"
+	"settings.h"
+	"manager.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/cbproject.h
+	<wx/datetime.h>
+	<wx/dynarray.h>
+	<wx/hashmap.h>
+	<wx/treectrl.h>
+	"settings.h"
+	"misctreeitemdata.h"
+	"compiletargetbase.h"
+	"cbplugin.h"
+	"projectbuildtarget.h"
+	"projectmanager.h"
+	<map>
+	<vector>
+
+1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/misctreeitemdata.h
+	<wx/treectrl.h>
+
+1451427366 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/projectmanager.h
+	"globals.h"
+	<wx/event.h>
+	<wx/dynarray.h>
+	<wx/hashmap.h>
+	<wx/treectrl.h>
+	"cbexception.h"
+	"cbtreectrl.h"
+	"settings.h"
+	"manager.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/cbtreectrl.h
+	<wx/treectrl.h>
+
+1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/cbtool.h
+	<wx/string.h>
+
+1451427366 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/cbworkspace.h
+	<wx/string.h>
+	<wx/filename.h>
+	"globals.h"
+
+1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/compilerfactory.h
+	<wx/arrstr.h>
+	"compiler.h"
+	"settings.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/compiler.h
+	<vector>
+	<map>
+	<wx/string.h>
+	<wx/filename.h>
+	<wx/dynarray.h>
+	<wx/regex.h>
+	"compileoptionsbase.h"
+	"compileroptions.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/compileroptions.h
+	<wx/dynarray.h>
+	<wx/intl.h>
+	<wx/string.h>
+	"settings.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/workspaceloader.h
+	"ibaseworkspaceloader.h"
+	"settings.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/ibaseworkspaceloader.h
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/editorcolourset.h
+	<wx/dynarray.h>
+	<wx/hashmap.h>
+	<wx/intl.h>
+	<wx/wxscintilla.h>
+	"settings.h"
+	"globals.h"
+	<set>
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/pipedprocess.h
+	<wx/process.h>
+	<wx/txtstrm.h>
+	<wx/timer.h>
+	"settings.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/scrollingdialog.h
+	"wx/dialog.h"
+	"wx/propdlg.h"
+	"settings.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/cbauibook.h
+	"prep.h"
+	"settings.h"
+	<vector>
+	<wx/aui/auibook.h>
+	<wx/dynarray.h>
+
+1451427366 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/configmanager.h
+	<wx/hashmap.h>
+	<wx/hashset.h>
+	"settings.h"
+	"globals.h"
+	"tinyxml/tinystr.h"
+	"tinyxml/tinyxml.h"
+	"manager.h"
+	"base64.h"
+	<map>
+	<set>
+
+1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/tinyxml/tinystr.h
+	<assert.h>
+	<string.h>
+
+1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/tinyxml/tinyxml.h
+	<ctype.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<assert.h>
+	<string>
+	<iostream>
+	<sstream>
+	"tinystr.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/base64.h
+	<wx/defs.h>
+	<wx/string.h>
+	"settings.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/editormanager.h
+	"prep.h"
+	<wx/list.h>
+	<wx/treectrl.h>
+	<wx/hashmap.h>
+	<wx/filename.h>
+	"settings.h"
+	"manager.h"
+	"cbexception.h"
+	"printing_types.h"
+	"globals.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/logmanager.h
+	"manager.h"
+	"logger.h"
+	<map>
+
+1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/menuitemsmanager.h
+	"settings.h"
+	<wx/menu.h>
+
+1451427366 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/scriptingmanager.h
+	<map>
+	<set>
+	"cbexception.h"
+	"globals.h"
+	"settings.h"
+	"manager.h"
+	"menuitemsmanager.h"
+	<wx/intl.h>
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/toolsmanager.h
+	<wx/event.h>
+	"manager.h"
+	"menuitemsmanager.h"
+	"cbtool.h"
+
+1451427366 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/templatemanager.h
+	"settings.h"
+	"manager.h"
+	<wx/event.h>
+	"globals.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/macrosmanager.h
+	"settings.h"
+	"manager.h"
+	<wx/regex.h>
+	<wx/filename.h>
+
+1451427366 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/personalitymanager.h
+	"settings.h"
+	"manager.h"
+	<wx/dynarray.h>
+
+1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/uservarmanager.h
+	"settings.h"
+	"manager.h"
+	"cbexception.h"
+	"globals.h"
+
+1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/filemanager.h
+	<wx/thread.h>
+	<wx/string.h>
+	<wx/log.h>
+	"backgroundthread.h"
+	<deque>
+	<memory>
+	<wx/file.h>
+	<wx/filename.h>
+	"configmanager.h"
+
+1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/backgroundthread.h
+	"safedelete.h"
+	<deque>
+	<list>
+	<algorithm>
+	<wx/timer.h>
+	"wx/thread.h"
+	"manager.h"
+	"blockallocated.h"
+
+1451427366 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/safedelete.h
+	<map>
+	<vector>
+	<list>
+	<deque>
+	<algorithm>
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/blockallocated.h
+	<vector>
+	<wx/file.h>
+	<wx/string.h>
+	<typeinfo>
+	"globals.h"
+	"prep.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/xtra_res.h
+	<wx/xrc/xmlres.h>
+	<wx/xrc/xh_dlg.h>
+	<wx/toolbar.h>
+	"settings.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/infowindow.h
+	<wx/event.h>
+	<wx/timer.h>
+	<wx/string.h>
+	"settings.h"
+	<wx/popupwin.h>
+	"scrollingdialog.h"
+	<list>
+	<algorithm>
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/licenses.h
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/sdk_precomp.h
+	"sdk_common.h"
+
+1451427368 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/configurationpanel.h
+	"globals.h"
+	"settings.h"
+	"scrollingdialog.h"
+	<wx/panel.h>
+	<wx/string.h>
+
+1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/tinyxml/tinywxuni.h
+
+1451895436 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.cc
+	"oflp-plugin.hh"
+	"oflp-panel.hh"
+	"oflp-settings.hh"
+	"oflp-plugin-module.hh"
+	"oflp-plugin-mod-gfx.hh"
+	"oflp-plugin-mod-layout.hh"
+	"oflp-plugin-mod-editors.hh"
+	"oflp-plugin-mod-panels.hh"
+	"oflp-plugin-mod-settings.hh"
+
+1451596257 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-accessors.hhi
+
+1451598546 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-classes.hhi
+
+1451588394 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-options.hhi
+
+1451649731 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-macros.hhi
+
+1451668920 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-stl-devel.hhi
+
+1451662573 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-stl-prod.hhi
+
+1451719928 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-cb-includes.hh
+	<codeblocks/sdk.h>
+	<codeblocks/manager.h>
+	<codeblocks/configmanager.h>
+	<codeblocks/configurationpanel.h>
+	<codeblocks/editormanager.h>
+	<codeblocks/projectmanager.h>
+	<codeblocks/logmanager.h>
+	<codeblocks/editorbase.h>
+	<codeblocks/cbeditor.h>
+	<codeblocks/sdk_events.h>
+	<codeblocks/misctreeitemdata.h>
+	<codeblocks/cbworkspace.h>
+	<codeblocks/cbproject.h>
+	<codeblocks/projectmanager.h>
+	"earlgrey-cb.log.hh"
+	"earlgrey-cb.hstring.hh"
+
+1451684804 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-classes.hh
+
+1451836065 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-module.hh
+
+1451835988 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings-options.hh
+
+1451894690 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-macros.hh
+
+1451863174 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-header.hh
+
+1451862964 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-utils.hh
+
+1451895423 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-panels.hh
+	"oflp-common.hh"
+	"oflp-plugin-module.hh"
+
+1451836104 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-gfx.hh
+	"oflp-common.hh"
+	"oflp-plugin-module.hh"
+	<wx/imaglist.h>
+	<wx/xrc/xmlres.h>
+	<wx/artprov.h>
+
+1451836124 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-dnd.cc
+	"oflp-plugin.hh"
+	"oflp-plugin-mod-panels.hh"
+	"oflp-plugin-mod-editors.hh"
+
+1451836109 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-editors.hh
+	"oflp-common.hh"
+	"oflp-plugin-module.hh"
+
+1451836120 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-events.cc
+	"oflp-plugin.hh"
+	"oflp-plugin-mod-layout.hh"
+	"oflp-plugin-mod-panels.hh"
+	"oflp-plugin-mod-settings.hh"
+	"oflp-plugin-mod-editors.hh"
+	"oflp-panel.hh"
+
+1451836094 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-layout.hh
+	"oflp-common.hh"
+	"oflp-plugin-module.hh"
+	<codeblocks/tinyxml/tinyxml.h>
+	<codeblocks/tinyxml/tinywxuni.h>
+
+1451836070 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-settings.hh
+	"oflp-common.hh"
+	"oflp-plugin-module.hh"
+	"oflp-settings-options.hh"
+
+1451836114 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-editors.cc
+	"oflp-plugin-mod-editors.hh"
+	"oflp-plugin.hh"
+	"oflp-plugin-mod-panels.hh"
+	"oflp-plugin-mod-layout.hh"
+	"oflp-panel.hh"
+
+1451836099 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-layout.cc
+	"oflp-plugin-mod-layout.hh"
+	"oflp-plugin.hh"
+	"oflp-plugin-mod-panels.hh"
+	"oflp-panel.hh"
+
+1451836076 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-settings.cc
+	"oflp-plugin-mod-settings.hh"
+	"oflp-settings.hh"
+	"oflp-plugin.hh"
+
+1451835997 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-header.cc
+	"oflp-plugin-mod-gfx.hh"
+	"oflp-panel.hh"
+
+1451840579 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-log.hh
+	<stdio.h>
+	<wx/string.h>
+	<wx/colour.h>
+	<wx/textctrl.h>
+
+1451836142 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-hstring.hh
+	<stdio.h>
+	<wx/string.h>
+	<wx/strconv.h>
+	<vector>
+
+1451896099 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-log.cc
+	"oflp-log.hh"
+	<wx/frame.h>
+	<wx/font.h>
+	<wx/textctrl.h>
+	<wx/sizer.h>
+
+1451839070 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-utils.cc
+	"oflp-plugin.hh"
+	"oflp-plugin-mod-panels.hh"
+	"oflp-panel.hh"
+
+1451895459 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-panels.cc
+	"oflp-plugin-mod-panels.hh"
+	"oflp-plugin.hh"
+	"oflp-plugin-mod-gfx.hh"
+	"oflp-panel.hh"
 

@@ -34,11 +34,11 @@ const wxWX2MBbuf    cbU2C(const wxString& str)
 //                              Manager
 //
 //  ############################################################################
-ProjectManager  *   Manager::GetProjectManager()
+ProjectManager  *   Manager::GetProjectManager()                        const
 {
     return  s_project_manager;
 }
-EditorManager   *   Manager::GetEditorManager()
+EditorManager   *   Manager::GetEditorManager()                         const
 {
     return  s_editor_manager;
 }

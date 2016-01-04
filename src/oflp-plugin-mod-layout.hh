@@ -1,3 +1,17 @@
+/*
+ * This file is licensed under the GNU General Public License, version 3
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ */
+
+#ifndef __OFLP_PLUGIN_MOD_LAYOUT_HH__
+#define __OFLP_PLUGIN_MOD_LAYOUT_HH__
+//  ............................................................................
+#include    "oflp-common.hh"
+
+#include    "oflp-plugin-module.hh"
+//  ............................................................................
+#include <codeblocks/tinyxml/tinyxml.h>
+#include <codeblocks/tinyxml/tinywxuni.h>
 /// ****************************************************************************
 //! \class  OflpModLayout
 //!
@@ -17,18 +31,18 @@ class OflpModLayout : public OflpModule
     /// ************************************************************************
     //! \class  PanelAssignment
     //!
-    //! \brief  (OFLPPanel name, OFLPPanel index) couple
+    //! \brief  (OflpPanel name, OflpPanel index) couple
     /// ************************************************************************
   public:
     class   PanelAssignment
     {
       private:
-        earlgreycb::HString     a_name;
+        oflp::HString           a_name;
         int                     a_index;
 
       public:
         wxString                    const   &   name()      const   { return a_name.get();  }
-        earlgreycb::HString::tHash              hname()     const   { return a_name.hash(); }
+        oflp::HString::tHash                    hname()     const   { return a_name.hash(); }
         int                                     index()     const   { return a_index;       }
 
       public:
@@ -44,27 +58,27 @@ class OflpModLayout : public OflpModule
     /// ************************************************************************
     //! \class  FileAssignment
     //!
-    //! \brief  (filename -> OFLPPanel) unidirectional association
+    //! \brief  (filename -> OflpPanel) unidirectional association
     //!
-    //! \detail Using some earlgreycb::HString-s for accelerating access-s
+    //! \detail Using some oflp::HString-s for accelerating access-s
     /// ************************************************************************
   public:
     class   FileAssignment
     {
       private:
         wxFileName                  a_absolute_filename;                        //! absolute filename
-        earlgreycb::HString         a_absolute_filepath;                        //! absolute filepath  + hash
-        earlgreycb::HString         a_relative_filepath;                        //! project-relative filepath + hash
-        earlgreycb::HString         a_panel_name;                               //! assigned panel name + hash
+        oflp::HString               a_absolute_filepath;                        //! absolute filepath  + hash
+        oflp::HString               a_relative_filepath;                        //! project-relative filepath + hash
+        oflp::HString               a_panel_name;                               //! assigned panel name + hash
 
       public:
         wxFileName                  const   &   awxfn()     { return a_absolute_filename;           }
         wxString                    const   &   afp()       { return a_absolute_filepath.get();     }
-        earlgreycb::HString::tHash              hafp()      { return a_absolute_filepath.hash();    }
+        oflp::HString::tHash                    hafp()      { return a_absolute_filepath.hash();    }
         wxString                    const   &   rfp()       { return a_relative_filepath.get();     }
-        earlgreycb::HString::tHash              hrfp()      { return a_relative_filepath.hash();    }
+        oflp::HString::tHash                    hrfp()      { return a_relative_filepath.hash();    }
         wxString                    const   &   pname()     { return a_panel_name.get();            }
-        earlgreycb::HString::tHash              hpname()    { return a_panel_name.hash();           }
+        oflp::HString::tHash                    hpname()    { return a_panel_name.hash();           }
 
       public:
         FileAssignment(
@@ -152,8 +166,8 @@ class OflpModLayout : public OflpModule
     bool                    p0_file_assignment_get_from_editor_base     (EditorBase*, FileAssignment*& _file_assignment);
 
   public:
-    OFLPPanel       *       file_assignment_find_panel_from_editor_base (EditorBase*    _nn_edb);
-    void                    file_assignment_update                      (EditorBase*    _nn_edb, OFLPPanel* _nn_dst_panel);
+    OflpPanel       *       file_assignment_find_panel_from_editor_base (EditorBase*    _nn_edb);
+    void                    file_assignment_update                      (EditorBase*    _nn_edb, OflpPanel* _nn_dst_panel);
 
     PanelAssignmentArray    const   &   panel_assignment_array          ()  { return a_panel_assignment_array;      }
     //  ------------------------------------------------------------------------
@@ -172,3 +186,5 @@ class OflpModLayout : public OflpModule
     OflpModLayout()                                                             {}
    ~OflpModLayout()                                                             {}
 };
+
+#endif

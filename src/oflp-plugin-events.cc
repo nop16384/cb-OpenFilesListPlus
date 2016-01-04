@@ -1,3 +1,24 @@
+/*
+ * This file is licensed under the GNU General Public License, version 3
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ */
+
+#include    "oflp-plugin.hh"
+
+#include    "oflp-plugin-mod-layout.hh"
+#include    "oflp-plugin-mod-panels.hh"
+#include    "oflp-plugin-mod-settings.hh"
+#include    "oflp-plugin-mod-editors.hh"
+
+#include    "oflp-panel.hh"
+//  ............................................................................
+#define GWR_OFLP_SANITY_CHECKS
+#define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
+#define GWR_TKI(FORMAT, ...)    GWRCB_TKI(FORMAT, __VA_ARGS__);
+#define GWR_TKE(FORMAT, ...)    GWRCB_TKE(FORMAT, __VA_ARGS__);
+#define GWR_INF(FORMAT, ...)    GWRCB_INF(FORMAT, __VA_ARGS__);
+#define GWR_WNG(FORMAT, ...)    GWRCB_WNG(FORMAT, __VA_ARGS__);
+#define GWR_ERR(FORMAT, ...)    GWRCB_ERR(FORMAT, __VA_ARGS__);
 //  ############################################################################
 //
 //                          EDITOR EVENTS
@@ -10,7 +31,7 @@ void    OpenFilesListPlus:: evh_workspace_loading_complete  (CodeBlocksEvent& _e
     //  ........................................................................
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::evh_workspace_loading_complete()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::evh_workspace_loading_complete()");
 
     layout()->workspace_load();
 
@@ -33,53 +54,55 @@ void    OpenFilesListPlus:: evh_workspace_loading_complete  (CodeBlocksEvent& _e
         panels()->p0_add( v[i]->name(), false );
     }
 
-    panels()->resize_and_layout();
-
     RefreshOpenFilesLayout();
 
-    earlgreycb::Log_function_exit();
+    panels()->resize_and_layout();
+
+    OFLP_FUNC_EXIT_LOG();
 }
 
 void    OpenFilesListPlus:: evh_workspace_close_begin       (CodeBlocksEvent &_e)
 {
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::evh_workspace_close_begin()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::evh_workspace_close_begin()");
 
     layout()->workspace_close();
 
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 }
 
 void    OpenFilesListPlus:: evh_workspace_close_complete    (CodeBlocksEvent &_e)
 {
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::evh_workspace_close_complete()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::evh_workspace_close_complete()");
+
+    GWRCB_TKI("editors count[%i]", EditorManager::Get()->GetEditorsCount() );
 
     reset();
 
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 }
 
 void    OpenFilesListPlus:: evh_project_open                (CodeBlocksEvent& _e)
 {
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::evh_project_open()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::evh_project_open()");
 
     layout()->project_load( _e.GetProject() );
 
     RefreshOpenFilesLayout();
 
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 }
 
 void    OpenFilesListPlus:: evh_project_close               (CodeBlocksEvent& _e)
 {
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::evh_project_close()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::evh_project_close()");
 
     GWR_TKI("project[%p] files:[%i]", _e.GetProject(), _e.GetProject()->GetFilesCount());
 
@@ -87,18 +110,18 @@ void    OpenFilesListPlus:: evh_project_close               (CodeBlocksEvent& _e
 
     RefreshOpenFilesLayout();
 
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 }
 
 void    OpenFilesListPlus:: evh_project_save                (CodeBlocksEvent& _e)
 {
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::evh_project_save()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::evh_project_save()");
 
     layout()->project_save( _e.GetProject() );
 
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 }
 
 void    OpenFilesListPlus:: evh_editor_opened               (CodeBlocksEvent& event)
@@ -110,10 +133,10 @@ void    OpenFilesListPlus:: evh_editor_opened               (CodeBlocksEvent& ev
     //  - file reloading
     //  ........................................................................
     EditorBase  *   nn_edb  =   event.GetEditor();
-    OFLPPanel   *   panel   =   NULL;
+    OflpPanel   *   panel   =   NULL;
     wxString        s;
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::evh_editor_opened()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::evh_editor_opened()");
     //  ........................................................................
     //D editor_dump(edb);
     if ( ! nn_edb )
@@ -136,7 +159,7 @@ void    OpenFilesListPlus:: evh_editor_opened               (CodeBlocksEvent& ev
     panels()->resize_and_layout();
     //  ........................................................................
 lab_exit:
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
     return;
 }
 
@@ -146,7 +169,7 @@ void    OpenFilesListPlus:: evh_editor_closed       (CodeBlocksEvent& event)
     //  ........................................................................
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::evh_editor_closed()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::evh_editor_closed()");
     //  ........................................................................
     if ( ! nn_edb )
     {
@@ -160,7 +183,7 @@ void    OpenFilesListPlus:: evh_editor_closed       (CodeBlocksEvent& event)
     panels()->resize_and_layout();
     //  ........................................................................
 lab_exit:
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
     return;
 }
 
@@ -171,7 +194,7 @@ void    OpenFilesListPlus:: evh_editor_activated    (CodeBlocksEvent& event)    
     EditorBase  *   nn_edb  =   event.GetEditor();
     ProjectFile *   pjf     =   NULL;
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::evh_editor_activated()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::evh_editor_activated()");
     //  ........................................................................
     //D editor_dump(edb);
     if ( ! nn_edb )
@@ -200,7 +223,7 @@ void    OpenFilesListPlus:: evh_editor_activated    (CodeBlocksEvent& event)    
     RefreshOpenFileState(nn_edb);
     //  ........................................................................
 lab_exit:
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 }
 
 void    OpenFilesListPlus:: evh_editor_deactivated  (CodeBlocksEvent& event)
@@ -216,7 +239,7 @@ void    OpenFilesListPlus:: evh_editor_modified     (CodeBlocksEvent& event)
     //  ........................................................................
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
-    earlgreycb::Log_function_mark(wxS("OFLP::evh_editor_modified()"));
+    OFLP_FUNC_ENTER_MARK("OFLP::evh_editor_modified()");
 
     if ( ! nn_edb )
     {
@@ -233,7 +256,7 @@ void    OpenFilesListPlus:: evh_editor_saved        (CodeBlocksEvent& event)
     //  ........................................................................
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::evh_editor_saved()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::evh_editor_saved()");
     //  ........................................................................
     if ( ! nn_edb )
     {
@@ -244,7 +267,7 @@ void    OpenFilesListPlus:: evh_editor_saved        (CodeBlocksEvent& event)
     RefreshOpenFileState(nn_edb);
     //  ........................................................................
 lab_exit:
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 }
 //  ############################################################################
 //
@@ -255,16 +278,16 @@ void    OpenFilesListPlus:: evh_tree_item_activated     (wxTreeEvent& event)
 {
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
-    OFLPPanelItemInfo   inf( event );
+    OflpPanelItemInfo   inf( event );
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::OnTreeItemActivated()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::OnTreeItemActivated()");
     //  ........................................................................
     if (Manager::IsAppShuttingDown())
         goto lab_return;
 
     if ( ! inf.IsOk() )
     {
-        GWR_TKI("      ...invalid OFLPPanelDataObject for panel[%p]", event.GetEventObject());
+        GWR_TKI("      ...invalid OflpPanelDataObject for panel[%p]", event.GetEventObject());
         goto lab_return;
     }
 
@@ -287,7 +310,7 @@ void    OpenFilesListPlus:: evh_tree_item_activated     (wxTreeEvent& event)
     }
     //  ........................................................................
 lab_return:
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 }
 
 void    OpenFilesListPlus:: evh_tree_item_right_click   (wxTreeEvent& event)
@@ -295,7 +318,7 @@ void    OpenFilesListPlus:: evh_tree_item_right_click   (wxTreeEvent& event)
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
     wxPoint             pt;
-    OFLPPanelItemInfo   inf( event );
+    OflpPanelItemInfo   inf( event );
     //  ........................................................................
     //GWR_INF("%s", wxS("########## OpenFilesListPlus::OnTreeItemRightClick() ##########"));
 
@@ -306,7 +329,7 @@ void    OpenFilesListPlus:: evh_tree_item_right_click   (wxTreeEvent& event)
 
     if ( ! inf.IsOk() )
     {
-        GWR_TKI("      ...invalid OFLPPanelDataObject for panel[%p]", event.GetEventObject());
+        GWR_TKI("      ...invalid OflpPanelDataObject for panel[%p]", event.GetEventObject());
         goto lab_return;
     }
 
@@ -323,16 +346,16 @@ void    OpenFilesListPlus:: evh_tree_sel_changed        (wxTreeEvent &event)
 {
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
-    OFLPPanelItemInfo   inf( event );
+    OflpPanelItemInfo   inf( event );
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::OnTreeSelChanged()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::OnTreeSelChanged()");
 
     if(Manager::IsAppShuttingDown())
         goto lab_return;
 
     if ( ! inf.IsOk() )
     {
-        GWR_TKI("      ...invalid OFLPPanelDataObject for panel[%p]", event.GetEventObject());
+        GWR_TKI("      ...invalid OflpPanelDataObject for panel[%p]", event.GetEventObject());
         goto lab_return;
     }
     GWR_TKI("      ...[%p][%s]", inf.GetPanel(), inf.GetEditor()->GetShortName().wc_str());
@@ -349,7 +372,7 @@ void    OpenFilesListPlus:: evh_tree_sel_changed        (wxTreeEvent &event)
     panels()->p0_unselect_except(inf.GetPanel());
     //  ........................................................................
 lab_return:
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 }
 //  ############################################################################
 //
@@ -370,8 +393,8 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_del (wxCommandEv
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
     //  fasten your seatbelt for the cast
-    //  event -> wxObject -> wxButton -> GetClientData() -> OFLPPanel*
-    OFLPPanel   *   panel   = static_cast< OFLPPanel* >
+    //  event -> wxObject -> wxButton -> GetClientData() -> OflpPanel*
+    OflpPanel   *   panel   = static_cast< OflpPanel* >
     (
         ( static_cast< wxButton* >( _e.GetEventObject() ) )->GetClientData()
     );
@@ -391,8 +414,8 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_mm  (wxCommandEv
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
     //  fasten your seatbelt for the cast
-    //  event -> wxObject -> wxButton -> GetClientData() -> OFLPPanel*
-    OFLPPanel   *   panel   = static_cast< OFLPPanel* >
+    //  event -> wxObject -> wxButton -> GetClientData() -> OflpPanel*
+    OflpPanel   *   panel   = static_cast< OflpPanel* >
     (
         ( static_cast< wxButton* >( _e.GetEventObject() ) )->GetClientData()
     );
@@ -412,8 +435,8 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_up  (wxCommandEv
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
     //  fasten your seatbelt for the cast
-    //  event -> wxObject -> wxButton -> GetClientData() -> OFLPPanel*
-    OFLPPanel   *   panel = static_cast< OFLPPanel* >
+    //  event -> wxObject -> wxButton -> GetClientData() -> OflpPanel*
+    OflpPanel   *   panel = static_cast< OflpPanel* >
     (
         ( static_cast< wxButton* >( _e.GetEventObject() ) )->GetClientData()
     );
@@ -432,8 +455,8 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_down(wxCommandEv
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
     //  fasten your seatbelt for the cast
-    //  event -> wxObject -> wxButton -> GetClientData() -> OFLPPanel*
-    OFLPPanel   *   panel = static_cast< OFLPPanel* >
+    //  event -> wxObject -> wxButton -> GetClientData() -> OflpPanel*
+    OflpPanel   *   panel = static_cast< OflpPanel* >
     (
         ( static_cast< wxButton* >( _e.GetEventObject() ) )->GetClientData()
     );
@@ -461,23 +484,11 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_opt (wxCommandEv
 //                          MENU EVENTS
 //
 //  ############################################################################
-/*
-void    OpenFilesListPlus::     evh_menu_option_checked             (wxCommandEvent& _e)
-{
-    OFLP_ON_DEGRADED__RET();
-    //  ........................................................................
-    bool    lc  =   menu_options()->log_console();
-    bool    lw  =   menu_options()->log_window();
-
-    GWR_INF( "%s", wxS("EVENT MENU") );
-
-    menu_options()->evh_menu_option_checked(_e);                                //  process event
-
-}
-*/
 void    OpenFilesListPlus::     evh_settings_activated              (wxActivateEvent& _e)
 {
-    if ( _e.GetEventObject() != settings()->dw_settings )
+    OFLP_FUNC_ENTER_MARK("oflp::evh_settings_activated()");
+
+    if ( _e.GetEventObject() != (wxObject*)( settings()->dw_settings ) )
         return;
 
     settings()->settings_window_activated( _e.GetActive() );

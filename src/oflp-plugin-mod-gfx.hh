@@ -1,3 +1,18 @@
+/*
+ * This file is licensed under the GNU General Public License, version 3
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ */
+
+#ifndef __OFLP_PLUGIN_MOD_GFX_HH__
+#define __OFLP_PLUGIN_MOD_GFX_HH__
+//  ............................................................................
+#include    "oflp-common.hh"
+
+#include    "oflp-plugin-module.hh"
+//  ............................................................................
+#include    <wx/imaglist.h>                                                     //  for OFPLPlugin::Gfx
+#include    <wx/xrc/xmlres.h>                                                   //  for OFPLPlugin::Gfx
+#include    <wx/artprov.h>                                                      //  for OFPLPlugin::Gfx
 /// ****************************************************************************
 //! \class  OflpModGfx
 //!
@@ -110,3 +125,5 @@ class OflpModGfx   :   public  OflpModule
 
     }
 };
+
+#endif

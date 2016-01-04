@@ -1,4 +1,4 @@
- (001)  2015.08.21  Obtain keyboard focus in text control in OFLPPanelHeader
+ (001)  2015.08.21  Obtain keyboard focus in text control in OflpPanelHeader
                     when changing the title
 
  (002)  2015.08.21  Terminate standard / productivity mode
@@ -27,13 +27,13 @@
 
  (013)  2015.09.12  Select active editor after workspace laoding
 
- (014)  2015.09.12  Put up & down arrows near mini/maxi-mize button in OFLPPanelHeader
+ (014)  2015.09.12  Put up & down arrows near mini/maxi-mize button in OflpPanelHeader
 
  (015)  2015.09.13  Layout : apply() : rewrite for handling all cases
 
 +(016)  2015.09.13  Layout : C::B save everything relationships
 
- (017)  2015.09.13  Layout : OFLPPanels ordering at loading
+ (017)  2015.09.13  Layout : OflpPanels ordering at loading
                     ( as long as panels are saved in the display order, unuseful
                     but maybe later )
 
@@ -44,7 +44,7 @@
 
 +(020)  2015.09.15  boolean return values check
 
- (021)  2015.09.19  oflp-plugin.hh : remove "friend class OFLPPanel" declaration
+ (021)  2015.09.19  oflp-plugin.hh : remove "friend class OflpPanel" declaration
 
  (022)  2015.09.20  "An inner class is a friend of the class it is defined within."
                     find something else, every module has access to everything !!!
@@ -59,6 +59,14 @@
  (025)  2015.12.27  Ensure panel indexes are not out of bounds in
                     OpenFilesListPlus::evh_workspace_loading_complete() when
                     sorting
+
++(026)  2015.12.31  If indexes are dummed in workspace.oflp.layout ( ex 3 panels
+                    with indexes 5,6,7 ) it cause segfault at loading in
+                    OpenFilesListPlus::evh_workspace_loading_complete()
+                    @'panels()->p0_add( v[i]->name(), false );'
+                    ->  in relationship with STL_ACCESSORS which return if locked
+                    ->  sorting PanelAssignments should be done in ModLayout ? or
+                        replace indexes with an "insert-after" field ?
 //  ############################################################################
 (001)
 2015.08.21  Done: call to SetFocus() )
@@ -137,3 +145,6 @@
  2015.12.27 Done, with a little frame
 //  ============================================================================
 (025)
+        See todo#(26)
+//  ============================================================================
+(026)

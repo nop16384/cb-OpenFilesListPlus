@@ -1,4 +1,13 @@
-#include    "earlgrey-cb.log.hh"
+/*
+ * This file is licensed under the GNU General Public License, version 3
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ */
+
+#include    "oflp-log.hh"
+//  ****************************************************************************
+//  logs enabled
+//  ****************************************************************************
+#ifdef  OFLP_LOG
 
 #include    <wx/frame.h>
 #include    <wx/font.h>
@@ -6,7 +15,7 @@
 #include    <wx/textctrl.h>
 #include    <wx/sizer.h>
 
-namespace   earlgreycb
+namespace   oflp
 {
 
 /// ****************************************************************************
@@ -45,13 +54,14 @@ class Spacer
 //! \brief  Window for outputing logs into.
 //!
 //! \detail Because using wxLogWindow involves using wxLog, and I get other C::B
-//!     logs in it.
+//!         logs in it.
 /// ****************************************************************************
 class   LogFrame : public wxFrame
 {
   private:
     wxSizer         *   dw_log_sizer;
     wxTextCtrl      *   dw_log_txt_ctrl;
+    wxTextAttr          a_text_attr;
 
   public:
             LogFrame(wxWindow* _parent)
@@ -65,6 +75,8 @@ class   LogFrame : public wxFrame
                     //dw_log_txt_ctrl->SetWindowStyle( wxTE_MULTILINE );        //  GWR_TECH_ causes crash
                     wxFont fnt(8, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxString::FromUTF8("monospace") );
                     dw_log_txt_ctrl->SetFont(fnt);
+
+                    dw_log_txt_ctrl->SetBackgroundColour( wxColour(0,0,0) );
 
                     dw_log_sizer        =   new wxBoxSizer(wxVERTICAL);
                     dw_log_sizer->Add( dw_log_txt_ctrl, 1, wxEXPAND, 0);
@@ -118,14 +130,27 @@ class   LogFrame : public wxFrame
             dw_log_txt_ctrl->AppendText( _wxs + wxString::FromUTF8("\n") );
         }
 
+    //wxTextAttr(const wxColour& colText, const wxColour& colBack = wxNullColour, const wxFont& font = wxNullFont, wxTextAttrAlignment alignment = wxTEXT_ALIGNMENT_DEFAULT)
+
+    void    set_text_col_fg(wxColour& _wx_col)
+        {
+            dw_log_txt_ctrl->SetDefaultStyle( wxTextAttr(_wx_col) );
+        }
 };
 //  ############################################################################
-bool                A_log_console   =   false;
-bool                A_log_window    =   false;
+wxColour    A_colour_log_inf    (  38 , 167 ,  38 );
+wxColour    A_colour_log_wng    ( 197 , 126 ,   0 );
+wxColour    A_colour_log_err    ( 255 ,   0 ,   0 );
+wxColour    A_colour_log_tki    ( 167 , 167 , 167 );
+wxColour    A_colour_log_tkw    ( 197 , 126 ,   0 );
+wxColour    A_colour_log_tke    ( 255 ,   0 ,   0 );
 
 Spacer              a_spacer;
 LogFrame        *   dw_log_frame    =   NULL;
 //  ............................................................................
+bool                A_log_console   =   false;
+bool                A_log_window    =   false;
+
 const wxChar*
         Log_spc_wxc()
 {
@@ -142,23 +167,28 @@ void    Log_spc_dec()
     a_spacer.dec();
 }
 
-void    Log_function_mark(const wxChar* _funcname)
+void    Log_function_mark   (const wxChar* _funcname)
 {
     GWRCB_TCS("%s%s%s", wxS("----------  "), _funcname, wxS("  ---------- ") );
 }
 
-void    Log_function_enter(const wxChar* _funcname)
+void    Log_function_enter  (const wxChar* _funcname)
 {
-    earlgreycb::Log_spc_inc();
+    oflp::Log_spc_inc();
 
     GWRCB_TCS("%s", wxS("***********************************************************")  );
     GWRCB_TCS("%s",  _funcname);
     GWRCB_TCS("%s", wxS("***********************************************************")  );
 }
 
-void    Log_function_exit()
+void    Log_function_exit   ()
 {
-    earlgreycb::Log_spc_dec();
+    oflp::Log_spc_dec();
+}
+
+int     Log_szt2int         (size_t _szt)
+{
+    return static_cast< int >( _szt );
 }
 //  ............................................................................
 void    Log_window_open     (wxWindow* _parent)
@@ -183,12 +213,12 @@ void    Log_window_close    ()
     dw_log_frame = NULL;
 }
 //  ............................................................................
-void        Log_console (wxString& _wxs)
+void    Log_console                 (wxString& _wxs)
 {
     printf("%s\n", _wxs.mb_str(wxConvUTF8).data());
 }
 
-void        Log_window  (wxString& _wxs)
+void    Log_window                  (wxString& _wxs)
 {
     if ( dw_log_frame )
     {
@@ -196,8 +226,36 @@ void        Log_window  (wxString& _wxs)
     }
 }
 
+void    Log_window_set_text_col_fg  (wxColour& _wx_col)
+{
+    if ( dw_log_frame )
+    {
+        dw_log_frame->set_text_col_fg(_wx_col);
+    }
 }
 
+}
+
+#endif                                                                          //  #ifdef LOG_ENABLED
+//  ****************************************************************************
+//  logs disabled
+//  ****************************************************************************
+#ifndef OFLP_LOG
+
+namespace oflp
+{
+
+class   wxWindow;
+
+bool                A_log_console   =   false;
+bool                A_log_window    =   false;
+
+void                Log_window_open             (wxWindow*) {}
+void                Log_window_close            ()          {}
+
+}
+
+#endif
 
 
 

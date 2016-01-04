@@ -1,3 +1,10 @@
+/*
+ * This file is licensed under the GNU General Public License, version 3
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ */
+
+#ifndef __OFLP_PLUGIN_MODULE_HH__
+#define __OFLP_PLUGIN_MODULE_HH__
 /// ****************************************************************************
 //! \class  OflpModule
 //!
@@ -27,3 +34,5 @@ class OflpModule
   public:
     void                        init();
 };
+
+#endif

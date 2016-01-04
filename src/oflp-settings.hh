@@ -1,15 +1,20 @@
 /*
- * This file is part of the Code::Blocks IDE and licensed under the GNU General Public License, version 3
+ * This file is licensed under the GNU General Public License, version 3
  * http://www.gnu.org/licenses/gpl-3.0.html
  */
 
 #ifndef __OFLP_SETTINGS_HH__
 #define __OFLP_SETTINGS_HH__
 //  ............................................................................
-#include    "oflp-common.hh"                                                    //  standard wx includes + OFLP log system
-//  ............................................................................
-#include    <wx/minifram.h>
+#include    "oflp-common.hh"
 
+#include    "oflp-plugin-module.hh"
+
+#include    "oflp-settings-options.hh"
+//  ............................................................................
+#include    <wx/sizer.h>
+#include    <wx/checkbox.h>
+#include    <wx/minifram.h>
 /// ****************************************************************************
 //! \class  OpenFilesListPlusSettings
 //!

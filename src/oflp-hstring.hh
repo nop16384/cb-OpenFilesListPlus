@@ -1,3 +1,8 @@
+/*
+ * This file is licensed under the GNU General Public License, version 3
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ */
+
 #ifndef __GWR_CB_HSTRING_HH__
 #define __GWR_CB_HSTRING_HH__
 //  ............................................................................
@@ -5,7 +10,9 @@
 #include    <wx/string.h>
 #include    <wx/strconv.h>
 //  ............................................................................
-namespace   earlgreycb
+#include    <vector>
+//  ............................................................................
+namespace   oflp
 {
 
 /// ****************************************************************************

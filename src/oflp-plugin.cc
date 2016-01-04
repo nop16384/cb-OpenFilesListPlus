@@ -1,28 +1,18 @@
-#include "sdk.h"                                                                // Code::Blocks SDK
-//  ............................................................................
-#ifndef CB_PRECOMP
-    #include "manager.h"
-    #include "configmanager.h"
-    #include "configurationpanel.h"
-    #include "editormanager.h"
-    #include "projectmanager.h"
-    #include "logmanager.h"
-    #include "editorbase.h"
-    #include "cbeditor.h"
-    #include "sdk_events.h"
-    #include "misctreeitemdata.h"
+/*
+ * This file is licensed under the GNU General Public License, version 3
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ */
 
-    #include "cbworkspace.h"
-    #include "cbproject.h"
-    #include "projectmanager.h"
-#endif
-//  ............................................................................
 #include    "oflp-plugin.hh"
 #include    "oflp-panel.hh"
 #include    "oflp-settings.hh"
-
-#include "tinyxml/tinyxml.h"
-#include "tinyxml/tinywxuni.h"
+//  ............................................................................
+#include    "oflp-plugin-module.hh"
+#include    "oflp-plugin-mod-gfx.hh"
+#include    "oflp-plugin-mod-layout.hh"
+#include    "oflp-plugin-mod-editors.hh"
+#include    "oflp-plugin-mod-panels.hh"
+#include    "oflp-plugin-mod-settings.hh"
 //  ............................................................................
 #define GWR_OFLP_SANITY_CHECKS
 #define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
@@ -51,7 +41,6 @@ namespace
     PluginRegistrant<OpenFilesListPlus> reg(_T("OpenFilesListPlus"));
 
     const int idViewOpenFilesPlus       = wxNewId();
-    const int idMainPanel               = wxNewId();
 }
 //  ............................................................................
 BEGIN_EVENT_TABLE(OpenFilesListPlus, cbPlugin)
@@ -61,7 +50,7 @@ END_EVENT_TABLE()
 //  ............................................................................
 void    OpenFilesListPlus:: dump_project_manager_state()
 {
-    earlgreycb::Log_function_mark( wxS("p0_dump_project_manager()"));
+    OFLP_FUNC_ENTER_MARK("p0_dump_project_manager()");
 
     ProjectManager* pjm = Manager::Get()->GetProjectManager();
 
@@ -106,9 +95,9 @@ void OpenFilesListPlus::OnAttach()
     aw_menu_view            =   NULL;
     //  ........................................................................
     //  this is for debugging only : enable log window at very startup of plugin
-    earlgreycb::A_log_window    =   true;                                       //  enable log window at start
-    earlgreycb::A_log_console   =   false;
-    earlgreycb::Log_window_open( Manager::Get()->GetAppWindow() );              //  enable log window at start
+    oflp::A_log_window    =   true;                                       //  enable log window at start
+    oflp::A_log_console   =   false;
+    oflp::Log_window_open( Manager::Get()->GetAppWindow() );              //  enable log window at start
 
     GWR_INF("OpenFilesListPlugin::OnAttach [%p][%p]", this, Instance());
     //  ........................................................................
@@ -181,7 +170,7 @@ void OpenFilesListPlus::OnRelease(bool appShutDown)
     #endif
 
     // finally destroy the widgets
-    earlgreycb::Log_window_close();
+    oflp::Log_window_close();
 
     panels()->p0_main()->Destroy();
     panels()->p0_main() = NULL;
@@ -285,7 +274,7 @@ bool    OpenFilesListPlus:: FindCbProjectForFile    (wxString const & _abs_fpath
 
     return ( (*_pro) != NULL );
 }
-//! \brief  Delete all OFLPPanels, forget about the layout
+//! \brief  Delete all OflpPanels, forget about the layout
 void OpenFilesListPlus::reset()
 {
     panels()->p0_reset();
@@ -326,9 +315,9 @@ void OpenFilesListPlus::RefreshOpenFileState    (EditorBase* _nn_edb)
     EditorManager   *   emgr  =   Manager::Get()->GetEditorManager();
     EditorBase      *   aedb  =   emgr->GetActiveEditor();
 
-    OFLPPanel       *   panel   =   NULL;
+    OflpPanel       *   panel   =   NULL;
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::RefreshOpenFileState()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::RefreshOpenFileState()");
     //  ........................................................................
     if ( Manager::IsAppShuttingDown() )
         return;
@@ -342,7 +331,7 @@ void OpenFilesListPlus::RefreshOpenFileState    (EditorBase* _nn_edb)
     GWR_TKI("     ...panel          :[%p]"    , panel);
     GWR_TKI("     ...active editor  :[%s]"    , aedb ? aedb->GetShortName().wc_str() : wxS("NULL"));
     //  ........................................................................
-    //  we found the editor in an OFLPPanel
+    //  we found the editor in an OflpPanel
     if ( panel )
     {
         //  ....................................................................
@@ -366,7 +355,7 @@ void OpenFilesListPlus::RefreshOpenFileState    (EditorBase* _nn_edb)
         }
     }
     //  ........................................................................
-    //  editor was not found in any OFLPPanel -> emergency
+    //  editor was not found in any OflpPanel -> emergency
     else
     {
         //  emergency();                                                        //  _GWR_TODO_ "Start here" is not in any panel !
@@ -374,22 +363,22 @@ void OpenFilesListPlus::RefreshOpenFileState    (EditorBase* _nn_edb)
     //  ........................................................................
     panels()->p0_main()->Thaw();
     //  ........................................................................
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 }
 
 //! \fn     RefreshOpenFileLayout
 //!
-//! \brief  Given an editor, put it in the right OFLPPanel
+//! \brief  Given an editor, put it in the right OflpPanel
 void OpenFilesListPlus::RefreshOpenFileLayout   (EditorBase* _nn_edb)
 {
     EditorManager   *   emgr        =   Manager::Get()->GetEditorManager();
     EditorBase      *   aedb        =   emgr->GetActiveEditor();
     wxString            shortname   =   _nn_edb->GetShortName();
 
-    OFLPPanel         *   psrc    =   NULL;
-    OFLPPanel         *   pdst    =   NULL;
+    OflpPanel         *   psrc    =   NULL;
+    OflpPanel         *   pdst    =   NULL;
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::RefreshOpenFileLayout()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::RefreshOpenFileLayout()");
     //  ........................................................................
     if ( Manager::IsAppShuttingDown() )
         goto lab_exit;
@@ -425,7 +414,7 @@ lab_eventually_move:
     }
     //  ........................................................................
 lab_exit:
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 }
 
 //! \fn     RefreshOpenFilesLayout
@@ -435,7 +424,7 @@ void OpenFilesListPlus::RefreshOpenFilesLayout  ()
 {
     EditorManager   *   emgr  =   Manager::Get()->GetEditorManager();
     //  ........................................................................
-    earlgreycb::Log_function_enter(wxS("OFLP::RefreshOpenFilesLayout()"));
+    OFLP_FUNC_ENTER_LOG("OFLP::RefreshOpenFilesLayout()");
     //  ........................................................................
     //  optim : if workspace loading, first calls to RefreshOpenFileLayout()    //  _GWR_OPTIM_
     //  occurs _BEFORE_ panels are created. So if no panel exist, drop
@@ -464,14 +453,14 @@ void OpenFilesListPlus::RefreshOpenFilesLayout  ()
     panels()->p0_main()->Thaw();
     //  ........................................................................
 lab_exit:
-    earlgreycb::Log_function_exit();
+    OFLP_FUNC_EXIT_LOG();
 }
 //  ############################################################################
-#include    "oflp-plugin-events.cci"
-#include    "oflp-plugin-mod-layout.cci"
-#include    "oflp-plugin-mod-editors.cci"
-#include    "oflp-plugin-mod-panels.cci"
-#include    "oflp-plugin-mod-settings.cci"
+//#include    "oflp-plugin-events.cci"
+//#include    "oflp-plugin-mod-layout.cci"
+//#include    "oflp-plugin-mod-editors.cci"
+//#include    "oflp-plugin-mod-panels.cci"
+//#include    "oflp-plugin-mod-settings.cci"
 
 // dont create a "oflp-plugin-gfx.cci" file for 2 lines
 BitmapPointerHash   OflpModGfx::A_bitmap_hash;

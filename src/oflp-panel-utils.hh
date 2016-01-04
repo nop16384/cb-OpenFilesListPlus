@@ -1,9 +1,14 @@
+/*
+ * This file is part of the Code::Blocks IDE and licensed under the GNU General Public License, version 3
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ */
+
 /// ****************************************************************************
 //! \class  OpenFilesListPlusPanelItemData
 //!
 //! \brief  Data stored in all tree items of panels
 //!
-//! \detail Points on the OFLPPanel, and the EditorBase
+//! \detail Points on the OflpPanel, and the EditorBase
 /// ****************************************************************************
 class OpenFilesListPlusPanelItemData      : public wxTreeItemData
 {
@@ -29,7 +34,7 @@ class OpenFilesListPlusPanelItemData      : public wxTreeItemData
 //! \brief  Data stored in all tree items of panels + other datas  ; construct
 //!     only from a wxTeeeEvent : its only for event handling coding lisibility
 //!
-//! \detail Points on the OFLPPanel, the EditorBase, has the wxTeeeItemId, and
+//! \detail Points on the OflpPanel, the EditorBase, has the wxTeeeItemId, and
 //!     the wxTreeCtrl
 /// ****************************************************************************
 class OpenFilesListPlusPanelItemInfo      : public OpenFilesListPlusPanelItemData
@@ -51,17 +56,17 @@ class OpenFilesListPlusPanelItemInfo      : public OpenFilesListPlusPanelItemDat
     wxTreeItemId                    GetIid()    { return a_iid;     }
 };
 /// ****************************************************************************
-//! \class  OFLPPanelDataObject
+//! \class  OflpPanelDataObject
 //!
 //! \brief  Allow parameters sharing between DnD src and dst widgets
 //!
 //! \detail We inherit from wxDataObjectSimple, and serialize / deserialize some
 //!     values.
 /// ****************************************************************************
-class OFLPPanelDataObject                   : public wxDataObjectSimple
+class OflpPanelDataObject                   : public wxDataObjectSimple
 {
   public:
-    OFLPPanelDataObject();
+    OflpPanelDataObject();
 
   private:
     static  const   size_t  s_capacity          =   64;
@@ -73,9 +78,9 @@ class OFLPPanelDataObject                   : public wxDataObjectSimple
     size_t  a_data_size;                                                        //! a_data_size = 0 <=> no data stored in object
 
   public:
-    //  ( wxWidgets would say ) "formatted" data for OFLPPanel
-    unsigned    char    a_data_panel_index;                                     //! formatted OFLPPanel index
-    unsigned    char    a_data_item_index;                                      //! formatted item index in above OFLPPanel
+    //  ( wxWidgets would say ) "formatted" data for OflpPanel
+    unsigned    char    a_data_panel_index;                                     //! formatted OflpPanel index
+    unsigned    char    a_data_item_index;                                      //! formatted item index in above OflpPanel
     EditorBase  *       a_data_editor;                                          //! formatted EditorBase*
 
   private:
@@ -107,18 +112,18 @@ class OpenFilesListPlusPanelDropTarget    : public wxDropTarget
 {
   private:
     wxTreeCtrl              *   a_owner;
-    OFLPPanel               *   a_owner_panel;
-    OFLPPanelDataObject     *   d_data_object;
+    OflpPanel               *   a_owner_panel;
+    OflpPanelDataObject     *   d_data_object;
 
   public:
     wxTreeCtrl              *   octrl()     { return a_owner;       }
-    OFLPPanel               *   opanel()    { return a_owner_panel; }
+    OflpPanel               *   opanel()    { return a_owner_panel; }
 
   public:
     virtual bool            OnDrop(wxCoord x, wxCoord y);
     virtual wxDragResult    OnData(wxCoord x, wxCoord y, wxDragResult _res);
 
   public:
-    OpenFilesListPlusPanelDropTarget(wxTreeCtrl *_owner, OFLPPanel* _owner_panel);
+    OpenFilesListPlusPanelDropTarget(wxTreeCtrl *_owner, OflpPanel* _owner_panel);
    ~OpenFilesListPlusPanelDropTarget();
 };
