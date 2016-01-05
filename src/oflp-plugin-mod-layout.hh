@@ -72,13 +72,13 @@ class OflpModLayout : public OflpModule
         oflp::HString               a_panel_name;                               //! assigned panel name + hash
 
       public:
-        wxFileName                  const   &   awxfn()     { return a_absolute_filename;           }
-        wxString                    const   &   afp()       { return a_absolute_filepath.get();     }
-        oflp::HString::tHash                    hafp()      { return a_absolute_filepath.hash();    }
-        wxString                    const   &   rfp()       { return a_relative_filepath.get();     }
-        oflp::HString::tHash                    hrfp()      { return a_relative_filepath.hash();    }
-        wxString                    const   &   pname()     { return a_panel_name.get();            }
-        oflp::HString::tHash                    hpname()    { return a_panel_name.hash();           }
+        wxFileName                  const   &   awxfn()     const   { return a_absolute_filename;           }
+        wxString                    const   &   afp()       const   { return a_absolute_filepath.get();     }
+        oflp::HString::tHash                    hafp()              { return a_absolute_filepath.hash();    }
+        wxString                    const   &   rfp()       const   { return a_relative_filepath.get();     }
+        oflp::HString::tHash                    hrfp()              { return a_relative_filepath.hash();    }
+        wxString                    const   &   pname()     const   { return a_panel_name.get();            }
+        oflp::HString::tHash                    hpname()            { return a_panel_name.hash();           }
 
       public:
         FileAssignment(
@@ -166,10 +166,13 @@ class OflpModLayout : public OflpModule
     bool                    p0_file_assignment_get_from_editor_base     (EditorBase*, FileAssignment*& _file_assignment);
 
   public:
-    OflpPanel       *       file_assignment_find_panel_from_editor_base (EditorBase*    _nn_edb);
-    void                    file_assignment_update                      (EditorBase*    _nn_edb, OflpPanel* _nn_dst_panel);
+    FileAssignment          const   *   file_assignment_find             (EditorBase*    _nn_edb);
+    void                                file_assignment_update           (EditorBase*    _nn_edb, OflpPanel* _nn_dst_panel);
 
-    PanelAssignmentArray    const   &   panel_assignment_array          ()  { return a_panel_assignment_array;      }
+    PanelAssignmentArray    const   &   panel_assignment_array          ()
+        {
+            return a_panel_assignment_array;
+        }
     //  ------------------------------------------------------------------------
   public:
     void                reset               ();

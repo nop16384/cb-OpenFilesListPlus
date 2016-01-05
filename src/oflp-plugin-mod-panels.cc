@@ -45,6 +45,12 @@ void            OflpModPanels:: init            ()
     a_panel_bulk    =   p0_add( wxString::FromUTF8("Bulk"), true );
 }
 //  ############################################################################
+void            OflpModPanels:: p0_destroy      ()
+{
+    dw_main_panel->Destroy();
+    dw_main_panel   =   NULL;
+}
+
 void            OflpModPanels:: p0_reset        ()
 {
     OflpPanel                       *       panel   =   NULL;

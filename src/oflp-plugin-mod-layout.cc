@@ -524,24 +524,20 @@ lab_exit_failure:
     return FALSE;
 }
 
-OflpPanel*  OflpModLayout:: file_assignment_find_panel_from_editor_base (EditorBase* _nn_edb)
+OflpModLayout::FileAssignment   const   *
+            OflpModLayout:: file_assignment_find                        (
+    EditorBase          *   _nn_edb)
 {
     FileAssignment      *   fa          =   NULL;
 
     OflpPanel           *   panel       =   NULL;
     //  ........................................................................
-    OFLP_FUNC_ENTER_LOG("OFLP::Layout::file_assignment_find_panel_from_editor_base()");
+    OFLP_FUNC_ENTER_MARK("OFLP::Layout::file_assignment_find()");
 
-    if ( ! p0_file_assignment_get_from_editor_base( _nn_edb, fa ) )
-    {
-        goto lab_exit;
-    }
-    //  ........................................................................
-    panel   =   panels()->get_by_name( fa->pname() );
-    //  ........................................................................
-lab_exit:
-    OFLP_FUNC_EXIT_LOG();
-    return panel;
+    if ( p0_file_assignment_get_from_editor_base( _nn_edb, fa ) )
+        return fa;
+
+    return NULL;
 }
 
 void        OflpModLayout:: file_assignment_update                      (
@@ -724,6 +720,7 @@ bool    OflpModLayout::     project_close               (cbProject* _pro)
     //  ........................................................................
 lab_exit:
     OFLP_FUNC_EXIT_LOG();
+    return true;
 }
 
 bool    OflpModLayout::     project_save                (cbProject* _pro)

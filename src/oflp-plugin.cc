@@ -172,8 +172,7 @@ void OpenFilesListPlus::OnRelease(bool appShutDown)
     // finally destroy the widgets
     oflp::Log_window_close();
 
-    panels()->p0_main()->Destroy();
-    panels()->p0_main() = NULL;
+    panels()->p0_destroy();
 }
 
 int OpenFilesListPlus:: Configure()
@@ -375,8 +374,9 @@ void OpenFilesListPlus::RefreshOpenFileLayout   (EditorBase* _nn_edb)
     EditorBase      *   aedb        =   emgr->GetActiveEditor();
     wxString            shortname   =   _nn_edb->GetShortName();
 
-    OflpPanel         *   psrc    =   NULL;
-    OflpPanel         *   pdst    =   NULL;
+    OflpPanel                               *   psrc    =   NULL;
+    OflpPanel                               *   pdst    =   NULL;
+    OflpModLayout::FileAssignment   const   *   fadst   =   NULL;
     //  ........................................................................
     OFLP_FUNC_ENTER_LOG("OFLP::RefreshOpenFileLayout()");
     //  ........................................................................
@@ -396,7 +396,9 @@ void OpenFilesListPlus::RefreshOpenFileLayout   (EditorBase* _nn_edb)
     //  ........................................................................
     //  find file assignment ; if found, move editor to its assigned panel
     //  if it lays in another panel.
-    pdst = layout()->file_assignment_find_panel_from_editor_base(_nn_edb);
+    fadst   =   layout()->file_assignment_find(_nn_edb);
+    if ( fadst )
+        pdst    = panels()->get_by_name( fadst->pname() );
 
     //  no assignment - set dst to bulk
     if ( ! pdst )

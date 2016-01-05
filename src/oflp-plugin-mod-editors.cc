@@ -80,23 +80,27 @@ lab_dump:
 //  ############################################################################
 bool    OflpModEditors::    add (EditorBase* _nn_edb)
 {
-    OflpPanel       *   panel   =   NULL;
+    OflpPanel                               *   panel   =   NULL;
+    OflpModLayout::FileAssignment   const   *   fa      =   NULL;
     //  ........................................................................
     OFLP_FUNC_ENTER_LOG("OFLP::Editors::add()");
     //  ........................................................................
     OFLP_EMERGENCY__NULL_POINTER__FAILURE(_nn_edb);
     //  ........................................................................
-    panel = layout()->file_assignment_find_panel_from_editor_base(_nn_edb);
-
+    fa      = layout()->file_assignment_find(_nn_edb);
+    if ( fa )
+        panel   =   panels()->get_by_name( fa->pname() );
     GWR_TKI("  ...[%p][%s] -> [%p][%s]" ,
         _nn_edb , _nn_edb->GetShortName().wc_str()                  ,
         panel   , panel ? panel->title().wc_str() : wxS("Bulk")     );
 
+    //  assignment found, at to the good panel
     if ( panel )
     {
         if ( ! panel->editor_add(_nn_edb) )
             goto lab_exit_failure;
     }
+    //  assignment not found, at to bulk
     else
     {
         if ( ! panels()->p0_bulk()->editor_add(_nn_edb) )

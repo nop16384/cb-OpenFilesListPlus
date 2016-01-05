@@ -26,32 +26,19 @@ class OflpModPanels : public OflpModule
     wxBoxSizer                      *   dw_main_sizer;
 
     OpenFilesListPlusPanel          *   a_panel_bulk;                           //!< Bulk panel permanent access
-    //oflp::TplScope< OflpPanelArray, OflpPanel >::AccessorArray  a_panels_array;
-    OflpPanelArray                  a_panels_array;
+    OflpPanelArray                      a_panels_array;
 
     //  ........................................................................
   private:
-    wxPanel                     *&  p0_main()   { return dw_main_panel;     }
-    wxBoxSizer                  *   p0_sizer()  { return dw_main_sizer;     }
-    OflpPanel                   *   p0_bulk()   { return a_panel_bulk;      }
+    wxPanel                     *   p0_main()           { return dw_main_panel;     }
+    wxBoxSizer                  *   p0_sizer()          { return dw_main_sizer;     }
+    OflpPanel                   *   p0_bulk()           { return a_panel_bulk;      }
   public:
-    size_t                          size()      { return a_panels_array.size();     }
-    //  C++ doesnt allow implicit conversion from
-    //      OflpPanel           *   &
-    //  to
-    //      OflpPanel   const   *   &
-    //  but wxArray-s only have 'T & Item()' method ; so use const_cast,
-    //  but this is for increasing security.
-    //OflpPanel  const  *   &         panel(size_t _ix)
-    //    {
-    //        return const_cast< OflpPanel const * & >( a_panels_array.Item(_ix) );
-    //    }
-    OflpPanel  const            *&  panel(size_t _ix)
-        {
-            return const_cast< OflpPanel const * & >( a_panels_array[_ix] );
-        }
+    size_t                          size()              { return a_panels_array.size();     }
+    OflpPanel                   *   panel(size_t _ix)   { return a_panels_array[_ix];       }
     //  ------------------------------------------------------------------------
   private:
+    void                    p0_destroy          ();
     void                    p0_reset            ();
 
     void                    p0_freeze()         { dw_main_panel->Freeze();      }

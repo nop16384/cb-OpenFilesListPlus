@@ -40,12 +40,8 @@
 					<Add option="-g" />
 					<Add option="`wx-config  --cflags`" />
 					<Add option="-DOFLP_DEBUG" />
-					<Add option="-DOFLP_COMPILE_TARGET_PROD" />
 					<Add directory="/home/gwr/Src/C-C++/gwr.codeblocks/src/svn10373/trunk/src/include" />
 				</Compiler>
-				<ResourceCompiler>
-					<Add option="-DOFLP_DEBUG" />
-				</ResourceCompiler>
 				<Linker>
 					<Add option="`wx-config --libs`" />
 				</Linker>
@@ -68,13 +64,7 @@
 					<Add option="-DOFLP_DEBUG" />
 					<Add option="-DOFLP_LOG_FUNCTIONS" />
 					<Add option="-DOFLP_LOG" />
-					<Add option="-DOFLP_COMPILE_TARGET_DEVEL" />
 				</Compiler>
-				<ResourceCompiler>
-					<Add option="-DOFLP_DEBUG" />
-					<Add option="-DOFLP_LOG_FUNCTIONS" />
-					<Add option="-DOFLP_LOG" />
-				</ResourceCompiler>
 				<Linker>
 					<Add option="`wx-config --libs`" />
 				</Linker>
@@ -140,12 +130,10 @@
 					<Add option="-g" />
 					<Add option="`wx-config --cflags`" />
 					<Add option="-fPIC" />
-				</Compiler>
-				<ResourceCompiler>
 					<Add option="-DOFLP_DEBUG" />
 					<Add option="-DOFLP_LOG_FUNCTIONS" />
 					<Add option="-DOFLP_LOG" />
-				</ResourceCompiler>
+				</Compiler>
 				<Linker>
 					<Add option="`wx-config --libs`" />
 					<Add option="-Wl,-z,defs" />
@@ -270,12 +258,6 @@
 			<Option target="Release" />
 		</Unit>
 		<Unit filename="src/oflp-common-macros.hh">
-			<Option virtualFolder="src/common/" />
-		</Unit>
-		<Unit filename="src/oflp-common-stl-devel.hhi">
-			<Option virtualFolder="src/common/" />
-		</Unit>
-		<Unit filename="src/oflp-common-stl-prod.hhi">
 			<Option virtualFolder="src/common/" />
 		</Unit>
 		<Unit filename="src/oflp-common.hh">

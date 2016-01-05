@@ -4,7 +4,6 @@
 	<Panels>
 		<Panel name="Common" index="1" />
 		<Panel name="Plugin" index="2" />
-		<Panel name="Done" index="3" />
-		<Panel name="Panels" index="4" />
+		<Panel name="Panels" index="3" />
 	</Panels>
 </CodeBlocks_workspace_oflp_file>
