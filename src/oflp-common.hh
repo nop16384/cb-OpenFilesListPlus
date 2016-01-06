@@ -16,23 +16,29 @@
 #endif
 //  ............................................................................
 //  C::B sdk
-#include <codeblocks/sdk.h>
+#include <sdk.h>
 
 #ifndef CB_PRECOMP
-    #include <codeblocks/manager.h>
-    #include <codeblocks/configmanager.h>
-    #include <codeblocks/configurationpanel.h>
-    #include <codeblocks/editormanager.h>
-    #include <codeblocks/projectmanager.h>
-    #include <codeblocks/logmanager.h>
-    #include <codeblocks/editorbase.h>
-    #include <codeblocks/cbeditor.h>
-    #include <codeblocks/sdk_events.h>
-    #include <codeblocks/misctreeitemdata.h>
 
-    #include <codeblocks/cbworkspace.h>
-    #include <codeblocks/cbproject.h>
-    #include <codeblocks/projectmanager.h>
+    //D #pragma message "-CBPRECOMP"
+
+    #include <cbplugin.h>                                             //  for "class cbPlugin"
+    #include <manager.h>
+    #include <configmanager.h>
+    #include <configurationpanel.h>
+    #include <editormanager.h>
+    #include <projectmanager.h>
+    #include <logmanager.h>
+    #include <editorbase.h>
+    #include <cbeditor.h>
+    #include <sdk_events.h>
+    #include <misctreeitemdata.h>
+
+    #include <cbworkspace.h>
+    #include <cbproject.h>
+    #include <projectmanager.h>
+#else
+    //D #pragma message "+CBPRECOMP"
 #endif
 //  ............................................................................
 //  general defines - compilation options

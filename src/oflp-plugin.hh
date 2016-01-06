@@ -15,15 +15,6 @@
 #define __OFLP_PLUGIN_HH__
 //  ............................................................................
 #include    "oflp-common.hh"                                                    //  standard wx includes + OFLP log system
-//  ............................................................................
-//#include    <wx/imaglist.h>                                                     //  for OFPLPlugin::Gfx
-//#include    <wx/xrc/xmlres.h>                                                   //  for OFPLPlugin::Gfx
-//#include    <wx/artprov.h>                                                      //  for OFPLPlugin::Gfx
-//  ............................................................................
-#include    <codeblocks/cbplugin.h>                                             //  for "class cbPlugin"
-#include    <codeblocks/cbworkspace.h>                                          //  for "class cbPlugin"
-//  ............................................................................
-//#include    "oflp-plugin-module.hh"
 /// ****************************************************************************
 //! \class  OpenFilesListPlus
 //!

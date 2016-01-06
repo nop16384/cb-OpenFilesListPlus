@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_layout_file>
 	<FileVersion major="1" minor="0" />
-	<ActiveProject path="../cb-debuggee/cb-debuggee.cbp" />
-	<PreferredTarget name="Debug" />
+	<ActiveProject path="cb-oflp-plugin.cbp" />
 </CodeBlocks_workspace_layout_file>

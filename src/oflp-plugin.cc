@@ -14,6 +14,8 @@
 #include    "oflp-plugin-mod-panels.hh"
 #include    "oflp-plugin-mod-settings.hh"
 //  ............................................................................
+#include    <configurationpanel.h>
+//  ............................................................................
 #define GWR_OFLP_SANITY_CHECKS
 #define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
 #define GWR_TKI(FORMAT, ...)    GWRCB_TKI(FORMAT, __VA_ARGS__);

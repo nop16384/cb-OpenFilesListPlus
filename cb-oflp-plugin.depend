@@ -2486,23 +2486,23 @@
 	<wx/colour.h>
 	<wx/textctrl.h>
 
-1451836334 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common.hh
+1452111237 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common.hh
 	<wx/wxprec.h>
 	<wx/wx.h>
-	<codeblocks/sdk.h>
-	<codeblocks/manager.h>
-	<codeblocks/configmanager.h>
-	<codeblocks/configurationpanel.h>
-	<codeblocks/editormanager.h>
-	<codeblocks/projectmanager.h>
-	<codeblocks/logmanager.h>
-	<codeblocks/editorbase.h>
-	<codeblocks/cbeditor.h>
-	<codeblocks/sdk_events.h>
-	<codeblocks/misctreeitemdata.h>
-	<codeblocks/cbworkspace.h>
-	<codeblocks/cbproject.h>
-	<codeblocks/projectmanager.h>
+	<sdk.h>
+	<manager.h>
+	<configmanager.h>
+	<configurationpanel.h>
+	<editormanager.h>
+	<projectmanager.h>
+	<logmanager.h>
+	<editorbase.h>
+	<cbeditor.h>
+	<sdk_events.h>
+	<misctreeitemdata.h>
+	<cbworkspace.h>
+	<cbproject.h>
+	<projectmanager.h>
 	"oflp-log.hh"
 	"oflp-hstring.hh"
 	"oflp-common-macros.hh"
@@ -4522,7 +4522,7 @@
 1413563581 /usr/include/wx-3.0/wx/gtk/dnd.h
 	"wx/icon.h"
 
-1451863005 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel.cc
+1452108172 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel.cc
 	"oflp-plugin.hh"
 	"oflp-plugin-mod-panels.hh"
 	"oflp-plugin-mod-gfx.hh"
@@ -4535,10 +4535,8 @@
 	"oflp-panel-header.hh"
 	"oflp-panel-utils.hh"
 
-1451836814 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.hh
+1452110824 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.hh
 	"oflp-common.hh"
-	<codeblocks/cbplugin.h>
-	<codeblocks/cbworkspace.h>
 
 1451727395 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/earlgrey-cb.hstring.hh
 	<stdio.h>
@@ -6172,7 +6170,7 @@
 
 1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/tinyxml/tinywxuni.h
 
-1452073854 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.cc
+1452110772 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.cc
 	"oflp-plugin.hh"
 	"oflp-panel.hh"
 	"oflp-settings.hh"
@@ -6182,6 +6180,7 @@
 	"oflp-plugin-mod-editors.hh"
 	"oflp-plugin-mod-panels.hh"
 	"oflp-plugin-mod-settings.hh"
+	<configurationpanel.h>
 
 1451596257 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-accessors.hhi
 
@@ -6253,11 +6252,11 @@
 	"oflp-plugin-mod-editors.hh"
 	"oflp-panel.hh"
 
-1451984383 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-layout.hh
+1452111169 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-layout.hh
 	"oflp-common.hh"
 	"oflp-plugin-module.hh"
-	<codeblocks/tinyxml/tinyxml.h>
-	<codeblocks/tinyxml/tinywxuni.h>
+	<tinyxml/tinyxml.h>
+	<tinyxml/tinywxuni.h>
 
 1451836070 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-settings.hh
 	"oflp-common.hh"
@@ -6271,7 +6270,7 @@
 	"oflp-plugin-mod-layout.hh"
 	"oflp-panel.hh"
 
-1451984498 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-layout.cc
+1452075954 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-layout.cc
 	"oflp-plugin-mod-layout.hh"
 	"oflp-plugin.hh"
 	"oflp-plugin-mod-panels.hh"
@@ -6316,4 +6315,13 @@
 	"oflp-plugin.hh"
 	"oflp-plugin-mod-gfx.hh"
 	"oflp-panel.hh"
+
+1451427327 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/sdk/wxscintilla/include/wx/wxscintilla.h
+	<wx/defs.h>
+	<wx/control.h>
+	<wx/dnd.h>
+	<wx/stopwatch.h>
+	<wx/timer.h>
+	<wx/scrolbar.h>
+	<wx/versioninfo.h>
 

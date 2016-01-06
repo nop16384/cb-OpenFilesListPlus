@@ -10,8 +10,8 @@
 
 #include    "oflp-plugin-module.hh"
 //  ............................................................................
-#include <codeblocks/tinyxml/tinyxml.h>
-#include <codeblocks/tinyxml/tinywxuni.h>
+#include <tinyxml/tinyxml.h>
+#include <tinyxml/tinywxuni.h>
 /// ****************************************************************************
 //! \class  OflpModLayout
 //!

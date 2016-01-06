@@ -224,6 +224,9 @@ OpenFilesListPlusPanel::OpenFilesListPlusPanel(
 {
     GWR_INF("OpenFilesListPlusPanel::OpenFilesListPlusPanel():[%p] plugin[%p]", this, _ofl_plugin);
 
+    if ( is_bulk() )
+        return;
+
     SetFont( OpenFilesListPlus::Instance()->gfx()->fnt8() );
 
     dw_header   =   new OpenFilesListPlusPanelHeader( this, _title );
