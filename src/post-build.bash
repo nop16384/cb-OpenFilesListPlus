@@ -6,18 +6,20 @@ OflpInstallDir=""
 if [[ "${WxVersion}" = "3.0" ]] ; then
 
     echo "> wxWidgets 3.0"
-    OflpInstallDir="./plugin/wx-3.0.2"
+    OflpInstallDir="./plugin/devel/linux/wx-3.0.2"
 
 fi
 
 if [[ "${WxVersion}" = "2.8" ]] ; then
 
     echo "> wxWidgets 2.8"
-    OflpInstallDir="./plugin/wx-2.8.12"
+    OflpInstallDir="./plugin/devel/linux/wx-2.8.12"
 
 fi
 
-cp  ./plugin/libOpenFilesListPlus.so "${OflpInstallDir}"
+mkdir -p                                            "${OflpInstallDir}"
+
+cp  ./plugin/devel/linux/libOpenFilesListPlus.so    "${OflpInstallDir}"
 
 rm -f "${OflpInstallDir}/OpenFilesListPlus.zip"
 rm -f "${OflpInstallDir}/OpenFilesListPlus.cbplugin"

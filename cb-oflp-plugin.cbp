@@ -185,13 +185,6 @@
 				</ExtraCommands>
 			</Target>
 		</Build>
-		<Compiler>
-			<Add option="-fPIC" />
-			<Add directory="$(#cb)/include" />
-			<Add directory="$(#cb)/sdk/wxscintilla/include" />
-			<Add directory="$(#wx.include)" />
-			<Add directory="$(#wx.lib)/gcc_dll/mswu" />
-		</Compiler>
 		<Unit filename="cb-fake-sdk/include/cbeditor.h">
 			<Option virtualFolder="cb-fake-sdk/include/" />
 			<Option target="devel-linux-memleaks" />

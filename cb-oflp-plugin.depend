@@ -2486,10 +2486,11 @@
 	<wx/colour.h>
 	<wx/textctrl.h>
 
-1452111237 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common.hh
+1452111397 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common.hh
 	<wx/wxprec.h>
 	<wx/wx.h>
 	<sdk.h>
+	<cbplugin.h>
 	<manager.h>
 	<configmanager.h>
 	<configurationpanel.h>
@@ -4535,7 +4536,7 @@
 	"oflp-panel-header.hh"
 	"oflp-panel-utils.hh"
 
-1452110824 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.hh
+1452111346 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.hh
 	"oflp-common.hh"
 
 1451727395 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/earlgrey-cb.hstring.hh
