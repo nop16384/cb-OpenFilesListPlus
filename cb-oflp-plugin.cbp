@@ -131,8 +131,6 @@
 					<Add option="`wx-config --cflags`" />
 					<Add option="-fPIC" />
 					<Add option="-DOFLP_DEBUG" />
-					<Add option="-DOFLP_LOG_FUNCTIONS" />
-					<Add option="-DOFLP_LOG" />
 				</Compiler>
 				<Linker>
 					<Add option="`wx-config --libs`" />

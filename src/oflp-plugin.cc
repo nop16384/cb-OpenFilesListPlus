@@ -95,9 +95,9 @@ void OpenFilesListPlus::OnAttach()
     aw_menu_view            =   NULL;
     //  ........................................................................
     //  this is for debugging only : enable log window at very startup of plugin
-    oflp::A_log_window    =   true;                                       //  enable log window at start
+    oflp::A_log_window    =   true;                                             //  enable log window at start
     oflp::A_log_console   =   false;
-    oflp::Log_window_open( Manager::Get()->GetAppWindow() );              //  enable log window at start
+    oflp::Log_window_open( Manager::Get()->GetAppWindow() );                    //  enable log window at start
 
     GWR_INF("OpenFilesListPlugin::OnAttach [%p][%p]", this, Instance());
     //  ........................................................................

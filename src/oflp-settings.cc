@@ -118,6 +118,7 @@ void            OpenFilesListPlusSettings:: evh_check_box_clicked(wxCommandEvent
     //  ........................................................................
     dw_bs_main                          =   new wxBoxSizer( wxVERTICAL );
     //  ........................................................................
+    //  log options
     dw_sb_log                           =   new wxStaticBoxSizer( wxVERTICAL, this, wxS(" Logs ") );
         dw_cb_log_enable                =   new wxCheckBox(this, idb + 0, wxS("Enable logs"), wxDefaultPosition, wxDefaultSize, 0);
         dw_bs_log_wc1                   =   new wxBoxSizer( wxHORIZONTAL );
@@ -135,6 +136,7 @@ void            OpenFilesListPlusSettings:: evh_check_box_clicked(wxCommandEvent
     dw_sb_log               ->Add(dw_cb_log_enable          , 0, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
     dw_sb_log               ->Add(dw_bs_log_wc1             , 0, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
     //  ........................................................................
+    //  file selection mode option
     dw_sb_sel                           =   new wxStaticBoxSizer( wxVERTICAL, this, wxS(" Selection ") );
             dw_cb_sel_double            =   new wxCheckBox(this, idb + 3, wxS("double click"));
             dw_cb_sel_single            =   new wxCheckBox(this, idb + 4, wxS("simple click"));
@@ -144,6 +146,12 @@ void            OpenFilesListPlusSettings:: evh_check_box_clicked(wxCommandEvent
     //  ........................................................................
     dw_bs_main              ->Add(dw_sb_log                 , 0, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
     dw_bs_main              ->Add(dw_sb_sel                 , 0, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+
+    //  if no logs, just hide the wxStaticBoxSizer here instead of not creating
+    //  it, which would lead to spread #ifndef OFLP_LOG checks everywhere
+    #ifndef OFLP_LOG
+    dw_bs_main->Show((size_t)0, false);
+    #endif
     //  ........................................................................
     import_log(_opt_log);
     import_sel(_opt_sel);
@@ -159,9 +167,6 @@ void            OpenFilesListPlusSettings:: evh_check_box_clicked(wxCommandEvent
     this->SetSizer(dw_bs_main);
     dw_bs_main->Fit(this);
     dw_bs_main->SetSizeHints(this);
-
-    //wxColour cl(255,255,255,0);
-    //SetOwnBackgroundColour(cl);
 }
 
                 OpenFilesListPlusSettings:: ~OpenFilesListPlusSettings()

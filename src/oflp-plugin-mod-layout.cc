@@ -15,6 +15,7 @@
 #define GWR_OFLP_SANITY_CHECKS
 #define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
 #define GWR_TKI(FORMAT, ...)    GWRCB_TKI(FORMAT, __VA_ARGS__);
+#define GWR_TKW(FORMAT, ...)    GWRCB_TKW(FORMAT, __VA_ARGS__);
 #define GWR_TKE(FORMAT, ...)    GWRCB_TKE(FORMAT, __VA_ARGS__);
 #define GWR_INF(FORMAT, ...)    GWRCB_INF(FORMAT, __VA_ARGS__);
 #define GWR_WNG(FORMAT, ...)    GWRCB_WNG(FORMAT, __VA_ARGS__);
@@ -467,7 +468,7 @@ bool        OflpModLayout:: p0_project_assignments_get_from_editor_base (
     //  ........................................................................
     if ( ! p0_project_assignments_get_from_cbProject(pro, _out_project_assignments) )
     {
-        GWR_TKI("              ...no ProjectAssignments for cbProject[%s]", pro->GetTitle().wc_str());
+        GWR_TKW("              ...no ProjectAssignments for cbProject[%s]", pro->GetTitle().wc_str());
         goto lab_exit_failure;
     }
     //  ........................................................................
@@ -504,14 +505,14 @@ bool        OflpModLayout:: p0_file_assignment_get_from_editor_base     (
     //  get the ProjectAssignments from the cbProject
     if ( ! p0_project_assignments_get_from_cbProject(pro, pas) )
     {
-        GWR_TKE("              ...no ProjectAssignments for cbProject[%s]", pro->GetTitle().wc_str());
+        GWR_TKW("              ...no ProjectAssignments for cbProject[%s]", pro->GetTitle().wc_str());
         goto lab_exit_failure;
     }
     //  ........................................................................
     //  get the FileAssignment from ProjectAssignments
     if ( ! pas->fas_get_from_rel_fpath( pjf->relativeFilename, _out_file_assignment ) )
     {
-        GWR_TKE("              ...no FileAssignment found for ProjectAssignments[%s]", pro->GetTitle().wc_str());
+        GWR_TKW("              ...no FileAssignment found for ProjectAssignments[%s]", pro->GetTitle().wc_str());
         goto lab_exit_failure;
     }
     //  ........................................................................
@@ -602,7 +603,7 @@ void        OflpModLayout:: file_assignment_update                      (
     //  ProjectAssignments not found
     else
     {
-        GWR_TKI("              ...no project assignment found for file[%s]", _nn_edb->GetFilename().wc_str());
+        GWR_WNG("              ...no project assignment found for file[%s]", _nn_edb->GetFilename().wc_str());
         goto lab_exit;
     }
     //  ........................................................................

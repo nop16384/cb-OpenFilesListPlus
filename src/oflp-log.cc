@@ -236,16 +236,18 @@ void    Log_window_set_text_col_fg  (wxColour& _wx_col)
 
 }
 
-#endif                                                                          //  #ifdef LOG_ENABLED
+#endif                                                                          //  #ifdef OFLP_LOG
 //  ****************************************************************************
 //  logs disabled
 //  ****************************************************************************
 #ifndef OFLP_LOG
 
+//  instead of just defining 'class wxWindow', we have to #include wxWidgets stuff
+//  else the Log_window_open(wxWindow*) wont be included in the shared library
+#include    <wx/window.h>
+
 namespace oflp
 {
-
-class   wxWindow;
 
 bool                A_log_console   =   false;
 bool                A_log_window    =   false;

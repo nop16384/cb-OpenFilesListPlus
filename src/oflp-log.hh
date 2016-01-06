@@ -48,7 +48,6 @@ extern          void            Log_function_exit   ();
 
 extern          int             Log_szt2int         (size_t _szt);
 
-}
 //  ............................................................................
 #define     GWRCB_LOG(WXFORMAT, ...)                                            \
 {                                                                               \
@@ -117,8 +116,9 @@ extern          int             Log_szt2int         (size_t _szt);
 #define OFLP_FUNC_ENTER_MARK(FUNCNAME)                                          \
         oflp::Log_function_mark(wxS(FUNCNAME));
 
-
 #endif                                                                          //  #ifdef OFLP_LOG_FUNCTIONS
+
+}
 
 #endif                                                                          //  #ifdef OFLP_LOG
 //  ****************************************************************************
@@ -135,9 +135,9 @@ extern  bool        A_log_console;
 extern  bool        A_log_window;
 
 extern  void        Log_window_open             (wxWindow*);
+//extern  void        Log_window_open             ();
 extern  void        Log_window_close            ();
 
-}
 //  ............................................................................
 #define GWRCB_LOG(WXFORMAT, ...)
 //  ............................................................................
@@ -154,6 +154,8 @@ extern  void        Log_window_close            ();
 #define OFLP_FUNC_ENTER_LOG(FUNCNAME)
 #define OFLP_FUNC_EXIT_LOG()
 #define OFLP_FUNC_ENTER_MARK(FUNCNAME)
+
+}
 
 #endif                                                                          //  #ifndef OFLP_LOG
 

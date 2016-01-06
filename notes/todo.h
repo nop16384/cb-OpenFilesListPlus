@@ -67,6 +67,8 @@
                     ->  in relationship with STL_ACCESSORS which return if locked
                     ->  sorting PanelAssignments should be done in ModLayout ? or
                         replace indexes with an "insert-after" field ?
+
++(027)  2016.01.06  on Debug version ( no logs ) , dont show log options
 //  ############################################################################
 (001)
 2015.08.21  Done: call to SetFocus() )
@@ -146,5 +148,7 @@
 //  ============================================================================
 (025)
         See todo#(26)
+//  ============================================================================
+(026)
 //  ============================================================================
 (026)

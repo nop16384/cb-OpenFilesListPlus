@@ -4717,7 +4717,7 @@
 	<memory>
 	<tr1/memory>
 
-1451896357 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings.cc
+1452074921 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings.cc
 	"oflp-settings.hh"
 
 1451835979 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings.hh
@@ -6172,7 +6172,7 @@
 
 1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/tinyxml/tinywxuni.h
 
-1451984858 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.cc
+1452073854 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.cc
 	"oflp-plugin.hh"
 	"oflp-panel.hh"
 	"oflp-settings.hh"
@@ -6264,7 +6264,7 @@
 	"oflp-plugin-module.hh"
 	"oflp-settings-options.hh"
 
-1451983987 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-editors.cc
+1451985460 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-editors.cc
 	"oflp-plugin-mod-editors.hh"
 	"oflp-plugin.hh"
 	"oflp-plugin-mod-panels.hh"
@@ -6277,7 +6277,7 @@
 	"oflp-plugin-mod-panels.hh"
 	"oflp-panel.hh"
 
-1451836076 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-settings.cc
+1452074058 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-settings.cc
 	"oflp-plugin-mod-settings.hh"
 	"oflp-settings.hh"
 	"oflp-plugin.hh"
@@ -6286,7 +6286,7 @@
 	"oflp-plugin-mod-gfx.hh"
 	"oflp-panel.hh"
 
-1451840579 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-log.hh
+1452073999 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-log.hh
 	<stdio.h>
 	<wx/string.h>
 	<wx/colour.h>
@@ -6298,19 +6298,20 @@
 	<wx/strconv.h>
 	<vector>
 
-1451896099 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-log.cc
+1452074010 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-log.cc
 	"oflp-log.hh"
 	<wx/frame.h>
 	<wx/font.h>
 	<wx/textctrl.h>
 	<wx/sizer.h>
+	<wx/window.h>
 
 1451839070 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-utils.cc
 	"oflp-plugin.hh"
 	"oflp-plugin-mod-panels.hh"
 	"oflp-panel.hh"
 
-1451984857 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-panels.cc
+1452072144 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-panels.cc
 	"oflp-plugin-mod-panels.hh"
 	"oflp-plugin.hh"
 	"oflp-plugin-mod-gfx.hh"
