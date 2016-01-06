@@ -246,7 +246,8 @@ OpenFilesListPlusPanelDropTarget::        OnData(wxCoord x, wxCoord y, wxDragRes
     //  use predef wxWidgets object copy ; depending on ??? ( answer :
     //  dropSource.DoDragDrop() ) the drag result may differ from what the drop
     //  source has asked for
-    dres = wxDropTarget::OnData(x, y, defaultDragResult);
+    //dres = wxDropTarget::OnData(x, y, defaultDragResult);                     //  see bug#
+    dres = defaultDragResult;
 
     GWR_TKI("OnData():suggested drag result[%s] returned[%s]"  ,
         OpenFilesListPlusPanel::stringize_drag_result(defaultDragResult).wc_str()   ,

@@ -57,6 +57,9 @@
 
  (022)  2016.01.05  OflpPanelBulk ctor calls OflpPanel ctor, and all the
                     graphical setup is done twice :(
+
+ (023)  2016.01.06  [oflp-panel-utils.cc]OpenFilesListPlusPanelDropTarget::OnData()
+                    wxDropTarget::OnData() is not implemented on ms
 //  ############################################################################
 (001)
 //  ============================================================================
@@ -152,3 +155,6 @@
 //  ============================================================================
 (022)
 2016.01.05  Done : test is_bulk() in OflpPanel ctor
+//  ============================================================================
+(023)
+2016.01.06  Done : just do dres = defaultDragResult;

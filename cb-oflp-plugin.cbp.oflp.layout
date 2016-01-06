@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_oflp_file>
 	<FileVersion major="1" minor="0" />
-	<File name="src/oflp-plugin-events.cc" panel="Plugin" />
-	<File name="src/oflp-plugin-mod-editors.cc" panel="Plugin" />
-	<File name="src/oflp-plugin-mod-panels.cc" panel="Plugin" />
-	<File name="src/oflp-plugin-mod-settings.cc" panel="Plugin" />
-	<File name="src/oflp-plugin-mod-settings.hh" panel="Plugin" />
-	<File name="src/oflp-settings.cc" panel="Plugin" />
-	<File name="src/oflp-settings.hh" panel="Plugin" />
 </CodeBlocks_project_oflp_file>

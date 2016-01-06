@@ -5,7 +5,7 @@
 		<Option title="cb-oflp-plugin" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="src/;src/plugin/;src/panels/;src/panels/c/;src/panels/h/;src/plugin/c/;src/plugin/h/;src/log/;src/common/;src/devel-memleaks/;src/settings/;cb-fake-sdk/include/;notes/;cb-fake-sdk/;" />
+		<Option virtualFolders="src\;src\plugin\;src\panels\;src\panels\c\;src\panels\h\;src\plugin\c\;src\plugin\h\;src\log\;src\common\;src\devel-memleaks\;src\settings\;cb-fake-sdk\include\;notes\;cb-fake-sdk\;" />
 		<Build>
 			<Target title="Release">
 				<Option output="plugin/libOpenFilesListPlus" prefix_auto="0" extension_auto="1" />
@@ -143,7 +143,7 @@
 				</Linker>
 			</Target>
 			<Target title="devel-ms">
-				<Option output="plugin/libOpenFilesListPlus" prefix_auto="0" extension_auto="1" />
+				<Option output="plugin/devel/ms/OpenFilesListPlus" prefix_auto="0" extension_auto="1" />
 				<Option object_output="obj" />
 				<Option type="3" />
 				<Option compiler="gcc" />
