@@ -23,6 +23,7 @@ class OflpModule
     OflpModEditors          *   a_module_editors;
     OflpModMenuOptions      *   a_module_menu_options;
     OflpModSettings         *   a_module_settings;
+    OflpModRunflow          *   a_module_runflow;
 
   protected:
     OpenFilesListPlus       *   oflp()      { return a_instance;        }
@@ -30,6 +31,7 @@ class OflpModule
     OflpModPanels           *   panels()    { return a_module_panels;   }
     OflpModGfx              *   gfx()       { return a_module_gfx;      }
     OflpModSettings         *   settings()  { return a_module_settings; }
+    OflpModRunflow          *   runflow()   { return a_module_runflow;  }
 
   public:
     void                        init();

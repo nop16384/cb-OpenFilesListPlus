@@ -26,6 +26,7 @@ class   OflpModPanels;
 class   OflpModEditors;
 class   OflpModMenuOptions;
 class   OflpModSettings;
+class   OflpModRunflow;
 
 #endif
 

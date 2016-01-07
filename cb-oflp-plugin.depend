@@ -4536,7 +4536,7 @@
 	"oflp-panel-header.hh"
 	"oflp-panel-utils.hh"
 
-1452111346 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.hh
+1452166463 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.hh
 	"oflp-common.hh"
 
 1451727395 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/earlgrey-cb.hstring.hh
@@ -4716,7 +4716,7 @@
 	<memory>
 	<tr1/memory>
 
-1452074921 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings.cc
+1452172496 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings.cc
 	"oflp-settings.hh"
 
 1451835979 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings.hh
@@ -6171,7 +6171,7 @@
 
 1451427367 /home/gwr/Src/C-C++/gwr.codeblocks/src/svn10631/wx-2.8.12/trunk/src/include/tinyxml/tinywxuni.h
 
-1452110772 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.cc
+1452171779 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin.cc
 	"oflp-plugin.hh"
 	"oflp-panel.hh"
 	"oflp-settings.hh"
@@ -6181,6 +6181,7 @@
 	"oflp-plugin-mod-editors.hh"
 	"oflp-plugin-mod-panels.hh"
 	"oflp-plugin-mod-settings.hh"
+	"oflp-plugin-mod-runflow.hh"
 	<configurationpanel.h>
 
 1451596257 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-accessors.hhi
@@ -6213,13 +6214,13 @@
 	"earlgrey-cb.log.hh"
 	"earlgrey-cb.hstring.hh"
 
-1451684804 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-classes.hh
+1452166234 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-classes.hh
 
-1451836065 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-module.hh
+1452166385 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-module.hh
 
 1451835988 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings-options.hh
 
-1451894690 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-macros.hh
+1452173833 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-macros.hh
 
 1451863174 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-header.hh
 
@@ -6245,12 +6246,13 @@
 	"oflp-common.hh"
 	"oflp-plugin-module.hh"
 
-1451901765 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-events.cc
+1452171694 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-events.cc
 	"oflp-plugin.hh"
 	"oflp-plugin-mod-layout.hh"
 	"oflp-plugin-mod-panels.hh"
 	"oflp-plugin-mod-settings.hh"
 	"oflp-plugin-mod-editors.hh"
+	"oflp-plugin-mod-runflow.hh"
 	"oflp-panel.hh"
 
 1452111169 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-layout.hh
@@ -6271,13 +6273,13 @@
 	"oflp-plugin-mod-layout.hh"
 	"oflp-panel.hh"
 
-1452075954 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-layout.cc
+1452173865 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-layout.cc
 	"oflp-plugin-mod-layout.hh"
 	"oflp-plugin.hh"
 	"oflp-plugin-mod-panels.hh"
 	"oflp-panel.hh"
 
-1452074058 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-settings.cc
+1452172251 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-settings.cc
 	"oflp-plugin-mod-settings.hh"
 	"oflp-settings.hh"
 	"oflp-plugin.hh"
@@ -6298,7 +6300,7 @@
 	<wx/strconv.h>
 	<vector>
 
-1452074010 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-log.cc
+1452161478 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-log.cc
 	"oflp-log.hh"
 	<wx/frame.h>
 	<wx/font.h>
@@ -6306,12 +6308,12 @@
 	<wx/sizer.h>
 	<wx/window.h>
 
-1451839070 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-utils.cc
+1452161478 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-utils.cc
 	"oflp-plugin.hh"
 	"oflp-plugin-mod-panels.hh"
 	"oflp-panel.hh"
 
-1452072144 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-panels.cc
+1452173916 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-panels.cc
 	"oflp-plugin-mod-panels.hh"
 	"oflp-plugin.hh"
 	"oflp-plugin-mod-gfx.hh"
@@ -9107,4 +9109,8 @@
 	"oflp-plugin.hh"
 	"oflp-plugin-mod-panels.hh"
 	"oflp-panel.hh"
+
+1452167014 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-runflow.hh
+	"oflp-common.hh"
+	"oflp-plugin-module.hh"
 

@@ -74,7 +74,6 @@ void            OflpModPanels:: p0_reset        ()
             //p0_sub( panel );
         }
     }
-    OFLP_STL_CNEXT()
 
     a_panels_array.Clear();
     a_panels_array.Add( static_cast< OflpPanel* >(a_panel_bulk) );
@@ -99,7 +98,6 @@ void            OflpModPanels:: p0_resize       ()
         if ( ! panel->is_minimized() )
             ned = ned + static_cast< int >( (*it)->get_editors()->size() );
     }
-    OFLP_STL_CNEXT()
 
     np      =   static_cast< int >( a_panels_array.size() );
 
@@ -154,7 +152,6 @@ void            OflpModPanels:: p0_resize       ()
         GWR_TKI("              ...[%03i] for panel[%s]", p, panel->title().wc_str());
 
     }
-    OFLP_STL_CNEXT()
 
     OFLP_FUNC_EXIT_LOG();
 }
@@ -173,7 +170,6 @@ void            OflpModPanels:: p0_set_bgs      (wxColour& _c)
         panel   =   *it;
         panel->set_bg(_c);
     }
-    OFLP_STL_CNEXT()
 }
 
 bool            OflpModPanels:: p0_editors_mov  (OflpPanel* _nn_dst, OflpPanel* _nn_src)
@@ -353,7 +349,6 @@ OflpPanel*      OflpModPanels:: get_by_name         (wxString const & _panel_nam
             OFLP_STL_RETV( a_panels_array, (*it) );
         }
     }
-    OFLP_STL_CNEXT()
 
     return NULL;
 }
@@ -371,7 +366,6 @@ OflpPanel*      OflpModPanels:: get                 (EditorBase* _editor )
         if ( panel->editor_has(_editor) )
             OFLP_STL_RETV( a_panels_array, panel );
     }
-    OFLP_STL_CNEXT()
 
     return NULL;
 }
@@ -393,7 +387,6 @@ OflpPanel*      OflpModPanels:: get_from_abs_path   (wxString const & _abs_path)
             OFLP_STL_RETV( a_panels_array, panel );
         }
     }
-    OFLP_STL_CNEXT()
 
     return NULL;
 }
@@ -416,5 +409,4 @@ void            OflpModPanels:: p0_unselect_except  (OflpPanel* _panel)
             GWR_TKI("              =panel[%p]", *it);
         }
     }
-    OFLP_STL_CNEXT()
 }

@@ -9,6 +9,7 @@
 #include    "oflp-plugin-mod-panels.hh"
 #include    "oflp-plugin-mod-settings.hh"
 #include    "oflp-plugin-mod-editors.hh"
+#include    "oflp-plugin-mod-runflow.hh"
 
 #include    "oflp-panel.hh"
 //  ............................................................................
@@ -32,7 +33,9 @@ void    OpenFilesListPlus:: evh_workspace_loading_complete  (CodeBlocksEvent& _e
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
     OFLP_FUNC_ENTER_LOG("OFLP::evh_workspace_loading_complete()");
-
+    //  ........................................................................
+    runflow()->wlc(true);
+    //  ........................................................................
     layout()->workspace_load();
 
     s = layout()->panel_assignment_array().size();
@@ -54,8 +57,12 @@ void    OpenFilesListPlus:: evh_workspace_loading_complete  (CodeBlocksEvent& _e
         panels()->p0_add( v[i]->name(), false );
     }
 
-    panels()->resize_and_layout();
+    RefreshOpenFilesLayout();
 
+    panels()->resize_and_layout();
+    //  ........................................................................
+    runflow()->wlc(false);
+    //  ........................................................................
     OFLP_FUNC_EXIT_LOG();
 }
 
@@ -64,9 +71,13 @@ void    OpenFilesListPlus:: evh_workspace_close_begin       (CodeBlocksEvent &_e
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
     OFLP_FUNC_ENTER_LOG("OFLP::evh_workspace_close_begin()");
-
+    //  ........................................................................
+    runflow()->wcb(true);
+    //  ........................................................................
     layout()->workspace_close();
-
+    //  ........................................................................
+    runflow()->wcb(false);
+    //  ........................................................................
     OFLP_FUNC_EXIT_LOG();
 }
 
@@ -75,11 +86,15 @@ void    OpenFilesListPlus:: evh_workspace_close_complete    (CodeBlocksEvent &_e
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
     OFLP_FUNC_ENTER_LOG("OFLP::evh_workspace_close_complete()");
-
+    //  ........................................................................
+    runflow()->wcc(true);
+    //  ........................................................................
     GWRCB_TKI("editors count[%i]", EditorManager::Get()->GetEditorsCount() );
 
     reset();
-
+    //  ........................................................................
+    runflow()->wcc(true);
+    //  ........................................................................
     OFLP_FUNC_EXIT_LOG();
 }
 
@@ -88,11 +103,15 @@ void    OpenFilesListPlus:: evh_project_open                (CodeBlocksEvent& _e
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
     OFLP_FUNC_ENTER_LOG("OFLP::evh_project_open()");
-
+    //  ........................................................................
+    runflow()->pop(true);
+    //  ........................................................................
     layout()->project_load( _e.GetProject() );
 
     RefreshOpenFilesLayout();
-
+    //  ........................................................................
+    runflow()->pop(false);
+    //  ........................................................................
     OFLP_FUNC_EXIT_LOG();
 }
 
@@ -101,13 +120,18 @@ void    OpenFilesListPlus:: evh_project_close               (CodeBlocksEvent& _e
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
     OFLP_FUNC_ENTER_LOG("OFLP::evh_project_close()");
-
+    //  ........................................................................
+    runflow()->pcl(true);
+    //  ........................................................................
     GWR_TKI("project[%p] files:[%i]", _e.GetProject(), _e.GetProject()->GetFilesCount());
 
     layout()->project_close( _e.GetProject() );
 
     RefreshOpenFilesLayout();
 
+    //  ........................................................................
+    runflow()->pcl(true);
+    //  ........................................................................
     OFLP_FUNC_EXIT_LOG();
 }
 
@@ -143,6 +167,8 @@ void    OpenFilesListPlus:: evh_editor_opened               (CodeBlocksEvent& ev
         goto lab_exit;
     }
     //  ........................................................................
+    GWR_TKI("      ...editor[%s]", nn_edb->GetTitle().wc_str());
+    //  ........................................................................
     //  check if editor is already open ( case of reload )
     panel = panels()->get(nn_edb);
     if ( panel )
@@ -175,6 +201,8 @@ void    OpenFilesListPlus:: evh_editor_closed       (CodeBlocksEvent& event)
         goto lab_exit;
     }
     //  ........................................................................
+    GWR_TKI("      ...editor[%s]", nn_edb->GetTitle().wc_str());
+    //  ........................................................................
     //  sub the editor
     editors()->sub(nn_edb);
 
@@ -201,20 +229,22 @@ void    OpenFilesListPlus:: evh_editor_activated    (CodeBlocksEvent& event)    
         goto lab_exit;
     }
     //  ........................................................................
+    GWR_TKI("      ...editor[%s]", nn_edb->GetTitle().wc_str());
+    //  ........................................................................
+    //  if no title, skip the RefreshOpenFileState() call ( C::B sends an       //  _GWR_CB_TRICK_  _GWR_OPTIM_
+    //  "activated" event with an empty-title before sending an "opened"
+    //  event with a non-empty-title when opening a file )
+    if ( nn_edb->GetTitle().IsEmpty() )
+    {
+        GWR_TKI("%s", wxS("      ...title is EMPTY - dropping"));
+        goto lab_exit;
+    }
+    //  ........................................................................
     //  if loading/closing workspace/project, skip RefreshOpenFileState()       //  _GWR_CB_TRICK_  _GWR_OPTIM_
     //  call
     if ( ProjectManager::IsBusy() )
     {
-        GWR_TKI("%s", wxS("      ...Project manager is BUSY - dropping"));
-        goto lab_exit;
-    }
-    //  ........................................................................
-    //  if no shortname, skip the RefreshOpenFileState() call ( C::B sends an   //  _GWR_CB_TRICK_  _GWR_OPTIM_
-    //  "activated" event with an empty-shortname before sending an "opened"
-    //  event with a non-empty-shortname when opening a file )
-    if ( nn_edb->GetShortName().IsEmpty() )
-    {
-        GWR_TKI("%s", wxS("      ...shortname is EMPTY - dropping"));
+        GWR_TKI("%s", wxS("      ...[OPTIM]Project manager is busy - dropping"));
         goto lab_exit;
     }
     //  ........................................................................
@@ -238,13 +268,15 @@ void    OpenFilesListPlus:: evh_editor_modified     (CodeBlocksEvent& event)
     OFLP_ON_DEGRADED__RET();
     //  ........................................................................
     OFLP_FUNC_ENTER_MARK("OFLP::evh_editor_modified()");
-
+    //  ........................................................................
     if ( ! nn_edb )
     {
         GWR_TKE("%s", wxS("      ...editor is NULL"));
         return;
     }
-
+    //  ........................................................................
+    GWR_TKI("      ...editor[%s]", nn_edb->GetTitle().wc_str());
+    //  ........................................................................
     RefreshOpenFileState(nn_edb);
 }
 
@@ -261,7 +293,9 @@ void    OpenFilesListPlus:: evh_editor_saved        (CodeBlocksEvent& event)
         GWR_TKE("%s", wxS("      ...editor is NULL"));
         goto lab_exit;
     }
-
+    //  ........................................................................
+    GWR_TKI("      ...editor[%s]", nn_edb->GetTitle().wc_str());
+    //  ........................................................................
     RefreshOpenFileState(nn_edb);
     //  ........................................................................
 lab_exit:
@@ -356,7 +390,7 @@ void    OpenFilesListPlus:: evh_tree_sel_changed        (wxTreeEvent &event)
         GWR_TKI("      ...invalid OflpPanelDataObject for panel[%p]", event.GetEventObject());
         goto lab_return;
     }
-    GWR_TKI("      ...[%p][%s]", inf.GetPanel(), inf.GetEditor()->GetShortName().wc_str());
+    GWR_TKI("      ...[%p][%s]", inf.GetPanel(), inf.GetEditor()->GetTitle().wc_str());
 
     //  in productivity mode, selecting a file makes the corresponding editor
     //  the active editor

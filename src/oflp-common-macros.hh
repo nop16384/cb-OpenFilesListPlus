@@ -64,13 +64,9 @@
 #define OFLP_STL_FOR(C, V, IT)                                                  \
     for ( C::iterator IT = (V).begin() ; IT != (V).end() ; IT++ )
 
-#define OFLP_STL_NEXT()
-
 //  const standard loops
 #define OFLP_STL_CFOR(C, V, IT)                                                 \
     for ( C::const_iterator IT = (V).begin() ; IT != (V).end() ; IT++ )
-
-#define OFLP_STL_CNEXT()
 
 //  break stl loop
 #define OFLP_STL_RET(V)                                                         \

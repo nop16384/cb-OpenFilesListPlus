@@ -13,6 +13,7 @@
 #include    "oflp-plugin-mod-editors.hh"
 #include    "oflp-plugin-mod-panels.hh"
 #include    "oflp-plugin-mod-settings.hh"
+#include    "oflp-plugin-mod-runflow.hh"
 //  ............................................................................
 #include    <configurationpanel.h>
 //  ............................................................................
@@ -36,6 +37,7 @@ void    OflpModule::init()
     a_module_panels         =   oflp()->panels();
     a_module_editors        =   oflp()->editors();
     a_module_settings       =   oflp()->settings();
+    a_module_runflow        =   oflp()->runflow();
 }
 //  ............................................................................
 namespace
@@ -68,7 +70,6 @@ void    OpenFilesListPlus:: dump_project_manager_state()
 OpenFilesListPlus::     OpenFilesListPlus()
 {
     a_mode_degraded     =   false;
-    a_on_attach         =   false;
     aw_menu_view        =   NULL;
 
     a_dnd_panel_src     =   NULL;
@@ -80,6 +81,7 @@ OpenFilesListPlus::     OpenFilesListPlus()
     d_editors           =   NULL;
     d_panels            =   NULL;
     d_settings          =   NULL;
+    d_runflow           =   NULL;
     // Make sure our resources are available.
     // In the generated boilerplate code we have no resources but when
     // we add some, it will be nice that this code is in place already ;)
@@ -97,7 +99,6 @@ OpenFilesListPlus::    ~OpenFilesListPlus()
 void OpenFilesListPlus::OnAttach()
 {
     s_singleton             =   this;
-    a_on_attach             =   true;
     //  ........................................................................
     //  this is for debugging only : enable log window at very startup of plugin
     oflp::A_log_window    =   true;                                             //  enable log window at start
@@ -112,6 +113,7 @@ void OpenFilesListPlus::OnAttach()
     d_editors       =   new OflpModEditors();
     d_panels        =   new OflpModPanels();
     d_settings      =   new OflpModSettings();
+    d_runflow       =   new OflpModRunflow();
 
     //  once all modules are created, init them with pointers to each others
     gfx()           ->OflpModule::init();
@@ -119,6 +121,9 @@ void OpenFilesListPlus::OnAttach()
     editors()       ->OflpModule::init();
     panels()        ->OflpModule::init();
     settings()      ->OflpModule::init();
+    runflow()       ->OflpModule::init();
+    //  ........................................................................
+    runflow()->attaching(true);
     //  ........................................................................
     //  create main wxPanel & its sizer, create "bulk" panel
     panels()->init();
@@ -162,7 +167,16 @@ void OpenFilesListPlus::OnAttach()
     ProjectManager      *   pjm     =   NULL;
     ProjectsArray       *   pja     =   NULL;
 
-    //  workspace
+    //  projects
+    pjm =   Manager::Get()->GetProjectManager();
+    pja =   pjm->GetProjects();
+
+    OFLP_STL_FOR( ProjectsArray, (*pja), it )
+    {
+        layout()->project_load((*it));
+    }
+
+    //  workspace : simulate a "workspace loading complete" event
         //CodeBlocksEvent(
         //    wxEventType  	commandType = wxEVT_NULL,
         //	int  	id = 0,
@@ -173,20 +187,7 @@ void OpenFilesListPlus::OnAttach()
     CodeBlocksEvent e;
     evh_workspace_loading_complete(e);
 
-    //  projects
-    pjm =   Manager::Get()->GetProjectManager();
-    pja =   pjm->GetProjects();
-
-    OFLP_STL_FOR( ProjectsArray, (*pja), it )
-    {
-        layout()->project_load((*it));
-    }
-    OFLP_STL_NEXT()
-
-    //  sync all editors
-    RefreshOpenFilesLayout();
-
-    a_on_attach =   false;
+    runflow()->attaching(false);
 }
 
 void OpenFilesListPlus::OnRelease(bool appShutDown)
@@ -309,12 +310,6 @@ bool    OpenFilesListPlus:: FindCbProjectForFile    (wxString const & _abs_fpath
     return ( (*_pro) != NULL );
 }
 
-//! \brief  Tell if OFLP is attaching ( OnAttach() is running )
-bool OpenFilesListPlus::attaching()
-{
-    return a_on_attach;
-}
-
 //! \brief  Delete all OflpPanels, forget about the layout
 void OpenFilesListPlus::reset()
 {
@@ -431,7 +426,7 @@ void OpenFilesListPlus::RefreshOpenFileLayout   (EditorBase* _nn_edb)
     GWR_TKI("      ...editor [%p][%s]", _nn_edb, shortname.wc_str());
     //  ........................................................................
     //  attaching section
-    if ( attaching() )
+    if ( runflow()->attaching() )
     {
         GWR_TKI("%s", wxS("      ...attaching())"));
         //  get infos on editor
@@ -501,7 +496,7 @@ void OpenFilesListPlus::RefreshOpenFilesLayout  ()
     //  optim : if workspace loading, first calls to RefreshOpenFileLayout()    //  _GWR_OPTIM_
     //  occurs _BEFORE_ panels are created. So if no panel exist, drop.
     //  But dont optimize OnAttach()
-    if ( ! attaching() )
+    if ( ! runflow()->attaching() )
         if ( layout()->panel_assignment_array().size() == 0 )
         {
             GWR_TKI("%s", wxS("      ...no panel is present - dropping"));

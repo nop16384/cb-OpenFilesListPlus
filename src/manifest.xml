@@ -3,7 +3,7 @@
     <SdkVersion major="1" minor="23"  release="0" />
     <Plugin name="OpenFilesListPlus">
         <Value title="Open Files List Plus" />
-        <Value version="alpha-8.4" />
+        <Value version="alpha-8.5" />
         <Value description="Enhanced view of open files" />
         <Value author="earlgrey" />
         <Value authorEmail="earlgrey@free.fr" />

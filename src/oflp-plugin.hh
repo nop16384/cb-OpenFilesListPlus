@@ -131,7 +131,6 @@ class OpenFilesListPlus : public cbPlugin
         //  ====================================================================
       private:
         bool        a_mode_degraded;
-        bool        a_on_attach;
         wxMenu  *   aw_menu_view;
         //  ====================================================================
         friend class OflpModSettings;                                           //  cf bugs#18
@@ -140,7 +139,6 @@ class OpenFilesListPlus : public cbPlugin
         void    reset();
         void    degrade();
         bool    degraded();
-        bool    attaching();
 
       protected:
         void    RefreshOpenFileState        (EditorBase* _edb);
@@ -229,6 +227,7 @@ class OpenFilesListPlus : public cbPlugin
         OFPL_MEMBER_MODULE(OflpModEditors       , d_editors         , editors   );
         OFPL_MEMBER_MODULE(OflpModPanels        , d_panels          , panels    );
         OFPL_MEMBER_MODULE(OflpModSettings      , d_settings        , settings  );
+        OFPL_MEMBER_MODULE(OflpModRunflow       , d_runflow         , runflow   );
         //  ====================================================================
     private:
         DECLARE_EVENT_TABLE();

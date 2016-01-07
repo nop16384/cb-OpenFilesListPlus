@@ -376,7 +376,6 @@ bool    OflpModLayout::ProjectAssignments::fas_get_from_rel_fpath(
         _fas = fas;
         return true;
     }
-    OFLP_STL_CNEXT()
 
     _fas = NULL;
     return FALSE;
@@ -388,7 +387,6 @@ void        OflpModLayout:: p0_reset_assignments                        ()
     {
         delete (*it);
     }
-    OFLP_STL_CNEXT()
 
     a_project_assignments_array.Clear();
 
@@ -396,7 +394,6 @@ void        OflpModLayout:: p0_reset_assignments                        ()
     {
         delete (*it);
     }
-    OFLP_STL_CNEXT()
 
     a_panel_assignment_array.Clear();
 }
@@ -411,7 +408,6 @@ bool        OflpModLayout:: p0_project_assignments_get_from_cbProject   (cbProje
             return true;
         }
     }
-    OFLP_STL_CNEXT()
 
     _pra = NULL;
     return FALSE;
@@ -440,7 +436,6 @@ void        OflpModLayout:: p0_project_assignments_sub                  (cbProje
             goto lab_exit;
         }
     }
-    OFLP_STL_CNEXT()
     //  ........................................................................
 lab_exit:
     OFLP_FUNC_EXIT_LOG();

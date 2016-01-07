@@ -67,13 +67,11 @@ void    OflpModSettings::   settings_window_activated   (bool _b)
 void    OflpModSettings::   popup                       (wxCommandEvent &   _e)
 {
     //  ........................................................................
-    //  ........................................................................
-    //  ........................................................................
     //  create widget
     wxWindow    *   w   =   reinterpret_cast<wxWindow*>(_e.GetEventObject());
     wxRect          r   =   w->GetScreenRect();
 
-    GWRCB_INF("x[%i] y[%i] h[%i] w[%i]", r.x, r.y, r.height, r.width);
+    //GWRCB_INF("x[%i] y[%i] h[%i] w[%i]", r.x, r.y, r.height, r.width);
 
     r.Offset( 0, r.GetHeight() );
 

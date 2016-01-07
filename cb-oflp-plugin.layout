@@ -1,97 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
-	<ActiveTarget name="devel-ms" />
-	<File name="src\oflp-plugin-mod-editors.cc" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<ActiveTarget name="Debug" />
+	<File name="cb-fake-sdk/include/cbworkspace.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="288" topLine="0" />
+			<Cursor1 position="211" topLine="0" />
 		</Cursor>
 		<Folding>
-			<Collapse line="33" />
-			<Collapse line="45" />
-			<Collapse line="53" />
-			<Collapse line="60" />
-			<Collapse line="68" />
-			<Collapse line="72" />
-			<Collapse line="81" />
-			<Collapse line="98" />
-			<Collapse line="104" />
-			<Collapse line="113" />
-			<Collapse line="125" />
-			<Collapse line="130" />
-			<Collapse line="141" />
+			<Collapse line="24" />
 		</Folding>
 	</File>
-	<File name="src\oflp-plugin-events.cc" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2502" topLine="35" />
-		</Cursor>
-		<Folding>
-			<Collapse line="86" />
-		</Folding>
-	</File>
-	<File name="src\oflp-plugin-dnd.cc" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="548" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\oflp-panel.hh" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="157" topLine="3" />
-		</Cursor>
-		<Folding>
-			<Collapse line="114" />
-		</Folding>
-	</File>
-	<File name="src\oflp-panel.cc" open="0" top="0" tabpos="26" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="19250" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="422" />
-		</Folding>
-	</File>
-	<File name="src\oflp-panel-utils.cc" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="10941" topLine="39" />
-		</Cursor>
-		<Folding>
-			<Collapse line="63" />
-			<Collapse line="227" />
-			<Collapse line="256" />
-			<Collapse line="276" />
-		</Folding>
-	</File>
-	<File name="src\oflp-panel-header.hh" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1865" topLine="11" />
-		</Cursor>
-	</File>
-	<File name="src\oflp-panel-header.cc" open="0" top="0" tabpos="28" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="686" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="22" />
-			<Collapse line="30" />
-			<Collapse line="47" />
-			<Collapse line="56" />
-			<Collapse line="75" />
-			<Collapse line="84" />
-			<Collapse line="97" />
-			<Collapse line="108" />
-			<Collapse line="129" />
-			<Collapse line="150" />
-			<Collapse line="164" />
-			<Collapse line="188" />
-		</Folding>
-	</File>
-	<File name="src\oflp-log.hh" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1324" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\oflp-log.cc" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-log.cc" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="2609" topLine="55" />
 		</Cursor>
@@ -110,137 +29,47 @@
 			<Collapse line="250" />
 		</Folding>
 	</File>
-	<File name="src\oflp-hstring.hh" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="125" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="33" />
-		</Folding>
-	</File>
-	<File name="src\oflp-common.hh" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="539" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\oflp-common-macros.hh" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3825" topLine="44" />
-		</Cursor>
-	</File>
-	<File name="src\manifest.xml" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/manifest.xml" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="419" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\devel-memleaks\devel-memleaks.cc" open="0" top="0" tabpos="27" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-settings.hh" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1433" topLine="8" />
+			<Cursor1 position="2953" topLine="0" />
 		</Cursor>
 		<Folding>
-			<Collapse line="41" />
-			<Collapse line="52" />
+			<Collapse line="23" />
+			<Collapse line="64" />
 		</Folding>
 	</File>
-	<File name="src\oflp-plugin-mod-settings.cc" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4626" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="67" />
-			<Collapse line="143" />
-		</Folding>
-	</File>
-	<File name="notes\todo.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2426" topLine="34" />
-		</Cursor>
-	</File>
-	<File name="src\oflp-plugin-mod-settings.hh" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-plugin-mod-settings.hh" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="830" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="notes\notes.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-panel-utils.cc" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="121" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\oflp-plugin-module.hh" open="0" top="0" tabpos="23" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="125" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="notes\new-list.h" open="0" top="0" tabpos="28" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="897" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\oflp-plugin.cc" open="1" top="1" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="8534" topLine="99" />
+			<Cursor1 position="10941" topLine="39" />
 		</Cursor>
 		<Folding>
-			<Collapse line="30" />
-			<Collapse line="41" />
-			<Collapse line="54" />
-			<Collapse line="68" />
-			<Collapse line="86" />
-			<Collapse line="93" />
-			<Collapse line="97" />
-			<Collapse line="180" />
-			<Collapse line="192" />
-			<Collapse line="213" />
-			<Collapse line="219" />
-			<Collapse line="229" />
-			<Collapse line="246" />
-			<Collapse line="248" />
-			<Collapse line="260" />
-			<Collapse line="269" />
-			<Collapse line="281" />
-			<Collapse line="290" />
-			<Collapse line="292" />
-			<Collapse line="302" />
-			<Collapse line="313" />
-			<Collapse line="319" />
-			<Collapse line="326" />
-			<Collapse line="333" />
-			<Collapse line="342" />
-			<Collapse line="354" />
-			<Collapse line="376" />
-			<Collapse line="384" />
-			<Collapse line="386" />
-			<Collapse line="391" />
-			<Collapse line="400" />
-			<Collapse line="413" />
-			<Collapse line="434" />
-			<Collapse line="439" />
-			<Collapse line="453" />
-			<Collapse line="458" />
-			<Collapse line="473" />
-			<Collapse line="480" />
-			<Collapse line="495" />
-			<Collapse line="505" />
-			<Collapse line="513" />
-			<Collapse line="522" />
+			<Collapse line="63" />
+			<Collapse line="227" />
+			<Collapse line="256" />
+			<Collapse line="276" />
 		</Folding>
 	</File>
-	<File name="notes\changelog.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="cb-fake-sdk/include/cbfunctor.h" open="0" top="0" tabpos="29" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="220" topLine="0" />
+			<Cursor1 position="1294" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="notes\bugs.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-common-macros.hh" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="8151" topLine="32" />
+			<Cursor1 position="3825" topLine="18" />
 		</Cursor>
 	</File>
-	<File name="src\oflp-plugin.hh" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="10422" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="cb-fake-sdk\manager.cpp" open="0" top="0" tabpos="32" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="cb-fake-sdk/manager.cpp" open="0" top="0" tabpos="32" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="14502" topLine="361" />
 		</Cursor>
@@ -253,31 +82,87 @@
 			<Collapse line="560" />
 		</Folding>
 	</File>
-	<File name="cb-fake-sdk\include\sdk_events.h" open="0" top="0" tabpos="33" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="cb-fake-sdk/include/cbeditor.h" open="0" top="0" tabpos="22" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="276" topLine="0" />
+			<Cursor1 position="19" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="notes/todo.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2426" topLine="34" />
+		</Cursor>
+	</File>
+	<File name="cb-fake-sdk/include/manager.h" open="0" top="0" tabpos="32" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="293" topLine="0" />
 		</Cursor>
 		<Folding>
-			<Collapse line="319" />
-			<Collapse line="321" />
+			<Collapse line="9" />
 		</Folding>
 	</File>
-	<File name="src\oflp-settings-options.hh" open="0" top="0" tabpos="21" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-plugin-mod-layout.cc" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="125" topLine="0" />
+			<Cursor1 position="14837" topLine="77" />
 		</Cursor>
+		<Folding>
+			<Collapse line="31" />
+			<Collapse line="41" />
+			<Collapse line="51" />
+			<Collapse line="62" />
+			<Collapse line="73" />
+			<Collapse line="124" />
+			<Collapse line="164" />
+			<Collapse line="216" />
+			<Collapse line="271" />
+			<Collapse line="274" />
+			<Collapse line="281" />
+			<Collapse line="288" />
+			<Collapse line="311" />
+			<Collapse line="317" />
+			<Collapse line="325" />
+			<Collapse line="334" />
+			<Collapse line="358" />
+			<Collapse line="363" />
+			<Collapse line="384" />
+			<Collapse line="386" />
+			<Collapse line="393" />
+			<Collapse line="401" />
+			<Collapse line="403" />
+			<Collapse line="416" />
+			<Collapse line="421" />
+			<Collapse line="427" />
+			<Collapse line="447" />
+			<Collapse line="460" />
+			<Collapse line="466" />
+			<Collapse line="477" />
+			<Collapse line="489" />
+			<Collapse line="496" />
+			<Collapse line="503" />
+			<Collapse line="510" />
+			<Collapse line="527" />
+			<Collapse line="543" />
+			<Collapse line="556" />
+			<Collapse line="601" />
+			<Collapse line="617" />
+			<Collapse line="624" />
+			<Collapse line="646" />
+			<Collapse line="660" />
+			<Collapse line="671" />
+			<Collapse line="682" />
+			<Collapse line="693" />
+			<Collapse line="712" />
+			<Collapse line="725" />
+		</Folding>
 	</File>
-	<File name="cb-fake-sdk\include\sdk.h" open="0" top="0" tabpos="30" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-panel.cc" open="0" top="0" tabpos="26" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2088" topLine="66" />
+			<Cursor1 position="19250" topLine="0" />
 		</Cursor>
+		<Folding>
+			<Collapse line="422" />
+		</Folding>
 	</File>
-	<File name="cb-fake-sdk\include\projectmanager.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="510" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\oflp-settings.cc" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-settings.cc" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="7362" topLine="11" />
 		</Cursor>
@@ -299,92 +184,17 @@
 			<Collapse line="177" />
 		</Folding>
 	</File>
-	<File name="cb-fake-sdk\include\projectfile.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-settings-options.hh" open="0" top="0" tabpos="21" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="277" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="25" />
-			<Collapse line="39" />
-			<Collapse line="241" />
-		</Folding>
-	</File>
-	<File name="src\oflp-settings.hh" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2953" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="23" />
-			<Collapse line="64" />
-		</Folding>
-	</File>
-	<File name="cb-fake-sdk\include\manager.h" open="0" top="0" tabpos="32" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="293" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="9" />
-		</Folding>
-	</File>
-	<File name="src\oflp-plugin-mod-panels.hh" open="0" top="0" tabpos="22" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="758" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="18" />
-			<Collapse line="49" />
-		</Folding>
-	</File>
-	<File name="src\oflp.xrc" open="0" top="0" tabpos="16" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="737" topLine="0" />
+			<Cursor1 position="125" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="cb-fake-sdk\include\editormanager.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-log.hh" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="244" topLine="0" />
+			<Cursor1 position="1324" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\oflp-plugin-mod-panels.cc" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4155" topLine="46" />
-		</Cursor>
-		<Folding>
-			<Collapse line="54" />
-			<Collapse line="61" />
-			<Collapse line="65" />
-			<Collapse line="96" />
-			<Collapse line="167" />
-			<Collapse line="171" />
-			<Collapse line="345" />
-			<Collapse line="347" />
-			<Collapse line="351" />
-			<Collapse line="361" />
-			<Collapse line="368" />
-			<Collapse line="379" />
-			<Collapse line="386" />
-			<Collapse line="390" />
-			<Collapse line="401" />
-			<Collapse line="407" />
-			<Collapse line="409" />
-			<Collapse line="414" />
-		</Folding>
-	</File>
-	<File name="src\post-build.bash" open="0" top="0" tabpos="21" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="173" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="cb-fake-sdk\include\editorbase.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="209" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="30" />
-			<Collapse line="55" />
-		</Folding>
-	</File>
-	<File name="src\oflp-plugin-mod-layout.hh" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-plugin-mod-layout.hh" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1682" topLine="0" />
 		</Cursor>
@@ -395,91 +205,115 @@
 			<Collapse line="104" />
 		</Folding>
 	</File>
-	<File name="cb-fake-sdk\include\cbworkspace.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-plugin-mod-panels.cc" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="211" topLine="0" />
+			<Cursor1 position="4046" topLine="40" />
 		</Cursor>
 		<Folding>
-			<Collapse line="24" />
-		</Folding>
-	</File>
-	<File name="src\oflp-plugin-mod-layout.cc" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="14837" topLine="89" />
-		</Cursor>
-		<Folding>
-			<Collapse line="31" />
-			<Collapse line="41" />
-			<Collapse line="51" />
-			<Collapse line="62" />
-			<Collapse line="73" />
-			<Collapse line="124" />
+			<Collapse line="26" />
+			<Collapse line="30" />
+			<Collapse line="34" />
+			<Collapse line="48" />
+			<Collapse line="54" />
+			<Collapse line="61" />
+			<Collapse line="84" />
+			<Collapse line="95" />
+			<Collapse line="107" />
+			<Collapse line="159" />
 			<Collapse line="164" />
-			<Collapse line="216" />
-			<Collapse line="220" />
-			<Collapse line="225" />
-			<Collapse line="227" />
-			<Collapse line="245" />
-			<Collapse line="271" />
-			<Collapse line="274" />
-			<Collapse line="281" />
-			<Collapse line="288" />
-			<Collapse line="294" />
-			<Collapse line="311" />
-			<Collapse line="317" />
+			<Collapse line="168" />
+			<Collapse line="175" />
+			<Collapse line="179" />
+			<Collapse line="189" />
+			<Collapse line="198" />
+			<Collapse line="215" />
+			<Collapse line="228" />
+			<Collapse line="250" />
+			<Collapse line="262" />
+			<Collapse line="275" />
+			<Collapse line="280" />
+			<Collapse line="287" />
+			<Collapse line="292" />
+			<Collapse line="302" />
+			<Collapse line="308" />
 			<Collapse line="325" />
-			<Collapse line="334" />
-			<Collapse line="358" />
+			<Collapse line="341" />
+			<Collapse line="343" />
+			<Collapse line="356" />
 			<Collapse line="363" />
-			<Collapse line="385" />
-			<Collapse line="387" />
-			<Collapse line="395" />
-			<Collapse line="404" />
-			<Collapse line="406" />
-			<Collapse line="408" />
-			<Collapse line="420" />
-			<Collapse line="425" />
-			<Collapse line="431" />
-			<Collapse line="435" />
-			<Collapse line="452" />
-			<Collapse line="465" />
-			<Collapse line="471" />
-			<Collapse line="482" />
-			<Collapse line="494" />
-			<Collapse line="501" />
-			<Collapse line="508" />
-			<Collapse line="515" />
-			<Collapse line="532" />
-			<Collapse line="548" />
-			<Collapse line="561" />
-			<Collapse line="564" />
-			<Collapse line="570" />
-			<Collapse line="576" />
-			<Collapse line="593" />
-			<Collapse line="606" />
-			<Collapse line="622" />
-			<Collapse line="629" />
-			<Collapse line="651" />
-			<Collapse line="665" />
-			<Collapse line="676" />
-			<Collapse line="687" />
-			<Collapse line="698" />
-			<Collapse line="717" />
-			<Collapse line="730" />
+			<Collapse line="373" />
+			<Collapse line="380" />
+			<Collapse line="394" />
+			<Collapse line="400" />
 		</Folding>
 	</File>
-	<File name="cb-fake-sdk\include\cbproject.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="notes/changelog.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="207" topLine="0" />
+			<Cursor1 position="220" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/post-build.bash" open="0" top="0" tabpos="21" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="173" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="cb-fake-sdk/include/editorbase.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="209" topLine="0" />
 		</Cursor>
 		<Folding>
-			<Collapse line="24" />
-			<Collapse line="41" />
-			<Collapse line="46" />
+			<Collapse line="30" />
 			<Collapse line="55" />
 		</Folding>
 	</File>
-	<File name="cb-fake-sdk\include\cbplugin.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-hstring.hh" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="125" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="33" />
+		</Folding>
+	</File>
+	<File name="cb-fake-sdk/include/projectfile.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="277" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="25" />
+			<Collapse line="39" />
+			<Collapse line="241" />
+		</Folding>
+	</File>
+	<File name="cb-fake-sdk/include/projectmanager.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="510" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-plugin-dnd.cc" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="548" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-panel-header.cc" open="0" top="0" tabpos="28" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="686" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="22" />
+			<Collapse line="30" />
+			<Collapse line="47" />
+			<Collapse line="56" />
+			<Collapse line="75" />
+			<Collapse line="84" />
+			<Collapse line="97" />
+			<Collapse line="108" />
+			<Collapse line="129" />
+			<Collapse line="150" />
+			<Collapse line="164" />
+			<Collapse line="188" />
+		</Folding>
+	</File>
+	<File name="cb-fake-sdk/include/cbplugin.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="205" topLine="0" />
 		</Cursor>
@@ -492,7 +326,99 @@
 			<Collapse line="69" />
 		</Folding>
 	</File>
-	<File name="src\oflp-plugin-mod-gfx.hh" open="0" top="0" tabpos="30" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-plugin.cc" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="21825" topLine="84" />
+		</Cursor>
+		<Folding>
+			<Collapse line="31" />
+			<Collapse line="43" />
+			<Collapse line="56" />
+			<Collapse line="70" />
+			<Collapse line="88" />
+			<Collapse line="95" />
+			<Collapse line="99" />
+			<Collapse line="174" />
+			<Collapse line="193" />
+			<Collapse line="214" />
+			<Collapse line="220" />
+			<Collapse line="230" />
+			<Collapse line="247" />
+			<Collapse line="261" />
+			<Collapse line="270" />
+			<Collapse line="282" />
+			<Collapse line="291" />
+			<Collapse line="293" />
+			<Collapse line="303" />
+			<Collapse line="314" />
+			<Collapse line="321" />
+			<Collapse line="328" />
+			<Collapse line="337" />
+			<Collapse line="349" />
+			<Collapse line="371" />
+			<Collapse line="395" />
+			<Collapse line="408" />
+			<Collapse line="429" />
+			<Collapse line="448" />
+			<Collapse line="490" />
+			<Collapse line="500" />
+			<Collapse line="508" />
+			<Collapse line="517" />
+		</Folding>
+	</File>
+	<File name="notes/new-list.h" open="0" top="0" tabpos="28" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="897" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-plugin.hh" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="10422" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-plugin-mod-panels.hh" open="0" top="0" tabpos="22" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="758" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="18" />
+			<Collapse line="49" />
+		</Folding>
+	</File>
+	<File name="src/oflp-panel.hh" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="157" topLine="3" />
+		</Cursor>
+		<Folding>
+			<Collapse line="114" />
+		</Folding>
+	</File>
+	<File name="cb-fake-sdk/include/cbproject.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="207" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="24" />
+			<Collapse line="41" />
+			<Collapse line="46" />
+			<Collapse line="55" />
+		</Folding>
+	</File>
+	<File name="src/oflp-plugin-mod-settings.cc" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4626" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="67" />
+			<Collapse line="143" />
+		</Folding>
+	</File>
+	<File name="src/oflp.xrc" open="0" top="0" tabpos="16" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="737" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-plugin-mod-gfx.hh" open="0" top="0" tabpos="30" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="125" topLine="0" />
 		</Cursor>
@@ -509,19 +435,112 @@
 			<Collapse line="117" />
 		</Folding>
 	</File>
-	<File name="cb-fake-sdk\include\cbfunctor.h" open="0" top="0" tabpos="29" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/devel-memleaks/devel-memleaks.cc" open="0" top="0" tabpos="27" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1294" topLine="0" />
+			<Cursor1 position="1433" topLine="8" />
+		</Cursor>
+		<Folding>
+			<Collapse line="41" />
+			<Collapse line="52" />
+		</Folding>
+	</File>
+	<File name="cb-fake-sdk/include/editormanager.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="244" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\oflp-plugin-mod-editors.hh" open="0" top="0" tabpos="25" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-plugin-mod-editors.cc" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="288" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-common.hh" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="539" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-plugin-mod-editors.hh" open="0" top="0" tabpos="25" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="125" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="cb-fake-sdk\include\cbeditor.h" open="0" top="0" tabpos="22" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="cb-fake-sdk/include/sdk_events.h" open="0" top="0" tabpos="33" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="19" topLine="0" />
+			<Cursor1 position="276" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="319" />
+			<Collapse line="321" />
+		</Folding>
+	</File>
+	<File name="src/oflp-plugin-module.hh" open="0" top="0" tabpos="23" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="125" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="notes/bugs.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7993" topLine="32" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-plugin-events.cc" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2502" topLine="6" />
+		</Cursor>
+		<Folding>
+			<Collapse line="28" />
+			<Collapse line="49" />
+			<Collapse line="55" />
+			<Collapse line="69" />
+			<Collapse line="84" />
+			<Collapse line="101" />
+			<Collapse line="118" />
+			<Collapse line="138" />
+			<Collapse line="149" />
+			<Collapse line="164" />
+			<Collapse line="174" />
+			<Collapse line="190" />
+			<Collapse line="198" />
+			<Collapse line="216" />
+			<Collapse line="226" />
+			<Collapse line="237" />
+			<Collapse line="245" />
+			<Collapse line="257" />
+			<Collapse line="264" />
+			<Collapse line="272" />
+			<Collapse line="283" />
+			<Collapse line="291" />
+			<Collapse line="309" />
+			<Collapse line="320" />
+			<Collapse line="331" />
+			<Collapse line="338" />
+			<Collapse line="348" />
+			<Collapse line="362" />
+			<Collapse line="377" />
+			<Collapse line="388" />
+			<Collapse line="397" />
+			<Collapse line="414" />
+			<Collapse line="423" />
+			<Collapse line="444" />
+			<Collapse line="465" />
+			<Collapse line="485" />
+			<Collapse line="503" />
+			<Collapse line="519" />
+		</Folding>
+	</File>
+	<File name="cb-fake-sdk/include/sdk.h" open="0" top="0" tabpos="30" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2088" topLine="66" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-panel-header.hh" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1865" topLine="11" />
+		</Cursor>
+	</File>
+	<File name="notes/notes.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="121" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
