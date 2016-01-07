@@ -2,119 +2,20 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug-linux" />
-	<File name="src/oflp-log.cc" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="notes/todo.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2609" topLine="55" />
+			<Cursor1 position="2426" topLine="34" />
 		</Cursor>
-		<Folding>
-			<Collapse line="34" />
-			<Collapse line="36" />
-			<Collapse line="44" />
-			<Collapse line="47" />
-			<Collapse line="109" />
-			<Collapse line="117" />
-			<Collapse line="120" />
-			<Collapse line="197" />
-			<Collapse line="208" />
-			<Collapse line="224" />
-			<Collapse line="232" />
-			<Collapse line="250" />
-		</Folding>
 	</File>
-	<File name="src/oflp-plugin-mod-layout.hh" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-common-macros.hh" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1682" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="20" />
-			<Collapse line="37" />
-			<Collapse line="66" />
-			<Collapse line="104" />
-		</Folding>
-	</File>
-	<File name="src/oflp-plugin-mod-panels.hh" open="0" top="0" tabpos="22" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="758" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="18" />
-			<Collapse line="49" />
-		</Folding>
-	</File>
-	<File name="src/oflp-log.hh" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1324" topLine="0" />
+			<Cursor1 position="3825" topLine="18" />
 		</Cursor>
 	</File>
 	<File name="src/oflp-plugin-module.hh" open="0" top="0" tabpos="23" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="125" topLine="0" />
 		</Cursor>
-	</File>
-	<File name="src/oflp-plugin-mod-editors.hh" open="0" top="0" tabpos="25" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="125" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src/oflp-plugin-mod-panels.cc" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4046" topLine="40" />
-		</Cursor>
-		<Folding>
-			<Collapse line="26" />
-			<Collapse line="30" />
-			<Collapse line="34" />
-			<Collapse line="48" />
-			<Collapse line="54" />
-			<Collapse line="61" />
-			<Collapse line="84" />
-			<Collapse line="95" />
-			<Collapse line="107" />
-			<Collapse line="159" />
-			<Collapse line="164" />
-			<Collapse line="168" />
-			<Collapse line="175" />
-			<Collapse line="179" />
-			<Collapse line="189" />
-			<Collapse line="198" />
-			<Collapse line="215" />
-			<Collapse line="228" />
-			<Collapse line="250" />
-			<Collapse line="262" />
-			<Collapse line="275" />
-			<Collapse line="280" />
-			<Collapse line="287" />
-			<Collapse line="292" />
-			<Collapse line="302" />
-			<Collapse line="308" />
-			<Collapse line="325" />
-			<Collapse line="341" />
-			<Collapse line="343" />
-			<Collapse line="356" />
-			<Collapse line="363" />
-			<Collapse line="373" />
-			<Collapse line="380" />
-			<Collapse line="394" />
-			<Collapse line="400" />
-		</Folding>
-	</File>
-	<File name="src/oflp-settings.hh" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2953" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="23" />
-			<Collapse line="64" />
-		</Folding>
-	</File>
-	<File name="src/oflp-plugin-mod-settings.cc" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4626" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="67" />
-			<Collapse line="143" />
-		</Folding>
 	</File>
 	<File name="src/oflp-panel-header.cc" open="0" top="0" tabpos="28" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
@@ -135,21 +36,6 @@
 			<Collapse line="188" />
 		</Folding>
 	</File>
-	<File name="src/oflp-common.hh" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="539" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src/oflp-common-macros.hh" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3825" topLine="18" />
-		</Cursor>
-	</File>
-	<File name="notes/new-list.h" open="0" top="0" tabpos="28" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="897" topLine="0" />
-		</Cursor>
-	</File>
 	<File name="src/oflp-panel.hh" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="157" topLine="3" />
@@ -158,37 +44,28 @@
 			<Collapse line="114" />
 		</Folding>
 	</File>
-	<File name="src/manifest.xml" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-log.cc" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="419" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src/oflp-hstring.hh" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="125" topLine="0" />
+			<Cursor1 position="2609" topLine="55" />
 		</Cursor>
 		<Folding>
-			<Collapse line="33" />
+			<Collapse line="34" />
+			<Collapse line="36" />
+			<Collapse line="44" />
+			<Collapse line="47" />
+			<Collapse line="109" />
+			<Collapse line="117" />
+			<Collapse line="120" />
+			<Collapse line="197" />
+			<Collapse line="208" />
+			<Collapse line="224" />
+			<Collapse line="232" />
+			<Collapse line="250" />
 		</Folding>
 	</File>
-	<File name="src/oflp-plugin-mod-settings.hh" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-plugin-mod-layout.cc" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="830" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src/oflp-plugin-dnd.cc" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="548" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src/oflp-plugin-mod-editors.cc" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="288" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src/oflp-plugin.hh" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="10422" topLine="0" />
+			<Cursor1 position="14837" topLine="77" />
 		</Cursor>
 	</File>
 	<File name="src/devel-memleaks/devel-memleaks.cc" open="0" top="0" tabpos="27" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -200,9 +77,9 @@
 			<Collapse line="52" />
 		</Folding>
 	</File>
-	<File name="notes/notes.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-plugin-dnd.cc" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="121" topLine="0" />
+			<Cursor1 position="548" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src/oflp-panel-header.hh" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -210,209 +87,9 @@
 			<Cursor1 position="1865" topLine="11" />
 		</Cursor>
 	</File>
-	<File name="src/oflp-plugin-mod-layout.cc" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src/oflp-plugin-mod-panels.cc" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="14837" topLine="77" />
-		</Cursor>
-		<Folding>
-			<Collapse line="31" />
-			<Collapse line="41" />
-			<Collapse line="51" />
-			<Collapse line="62" />
-			<Collapse line="73" />
-			<Collapse line="124" />
-			<Collapse line="164" />
-			<Collapse line="216" />
-			<Collapse line="271" />
-			<Collapse line="274" />
-			<Collapse line="281" />
-			<Collapse line="288" />
-			<Collapse line="311" />
-			<Collapse line="317" />
-			<Collapse line="325" />
-			<Collapse line="334" />
-			<Collapse line="358" />
-			<Collapse line="363" />
-			<Collapse line="384" />
-			<Collapse line="386" />
-			<Collapse line="393" />
-			<Collapse line="401" />
-			<Collapse line="403" />
-			<Collapse line="416" />
-			<Collapse line="421" />
-			<Collapse line="427" />
-			<Collapse line="447" />
-			<Collapse line="460" />
-			<Collapse line="466" />
-			<Collapse line="477" />
-			<Collapse line="489" />
-			<Collapse line="496" />
-			<Collapse line="503" />
-			<Collapse line="510" />
-			<Collapse line="527" />
-			<Collapse line="543" />
-			<Collapse line="556" />
-			<Collapse line="601" />
-			<Collapse line="617" />
-			<Collapse line="624" />
-			<Collapse line="646" />
-			<Collapse line="660" />
-			<Collapse line="671" />
-			<Collapse line="682" />
-			<Collapse line="693" />
-			<Collapse line="712" />
-			<Collapse line="725" />
-		</Folding>
-	</File>
-	<File name="notes/bugs.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="7993" topLine="32" />
-		</Cursor>
-	</File>
-	<File name="src/oflp-panel.cc" open="0" top="0" tabpos="26" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="19250" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="422" />
-		</Folding>
-	</File>
-	<File name="src/oflp-plugin-events.cc" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2502" topLine="6" />
-		</Cursor>
-		<Folding>
-			<Collapse line="28" />
-			<Collapse line="49" />
-			<Collapse line="55" />
-			<Collapse line="69" />
-			<Collapse line="84" />
-			<Collapse line="101" />
-			<Collapse line="118" />
-			<Collapse line="138" />
-			<Collapse line="149" />
-			<Collapse line="164" />
-			<Collapse line="174" />
-			<Collapse line="190" />
-			<Collapse line="198" />
-			<Collapse line="216" />
-			<Collapse line="226" />
-			<Collapse line="237" />
-			<Collapse line="245" />
-			<Collapse line="257" />
-			<Collapse line="264" />
-			<Collapse line="272" />
-			<Collapse line="283" />
-			<Collapse line="291" />
-			<Collapse line="309" />
-			<Collapse line="320" />
-			<Collapse line="331" />
-			<Collapse line="338" />
-			<Collapse line="348" />
-			<Collapse line="362" />
-			<Collapse line="377" />
-			<Collapse line="388" />
-			<Collapse line="397" />
-			<Collapse line="414" />
-			<Collapse line="423" />
-			<Collapse line="444" />
-			<Collapse line="465" />
-			<Collapse line="485" />
-			<Collapse line="503" />
-			<Collapse line="519" />
-		</Folding>
-	</File>
-	<File name="src/oflp.xrc" open="0" top="0" tabpos="16" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="737" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src/oflp-panel-utils.cc" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="10941" topLine="39" />
-		</Cursor>
-		<Folding>
-			<Collapse line="63" />
-			<Collapse line="227" />
-			<Collapse line="256" />
-			<Collapse line="276" />
-		</Folding>
-	</File>
-	<File name="src/post-build.bash" open="1" top="1" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="443" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src/oflp-plugin-mod-gfx.hh" open="0" top="0" tabpos="30" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="125" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="21" />
-			<Collapse line="24" />
-			<Collapse line="47" />
-			<Collapse line="51" />
-			<Collapse line="57" />
-			<Collapse line="62" />
-			<Collapse line="72" />
-			<Collapse line="82" />
-			<Collapse line="88" />
-			<Collapse line="117" />
-		</Folding>
-	</File>
-	<File name="src/oflp-plugin.cc" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="570" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="31" />
-			<Collapse line="43" />
-			<Collapse line="56" />
-			<Collapse line="70" />
-			<Collapse line="88" />
-			<Collapse line="95" />
-			<Collapse line="99" />
-			<Collapse line="174" />
-			<Collapse line="193" />
-			<Collapse line="214" />
-			<Collapse line="220" />
-			<Collapse line="230" />
-			<Collapse line="247" />
-			<Collapse line="261" />
-			<Collapse line="270" />
-			<Collapse line="282" />
-			<Collapse line="291" />
-			<Collapse line="293" />
-			<Collapse line="303" />
-			<Collapse line="314" />
-			<Collapse line="321" />
-			<Collapse line="328" />
-			<Collapse line="337" />
-			<Collapse line="349" />
-			<Collapse line="371" />
-			<Collapse line="395" />
-			<Collapse line="408" />
-			<Collapse line="429" />
-			<Collapse line="448" />
-			<Collapse line="490" />
-			<Collapse line="500" />
-			<Collapse line="508" />
-			<Collapse line="517" />
-		</Folding>
-	</File>
-	<File name="notes/todo.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2426" topLine="34" />
-		</Cursor>
-	</File>
-	<File name="notes/changelog.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="220" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src/oflp-settings-options.hh" open="0" top="0" tabpos="21" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="125" topLine="0" />
+			<Cursor1 position="4046" topLine="40" />
 		</Cursor>
 	</File>
 	<File name="src/oflp-settings.cc" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -436,5 +113,182 @@
 			<Collapse line="97" />
 			<Collapse line="177" />
 		</Folding>
+	</File>
+	<File name="src/oflp-plugin-mod-gfx.hh" open="0" top="0" tabpos="30" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="125" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="21" />
+			<Collapse line="24" />
+			<Collapse line="47" />
+			<Collapse line="51" />
+			<Collapse line="57" />
+			<Collapse line="62" />
+			<Collapse line="72" />
+			<Collapse line="82" />
+			<Collapse line="88" />
+			<Collapse line="117" />
+		</Folding>
+	</File>
+	<File name="src/oflp-plugin-events.cc" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2502" topLine="6" />
+		</Cursor>
+	</File>
+	<File name="notes/changelog.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="220" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-plugin.cc" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="570" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-plugin-mod-settings.cc" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4626" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="67" />
+			<Collapse line="143" />
+		</Folding>
+	</File>
+	<File name="src/oflp-plugin.hh" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="10422" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-hstring.hh" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="125" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="33" />
+		</Folding>
+	</File>
+	<File name="src/oflp-plugin-mod-editors.cc" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="288" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="33" />
+			<Collapse line="45" />
+			<Collapse line="53" />
+			<Collapse line="60" />
+			<Collapse line="68" />
+			<Collapse line="72" />
+			<Collapse line="81" />
+			<Collapse line="98" />
+			<Collapse line="104" />
+			<Collapse line="113" />
+			<Collapse line="125" />
+			<Collapse line="130" />
+			<Collapse line="141" />
+		</Folding>
+	</File>
+	<File name="src/oflp-settings-options.hh" open="0" top="0" tabpos="21" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="125" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/manifest.xml" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="419" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-panel-utils.cc" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="10941" topLine="39" />
+		</Cursor>
+		<Folding>
+			<Collapse line="63" />
+			<Collapse line="227" />
+			<Collapse line="256" />
+			<Collapse line="276" />
+		</Folding>
+	</File>
+	<File name="src/oflp-plugin-mod-settings.hh" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="830" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/post-build.bash" open="1" top="1" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="443" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp.xrc" open="0" top="0" tabpos="16" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="737" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-log.hh" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1324" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-plugin-mod-editors.hh" open="0" top="0" tabpos="25" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="125" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-plugin-mod-panels.hh" open="0" top="0" tabpos="22" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="758" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="18" />
+			<Collapse line="49" />
+		</Folding>
+	</File>
+	<File name="src/oflp-common.hh" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="539" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="notes/notes.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="121" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-settings.hh" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2953" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="23" />
+			<Collapse line="64" />
+		</Folding>
+	</File>
+	<File name="notes/bugs.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7993" topLine="32" />
+		</Cursor>
+	</File>
+	<File name="src/oflp-plugin-mod-layout.hh" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1682" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="20" />
+			<Collapse line="37" />
+			<Collapse line="66" />
+			<Collapse line="104" />
+		</Folding>
+	</File>
+	<File name="src/oflp-panel.cc" open="0" top="0" tabpos="26" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="19250" topLine="0" />
+		</Cursor>
+		<Folding>
+			<Collapse line="422" />
+		</Folding>
+	</File>
+	<File name="notes/new-list.h" open="0" top="0" tabpos="28" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="897" topLine="0" />
+		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
