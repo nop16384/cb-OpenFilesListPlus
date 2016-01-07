@@ -1,26 +1,36 @@
 #!/bin/bash
 
+################################################################################
+#   src/common/post-build.bash
+#
+#   $1  : target identifier ( Debug, devel, ... )
+#
+################################################################################
+TargetId="${1}"
+echo "> target id [${TargetId}]"
+#   ----------------------------------------------------------------------------
 WxVersion=$( wx-config --release )
 OflpInstallDir=""
 
 if [[ "${WxVersion}" = "3.0" ]] ; then
 
     echo "> wxWidgets 3.0"
-    OflpInstallDir="./plugin/devel/linux/wx-3.0.2"
+    OflpInstallDir="./plugin/${TargetId}/linux/wx-3.0.2"
 
 fi
 
 if [[ "${WxVersion}" = "2.8" ]] ; then
 
     echo "> wxWidgets 2.8"
-    OflpInstallDir="./plugin/devel/linux/wx-2.8.12"
+    OflpInstallDir="./plugin/${TargetId}/linux/wx-2.8.12"
 
 fi
 
-mkdir -p                                            "${OflpInstallDir}"
+echo "> installation directory [${OflpInstallDir}]"
+#   ----------------------------------------------------------------------------
+mkdir -p                                                "${OflpInstallDir}"
 
-cp  ./plugin/devel/linux/libOpenFilesListPlus.so    "${OflpInstallDir}"
-cp  ./plugin/devel/linux/libOpenFilesListPlus.so    "${OflpInstallDir}/OpenFilesListPlus.so"
+cp  "./plugin/${TargetId}/linux/OpenFilesListPlus.so"   "${OflpInstallDir}"
 
 rm -f "${OflpInstallDir}/OpenFilesListPlus.zip"
 rm -f "${OflpInstallDir}/OpenFilesListPlus.cbplugin"

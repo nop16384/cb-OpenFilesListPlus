@@ -5,9 +5,6 @@ obj/*
 samples/*
 plugin/*
 Pulled/*
-cb-fake-sdk/*
-project-pub/*
-src/old-style/*
 
 src/svn9857/trunk/*
 src/svn10373/trunk/*

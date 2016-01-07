@@ -2,7 +2,6 @@
 <CodeBlocks_workspace_file>
 	<Workspace title="codeblocks.oflp-plugin">
 		<Project filename="../cb-debuggee/cb-debuggee.cbp" />
-		<Project filename="project-pub/cb-oflp-plugin-pub.cbp" />
 		<Project filename="cb-oflp-plugin.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

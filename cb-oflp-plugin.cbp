@@ -5,51 +5,21 @@
 		<Option title="cb-oflp-plugin" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="src/;src/plugin/;src/panels/;src/panels/c/;src/panels/h/;src/plugin/c/;src/plugin/h/;src/log/;src/common/;src/devel-memleaks/;src/settings/;cb-fake-sdk/include/;notes/;cb-fake-sdk/;" />
+		<Option virtualFolders="src/;src/plugin/;src/panels/;src/panels/c/;src/panels/h/;src/plugin/c/;src/plugin/h/;src/log/;src/common/;src/devel-memleaks/;src/settings/;notes/;" />
+		<Option show_notes="0">
+			<notes>
+				<![CDATA[OpenFilesListPlus plugin project
+
+Targets
+====
+  - devel	: debug info is generated ; logs 
+  - Debug	: debug info is generated ; no logs at all
+]]>
+			</notes>
+		</Option>
 		<Build>
-			<Target title="Release">
-				<Option output="plugin/libOpenFilesListPlus" prefix_auto="0" extension_auto="1" />
-				<Option object_output="obj" />
-				<Option type="3" />
-				<Option compiler="gcc" />
-				<Option host_application="codeblocks" />
-				<Option run_host_application_in_terminal="0" />
-				<Compiler>
-					<Add option="-ansi" />
-					<Add option="`wx-config  --cflags`" />
-					<Add option="-DOFLP_COMPILE_TARGET_PROD" />
-				</Compiler>
-				<Linker>
-					<Add option="`wx-config --libs`" />
-				</Linker>
-				<ExtraCommands>
-					<Add after="chmod u=rwx ./src/post-build.bash" />
-					<Add after="./src/post-build.bash" />
-				</ExtraCommands>
-			</Target>
-			<Target title="Debug">
-				<Option output="plugin/libOpenFilesListPlus" prefix_auto="0" extension_auto="1" />
-				<Option object_output="obj" />
-				<Option type="3" />
-				<Option compiler="gcc" />
-				<Option host_application="codeblocks" />
-				<Option run_host_application_in_terminal="0" />
-				<Compiler>
-					<Add option="-ansi" />
-					<Add option="-g" />
-					<Add option="`wx-config  --cflags`" />
-					<Add option="-DOFLP_DEBUG" />
-				</Compiler>
-				<Linker>
-					<Add option="`wx-config --libs`" />
-				</Linker>
-				<ExtraCommands>
-					<Add after="chmod u=rwx ./src/post-build.bash" />
-					<Add after="./src/post-build.bash" />
-				</ExtraCommands>
-			</Target>
 			<Target title="devel-linux">
-				<Option output="plugin/devel/linux/libOpenFilesListPlus" prefix_auto="0" extension_auto="1" />
+				<Option output="plugin/devel/linux/OpenFilesListPlus.so" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -78,12 +48,12 @@
 				</Linker>
 				<ExtraCommands>
 					<Add after="chmod u=rwx ./src/post-build.bash" />
-					<Add after="./src/post-build.bash" />
+					<Add after="./src/post-build.bash devel" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
 			<Target title="devel-linux-configure">
-				<Option output="plugin/devel/linux-configure/libOpenFilesListPlus" prefix_auto="0" extension_auto="1" />
+				<Option output="plugin/devel/linux-configure/libOpenFilesListPlus.so" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -105,7 +75,7 @@
 				</ExtraCommands>
 			</Target>
 			<Target title="devel-linux-memleaks">
-				<Option output="plugin/devel/linux-memleaks/OpenFilesListPlus" prefix_auto="0" extension_auto="1" />
+				<Option output="plugin/devel/linux-memleaks/OpenFilesListPlus" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -125,7 +95,7 @@
 				</Linker>
 			</Target>
 			<Target title="devel-linux-symbols">
-				<Option output="plugin/devel/linux/symbols/OpenFilesListPlus" prefix_auto="0" extension_auto="1" />
+				<Option output="plugin/devel/linux/symbols/OpenFilesListPlus.so" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -144,7 +114,7 @@
 				</Linker>
 			</Target>
 			<Target title="devel-ms">
-				<Option output="plugin/devel/ms/OpenFilesListPlus" prefix_auto="0" extension_auto="1" />
+				<Option output="plugin/devel/ms/OpenFilesListPlus.dll" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -186,113 +156,120 @@
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
+			<Target title="Debug-linux">
+				<Option output="plugin/Debug/linux/OpenFilesListPlus.so" prefix_auto="0" extension_auto="0" />
+				<Option object_output="obj" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option host_application="codeblocks" />
+				<Option run_host_application_in_terminal="0" />
+				<Compiler>
+					<Add option="-ansi" />
+					<Add option="-g" />
+					<Add option="-fPIC" />
+					<Add option="`wx-config --cflags`" />
+					<Add option="-DBUILDING_PLUGIN" />
+					<Add option="-DWXUSINGDLL" />
+					<Add option="-DcbDEBUG" />
+					<Add option="-DCB_PRECOMP" />
+					<Add option="-DWX_PRECOMP" />
+					<Add option="-DwxUSE_UNICODE" />
+					<Add option="-DOFLP_LINUX" />
+					<Add option="-DOFLP_DEBUG" />
+					<Add directory="$(#cb)/include" />
+					<Add directory="$(#cb)/sdk/wxscintilla/include" />
+				</Compiler>
+				<Linker>
+					<Add option="`wx-config --libs`" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="chmod u=rwx ./src/post-build.bash" />
+					<Add after="./src/post-build.bash Debug" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Debug-ms">
+				<Option output="plugin/Debug/ms/OpenFilesListPlus.dll" prefix_auto="0" extension_auto="0" />
+				<Option object_output="obj" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option host_application="codeblocks" />
+				<Option run_host_application_in_terminal="0" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-mthreads" />
+					<Add option="-fmessage-length=0" />
+					<Add option="-fexceptions" />
+					<Add option="-Winvalid-pch" />
+					<Add option="-DBUILDING_PLUGIN" />
+					<Add option="-DHAVE_W32API_H" />
+					<Add option="-D__WXMSW__" />
+					<Add option="-DWXUSINGDLL" />
+					<Add option="-DcbDEBUG" />
+					<Add option="-DCB_PRECOMP" />
+					<Add option="-DWX_PRECOMP" />
+					<Add option="-DwxUSE_UNICODE" />
+					<Add option="-DOFLP_MS" />
+					<Add option="-DOFLP_DEBUG" />
+					<Add directory="$(#cb)/include" />
+					<Add directory="$(#cb)/sdk/wxscintilla/include" />
+					<Add directory="$(#wx.include)" />
+					<Add directory="$(#wx.lib)/gcc_dll/mswu" />
+				</Compiler>
+				<Linker>
+					<Add option="-mthreads" />
+					<Add library="codeblocks" />
+					<Add library="wxmsw28u" />
+					<Add directory="$(#cb)/devel" />
+					<Add directory="$(#wx.lib)/gcc_dll" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="zip -j9 plugin/Debug/ms/OpenFilesListPlus.zip          src/manifest.xml src/oflp.xrc graphics/oflp-panel-header-button-bar-padding.png graphics/oflp-panel-header-button-bar-blue.png graphics/oflp-panel-header-button-bar-green.png graphics/oflp-panel-header-button-bar-orange.png graphics/oflp-panel-header-button-bar-red.png  graphics/oflp-panel-header-button-bar-up.png graphics/oflp-panel-header-button-bar-down.png" />
+					<Add after="zip -j9 plugin/Debug/ms/OpenFilesListPlus.cbplugin plugin/Debug/ms/OpenFilesListPlus.dll plugin/Debug/ms/OpenFilesListPlus.zip" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
 		</Build>
-		<Unit filename="cb-fake-sdk/include/cbeditor.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/include/cbfunctor.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/include/cbplugin.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/include/cbproject.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/include/cbworkspace.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/include/configmanager.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/include/configurationpanel.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/include/editorbase.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/include/editormanager.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/include/logmanager.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/include/manager.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/include/misctreeitemdata.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/include/prep.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/include/projectfile.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/include/projectmanager.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/include/sdk.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/include/sdk_events.h">
-			<Option virtualFolder="cb-fake-sdk/include/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
-		<Unit filename="cb-fake-sdk/manager.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-			<Option virtualFolder="cb-fake-sdk/" />
-			<Option target="devel-linux-memleaks" />
-		</Unit>
 		<Unit filename="notes/bugs.h">
 			<Option virtualFolder="notes/" />
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-ms" />
+			<Option target="Debug-linux" />
+			<Option target="Debug-ms" />
 		</Unit>
 		<Unit filename="notes/changelog.h">
 			<Option virtualFolder="notes/" />
-			<Option target="Debug" />
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-linux-symbols" />
-			<Option target="Release" />
 			<Option target="devel-ms" />
+			<Option target="Debug-linux" />
+			<Option target="Debug-ms" />
 		</Unit>
 		<Unit filename="notes/new-list.h">
 			<Option virtualFolder="notes/" />
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-ms" />
+			<Option target="Debug-linux" />
+			<Option target="Debug-ms" />
 		</Unit>
 		<Unit filename="notes/notes.h">
 			<Option virtualFolder="notes/" />
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-ms" />
+			<Option target="Debug-linux" />
+			<Option target="Debug-ms" />
 		</Unit>
 		<Unit filename="notes/todo.h">
 			<Option virtualFolder="notes/" />
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-ms" />
+			<Option target="Debug-linux" />
+			<Option target="Debug-ms" />
 		</Unit>
 		<Unit filename="src/devel-memleaks/devel-memleaks.cc">
 			<Option virtualFolder="src/devel-memleaks/" />
@@ -300,12 +277,12 @@
 		</Unit>
 		<Unit filename="src/manifest.xml">
 			<Option virtualFolder="src/common/" />
-			<Option target="Debug" />
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-linux-symbols" />
-			<Option target="Release" />
 			<Option target="devel-ms" />
+			<Option target="Debug-linux" />
+			<Option target="Debug-ms" />
 		</Unit>
 		<Unit filename="src/oflp-common-classes.hh">
 			<Option virtualFolder="src/common/" />
@@ -315,12 +292,12 @@
 		</Unit>
 		<Unit filename="src/oflp-common.hh">
 			<Option virtualFolder="src/common/" />
-			<Option target="Debug" />
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-linux-symbols" />
-			<Option target="Release" />
 			<Option target="devel-ms" />
+			<Option target="Debug-linux" />
+			<Option target="Debug-ms" />
 		</Unit>
 		<Unit filename="src/oflp-hstring.hh">
 			<Option virtualFolder="src/common/" />
@@ -345,21 +322,21 @@
 		</Unit>
 		<Unit filename="src/oflp-panel.cc">
 			<Option virtualFolder="src/panels/c/" />
-			<Option target="Debug" />
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-linux-symbols" />
-			<Option target="Release" />
 			<Option target="devel-ms" />
+			<Option target="Debug-linux" />
+			<Option target="Debug-ms" />
 		</Unit>
 		<Unit filename="src/oflp-panel.hh">
 			<Option virtualFolder="src/panels/h/" />
-			<Option target="Debug" />
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-linux-symbols" />
-			<Option target="Release" />
 			<Option target="devel-ms" />
+			<Option target="Debug-linux" />
+			<Option target="Debug-ms" />
 		</Unit>
 		<Unit filename="src/oflp-plugin-dnd.cc">
 			<Option virtualFolder="src/plugin/c/" />
@@ -405,12 +382,12 @@
 		</Unit>
 		<Unit filename="src/oflp-plugin.hh">
 			<Option virtualFolder="src/plugin/h/" />
-			<Option target="Debug" />
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-linux-symbols" />
-			<Option target="Release" />
 			<Option target="devel-ms" />
+			<Option target="Debug-linux" />
+			<Option target="Debug-ms" />
 		</Unit>
 		<Unit filename="src/oflp-settings-options.hh">
 			<Option virtualFolder="src/settings/" />
@@ -423,20 +400,20 @@
 		</Unit>
 		<Unit filename="src/oflp.xrc">
 			<Option virtualFolder="src/common/" />
-			<Option target="Debug" />
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-linux-symbols" />
-			<Option target="Release" />
 			<Option target="devel-ms" />
+			<Option target="Debug-linux" />
+			<Option target="Debug-ms" />
 		</Unit>
 		<Unit filename="src/post-build.bash">
 			<Option virtualFolder="src/common/" />
 			<Option target="devel-linux" />
-			<Option target="Debug" />
 			<Option target="devel-linux-memleaks" />
-			<Option target="Release" />
 			<Option target="devel-ms" />
+			<Option target="Debug-linux" />
+			<Option target="Debug-ms" />
 		</Unit>
 		<Extensions>
 			<envvars />
