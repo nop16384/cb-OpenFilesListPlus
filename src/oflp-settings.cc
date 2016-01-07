@@ -108,8 +108,8 @@ void            OpenFilesListPlusSettings:: evh_check_box_clicked(wxCommandEvent
         OflpOptLog      _opt_log    ,
         OflpOptSel      _opt_sel    )
             :   wxFrame (   _parent     , wxNewId() ,   wxT("title")        ,
-                            _scr_pos    , _scr_size                         ,
-                            ~( wxCAPTION)                               )   ,
+                            _scr_pos    , wxDefaultSize                     ,
+                            ~( wxCAPTION) & wxRESIZE_BORDER             )   ,
                 a_parent    (_parent)
 {
     //  ........................................................................
@@ -164,9 +164,14 @@ void            OpenFilesListPlusSettings:: evh_check_box_clicked(wxCommandEvent
         wxCommandEventHandler(OpenFilesListPlusSettings::evh_check_box_clicked) ,
         NULL, this                                                              );
     //  ........................................................................
-    this->SetSizer(dw_bs_main);
-    dw_bs_main->Fit(this);
-    dw_bs_main->SetSizeHints(this);
+    //  good combination for ms:
+        this->SetSizer(dw_bs_main);
+        this->SetBackgroundColour( wxColour(200,200,200) );
+        this->SetPosition( _scr_pos );                                          //  required under ms
+        dw_bs_main->Fit(this);
+        dw_bs_main->Layout();
+
+    //dw_bs_main->SetSizeHints(this);
 }
 
                 OpenFilesListPlusSettings:: ~OpenFilesListPlusSettings()

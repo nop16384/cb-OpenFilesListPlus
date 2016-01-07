@@ -40,6 +40,8 @@ void    OflpModLayout::     Filename_cb_to_oflp(
 //  ############################################################################
 bool    OflpModLayout::     xml_load_document       (wxString& _filename, TiXmlDocument* _doc)
 {
+    GWR_TKI("OflpModLayout::xml_load_document():[%s]", _filename.wc_str());
+
     if ( ! TinyXML::LoadDocument(_filename, _doc) )
         return false;
 
@@ -374,7 +376,7 @@ bool    OflpModLayout::ProjectAssignments::fas_get_from_rel_fpath(
         _fas = fas;
         return true;
     }
-    OFLP_STL_CNEXT( a_assignments )
+    OFLP_STL_CNEXT()
 
     _fas = NULL;
     return FALSE;
@@ -386,7 +388,7 @@ void        OflpModLayout:: p0_reset_assignments                        ()
     {
         delete (*it);
     }
-    OFLP_STL_CNEXT(a_project_assignments_array)
+    OFLP_STL_CNEXT()
 
     a_project_assignments_array.Clear();
 
@@ -394,7 +396,7 @@ void        OflpModLayout:: p0_reset_assignments                        ()
     {
         delete (*it);
     }
-    OFLP_STL_CNEXT(a_project_assignments_array)
+    OFLP_STL_CNEXT()
 
     a_panel_assignment_array.Clear();
 }
@@ -409,7 +411,7 @@ bool        OflpModLayout:: p0_project_assignments_get_from_cbProject   (cbProje
             return true;
         }
     }
-    OFLP_STL_CNEXT(a_project_assignments_array)
+    OFLP_STL_CNEXT()
 
     _pra = NULL;
     return FALSE;
@@ -438,7 +440,7 @@ void        OflpModLayout:: p0_project_assignments_sub                  (cbProje
             goto lab_exit;
         }
     }
-    OFLP_STL_CNEXT(a_project_assignments_array)
+    OFLP_STL_CNEXT()
     //  ........................................................................
 lab_exit:
     OFLP_FUNC_EXIT_LOG();
@@ -642,6 +644,7 @@ bool    OflpModLayout::     workspace_load              ()
     wsp = pjm->GetWorkspace();
     pja = pjm->GetProjects();
     //  ........................................................................
+    GWR_TKI("workspace_load():wks[%s]", wsp->GetTitle().wc_str());
     //  load the oflp workspace layout
     doc_wsp =   new TiXmlDocument();
 

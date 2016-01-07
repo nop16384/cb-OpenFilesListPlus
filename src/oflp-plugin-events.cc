@@ -54,8 +54,6 @@ void    OpenFilesListPlus:: evh_workspace_loading_complete  (CodeBlocksEvent& _e
         panels()->p0_add( v[i]->name(), false );
     }
 
-    RefreshOpenFilesLayout();
-
     panels()->resize_and_layout();
 
     OFLP_FUNC_EXIT_LOG();

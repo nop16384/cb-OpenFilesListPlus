@@ -125,13 +125,14 @@ class OpenFilesListPlus : public cbPlugin
         //  ####################################################################
       private:
         static  OpenFilesListPlus   *   s_singleton;
-        wxMenu                      *   aw_menu_view;
 
       public:
         static  OpenFilesListPlus   *   Instance()  { return s_singleton; }
         //  ====================================================================
-      protected:
-        bool    a_mode_degraded;
+      private:
+        bool        a_mode_degraded;
+        bool        a_on_attach;
+        wxMenu  *   aw_menu_view;
         //  ====================================================================
         friend class OflpModSettings;                                           //  cf bugs#18
 
@@ -139,6 +140,7 @@ class OpenFilesListPlus : public cbPlugin
         void    reset();
         void    degrade();
         bool    degraded();
+        bool    attaching();
 
       protected:
         void    RefreshOpenFileState        (EditorBase* _edb);

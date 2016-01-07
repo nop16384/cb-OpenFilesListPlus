@@ -19,6 +19,7 @@
 #define GWR_OFLP_SANITY_CHECKS
 #define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
 #define GWR_TKI(FORMAT, ...)    GWRCB_TKI(FORMAT, __VA_ARGS__);
+#define GWR_TKW(FORMAT, ...)    GWRCB_TKW(FORMAT, __VA_ARGS__);
 #define GWR_TKE(FORMAT, ...)    GWRCB_TKE(FORMAT, __VA_ARGS__);
 #define GWR_INF(FORMAT, ...)    GWRCB_INF(FORMAT, __VA_ARGS__);
 #define GWR_WNG(FORMAT, ...)    GWRCB_WNG(FORMAT, __VA_ARGS__);
@@ -67,6 +68,8 @@ void    OpenFilesListPlus:: dump_project_manager_state()
 OpenFilesListPlus::     OpenFilesListPlus()
 {
     a_mode_degraded     =   false;
+    a_on_attach         =   false;
+    aw_menu_view        =   NULL;
 
     a_dnd_panel_src     =   NULL;
     a_dnd_panel_dst     =   NULL;
@@ -94,7 +97,7 @@ OpenFilesListPlus::    ~OpenFilesListPlus()
 void OpenFilesListPlus::OnAttach()
 {
     s_singleton             =   this;
-    aw_menu_view            =   NULL;
+    a_on_attach             =   true;
     //  ........................................................................
     //  this is for debugging only : enable log window at very startup of plugin
     oflp::A_log_window    =   true;                                             //  enable log window at start
@@ -154,6 +157,36 @@ void OpenFilesListPlus::OnAttach()
     pm->RegisterEventSink(cbEVT_EDITOR_MODIFIED , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_editor_modified  ));
     pm->RegisterEventSink(cbEVT_EDITOR_SAVE     , new cbEventFunctor<OpenFilesListPlus, CodeBlocksEvent>(this, &OpenFilesListPlus::evh_editor_saved     ));
     //pm->RegisterEventSink(cbEVT_EDITOR_DEACTIVATED, new cbEventFunctor<OpenFilesListPlugin, CodeBlocksEvent>(this, &OpenFilesListPlugin::OnEditorDeactivated));
+    //  ........................................................................
+    //  check for open workspace / project / files on plugin attach
+    ProjectManager      *   pjm     =   NULL;
+    ProjectsArray       *   pja     =   NULL;
+
+    //  workspace
+        //CodeBlocksEvent(
+        //    wxEventType  	commandType = wxEVT_NULL,
+        //	int  	id = 0,
+        //	cbProject *  	project = nullptr,
+        //	EditorBase *  	editor = nullptr,
+        //	cbPlugin *  	plugin = nullptr,
+        //	EditorBase *  	old_editor = nullptr    )
+    CodeBlocksEvent e;
+    evh_workspace_loading_complete(e);
+
+    //  projects
+    pjm =   Manager::Get()->GetProjectManager();
+    pja =   pjm->GetProjects();
+
+    OFLP_STL_FOR( ProjectsArray, (*pja), it )
+    {
+        layout()->project_load((*it));
+    }
+    OFLP_STL_NEXT()
+
+    //  sync all editors
+    RefreshOpenFilesLayout();
+
+    a_on_attach =   false;
 }
 
 void OpenFilesListPlus::OnRelease(bool appShutDown)
@@ -275,6 +308,13 @@ bool    OpenFilesListPlus:: FindCbProjectForFile    (wxString const & _abs_fpath
 
     return ( (*_pro) != NULL );
 }
+
+//! \brief  Tell if OFLP is attaching ( OnAttach() is running )
+bool OpenFilesListPlus::attaching()
+{
+    return a_on_attach;
+}
+
 //! \brief  Delete all OflpPanels, forget about the layout
 void OpenFilesListPlus::reset()
 {
@@ -372,6 +412,9 @@ void OpenFilesListPlus::RefreshOpenFileState    (EditorBase* _nn_edb)
 //! \brief  Given an editor, put it in the right OflpPanel
 void OpenFilesListPlus::RefreshOpenFileLayout   (EditorBase* _nn_edb)
 {
+    //  Splitted in 2 parts because bugs#20 ( OnAttach pb ) - gets too
+    //  complicated while merging the 2 cases
+    //  ........................................................................
     EditorManager   *   emgr        =   Manager::Get()->GetEditorManager();
     EditorBase      *   aedb        =   emgr->GetActiveEditor();
     wxString            shortname   =   _nn_edb->GetShortName();
@@ -385,36 +428,61 @@ void OpenFilesListPlus::RefreshOpenFileLayout   (EditorBase* _nn_edb)
     if ( Manager::IsAppShuttingDown() )
         goto lab_exit;
     //  ........................................................................
-    //  get infos on editor
-    psrc                            = panels()->get(_nn_edb);
-    if ( ! psrc )
+    GWR_TKI("      ...editor [%p][%s]", _nn_edb, shortname.wc_str());
+    //  ........................................................................
+    //  attaching section
+    if ( attaching() )
     {
-        GWR_TKE("      ...editor [%p][%s] was _NOT_ found in any panel", _nn_edb, shortname.wc_str());
+        GWR_TKI("%s", wxS("      ...attaching())"));
+        //  get infos on editor
+        psrc                            = panels()->get(_nn_edb);
+        if ( psrc )                                                             //  has to be NULL OnAttach()
+        {
+            GWR_TKE("%s", wxS(  "      ...editor was found in a panel"));
+            GWR_TKE(            "      ...panel          :[%p][%s]", psrc->title().wc_str());
+            GWR_TKE(            "      ...active editor  :[%s]"    , aedb ? aedb->GetShortName().wc_str()   : wxS("NULL")   );
+            goto    lab_exit;
+        }
+        //  ....................................................................
+        //  add it ( should be added to bulk )
+        editors()->add(_nn_edb);
         goto lab_exit;
     }
-    GWR_TKI("      ...editor         :[%p][%s]", _nn_edb, shortname.wc_str());
-    GWR_TKI("      ...panel          :[%p]"    , psrc);
-    GWR_TKI("      ...active editor  :[%s]"    , aedb ? aedb->GetShortName().wc_str() : wxS("NULL"));
     //  ........................................................................
-    //  find file assignment ; if found, move editor to its assigned panel
-    //  if it lays in another panel.
-    fadst   =   layout()->file_assignment_find(_nn_edb);
-    if ( fadst )
-        pdst    = panels()->get_by_name( fadst->pname() );
+    //  non-attaching section
+    else
+    {
+        GWR_TKI("%s", wxS("      ...!attaching())"));
+        //  get infos on editor
+        psrc                            = panels()->get(_nn_edb);
+        if ( ! psrc )
+        {
+            GWR_TKE("      ...editor [%p][%s] was not found in any panel", _nn_edb, shortname.wc_str());
+            goto lab_exit;
+        }
+        GWR_TKI("      ...panel          :[%p][%s]", psrc, psrc->title().wc_str());
+        GWR_TKI("      ...active editor  :[%s]"    , aedb ? aedb->GetShortName().wc_str()   : wxS("NULL")   );
+        //  ........................................................................
+        //  find file assignment ; if found, move editor to its assigned panel
+        //  if it lays in another panel.
+        fadst   =   layout()->file_assignment_find(_nn_edb);
+        if ( fadst )
+            pdst    = panels()->get_by_name( fadst->pname() );
 
-    //  no assignment - set dst to bulk
-    if ( ! pdst )
-    {
-        GWR_TKI("%s", wxS("      ...not assigned"));
-        pdst    =   panels()->p0_bulk();
-    }
-    //  ........................................................................
-lab_eventually_move:
-    //  move if different panels
-    if ( psrc != pdst )
-    {
-        GWR_TKI("      ...moving editor to panel[%s]", pdst->title().wc_str());
-        panels()->p0_editor_mov( pdst, psrc, _nn_edb );                         //  _GWR_TODO_ needs panels()::resize() call here !!!
+        //  no assignment - set dst to bulk
+        if ( ! pdst )
+        {
+            GWR_TKI("%s", wxS("      ...not assigned"));
+            pdst    =   panels()->p0_bulk();
+        }
+        //  ........................................................................
+        //  move if different panels
+        if ( psrc != pdst )
+        {
+            GWR_TKI("      ...moving editor to panel[%s]", pdst->title().wc_str());
+            panels()->p0_editor_mov( pdst, psrc, _nn_edb );                         //  _GWR_TODO_ needs panels()::resize() call here !!!
+        }
+        goto lab_exit;
     }
     //  ........................................................................
 lab_exit:
@@ -423,7 +491,7 @@ lab_exit:
 
 //! \fn     RefreshOpenFilesLayout
 //!
-//! \brief  RefreshOpenFileLayout() on all editors
+//! \brief  Calls RefreshOpenFileLayout() on all editors
 void OpenFilesListPlus::RefreshOpenFilesLayout  ()
 {
     EditorManager   *   emgr  =   Manager::Get()->GetEditorManager();
@@ -431,12 +499,14 @@ void OpenFilesListPlus::RefreshOpenFilesLayout  ()
     OFLP_FUNC_ENTER_LOG("OFLP::RefreshOpenFilesLayout()");
     //  ........................................................................
     //  optim : if workspace loading, first calls to RefreshOpenFileLayout()    //  _GWR_OPTIM_
-    //  occurs _BEFORE_ panels are created. So if no panel exist, drop
-    if ( layout()->panel_assignment_array().size() == 0 )
-    {
-        GWR_TKI("%s", wxS("      ...no panel is present - dropping"));
-        goto lab_exit;
-    }
+    //  occurs _BEFORE_ panels are created. So if no panel exist, drop.
+    //  But dont optimize OnAttach()
+    if ( ! attaching() )
+        if ( layout()->panel_assignment_array().size() == 0 )
+        {
+            GWR_TKI("%s", wxS("      ...no panel is present - dropping"));
+            goto lab_exit;
+        }
     //  ........................................................................
     panels()->p0_main()->Freeze();
 

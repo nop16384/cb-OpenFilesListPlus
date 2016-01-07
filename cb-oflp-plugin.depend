@@ -6326,7 +6326,7 @@
 	<wx/scrolbar.h>
 	<wx/versioninfo.h>
 
-1452117776 source:c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-log.cc
+1452121914 source:c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-log.cc
 	"oflp-log.hh"
 	<wx/frame.h>
 	<wx/font.h>
@@ -8994,7 +8994,7 @@
 	<wx/strconv.h>
 	<vector>
 
-1452117776 c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-common-macros.hh
+1452156476 c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-common-macros.hh
 
 1452117776 c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-common-classes.hh
 
@@ -9017,7 +9017,7 @@
 	"oflp-plugin-mod-gfx.hh"
 	"oflp-panel.hh"
 
-1452117776 c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-plugin.hh
+1452153215 c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-plugin.hh
 	"oflp-common.hh"
 
 1452117776 c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-plugin-mod-panels.hh
@@ -9033,7 +9033,7 @@
 	"oflp-common.hh"
 	"oflp-plugin-module.hh"
 
-1452117776 source:c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-plugin-events.cc
+1452156716 source:c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-plugin-events.cc
 	"oflp-plugin.hh"
 	"oflp-plugin-mod-layout.hh"
 	"oflp-plugin-mod-panels.hh"
@@ -9063,19 +9063,19 @@
 	"oflp-plugin-mod-layout.hh"
 	"oflp-panel.hh"
 
-1452117776 source:c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-plugin-mod-layout.cc
+1452156520 source:c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-plugin-mod-layout.cc
 	"oflp-plugin-mod-layout.hh"
 	"oflp-plugin.hh"
 	"oflp-plugin-mod-panels.hh"
 	"oflp-panel.hh"
 
-1452117776 source:c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-plugin-mod-panels.cc
+1452156562 source:c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-plugin-mod-panels.cc
 	"oflp-plugin-mod-panels.hh"
 	"oflp-plugin.hh"
 	"oflp-plugin-mod-gfx.hh"
 	"oflp-panel.hh"
 
-1452117776 source:c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-plugin-mod-settings.cc
+1452123431 source:c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-plugin-mod-settings.cc
 	"oflp-plugin-mod-settings.hh"
 	"oflp-settings.hh"
 	"oflp-plugin.hh"
@@ -9088,7 +9088,7 @@
 	<wx/checkbox.h>
 	<wx/minifram.h>
 
-1452117776 source:c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-plugin.cc
+1452155167 source:c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-plugin.cc
 	"oflp-plugin.hh"
 	"oflp-panel.hh"
 	"oflp-settings.hh"
@@ -9100,7 +9100,7 @@
 	"oflp-plugin-mod-settings.hh"
 	<configurationpanel.h>
 
-1452117776 source:c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-settings.cc
+1452123685 source:c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-settings.cc
 	"oflp-settings.hh"
 
 1452118096 source:c:\root\src\openfileslistplus\git\8.1-ms\src\oflp-panel-utils.cc

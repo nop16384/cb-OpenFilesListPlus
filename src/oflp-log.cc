@@ -68,14 +68,15 @@ class   LogFrame : public wxFrame
                 :   wxFrame(_parent, wxNewId(), wxString::FromUTF8("OpenFilesListPlus"), wxDefaultPosition, wxSize(900,800))
                 {
                     dw_log_txt_ctrl     =   new wxTextCtrl(
-                    this            , wxNewId()                         ,
-                    wxEmptyString   , wxDefaultPosition , wxDefaultSize ,
-                    wxTE_MULTILINE | wxTE_READONLY | wxHSCROLL          );
+                    this            , wxNewId()                             ,
+                    wxEmptyString   , wxDefaultPosition , wxDefaultSize     ,
+                    wxTE_MULTILINE | wxTE_READONLY | wxHSCROLL | wxTE_RICH  );
 
                     //dw_log_txt_ctrl->SetWindowStyle( wxTE_MULTILINE );        //  GWR_TECH_ causes crash
                     wxFont fnt(8, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxString::FromUTF8("monospace") );
                     dw_log_txt_ctrl->SetFont(fnt);
 
+                    dw_log_txt_ctrl->SetForegroundColour( wxColour(255,255,255) );
                     dw_log_txt_ctrl->SetBackgroundColour( wxColour(0,0,0) );
 
                     dw_log_sizer        =   new wxBoxSizer(wxVERTICAL);
@@ -132,7 +133,7 @@ class   LogFrame : public wxFrame
 
     //wxTextAttr(const wxColour& colText, const wxColour& colBack = wxNullColour, const wxFont& font = wxNullFont, wxTextAttrAlignment alignment = wxTEXT_ALIGNMENT_DEFAULT)
 
-    void    set_text_col_fg(wxColour& _wx_col)
+    void    set_text_col_fg(const wxColour& _wx_col)
         {
             dw_log_txt_ctrl->SetDefaultStyle( wxTextAttr(_wx_col) );
         }

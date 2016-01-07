@@ -73,6 +73,8 @@ void    OflpModSettings::   popup                       (wxCommandEvent &   _e)
     wxWindow    *   w   =   reinterpret_cast<wxWindow*>(_e.GetEventObject());
     wxRect          r   =   w->GetScreenRect();
 
+    GWRCB_INF("x[%i] y[%i] h[%i] w[%i]", r.x, r.y, r.height, r.width);
+
     r.Offset( 0, r.GetHeight() );
 
     wxPoint         p   =   r.GetPosition();
@@ -84,8 +86,6 @@ void    OflpModSettings::   popup                       (wxCommandEvent &   _e)
         wxEVT_ACTIVATE                                                      ,
         wxActivateEventHandler(OpenFilesListPlus::evh_settings_activated)   ,
         NULL, oflp());
-
-    //dw_settings->SetPosition(p);
 
     dw_settings->Show();
     //  ........................................................................
