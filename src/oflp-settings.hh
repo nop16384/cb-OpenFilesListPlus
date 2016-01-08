@@ -66,9 +66,16 @@ class OpenFilesListPlusSettings             : public wxFrame
             return a_parent->GetScreenRect();
         }
     //  ------------------------------------------------------------------------
+  private:
+    void        p0_ctor_01                  (OflpOptLog&, OflpOptSel&);
+
+    void        p0_ctor_02                  (wxPoint& _scr_pos, wxSize& _scr_size);
+
   public:
-                OpenFilesListPlusSettings(wxWindow* _parent, wxPoint, wxSize, OflpOptLog, OflpOptSel);
-    virtual    ~OpenFilesListPlusSettings();
+                OpenFilesListPlusSettings   (wxWindow* _parent, wxPoint, wxSize, OflpOptLog, OflpOptSel);
+    virtual    ~OpenFilesListPlusSettings   ();
+
+
 };
 
 #endif                                                                          //  __OFLP_SETTINGS_HH__

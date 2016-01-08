@@ -6,6 +6,8 @@
 #ifndef __OFLP_COMMON_MACROS_HH__
 #define __OFLP_COMMON_MACROS_HH__
 //  ............................................................................
+#define OFLP01(SIZE_T_VARIABLE) ( static_cast< int >( SIZE_T_VARIABLE ) )
+//  ............................................................................
 #define GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF()                                   \
     lab_exit_success:                                                           \
         OFLP_FUNC_EXIT_LOG();                                                   \

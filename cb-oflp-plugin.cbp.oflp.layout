@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_oflp_file>
 	<FileVersion major="1" minor="0" />
-	<File name="src/oflp-plugin.cc" panel="Plugin" />
-	<File name="src/oflp-plugin.hh" panel="Plugin" />
 </CodeBlocks_project_oflp_file>

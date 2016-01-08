@@ -374,7 +374,7 @@ OflpPanel*      OflpModPanels:: get_from_abs_path   (wxString const & _abs_path)
 {
     OflpPanel                       *   panel   =   NULL;
     //  ........................................................................
-    GWR_INF("OFLP::Panels::get(wxString&):[%s] panels[%i]", _abs_path.wc_str(), a_panels_array.size());
+    GWR_INF("OFLP::Panels::get(wxString&):[%s] panels[%i]", _abs_path.wc_str(), OFLP01(a_panels_array.size()));
     //  ........................................................................
     // loop all panels
     OFLP_STL_CFOR( OflpPanelArray, a_panels_array, it )

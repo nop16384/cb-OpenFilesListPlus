@@ -4716,10 +4716,10 @@
 	<memory>
 	<tr1/memory>
 
-1452172496 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings.cc
+1452252782 source:/home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings.cc
 	"oflp-settings.hh"
 
-1451835979 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings.hh
+1452251433 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings.hh
 	"oflp-common.hh"
 	"oflp-plugin-module.hh"
 	"oflp-settings-options.hh"
@@ -6220,7 +6220,7 @@
 
 1451835988 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-settings-options.hh
 
-1452173833 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-macros.hh
+1452254105 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-common-macros.hh
 
 1451863174 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-panel-header.hh
 
@@ -9113,4 +9113,19 @@
 1452167014 /home/gwr/Src/C-C++/codeblocks.oflp-plugin/src/oflp-plugin-mod-runflow.hh
 	"oflp-common.hh"
 	"oflp-plugin-module.hh"
+
+1413563579 /usr/include/wx-3.0/wx/minifram.h
+	"wx/defs.h"
+	"wx/msw/minifram.h"
+	"wx/motif/minifram.h"
+	"wx/gtk/minifram.h"
+	"wx/gtk1/minifram.h"
+	"wx/x11/minifram.h"
+	"wx/osx/minifram.h"
+	"wx/os2/minifram.h"
+	"wx/frame.h"
+
+1413563581 /usr/include/wx-3.0/wx/gtk/minifram.h
+	"wx/bitmap.h"
+	"wx/frame.h"
 
