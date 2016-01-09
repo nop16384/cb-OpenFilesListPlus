@@ -5,7 +5,7 @@
 		<Option title="cb-oflp-plugin" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="src/;src/plugin/;src/panels/;src/panels/c/;src/panels/h/;src/plugin/c/;src/plugin/h/;src/log/;src/common/;src/devel-memleaks/;src/settings/;notes/;" />
+		<Option virtualFolders="src\;src\plugin\;src\panels\;src\panels\c\;src\panels\h\;src\plugin\c\;src\plugin\h\;src\log\;src\common\;src\devel-memleaks\;src\settings\;notes\;" />
 		<Option show_notes="0">
 			<notes>
 				<![CDATA[OpenFilesListPlus plugin project
@@ -114,7 +114,7 @@ Targets
 				</Linker>
 			</Target>
 			<Target title="devel-ms">
-				<Option output="plugin/devel/ms/OpenFilesListPlus.dll" prefix_auto="0" extension_auto="0" />
+				<Option output="plugin/devel/ms/$(#oflp.tdm_id)/OpenFilesListPlus.dll" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -151,8 +151,8 @@ Targets
 					<Add directory="$(#wx.lib)/gcc_dll" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="zip -j9 plugin/devel/ms/OpenFilesListPlus.zip          src/manifest.xml src/oflp.xrc graphics/oflp-panel-header-button-bar-padding.png graphics/oflp-panel-header-button-bar-blue.png graphics/oflp-panel-header-button-bar-green.png graphics/oflp-panel-header-button-bar-orange.png graphics/oflp-panel-header-button-bar-red.png  graphics/oflp-panel-header-button-bar-up.png graphics/oflp-panel-header-button-bar-down.png" />
-					<Add after="zip -j9 plugin/devel/ms/OpenFilesListPlus.cbplugin plugin/devel/ms/OpenFilesListPlus.dll plugin/devel/ms/OpenFilesListPlus.zip" />
+					<Add after="zip -j9 plugin/devel/ms/$(#oflp.tdm_id)/OpenFilesListPlus.zip          src/manifest.xml src/oflp.xrc graphics/oflp-panel-header-button-bar-padding.png graphics/oflp-panel-header-button-bar-blue.png graphics/oflp-panel-header-button-bar-green.png graphics/oflp-panel-header-button-bar-orange.png graphics/oflp-panel-header-button-bar-red.png  graphics/oflp-panel-header-button-bar-up.png graphics/oflp-panel-header-button-bar-down.png" />
+					<Add after="zip -j9 plugin/devel/ms/$(#oflp.tdm_id)/OpenFilesListPlus.cbplugin plugin/devel/ms/$(#oflp.tdm_id)/OpenFilesListPlus.dll plugin/devel/ms/$(#oflp.tdm_id)/OpenFilesListPlus.zip" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
@@ -189,7 +189,7 @@ Targets
 				</ExtraCommands>
 			</Target>
 			<Target title="debug-ms">
-				<Option output="plugin/debug/ms/OpenFilesListPlus.dll" prefix_auto="0" extension_auto="0" />
+				<Option output="plugin/debug/ms/$(#oflp.tdm_id)/OpenFilesListPlus.dll" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -224,8 +224,47 @@ Targets
 					<Add directory="$(#wx.lib)/gcc_dll" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="zip -j9 plugin/debug/ms/OpenFilesListPlus.zip          src/manifest.xml src/oflp.xrc graphics/oflp-panel-header-button-bar-padding.png graphics/oflp-panel-header-button-bar-blue.png graphics/oflp-panel-header-button-bar-green.png graphics/oflp-panel-header-button-bar-orange.png graphics/oflp-panel-header-button-bar-red.png  graphics/oflp-panel-header-button-bar-up.png graphics/oflp-panel-header-button-bar-down.png" />
-					<Add after="zip -j9 plugin/debug/ms/OpenFilesListPlus.cbplugin plugin/debug/ms/OpenFilesListPlus.dll plugin/debug/ms/OpenFilesListPlus.zip" />
+					<Add after="zip -j9 plugin/debug/ms/$(#oflp.tdm_id)/OpenFilesListPlus.zip          src/manifest.xml src/oflp.xrc graphics/oflp-panel-header-button-bar-padding.png graphics/oflp-panel-header-button-bar-blue.png graphics/oflp-panel-header-button-bar-green.png graphics/oflp-panel-header-button-bar-orange.png graphics/oflp-panel-header-button-bar-red.png  graphics/oflp-panel-header-button-bar-up.png graphics/oflp-panel-header-button-bar-down.png" />
+					<Add after="zip -j9 plugin/debug/ms/$(#oflp.tdm_id)/OpenFilesListPlus.cbplugin plugin/debug/ms/$(#oflp.tdm_id)/OpenFilesListPlus.dll plugin/debug/ms/$(#oflp.tdm_id)/OpenFilesListPlus.zip" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="release-ms">
+				<Option output="plugin/release/ms/$(#oflp.tdm_id)/OpenFilesListPlus.dll" prefix_auto="0" extension_auto="0" />
+				<Option object_output="obj" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option host_application="codeblocks" />
+				<Option run_host_application_in_terminal="0" />
+				<Compiler>
+					<Add option="-mthreads" />
+					<Add option="-fmessage-length=0" />
+					<Add option="-fexceptions" />
+					<Add option="-Winvalid-pch" />
+					<Add option="-DBUILDING_PLUGIN" />
+					<Add option="-DHAVE_W32API_H" />
+					<Add option="-D__WXMSW__" />
+					<Add option="-DWXUSINGDLL" />
+					<Add option="-DcbDEBUG" />
+					<Add option="-DCB_PRECOMP" />
+					<Add option="-DWX_PRECOMP" />
+					<Add option="-DwxUSE_UNICODE" />
+					<Add option="-DOFLP_MS" />
+					<Add directory="$(#cb)/include" />
+					<Add directory="$(#cb)/sdk/wxscintilla/include" />
+					<Add directory="$(#wx.include)" />
+					<Add directory="$(#wx.lib)/gcc_dll/mswu" />
+				</Compiler>
+				<Linker>
+					<Add option="-mthreads" />
+					<Add library="codeblocks" />
+					<Add library="wxmsw28u" />
+					<Add directory="$(#cb)/devel" />
+					<Add directory="$(#wx.lib)/gcc_dll" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="zip -j9 plugin/release/ms/$(#oflp.tdm_id)/OpenFilesListPlus.zip          src/manifest.xml src/oflp.xrc graphics/oflp-panel-header-button-bar-padding.png graphics/oflp-panel-header-button-bar-blue.png graphics/oflp-panel-header-button-bar-green.png graphics/oflp-panel-header-button-bar-orange.png graphics/oflp-panel-header-button-bar-red.png  graphics/oflp-panel-header-button-bar-up.png graphics/oflp-panel-header-button-bar-down.png" />
+					<Add after="zip -j9 plugin/release/ms/$(#oflp.tdm_id)/OpenFilesListPlus.cbplugin plugin/release/ms/$(#oflp.tdm_id)/OpenFilesListPlus.dll plugin/release/ms/$(#oflp.tdm_id)/OpenFilesListPlus.zip" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
@@ -237,6 +276,7 @@ Targets
 			<Option target="devel-ms" />
 			<Option target="debug-linux" />
 			<Option target="debug-ms" />
+			<Option target="release-ms" />
 		</Unit>
 		<Unit filename="notes/changelog.h">
 			<Option virtualFolder="notes/" />
@@ -246,6 +286,7 @@ Targets
 			<Option target="devel-ms" />
 			<Option target="debug-linux" />
 			<Option target="debug-ms" />
+			<Option target="release-ms" />
 		</Unit>
 		<Unit filename="notes/new-list.h">
 			<Option virtualFolder="notes/" />
@@ -254,6 +295,7 @@ Targets
 			<Option target="devel-ms" />
 			<Option target="debug-linux" />
 			<Option target="debug-ms" />
+			<Option target="release-ms" />
 		</Unit>
 		<Unit filename="notes/notes.h">
 			<Option virtualFolder="notes/" />
@@ -262,6 +304,7 @@ Targets
 			<Option target="devel-ms" />
 			<Option target="debug-linux" />
 			<Option target="debug-ms" />
+			<Option target="release-ms" />
 		</Unit>
 		<Unit filename="notes/todo.h">
 			<Option virtualFolder="notes/" />
@@ -270,6 +313,7 @@ Targets
 			<Option target="devel-ms" />
 			<Option target="debug-linux" />
 			<Option target="debug-ms" />
+			<Option target="release-ms" />
 		</Unit>
 		<Unit filename="src/devel-memleaks/devel-memleaks.cc">
 			<Option virtualFolder="src/devel-memleaks/" />
@@ -283,6 +327,7 @@ Targets
 			<Option target="devel-ms" />
 			<Option target="debug-linux" />
 			<Option target="debug-ms" />
+			<Option target="release-ms" />
 		</Unit>
 		<Unit filename="src/oflp-common-classes.hh">
 			<Option virtualFolder="src/common/" />
@@ -298,6 +343,7 @@ Targets
 			<Option target="devel-ms" />
 			<Option target="debug-linux" />
 			<Option target="debug-ms" />
+			<Option target="release-ms" />
 		</Unit>
 		<Unit filename="src/oflp-hstring.hh">
 			<Option virtualFolder="src/common/" />
@@ -328,6 +374,7 @@ Targets
 			<Option target="devel-ms" />
 			<Option target="debug-linux" />
 			<Option target="debug-ms" />
+			<Option target="release-ms" />
 		</Unit>
 		<Unit filename="src/oflp-panel.hh">
 			<Option virtualFolder="src/panels/h/" />
@@ -337,6 +384,7 @@ Targets
 			<Option target="devel-ms" />
 			<Option target="debug-linux" />
 			<Option target="debug-ms" />
+			<Option target="release-ms" />
 		</Unit>
 		<Unit filename="src/oflp-plugin-dnd.cc">
 			<Option virtualFolder="src/plugin/c/" />
@@ -388,6 +436,7 @@ Targets
 			<Option target="devel-ms" />
 			<Option target="debug-linux" />
 			<Option target="debug-ms" />
+			<Option target="release-ms" />
 		</Unit>
 		<Unit filename="src/oflp-settings-options.hh">
 			<Option virtualFolder="src/settings/" />
@@ -406,6 +455,7 @@ Targets
 			<Option target="devel-ms" />
 			<Option target="debug-linux" />
 			<Option target="debug-ms" />
+			<Option target="release-ms" />
 		</Unit>
 		<Unit filename="src/post-build.bash">
 			<Option virtualFolder="src/common/" />
@@ -414,6 +464,7 @@ Targets
 			<Option target="devel-ms" />
 			<Option target="debug-linux" />
 			<Option target="debug-ms" />
+			<Option target="release-ms" />
 		</Unit>
 		<Extensions>
 			<envvars />
