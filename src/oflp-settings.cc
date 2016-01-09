@@ -172,7 +172,7 @@ void            OpenFilesListPlusSettings:: p0_ctor_01  (OflpOptLog& _opt_log, O
         OflpOptSel      _opt_sel    )
             :   wxFrame (   _parent             , wxNewId()     ,   wxT("title")    ,
                             wxDefaultPosition   , wxDefaultSize ,
-                            ~( wxCAPTION) & wxRESIZE_BORDER                         )   ,
+                            (wxBORDER_NONE)                         )   ,
                 a_parent    (_parent)
 {
     //  ------------------------------------------------------------------------
@@ -208,7 +208,6 @@ void            OpenFilesListPlusSettings:: p0_ctor_02  (wxPoint& _scr_pos, wxSi
         OflpOptSel      _opt_sel    )
             :   wxFrame (   _parent             , wxNewId()     ,   wxT("title")    ,
                             wxDefaultPosition   , wxDefaultSize ,
-                            //~( wxCAPTION)                                           )   ,
                             (wxBORDER_NONE)                         )   ,
                 a_parent    (_parent)
 {

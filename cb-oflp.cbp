@@ -156,8 +156,8 @@ Targets
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
-			<Target title="Debug-linux">
-				<Option output="plugin/Debug/linux/OpenFilesListPlus.so" prefix_auto="0" extension_auto="0" />
+			<Target title="debug-linux">
+				<Option output="plugin/debug/linux/OpenFilesListPlus.so" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -184,12 +184,12 @@ Targets
 				</Linker>
 				<ExtraCommands>
 					<Add after="chmod u=rwx ./src/post-build.bash" />
-					<Add after="./src/post-build.bash Debug" />
+					<Add after="./src/post-build.bash debug" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
-			<Target title="Debug-ms">
-				<Option output="plugin/Debug/ms/OpenFilesListPlus.dll" prefix_auto="0" extension_auto="0" />
+			<Target title="debug-ms">
+				<Option output="plugin/debug/ms/OpenFilesListPlus.dll" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -224,8 +224,8 @@ Targets
 					<Add directory="$(#wx.lib)/gcc_dll" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="zip -j9 plugin/Debug/ms/OpenFilesListPlus.zip          src/manifest.xml src/oflp.xrc graphics/oflp-panel-header-button-bar-padding.png graphics/oflp-panel-header-button-bar-blue.png graphics/oflp-panel-header-button-bar-green.png graphics/oflp-panel-header-button-bar-orange.png graphics/oflp-panel-header-button-bar-red.png  graphics/oflp-panel-header-button-bar-up.png graphics/oflp-panel-header-button-bar-down.png" />
-					<Add after="zip -j9 plugin/Debug/ms/OpenFilesListPlus.cbplugin plugin/Debug/ms/OpenFilesListPlus.dll plugin/Debug/ms/OpenFilesListPlus.zip" />
+					<Add after="zip -j9 plugin/debug/ms/OpenFilesListPlus.zip          src/manifest.xml src/oflp.xrc graphics/oflp-panel-header-button-bar-padding.png graphics/oflp-panel-header-button-bar-blue.png graphics/oflp-panel-header-button-bar-green.png graphics/oflp-panel-header-button-bar-orange.png graphics/oflp-panel-header-button-bar-red.png  graphics/oflp-panel-header-button-bar-up.png graphics/oflp-panel-header-button-bar-down.png" />
+					<Add after="zip -j9 plugin/debug/ms/OpenFilesListPlus.cbplugin plugin/debug/ms/OpenFilesListPlus.dll plugin/debug/ms/OpenFilesListPlus.zip" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
@@ -235,8 +235,8 @@ Targets
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-ms" />
-			<Option target="Debug-linux" />
-			<Option target="Debug-ms" />
+			<Option target="debug-linux" />
+			<Option target="debug-ms" />
 		</Unit>
 		<Unit filename="notes/changelog.h">
 			<Option virtualFolder="notes/" />
@@ -244,32 +244,32 @@ Targets
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-linux-symbols" />
 			<Option target="devel-ms" />
-			<Option target="Debug-linux" />
-			<Option target="Debug-ms" />
+			<Option target="debug-linux" />
+			<Option target="debug-ms" />
 		</Unit>
 		<Unit filename="notes/new-list.h">
 			<Option virtualFolder="notes/" />
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-ms" />
-			<Option target="Debug-linux" />
-			<Option target="Debug-ms" />
+			<Option target="debug-linux" />
+			<Option target="debug-ms" />
 		</Unit>
 		<Unit filename="notes/notes.h">
 			<Option virtualFolder="notes/" />
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-ms" />
-			<Option target="Debug-linux" />
-			<Option target="Debug-ms" />
+			<Option target="debug-linux" />
+			<Option target="debug-ms" />
 		</Unit>
 		<Unit filename="notes/todo.h">
 			<Option virtualFolder="notes/" />
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-ms" />
-			<Option target="Debug-linux" />
-			<Option target="Debug-ms" />
+			<Option target="debug-linux" />
+			<Option target="debug-ms" />
 		</Unit>
 		<Unit filename="src/devel-memleaks/devel-memleaks.cc">
 			<Option virtualFolder="src/devel-memleaks/" />
@@ -281,8 +281,8 @@ Targets
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-linux-symbols" />
 			<Option target="devel-ms" />
-			<Option target="Debug-linux" />
-			<Option target="Debug-ms" />
+			<Option target="debug-linux" />
+			<Option target="debug-ms" />
 		</Unit>
 		<Unit filename="src/oflp-common-classes.hh">
 			<Option virtualFolder="src/common/" />
@@ -296,8 +296,8 @@ Targets
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-linux-symbols" />
 			<Option target="devel-ms" />
-			<Option target="Debug-linux" />
-			<Option target="Debug-ms" />
+			<Option target="debug-linux" />
+			<Option target="debug-ms" />
 		</Unit>
 		<Unit filename="src/oflp-hstring.hh">
 			<Option virtualFolder="src/common/" />
@@ -326,8 +326,8 @@ Targets
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-linux-symbols" />
 			<Option target="devel-ms" />
-			<Option target="Debug-linux" />
-			<Option target="Debug-ms" />
+			<Option target="debug-linux" />
+			<Option target="debug-ms" />
 		</Unit>
 		<Unit filename="src/oflp-panel.hh">
 			<Option virtualFolder="src/panels/h/" />
@@ -335,8 +335,8 @@ Targets
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-linux-symbols" />
 			<Option target="devel-ms" />
-			<Option target="Debug-linux" />
-			<Option target="Debug-ms" />
+			<Option target="debug-linux" />
+			<Option target="debug-ms" />
 		</Unit>
 		<Unit filename="src/oflp-plugin-dnd.cc">
 			<Option virtualFolder="src/plugin/c/" />
@@ -386,8 +386,8 @@ Targets
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-linux-symbols" />
 			<Option target="devel-ms" />
-			<Option target="Debug-linux" />
-			<Option target="Debug-ms" />
+			<Option target="debug-linux" />
+			<Option target="debug-ms" />
 		</Unit>
 		<Unit filename="src/oflp-settings-options.hh">
 			<Option virtualFolder="src/settings/" />
@@ -404,16 +404,16 @@ Targets
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-linux-symbols" />
 			<Option target="devel-ms" />
-			<Option target="Debug-linux" />
-			<Option target="Debug-ms" />
+			<Option target="debug-linux" />
+			<Option target="debug-ms" />
 		</Unit>
 		<Unit filename="src/post-build.bash">
 			<Option virtualFolder="src/common/" />
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-ms" />
-			<Option target="Debug-linux" />
-			<Option target="Debug-ms" />
+			<Option target="debug-linux" />
+			<Option target="debug-ms" />
 		</Unit>
 		<Extensions>
 			<envvars />
