@@ -180,7 +180,7 @@ void            OpenFilesListPlusSettings:: p0_ctor_01  (OflpOptLog& _opt_log, O
     p0_ctor_01(_opt_log, _opt_sel);
     //  ........................................................................
     //  flags etc...
-    p0_ctor_02(_scr_pos, _scr_size):
+    p0_ctor_02(_scr_pos, _scr_size);
 }
 
 void            OpenFilesListPlusSettings:: p0_ctor_02  (wxPoint& _scr_pos, wxSize& _scr_size)
