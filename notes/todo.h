@@ -72,6 +72,9 @@
 
 +(028)  2016.01.08  unify OflpPanelSettings constructor code for all platforms
                     and all wxWIdgets version
+
++(029)  2018.01.04  OflpPanelItemInfo::eOkType is not needed anymore since method
+                    OflpPanel::z_allow_selection_changed_event() method was created
 //  ############################################################################
 (001)
 2015.08.21  Done: call to SetFocus() )
@@ -158,3 +161,5 @@
 2016.01.??  Done
 //  ============================================================================
 (028)
+//  ============================================================================
+(029)

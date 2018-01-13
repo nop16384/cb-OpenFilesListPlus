@@ -6,24 +6,27 @@
 #ifndef __OFLP_COMMON_MACROS_HH__
 #define __OFLP_COMMON_MACROS_HH__
 //  ............................................................................
+#define OFLP_EDB_LOG(edb)       edb, edb->GetTitle().wc_str(), edb->GetFilename().wc_str()
+#define OFLP_PANEL_LOG(p)       p, p->uid().str().wc_str(), p->title().wc_str()
+//  ............................................................................
 #define OFLP01(SIZE_T_VARIABLE) ( static_cast< int >( SIZE_T_VARIABLE ) )
 //  ............................................................................
 #define GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF()                                   \
     lab_exit_success:                                                           \
-        OFLP_FUNC_EXIT_LOG();                                                   \
+        OFLP_LOG_FUNC_EXIT();                                                   \
         return true;                                                            \
                                                                                 \
     lab_exit_failure:                                                           \
-        OFLP_FUNC_EXIT_LOG();                                                   \
+        OFLP_LOG_FUNC_EXIT();                                                   \
         return false;
 
 #define GWR_LABELS_EXIT_SUCCESS_FAILURE_RET()                                   \
     lab_exit_success:                                                           \
-        OFLP_FUNC_EXIT_LOG();                                                   \
+        OFLP_LOG_FUNC_EXIT();                                                   \
         return;                                                                 \
                                                                                 \
     lab_exit_failure:                                                           \
-        OFLP_FUNC_EXIT_LOG();                                                   \
+        OFLP_LOG_FUNC_EXIT();                                                   \
         return;
 //  ............................................................................
 //! Return immediately on degraded mode
@@ -71,10 +74,10 @@
     for ( C::const_iterator IT = (V).begin() ; IT != (V).end() ; IT++ )
 
 //  break stl loop
-#define OFLP_STL_RET(V)                                                         \
+#define OFLP_STL_RET()                                                          \
         return;
 
-#define OFLP_STL_RETV(V,RETVAL)                                                 \
+#define OFLP_STL_RETV(RETVAL)                                                  \
         return (RETVAL);
 
 #endif

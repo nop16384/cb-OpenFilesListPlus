@@ -8,12 +8,13 @@
 //  ............................................................................
 #include    "oflp-common.hh"
 //  ............................................................................
-#include    <wx/dnd.h>                                                          //  for OpenFilesListPlusPanelDropTarget
+#include    <wx/dnd.h>                                                                              //  for OpenFilesListPlusPanelDropTarget
 //  ............................................................................
 #include    <wx/dynarray.h>
 
 #include    "oflp-panel-header.hh"
 #include    "oflp-panel-utils.hh"
+#include    "oflp-panel-utils-dnd.hh"                                                               // separate file for thinness
 /// ****************************************************************************
 //! \class  OpenFilesListPlusPanel
 //!
@@ -26,19 +27,22 @@ class OpenFilesListPlusPanel              : public wxPanel
     friend class    OflpModEditors;
     //  ------------------------------------------------------------------------
   protected:
+    oflp::UID                           a_uid;
     bool                                a_bulk;
     bool                                a_allow_kill_focus_event;
+    static  wxTreeItemId                A_last_wxTreeItemId_dragged_and_dropped;
 
     OflpPanelHeader                 *   dw_header;
     wxTreeCtrl                      *   d_tree;
     wxBoxSizer                      *   dw_sizer;
 
-    EditorArray                         a_editors_array;                        //  speed up finding editors
+    EditorArray                         a_editors_array;                                            //  speed up finding editors
     oflp::HString::HArray               a_harray;
 
     OpenFilesListPlusPanelDropTarget*   d_drop_target;
     //  ........................................................................
   public:
+    oflp::UID                       uid()                       const   { return a_uid;                 }
     bool                            is_bulk()                   const   { return a_bulk;                }
     EditorArray const   *           get_editors()               const   { return &a_editors_array;      }
     wxTreeCtrl  const   *   const   tree()                      const   { return d_tree;                }
@@ -93,16 +97,18 @@ class OpenFilesListPlusPanel              : public wxPanel
     void                    OnDragEnd   (wxTreeEvent&);
     //  ------------------------------------------------------------------------
   private:
-    void                    p0_allow_kill_focus_event               (bool);
-
+            void            z_event_allow__kill_focus                       (bool);
+    static  void            Z_set_last_wxTreeItemId_dragged_and_dropped     (wxTreeItemId);
+public:
+            bool            x_event_allowed__kill_focus             ()  { return a_allow_kill_focus_event;                  }
+    static  wxTreeItemId    X_last_wxTreeItemId_dragged_and_dropped ()  { return A_last_wxTreeItemId_dragged_and_dropped;   }
   public:
     void                    evh_title_static_LEFT_DOWN              (wxMouseEvent   &);
     void                    evh_title_dynamic_TEXT_ENTER            (wxCommandEvent &);
     void                    evh_title_dynamic_KILL_FOCUS            (wxFocusEvent   &);
     //  ------------------------------------------------------------------------
   public:
-             OpenFilesListPlusPanel();
-             OpenFilesListPlusPanel(OpenFilesListPlus* _ofl_plugin, wxWindow* _parent, wxString _title, bool _bulk = false);
+             OpenFilesListPlusPanel(wxWindow* _parent, wxString _title, oflp::UID _uid, bool _bulk);
     virtual ~OpenFilesListPlusPanel();
 };
 /// ****************************************************************************
@@ -115,7 +121,7 @@ class OpenFilesListPlusPanelBulk          : public OpenFilesListPlusPanel
 {
     //  ------------------------------------------------------------------------
   public:
-             OpenFilesListPlusPanelBulk(OpenFilesListPlus* _ofl_plugin, wxWindow* _parent, wxString _title);
+             OpenFilesListPlusPanelBulk(wxWindow* _parent, wxString _title);
     virtual ~OpenFilesListPlusPanelBulk();
 };
 /*

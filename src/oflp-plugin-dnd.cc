@@ -5,33 +5,37 @@
 
 #include    "oflp-plugin.hh"
 
+#include    "oflp-panel.hh"
 #include    "oflp-plugin-mod-panels.hh"
-#include    "oflp-plugin-mod-editors.hh"
-//  ############################################################################
+//  ################################################################################################
 //
 //                          EDITOR EVENTS
 //
-//  ############################################################################
-void    OpenFilesListPlus:: editor_drag_and_dropped()
+//  ################################################################################################
+void    OpenFilesListPlus:: editor_drag_and_dropped(
+    OflpPanel   *   _panel_dst  ,
+    OflpPanel   *   _panel_src  ,
+    EditorBase  *   _ed         )
 {
-    if ( ! a_dnd_panel_dst )
+    if ( ! _panel_dst )
     {
-        GWRCB_TKE("editor_drag_and_dropped():%s", wxS("a_dnd_panel_dst is NULL"));
+        GWRCB_TKE("editor_drag_and_dropped():%s", wxS("_panel_dst is NULL"));
         return;
     }
-    if ( ! a_dnd_panel_src )
+    if ( ! _panel_src )
     {
-        GWRCB_TKE("editor_drag_and_dropped():%s", wxS("a_dnd_panel_src is NULL"));
+        GWRCB_TKE("editor_drag_and_dropped():%s", wxS("_panel_src is NULL"));
         return;
     }
-    if ( ! a_dnd_editor_base )
+    if ( ! _ed )
     {
-        GWRCB_TKE("editor_drag_and_dropped():%s", wxS("a_dnd_editor_base is NULL"));
+        GWRCB_TKE("editor_drag_and_dropped():%s", wxS("_ed is NULL"));
         return;
     }
-    //  ................................................................
-    editors()->mov( a_dnd_panel_dst, a_dnd_panel_src, a_dnd_editor_base );
-
+    //  ............................................................................................
+    _panel_src->editor_del( _ed );
+    _panel_dst->editor_add( _ed );
+    ///layout()->file_assignment_update( _nn_edb, _nn_dst );
     panels()->resize_and_layout();
 }
 

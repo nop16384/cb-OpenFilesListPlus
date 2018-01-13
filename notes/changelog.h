@@ -9,3 +9,7 @@
 - TKI editor name on each editor event
 - 2 configurations for OpenFilesListPlusSettings because wxFrame behaves
   differently on linux & ms
+2018.01.04
+- proper wxWidgets DnD ( GetData() call forgotten ! )
+- renamed OpenFilesListPlusPanelItemData in OpenFilesListPlusPanelTiData
+- renamed OpenFilesListPlusPanelItemInfo in OpenFilesListPlusPanelTiEventInfo

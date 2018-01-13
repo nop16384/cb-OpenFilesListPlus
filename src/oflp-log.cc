@@ -65,7 +65,7 @@ class   LogFrame : public wxFrame
 
   public:
             LogFrame(wxWindow* _parent)
-                :   wxFrame(_parent, wxNewId(), wxString::FromUTF8("OpenFilesListPlus"), wxDefaultPosition, wxSize(900,800))
+                :   wxFrame(_parent, wxNewId(), wxString::FromUTF8("OpenFilesListPlus logs"), wxDefaultPosition, wxSize(1200,800))
                 {
                     dw_log_txt_ctrl     =   new wxTextCtrl(
                     this            , wxNewId()                             ,
@@ -131,20 +131,30 @@ class   LogFrame : public wxFrame
             dw_log_txt_ctrl->AppendText( _wxs + wxString::FromUTF8("\n") );
         }
 
-    //wxTextAttr(const wxColour& colText, const wxColour& colBack = wxNullColour, const wxFont& font = wxNullFont, wxTextAttrAlignment alignment = wxTEXT_ALIGNMENT_DEFAULT)
-
     void    set_text_col_fg(const wxColour& _wx_col)
         {
             dw_log_txt_ctrl->SetDefaultStyle( wxTextAttr(_wx_col) );
         }
+
+    void    set_text_attr(const wxTextAttr& _wx_att)
+        {
+            dw_log_txt_ctrl->SetDefaultStyle( _wx_att );
+        }
 };
 //  ############################################################################
-wxColour    A_colour_log_inf    (  38 , 167 ,  38 );
+wxColour    A_colour_fun_ent    (   0 , 255 ,   0 );
+wxColour    A_colour_log_inf    (  58 , 187 ,  58 );
 wxColour    A_colour_log_wng    ( 197 , 126 ,   0 );
 wxColour    A_colour_log_err    ( 255 ,   0 ,   0 );
 wxColour    A_colour_log_tki    ( 167 , 167 , 167 );
 wxColour    A_colour_log_tkw    ( 197 , 126 ,   0 );
 wxColour    A_colour_log_tke    ( 255 ,   0 ,   0 );
+
+wxFont      A_fnt_001( 8, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxString::FromUTF8("monospace") );
+wxFont      A_fnt_002( 8, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD,   false, wxString::FromUTF8("monospace") );
+
+wxTextAttr  A_att_001( A_colour_log_inf, wxNullColour, A_fnt_001);
+wxTextAttr  A_att_002( A_colour_fun_ent, wxNullColour, A_fnt_002);
 
 Spacer              a_spacer;
 LogFrame        *   dw_log_frame    =   NULL;
@@ -170,16 +180,16 @@ void    Log_spc_dec()
 
 void    Log_function_mark   (const wxChar* _funcname)
 {
-    GWRCB_TCS("%s%s%s", wxS("----------  "), _funcname, wxS("  ---------- ") );
+    GWRCB_FNE("%s%s%s", wxS("----------  "), _funcname, wxS("  ---------- ") );
 }
 
 void    Log_function_enter  (const wxChar* _funcname)
 {
     oflp::Log_spc_inc();
 
-    GWRCB_TCS("%s", wxS("***********************************************************")  );
-    GWRCB_TCS("%s",  _funcname);
-    GWRCB_TCS("%s", wxS("***********************************************************")  );
+    oflp::Log_window_set_text_attr(oflp::A_att_002);
+    GWRCB_LOG(wxS("%s%s"), _funcname);
+    oflp::Log_window_set_text_attr(oflp::A_att_001);
 }
 
 void    Log_function_exit   ()
@@ -232,6 +242,14 @@ void    Log_window_set_text_col_fg  (wxColour& _wx_col)
     if ( dw_log_frame )
     {
         dw_log_frame->set_text_col_fg(_wx_col);
+    }
+}
+
+void    Log_window_set_text_attr    (wxTextAttr& _att)
+{
+    if ( dw_log_frame )
+    {
+        dw_log_frame->set_text_attr(_att);
     }
 }
 

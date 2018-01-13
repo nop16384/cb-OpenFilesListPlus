@@ -45,7 +45,7 @@
 #define EARLGREY_USE_STL_ACCESSORS
 //  ............................................................................
 #include    "oflp-log.hh"                                                       //  OFLP plugin log system
-#include    "oflp-hstring.hh"                                                   //  HString
+#include    "oflp-globals.hh"
 //  ............................................................................
 #define OFLP_FILE_VERSION_MAJOR_STR     "1"
 #define OFLP_FILE_VERSION_MINOR_STR     "0"

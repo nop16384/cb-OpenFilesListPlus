@@ -21,6 +21,8 @@ class   wxWindow;
 namespace   oflp
 {
 
+extern  wxColour    A_colour_fun_ent;
+
 extern  wxColour    A_colour_log_inf;
 extern  wxColour    A_colour_log_wng;
 extern  wxColour    A_colour_log_err;
@@ -34,6 +36,7 @@ extern  bool        A_log_window;
 extern  void        Log_console                 (wxString&);
 extern  void        Log_window                  (wxString&);
 extern  void        Log_window_set_text_col_fg  (wxColour&);
+extern  void        Log_window_set_text_attr    (wxTextAttr&);
 extern  bool        Log_window_opened           ();
 extern  void        Log_window_open             (wxWindow*);
 extern  void        Log_window_close            ();
@@ -54,7 +57,7 @@ extern          int             Log_szt2int         (size_t _szt);
     wxString tmp =                                                              \
         wxString::Format(                                                       \
             WXFORMAT                    ,                                       \
-            oflp::Log_spc_wxc()   ,                                             \
+            oflp::Log_spc_wxc()         ,                                       \
             __VA_ARGS__                 );                                      \
                                                                                 \
     if ( oflp::A_log_console )                                                  \
@@ -67,9 +70,9 @@ extern          int             Log_szt2int         (size_t _szt);
     }                                                                           \
 }
 //  ............................................................................
-#define GWRCB_TCS(FORMAT, ...)                                                  \
+#define GWRCB_FNE(FORMAT, ...)                                                  \
 {                                                                               \
-    oflp::Log_window_set_text_col_fg(oflp::A_colour_log_inf);                   \
+    oflp::Log_window_set_text_col_fg(oflp::A_colour_fun_ent);                   \
     GWRCB_LOG(wxS("%s"        FORMAT), __VA_ARGS__);                            \
 }
 
@@ -107,14 +110,26 @@ extern          int             Log_szt2int         (size_t _szt);
 //  ............................................................................
 #ifdef  OFLP_LOG_FUNCTIONS
 
-#define OFLP_FUNC_ENTER_LOG(FUNCNAME)                                           \
+#define OFLP_LOG_FUNC_ENTER(FUNCNAME)                                           \
         oflp::Log_function_enter(wxS(FUNCNAME));
 
-#define OFLP_FUNC_EXIT_LOG()                                                    \
+#define OFLP_LOG_FUNC_EXIT()                                                    \
         oflp::Log_function_exit();
+
+#define OFLP_LOG_FUNC_INC()                                                     \
+        oflp::Log_spc_inc();
+
+#define OFLP_LOG_FUNC_DEC()                                                     \
+        oflp::Log_spc_dec();
 
 #define OFLP_FUNC_ENTER_MARK(FUNCNAME)                                          \
         oflp::Log_function_mark(wxS(FUNCNAME));
+
+#else
+
+#define OFLP_LOG_FUNC_ENTER(FUNCNAME)
+#define OFLP_LOG_FUNC_EXIT()
+#define OFLP_FUNC_ENTER_MARK(FUNCNAME)
 
 #endif                                                                          //  #ifdef OFLP_LOG_FUNCTIONS
 
@@ -151,8 +166,10 @@ extern  void        Log_window_close            ();
 #define GWRCB_WNG(FORMAT, ...)
 #define GWRCB_ERR(FORMAT, ...)
 //  ............................................................................
-#define OFLP_FUNC_ENTER_LOG(FUNCNAME)
-#define OFLP_FUNC_EXIT_LOG()
+#define OFLP_LOG_FUNC_ENTER(FUNCNAME)
+#define OFLP_LOG_FUNC_EXIT()
+#define OFLP_LOG_FUNC_INC()
+#define OFLP_LOG_FUNC_DEC()
 #define OFLP_FUNC_ENTER_MARK(FUNCNAME)
 
 }

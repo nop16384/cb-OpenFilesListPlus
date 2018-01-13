@@ -3,28 +3,29 @@
  * http://www.gnu.org/licenses/gpl-3.0.html
  */
 
-/*******************************************************************************
+/***************************************************************************************************
  * Name:      cb-oflp-plugin
  * Purpose:   Code::Blocks plugin
  * Author:     ()
  * Created:   2015-08-23
  * Copyright:
  * License:   GPL
- ******************************************************************************/
+ **************************************************************************************************/
 #ifndef __OFLP_PLUGIN_HH__
 #define __OFLP_PLUGIN_HH__
-//  ............................................................................
-#include    "oflp-common.hh"                                                    //  standard wx includes + OFLP log system
-/// ****************************************************************************
+//  ................................................................................................
+#include    "oflp-common.hh"                                                                        //  standard wx includes + OFLP log system
+#include    "oflp-plugin-mod-layout.hh"
+/// ************************************************************************************************
 //! \class  OpenFilesListPlus
 //!
 //! \brief
-/// ****************************************************************************
+/// ************************************************************************************************
 class OpenFilesListPlus : public cbPlugin
 {
-        //  ####################################################################
+        //  ########################################################################################
         //                      BOILERPLATE STUFF
-        //  ####################################################################
+        //  ########################################################################################
     public:
         /** Constructor. */
         OpenFilesListPlus();
@@ -120,9 +121,9 @@ class OpenFilesListPlus : public cbPlugin
           *         behaviour is undefined...
           */
         virtual void OnRelease(bool appShutDown);
-        //  ####################################################################
+        //  ########################################################################################
         //                      CORE
-        //  ####################################################################
+        //  ########################################################################################
       private:
         static  OpenFilesListPlus   *   s_singleton;
 
@@ -136,24 +137,22 @@ class OpenFilesListPlus : public cbPlugin
         friend class OflpModSettings;                                           //  cf bugs#18
 
       protected:
-        void    reset();
+        void    y_reset();
         void    degrade();
         bool    degraded();
 
       protected:
         void    RefreshOpenFileState        (EditorBase* _edb);
-        void    RefreshOpenFileLayout       (EditorBase* _edb);
-        void    RefreshOpenFilesLayout      ();
+        void    SyncEditorToLayout          (EditorBase* _edb);
+        void    SyncEditorsToLayout         ();
 
       public:
         void    emergency();
 
         void    dump_project_manager_state  ();
-
-        bool    FindCbProjectForFile        (wxString const & _abs_fpath, cbProject** _pro, ProjectFile** _pjf);
-        //  ####################################################################
+        //  ########################################################################################
         //                      EVENTS
-        //  ####################################################################
+        //  ########################################################################################
       public:
         void    evh_view_open_files_plus        (wxCommandEvent& event);
         void    evh_update_ui                   (wxUpdateUIEvent& event);
@@ -184,34 +183,68 @@ class OpenFilesListPlus : public cbPlugin
         void    evh_panel_header_button_clicked_opt     (wxCommandEvent &);
 
         void    evh_settings_activated                  (wxActivateEvent& _e);
-        //  ####################################################################
+        //  ########################################################################################
         //                      DRAG N DROP
-        //  ####################################################################
-      private:
-        OflpPanel           *   a_dnd_panel_src;
-        OflpPanel           *   a_dnd_panel_dst;
-        EditorBase          *   a_dnd_editor_base;
-
+        //  ########################################################################################
       public:
-        OflpPanel   const   *   dnd_panel_src() { return a_dnd_panel_src;   }
-        OflpPanel   const   *   dnd_panel_dst() { return a_dnd_panel_dst;   }
-        EditorBase          *   dnd_editor()    { return a_dnd_editor_base; }
-
+          void                    editor_drag_and_dropped(OflpPanel* _panel_dst, OflpPanel* _panel_src, EditorBase* _ed);
+        //  ########################################################################################
+        //                      UTILS
+        //  ########################################################################################
       public:
-        void                    dnd_panel_src_set   (OflpPanel* _panel)
-            {
-                a_dnd_panel_src = _panel;
-            }
-        void                    dnd_panel_dst_set   (OflpPanel* _panel)
-            {
-                a_dnd_panel_dst = _panel;
-            }
-        void                    dnd_editor_set      (EditorBase* _edb)
-            {
-                a_dnd_editor_base = _edb;
-            }
+        class   CB
+        {
+          public:
+            static  bool    X_cbEditor_from_file_path                   (cbEditor** _ed, wxString const & _fp);
 
-        void                    editor_drag_and_dropped();
+            enum    _eEdbInfoType
+            {
+                ePjf    =   (int)0x01   ,
+                ePrj    =   (int)0x02   ,
+                ePjas   =   (int)0x04   ,
+                eFlas   =   (int)0x08
+            };
+            typedef int eEdbInfoType;
+
+            class   EdbInfos
+            {
+                friend class    OpenFilesListPlus;
+
+              public:
+                eEdbInfoType                a_inf;
+
+                wxString                    a_fn;
+                wxString                    a_fp;
+                wxString                    a_rfp;
+
+              private:
+                ProjectFile             *   a_pjf;
+                cbProject               *   a_prj;
+
+                OflpModLayout::PjAs             *   a_pjas;
+                OflpModLayout::FlAs     const   *   a_flas;
+
+              public:
+                ProjectFile             const   *   pjf()   { return a_pjf;     }
+                cbProject               const   *   prj()   { return a_prj;     }
+                OflpModLayout::PjAs             *   pjas()  { return a_pjas;    }
+                OflpModLayout::FlAs     const   *   flas()  { return a_flas;    }
+
+                void                                clear()
+                                                    {
+                                                        a_inf   =   0;
+                                                        a_fn.Empty(); a_fp.Empty(); a_rfp.Empty();
+                                                        a_pjf   = nullptr;
+                                                        a_prj   = nullptr;
+                                                        a_pjas  = nullptr;
+                                                        a_flas  = nullptr;
+                                                    }
+                EdbInfos()  { clear();  }
+                ~EdbInfos() {           }
+            };
+
+            static  bool    X_EditorBase_get_infos  (EdbInfos* _inf, eEdbInfoType _type, EditorBase* _nn_edb);
+        };
         //  ====================================================================
         //  modules
         #define OFPL_MEMBER_MODULE(MODULE_NAME, MEMBER_NAME, GET_NAME)          \
@@ -229,6 +262,8 @@ class OpenFilesListPlus : public cbPlugin
         OFPL_MEMBER_MODULE(OflpModSettings      , d_settings        , settings  );
         OFPL_MEMBER_MODULE(OflpModRunflow       , d_runflow         , runflow   );
         //  ====================================================================
+
+
     private:
         DECLARE_EVENT_TABLE();
 };

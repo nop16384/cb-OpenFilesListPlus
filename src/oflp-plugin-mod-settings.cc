@@ -24,7 +24,7 @@
 void    OflpModSettings::   action                      (wxCommandEvent &   _e)
 {
     //  ........................................................................
-    OFLP_FUNC_ENTER_LOG("OFLP::Settings::action()");
+    OFLP_LOG_FUNC_ENTER("OFLP::Settings::action()");
     //  ........................................................................
     //  ........................................................................
     //  widget is shown,
@@ -33,7 +33,7 @@ void    OflpModSettings::   action                      (wxCommandEvent &   _e)
     else
         popout(_e);
 
-    OFLP_FUNC_EXIT_LOG();
+    OFLP_LOG_FUNC_EXIT();
 }
 
 void    OflpModSettings::   settings_window_activated   (bool _b)
@@ -142,7 +142,7 @@ void    OflpModSettings::   update_from_user_input      ()
 {
     a_opt_log.enabled    = true;
     a_opt_log.window     = true;
-    a_opt_log.console    = false;
+    a_opt_log.console    = true;
 
     a_opt_sel.set_dclick(true);
 

@@ -6,19 +6,19 @@ class   EditorBase;
 
 class   OpenFilesListPlus;
 
-class   OpenFilesListPlusPanel;
 class   OpenFilesListPlusHeader;
+class   OpenFilesListPlusPanel;
 class   OpenFilesListPlusPanelHeader;
-class   OpenFilesListPlusPanelItemData;
-class   OpenFilesListPlusPanelItemInfo;
+class   OpenFilesListPlusPanelTreeItemData;
+class   OpenFilesListPlusPanelTreeItemEventInfo;
 class   OpenFilesListPlusSettings;
 
-typedef OpenFilesListPlusPanel          OflpPanel;
-typedef OpenFilesListPlusPanelItemData  OflpPanelItemData;
-typedef OpenFilesListPlusPanelItemInfo  OflpPanelItemInfo;
-typedef OpenFilesListPlusHeader         OflpHeader;
-typedef OpenFilesListPlusPanelHeader    OflpPanelHeader;
-typedef OpenFilesListPlusSettings       OflpSettings;
+typedef OpenFilesListPlusHeader                 OflpHeader;
+typedef OpenFilesListPlusPanel                  OflpPanel;
+typedef OpenFilesListPlusPanelHeader            OflpPanelHeader;
+typedef OpenFilesListPlusPanelTreeItemData      OflpPanelTiData;
+typedef OpenFilesListPlusPanelTreeItemEventInfo OflpPanelTiEventInfo;
+typedef OpenFilesListPlusSettings               OflpSettings;
 
 class   OflpModGfx;
 class   OflpModLayout;

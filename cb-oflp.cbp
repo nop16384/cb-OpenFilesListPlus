@@ -5,7 +5,7 @@
 		<Option title="cb-oflp-plugin" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="src\;src\plugin\;src\panels\;src\panels\c\;src\panels\h\;src\plugin\c\;src\plugin\h\;src\log\;src\common\;src\devel-memleaks\;src\settings\;notes\;" />
+		<Option virtualFolders="src/;src/plugin/;src/panels/;src/panels/c/;src/panels/h/;src/plugin/c/;src/plugin/h/;src/log/;src/common/;src/devel-memleaks/;src/settings/;notes/;build/;build/linux/;" />
 		<Option show_notes="0">
 			<notes>
 				<![CDATA[OpenFilesListPlus plugin project
@@ -27,28 +27,30 @@ Targets
 				<Option run_host_application_in_terminal="0" />
 				<Compiler>
 					<Add option="-ansi" />
-					<Add option="-g" />
+					<Add option="-g -ggdb" />
 					<Add option="-fPIC" />
-					<Add option="`wx-config --cflags`" />
-					<Add option="-DBUILDING_PLUGIN" />
-					<Add option="-DWXUSINGDLL" />
-					<Add option="-DcbDEBUG" />
-					<Add option="-DCB_PRECOMP" />
-					<Add option="-DWX_PRECOMP" />
-					<Add option="-DwxUSE_UNICODE" />
+					<Add option="-Winvalid-pch" />
+					<Add option="-fexceptions" />
+					<Add option="`wx-config --version=$(OFLP_WXVERSION) --toolkit=$(OFLP_WXTOOLKIT) --unicode=$(OFLP_WXUNICODE) --debug=$(OFLP_WXDEBUG) --cflags`" />
 					<Add option="-DOFLP_LINUX" />
-					<Add option="-DOFLP_DEBUG" />
-					<Add option="-DOFLP_LOG_FUNCTIONS" />
 					<Add option="-DOFLP_LOG" />
-					<Add directory="$(#cb)/include" />
-					<Add directory="$(#cb)/sdk/wxscintilla/include" />
+					<Add option="-DOFLP_LOG_DND" />
+					<Add option="-DOFLP_LOG_FUNCTIONS" />
+					<Add option="-DOFLP_DEBUG_LAYOUT" />
+					<Add option="-DTIXML_USE_STL" />
+					<Add option="-DDEBUG" />
+					<Add option="-DCB_AUTOCONF" />
+					<Add option="-DCB_PRECOMP" />
+					<Add option="-DPIC" />
+					<Add directory="$(OFLP_CBSRC)/include" />
+					<Add directory="$(OFLP_CBSRC)/sdk/wxscintilla/include" />
 				</Compiler>
 				<Linker>
-					<Add option="`wx-config --libs`" />
+					<Add option="`wx-config --version=$(OFLP_WXVERSION) --toolkit=$(OFLP_WXTOOLKIT) --unicode=$(OFLP_WXUNICODE) --debug=$(OFLP_WXDEBUG) --libs`" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="chmod u=rwx ./src/post-build.bash" />
-					<Add after="./src/post-build.bash devel" />
+					<Add after="chmod u=rwx ./build/linux/post-build.bash" />
+					<Add after="./build/linux/post-build.bash devel $(OFLP_WXVERSION)" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
@@ -269,6 +271,13 @@ Targets
 				</ExtraCommands>
 			</Target>
 		</Build>
+		<Unit filename="build/linux/post-build.bash">
+			<Option virtualFolder="build/linux/" />
+			<Option target="devel-linux" />
+			<Option target="devel-linux-configure" />
+			<Option target="devel-linux-memleaks" />
+			<Option target="devel-linux-symbols" />
+		</Unit>
 		<Unit filename="notes/bugs.h">
 			<Option virtualFolder="notes/" />
 			<Option target="devel-linux" />
@@ -305,6 +314,9 @@ Targets
 			<Option target="debug-linux" />
 			<Option target="debug-ms" />
 			<Option target="release-ms" />
+		</Unit>
+		<Unit filename="notes/techs.h">
+			<Option virtualFolder="notes/" />
 		</Unit>
 		<Unit filename="notes/todo.h">
 			<Option virtualFolder="notes/" />
@@ -345,7 +357,10 @@ Targets
 			<Option target="debug-ms" />
 			<Option target="release-ms" />
 		</Unit>
-		<Unit filename="src/oflp-hstring.hh">
+		<Unit filename="src/oflp-globals.cc">
+			<Option virtualFolder="src/common/" />
+		</Unit>
+		<Unit filename="src/oflp-globals.hh">
 			<Option virtualFolder="src/common/" />
 		</Unit>
 		<Unit filename="src/oflp-log.cc">
@@ -358,6 +373,12 @@ Targets
 			<Option virtualFolder="src/panels/c/" />
 		</Unit>
 		<Unit filename="src/oflp-panel-header.hh">
+			<Option virtualFolder="src/panels/h/" />
+		</Unit>
+		<Unit filename="src/oflp-panel-utils-dnd.cc">
+			<Option virtualFolder="src/panels/c/" />
+		</Unit>
+		<Unit filename="src/oflp-panel-utils-dnd.hh">
 			<Option virtualFolder="src/panels/h/" />
 		</Unit>
 		<Unit filename="src/oflp-panel-utils.cc">
@@ -391,12 +412,6 @@ Targets
 		</Unit>
 		<Unit filename="src/oflp-plugin-events.cc">
 			<Option virtualFolder="src/plugin/c/" />
-		</Unit>
-		<Unit filename="src/oflp-plugin-mod-editors.cc">
-			<Option virtualFolder="src/plugin/c/" />
-		</Unit>
-		<Unit filename="src/oflp-plugin-mod-editors.hh">
-			<Option virtualFolder="src/plugin/h/" />
 		</Unit>
 		<Unit filename="src/oflp-plugin-mod-gfx.hh">
 			<Option virtualFolder="src/plugin/h/" />
@@ -452,15 +467,6 @@ Targets
 			<Option target="devel-linux" />
 			<Option target="devel-linux-memleaks" />
 			<Option target="devel-linux-symbols" />
-			<Option target="devel-ms" />
-			<Option target="debug-linux" />
-			<Option target="debug-ms" />
-			<Option target="release-ms" />
-		</Unit>
-		<Unit filename="src/post-build.bash">
-			<Option virtualFolder="src/common/" />
-			<Option target="devel-linux" />
-			<Option target="devel-linux-memleaks" />
 			<Option target="devel-ms" />
 			<Option target="debug-linux" />
 			<Option target="debug-ms" />
