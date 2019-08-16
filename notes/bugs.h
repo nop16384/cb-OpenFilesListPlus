@@ -60,6 +60,8 @@
 
  (023)  2016.01.06  [oflp-panel-utils.cc]OpenFilesListPlusPanelDropTarget::OnData()
                     wxDropTarget::OnData() is not implemented on ms
+
++(024)  2019.06.17  Rename a file + add to active project -> bug when saving
 //  ############################################################################
 (001)
 //  ============================================================================

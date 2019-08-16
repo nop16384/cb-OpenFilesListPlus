@@ -5,27 +5,22 @@
 
 #ifndef __OFLP_PANEL_HH__
 #define __OFLP_PANEL_HH__
-//  ............................................................................
-#include    "oflp-common.hh"
-//  ............................................................................
+//  ................................................................................................
 #include    <wx/dnd.h>                                                                              //  for OpenFilesListPlusPanelDropTarget
-//  ............................................................................
+//  ................................................................................................
 #include    <wx/dynarray.h>
 
-#include    "oflp-panel-header.hh"
-#include    "oflp-panel-utils.hh"
-#include    "oflp-panel-utils-dnd.hh"                                                               // separate file for thinness
-/// ****************************************************************************
+#include    "oflp-util-uid.hh"
+/// ************************************************************************************************
 //! \class  OpenFilesListPlusPanel
 //!
 //! \brief  wxPanel containing a OpenFilesListPlusPanelHeader and a wxTreeCtrl
-/// ****************************************************************************
+/// ************************************************************************************************
 class OpenFilesListPlusPanel              : public wxPanel
 {
     friend class    OpenFilesListPlus;
     friend class    OflpModPanels;
-    friend class    OflpModEditors;
-    //  ------------------------------------------------------------------------
+    //  --------------------------------------------------------------------------------------------
   protected:
     oflp::UID                           a_uid;
     bool                                a_bulk;
@@ -40,18 +35,18 @@ class OpenFilesListPlusPanel              : public wxPanel
     oflp::HString::HArray               a_harray;
 
     OpenFilesListPlusPanelDropTarget*   d_drop_target;
-    //  ........................................................................
+    //  ............................................................................................
   public:
     oflp::UID                       uid()                       const   { return a_uid;                 }
     bool                            is_bulk()                   const   { return a_bulk;                }
     EditorArray const   *           get_editors()               const   { return &a_editors_array;      }
     wxTreeCtrl  const   *   const   tree()                      const   { return d_tree;                }
-    wxString    const   &           title()                     const   { return dw_header->title();    }
-    //  ------------------------------------------------------------------------
+    wxString    const   &           title()                     const;
+    //  --------------------------------------------------------------------------------------------
     static      wxString            stringize_drag_result(wxDragResult _dres);
-    //  ------------------------------------------------------------------------
+    //  --------------------------------------------------------------------------------------------
   protected:
-    void                    p0_create_tree      ();
+    void                    z_create_tree       ();
 
     wxTreeItemId            item_append         (EditorBase*);                  //  x
     wxTreeItemId            item_find           (EditorBase*);                  //  x
@@ -61,10 +56,8 @@ class OpenFilesListPlusPanel              : public wxPanel
 
     void                    items_deselect      ();
     void                    items_del           ();
-    //  ------------------------------------------------------------------------
+    //  --------------------------------------------------------------------------------------------
   protected:
-    void                    reset();
-
     bool                    editor_add      (EditorBase*);                      //  x
     bool                    editor_del      (EditorBase*);                      //  x
     void                    editor_select   (EditorBase*);
@@ -79,23 +72,22 @@ class OpenFilesListPlusPanel              : public wxPanel
 
     void                    minimize();
     void                    maximize();
-    //  ........................................................................
+    //  ............................................................................................
   public:
     void                    dump();
 
     bool                    editor_has                      (EditorBase*);
     bool                    is_minimized                    ();
-
-    EditorBase  *           editor_from_absolute_filepath   (wxString const & _absolute_filepath);
-    //  ------------------------------------------------------------------------
-  public:
-    void                    set_bg      (wxColour& _c);
-    //  ------------------------------------------------------------------------
+    //  --------------------------------------------------------------------------------------------
+  private:
+    void                    z_set_col_bg                    (wxColour& _c);
+    //void                    x_set_col_bg     (wxColour& _c);
+    //  --------------------------------------------------------------------------------------------
   protected:
     void                    OnSelect    (wxCommandEvent&);
     void                    OnDragInit  (wxTreeEvent&);
     void                    OnDragEnd   (wxTreeEvent&);
-    //  ------------------------------------------------------------------------
+    //  --------------------------------------------------------------------------------------------
   private:
             void            z_event_allow__kill_focus                       (bool);
     static  void            Z_set_last_wxTreeItemId_dragged_and_dropped     (wxTreeItemId);
@@ -106,40 +98,24 @@ public:
     void                    evh_title_static_LEFT_DOWN              (wxMouseEvent   &);
     void                    evh_title_dynamic_TEXT_ENTER            (wxCommandEvent &);
     void                    evh_title_dynamic_KILL_FOCUS            (wxFocusEvent   &);
-    //  ------------------------------------------------------------------------
+    //  --------------------------------------------------------------------------------------------
   public:
              OpenFilesListPlusPanel(wxWindow* _parent, wxString _title, oflp::UID _uid, bool _bulk);
     virtual ~OpenFilesListPlusPanel();
 };
-/// ****************************************************************************
+/// ************************************************************************************************
 //! \class  OpenFilesListPlusPanelBulk
 //!
 //! \brief  Like OpenFilesListPlusPanel, but not deletable, not renamable,
 //!     and containg the options menu
-/// ****************************************************************************
+/// ************************************************************************************************
 class OpenFilesListPlusPanelBulk          : public OpenFilesListPlusPanel
 {
-    //  ------------------------------------------------------------------------
+    //  --------------------------------------------------------------------------------------------
   public:
              OpenFilesListPlusPanelBulk(wxWindow* _parent, wxString _title);
     virtual ~OpenFilesListPlusPanelBulk();
 };
-/*
-/// ****************************************************************************
-//! \class  OpenFilesListPlusPanelOptions
-//!
-//! \brief  Options for the plugin
-/// ****************************************************************************
-class OpenFilesListPlusPanelOptions       : public wxPanel
-{
-  private:
-    OFLPHeader      *   dw_header;
-    wxBoxSizer      *   dw_sizer;
 
-  public:
-             OpenFilesListPlusPanelOptions(OpenFilesListPlus* _ofl_plugin, wxWindow* _parent);
-    virtual ~OpenFilesListPlusPanelOptions();
-};
-*/
-#endif                                                                          // __OFLP_PANEL_HH__
+#endif                                                                                              // __OFLP_PANEL_HH__
 

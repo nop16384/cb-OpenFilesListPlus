@@ -13,9 +13,6 @@
  **************************************************************************************************/
 #ifndef __OFLP_PLUGIN_HH__
 #define __OFLP_PLUGIN_HH__
-//  ................................................................................................
-#include    "oflp-common.hh"                                                                        //  standard wx includes + OFLP log system
-#include    "oflp-plugin-mod-layout.hh"
 /// ************************************************************************************************
 //! \class  OpenFilesListPlus
 //!
@@ -129,12 +126,12 @@ class OpenFilesListPlus : public cbPlugin
 
       public:
         static  OpenFilesListPlus   *   Instance()  { return s_singleton; }
-        //  ====================================================================
+        //  ========================================================================================
       private:
         bool        a_mode_degraded;
         wxMenu  *   aw_menu_view;
-        //  ====================================================================
-        friend class OflpModSettings;                                           //  cf bugs#18
+        //  ========================================================================================
+        friend class OflpModSettings;                                                               //  cf bugs#18
 
       protected:
         void    y_reset();
@@ -191,81 +188,11 @@ class OpenFilesListPlus : public cbPlugin
         //  ########################################################################################
         //                      UTILS
         //  ########################################################################################
-      public:
-        class   CB
-        {
-          public:
-            static  bool    X_cbEditor_from_file_path                   (cbEditor** _ed, wxString const & _fp);
-
-            enum    _eEdbInfoType
-            {
-                ePjf    =   (int)0x01   ,
-                ePrj    =   (int)0x02   ,
-                ePjas   =   (int)0x04   ,
-                eFlas   =   (int)0x08
-            };
-            typedef int eEdbInfoType;
-
-            class   EdbInfos
-            {
-                friend class    OpenFilesListPlus;
-
-              public:
-                eEdbInfoType                a_inf;
-
-                wxString                    a_fn;
-                wxString                    a_fp;
-                wxString                    a_rfp;
-
-              private:
-                ProjectFile             *   a_pjf;
-                cbProject               *   a_prj;
-
-                OflpModLayout::PjAs             *   a_pjas;
-                OflpModLayout::FlAs     const   *   a_flas;
-
-              public:
-                ProjectFile             const   *   pjf()   { return a_pjf;     }
-                cbProject               const   *   prj()   { return a_prj;     }
-                OflpModLayout::PjAs             *   pjas()  { return a_pjas;    }
-                OflpModLayout::FlAs     const   *   flas()  { return a_flas;    }
-
-                void                                clear()
-                                                    {
-                                                        a_inf   =   0;
-                                                        a_fn.Empty(); a_fp.Empty(); a_rfp.Empty();
-                                                        a_pjf   = nullptr;
-                                                        a_prj   = nullptr;
-                                                        a_pjas  = nullptr;
-                                                        a_flas  = nullptr;
-                                                    }
-                EdbInfos()  { clear();  }
-                ~EdbInfos() {           }
-            };
-
-            static  bool    X_EditorBase_get_infos  (EdbInfos* _inf, eEdbInfoType _type, EditorBase* _nn_edb);
-        };
-        //  ====================================================================
-        //  modules
-        #define OFPL_MEMBER_MODULE(MODULE_NAME, MEMBER_NAME, GET_NAME)          \
-          private:                                                              \
-            MODULE_NAME *   MEMBER_NAME;                                        \
-          public:                                                               \
-            MODULE_NAME *   GET_NAME()                                          \
-                {                                                               \
-                    return MEMBER_NAME;                                         \
-                }
-        OFPL_MEMBER_MODULE(OflpModGfx           , d_gfx             , gfx       );
-        OFPL_MEMBER_MODULE(OflpModLayout        , d_layout          , layout    );
-        OFPL_MEMBER_MODULE(OflpModEditors       , d_editors         , editors   );
-        OFPL_MEMBER_MODULE(OflpModPanels        , d_panels          , panels    );
-        OFPL_MEMBER_MODULE(OflpModSettings      , d_settings        , settings  );
-        OFPL_MEMBER_MODULE(OflpModRunflow       , d_runflow         , runflow   );
-        //  ====================================================================
-
-
+        //  ########################################################################################
+        //                      MODULES
+        //  ########################################################################################
     private:
         DECLARE_EVENT_TABLE();
 };
 
-#endif                                                                          // __OFLP_PLUGIN_HH__
+#endif                                                                                              // __OFLP_PLUGIN_HH__

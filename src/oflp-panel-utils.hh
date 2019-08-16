@@ -3,6 +3,11 @@
  * http://www.gnu.org/licenses/gpl-3.0.html
  */
 
+#ifndef __OFLP_PANEL_UTILS_HH__
+#define __OFLP_PANEL_UTILS_HH__
+
+#include    "oflp-common-classes.hh"
+
 /// ************************************************************************************************
 //! \class  OpenFilesListPlusPanelTreeItemData
 //!
@@ -58,7 +63,10 @@ class OpenFilesListPlusPanelTreeItemEventInfo   : public OpenFilesListPlusPanelT
                                     {
                                         if ( _type == eOkAll )          return ( ( a_tree != NULL ) && ( a_iid.IsOk() ) && OflpPanelTiData::IsOk() );
                                         if ( _type == eOkExceptData )   return ( ( a_tree != NULL ) && ( a_iid.IsOk() ) );
+                                        return false;                                               // GWR_TEK g++ does not know this statement is never reached
                                     }
     wxTreeCtrl                  *   x_get_tree()        { return a_tree;    }
     wxTreeItemId                    x_get_item_id()     { return a_iid;     }
 };
+
+#endif

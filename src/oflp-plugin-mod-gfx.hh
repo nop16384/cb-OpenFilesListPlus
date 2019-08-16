@@ -9,15 +9,15 @@
 #include    "oflp-common.hh"
 
 #include    "oflp-plugin-module.hh"
-//  ............................................................................
-#include    <wx/imaglist.h>                                                     //  for OFPLPlugin::Gfx
-#include    <wx/xrc/xmlres.h>                                                   //  for OFPLPlugin::Gfx
-#include    <wx/artprov.h>                                                      //  for OFPLPlugin::Gfx
-/// ****************************************************************************
+//  ................................................................................................
+#include    <wx/imaglist.h>                                                                         //  for OFPLPlugin::Gfx
+#include    <wx/xrc/xmlres.h>                                                                       //  for OFPLPlugin::Gfx
+#include    <wx/artprov.h>                                                                          //  for OFPLPlugin::Gfx
+/// ************************************************************************************************
 //! \class  OflpModGfx
 //!
 //! \brief  Module for all OFLP graphic stuff
-/// ****************************************************************************
+/// ************************************************************************************************
 class OflpModGfx   :   public  OflpModule
 {
   public:
@@ -38,11 +38,11 @@ class OflpModGfx   :   public  OflpModule
 
         eBmpNotFound        =  99
     };
-    //  ------------------------------------------------------------------------
+    //  --------------------------------------------------------------------------------------------
   private:
     static  BitmapPointerHash       A_bitmap_hash;
-    static  wxImageList             A_img_list;                                 //!< For wxTreeCtrl-s
-    //  ........................................................................
+    static  wxImageList             A_img_list;                                                     //!< For wxTreeCtrl-s
+    //  ............................................................................................
   private:
     void                    bitmap_add(int _hash_key, wxBitmap _bmp)
         {
@@ -74,7 +74,7 @@ class OflpModGfx   :   public  OflpModule
 
             return *( A_bitmap_hash[_ix] );
         }
-    //  ------------------------------------------------------------------------
+    //  --------------------------------------------------------------------------------------------
   private:
     wxFont              *   d_fnt_8;
 
@@ -83,12 +83,15 @@ class OflpModGfx   :   public  OflpModule
         {
             return *d_fnt_8;
         }
-    //  ------------------------------------------------------------------------
+    //  --------------------------------------------------------------------------------------------
+  private:
+    virtual     void    z_release() {}
+    //  --------------------------------------------------------------------------------------------
   public:
     OflpModGfx(wxString _gfx_dir)
     {
         wxBitmap    bmp;
-        //  ................................................................
+        //  ........................................................................................
         // load bitmaps
         bitmap_add( eBmpFolder       , _gfx_dir + wxS("folder_open.png")     );          // 0 folder
         bitmap_add( eBmpFileAscii    , _gfx_dir + wxS("ascii.png")           );          // 1 file
@@ -110,7 +113,7 @@ class OflpModGfx   :   public  OflpModule
         A_img_list.Add( Bitmap(1) );
         A_img_list.Add( Bitmap(2) );
         A_img_list.Add( Bitmap(3) );
-        //  ................................................................
+        //  ........................................................................................
         //  fonts
         d_fnt_8 =   new wxFont(8, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxString::FromUTF8("monospace") );
     }

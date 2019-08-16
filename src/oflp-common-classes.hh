@@ -13,6 +13,9 @@ class   OpenFilesListPlusPanelTreeItemData;
 class   OpenFilesListPlusPanelTreeItemEventInfo;
 class   OpenFilesListPlusSettings;
 
+class   OflpPanelDndDataObject;
+class   OpenFilesListPlusPanelDropTarget;
+
 typedef OpenFilesListPlusHeader                 OflpHeader;
 typedef OpenFilesListPlusPanel                  OflpPanel;
 typedef OpenFilesListPlusPanelHeader            OflpPanelHeader;
@@ -23,10 +26,21 @@ typedef OpenFilesListPlusSettings               OflpSettings;
 class   OflpModGfx;
 class   OflpModLayout;
 class   OflpModPanels;
-class   OflpModEditors;
 class   OflpModMenuOptions;
 class   OflpModSettings;
 class   OflpModRunflow;
+class   OflpModTooltips;
+class   OflpModFLog;
+
+WX_DEFINE_ARRAY(        EditorBase  *, EditorArray);
+
+WX_DEFINE_ARRAY(        OflpPanel   *, OflpPanelArray);
+
+WX_DECLARE_HASH_MAP(    int                 ,
+                        wxBitmap*           ,
+                        wxIntegerHash       ,
+                        wxIntegerEqual      ,
+                        BitmapPointerHash   );
 
 #endif
 

@@ -5,11 +5,9 @@
 
 #ifndef __GWR_CB_LOG_HH__
 #define __GWR_CB_LOG_HH__
-//  ............................................................................
-#include    <stdio.h>
-//  ****************************************************************************
+//  ************************************************************************************************
 //  logs enabled
-//  ****************************************************************************
+//  ************************************************************************************************
 #ifdef  OFLP_LOG
 
 #include    <wx/string.h>
@@ -29,7 +27,7 @@ extern  wxColour    A_colour_log_err;
 extern  wxColour    A_colour_log_tki;
 extern  wxColour    A_colour_log_tkw;
 extern  wxColour    A_colour_log_tke;
-//  ............................................................................
+//  ................................................................................................
 extern  bool        A_log_console;
 extern  bool        A_log_window;
 
@@ -51,8 +49,8 @@ extern          void            Log_function_exit   ();
 
 extern          int             Log_szt2int         (size_t _szt);
 
-//  ............................................................................
-#define     GWRCB_LOG(WXFORMAT, ...)                                            \
+//  ................................................................................................
+#define     ERGCB_LOG(WXFORMAT, ...)                                            \
 {                                                                               \
     wxString tmp =                                                              \
         wxString::Format(                                                       \
@@ -69,45 +67,45 @@ extern          int             Log_szt2int         (size_t _szt);
         oflp::Log_window   ( tmp );                                             \
     }                                                                           \
 }
-//  ............................................................................
-#define GWRCB_FNE(FORMAT, ...)                                                  \
+//  ................................................................................................
+#define ERGCB_FNE(FORMAT, ...)                                                  \
 {                                                                               \
     oflp::Log_window_set_text_col_fg(oflp::A_colour_fun_ent);                   \
-    GWRCB_LOG(wxS("%s"        FORMAT), __VA_ARGS__);                            \
+    ERGCB_LOG(wxS("%s"        FORMAT), __VA_ARGS__);                            \
 }
 
-#define GWRCB_TKI(FORMAT, ...)                                                  \
+#define ERGCB_TKI(FORMAT, ...)                                                  \
 {                                                                               \
     oflp::Log_window_set_text_col_fg(oflp::A_colour_log_tki);                   \
-    GWRCB_LOG(wxS("%s" "tki:" FORMAT), __VA_ARGS__);                            \
+    ERGCB_LOG(wxS("%s" "tki:" FORMAT), __VA_ARGS__);                            \
 }
-#define GWRCB_TKW(FORMAT, ...)                                                  \
+#define ERGCB_TKW(FORMAT, ...)                                                  \
 {                                                                               \
     oflp::Log_window_set_text_col_fg(oflp::A_colour_log_tkw);                   \
-    GWRCB_LOG(wxS("%s" "tkw:" FORMAT), __VA_ARGS__);                            \
+    ERGCB_LOG(wxS("%s" "tkw:" FORMAT), __VA_ARGS__);                            \
 }
-#define GWRCB_TKE(FORMAT, ...)                                                  \
+#define ERGCB_TKE(FORMAT, ...)                                                  \
 {                                                                               \
     oflp::Log_window_set_text_col_fg(oflp::A_colour_log_tke);                   \
-    GWRCB_LOG(wxS("%s" "tke:" FORMAT), __VA_ARGS__);                            \
+    ERGCB_LOG(wxS("%s" "tke:" FORMAT), __VA_ARGS__);                            \
 }
-#define GWRCB_INF(FORMAT, ...)                                                  \
+#define ERGCB_INF(FORMAT, ...)                                                  \
 {                                                                               \
     oflp::Log_window_set_text_col_fg(oflp::A_colour_log_inf);                   \
-    GWRCB_LOG(wxS("%s" "inf:" FORMAT), __VA_ARGS__);                            \
+    ERGCB_LOG(wxS("%s" "inf:" FORMAT), __VA_ARGS__);                            \
 }
-#define GWRCB_WNG(FORMAT, ...)                                                  \
+#define ERGCB_WNG(FORMAT, ...)                                                  \
 {                                                                               \
     oflp::Log_window_set_text_col_fg(oflp::A_colour_log_wng);                   \
-    GWRCB_LOG(wxS("%s" "wng:" FORMAT), __VA_ARGS__);                            \
+    ERGCB_LOG(wxS("%s" "wng:" FORMAT), __VA_ARGS__);                            \
 }
-#define GWRCB_ERR(FORMAT, ...)                                                  \
+#define ERGCB_ERR(FORMAT, ...)                                                  \
 {                                                                               \
     oflp::Log_window_set_text_col_fg(oflp::A_colour_log_err);                   \
-    GWRCB_LOG(wxS("%s" "err:" FORMAT), __VA_ARGS__);                            \
+    ERGCB_LOG(wxS("%s" "err:" FORMAT), __VA_ARGS__);                            \
 }
 
-//  ............................................................................
+//  ................................................................................................
 #ifdef  OFLP_LOG_FUNCTIONS
 
 #define OFLP_LOG_FUNC_ENTER(FUNCNAME)                                           \
@@ -131,14 +129,14 @@ extern          int             Log_szt2int         (size_t _szt);
 #define OFLP_LOG_FUNC_EXIT()
 #define OFLP_FUNC_ENTER_MARK(FUNCNAME)
 
-#endif                                                                          //  #ifdef OFLP_LOG_FUNCTIONS
+#endif                                                                                              //  #ifdef OFLP_LOG_FUNCTIONS
 
 }
 
-#endif                                                                          //  #ifdef OFLP_LOG
-//  ****************************************************************************
+#endif                                                                                              //  #ifdef OFLP_LOG
+//  ************************************************************************************************
 //  logs disabled
-//  ****************************************************************************
+//  ************************************************************************************************
 #ifndef OFLP_LOG
 
 class   wxWindow;
@@ -153,19 +151,19 @@ extern  void        Log_window_open             (wxWindow*);
 //extern  void        Log_window_open             ();
 extern  void        Log_window_close            ();
 
-//  ............................................................................
-#define GWRCB_LOG(WXFORMAT, ...)
-//  ............................................................................
-#define GWRCB_TCS(FORMAT, ...)
+//  ................................................................................................
+#define ERGCB_LOG(WXFORMAT, ...)
+//  ................................................................................................
+#define ERGCB_TCS(FORMAT, ...)
 
-#define GWRCB_TKI(FORMAT, ...)
-#define GWRCB_TKW(FORMAT, ...)
-#define GWRCB_TKE(FORMAT, ...)
+#define ERGCB_TKI(FORMAT, ...)
+#define ERGCB_TKW(FORMAT, ...)
+#define ERGCB_TKE(FORMAT, ...)
 
-#define GWRCB_INF(FORMAT, ...)
-#define GWRCB_WNG(FORMAT, ...)
-#define GWRCB_ERR(FORMAT, ...)
-//  ............................................................................
+#define ERGCB_INF(FORMAT, ...)
+#define ERGCB_WNG(FORMAT, ...)
+#define ERGCB_ERR(FORMAT, ...)
+//  ................................................................................................
 #define OFLP_LOG_FUNC_ENTER(FUNCNAME)
 #define OFLP_LOG_FUNC_EXIT()
 #define OFLP_LOG_FUNC_INC()

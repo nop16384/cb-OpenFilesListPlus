@@ -3,41 +3,39 @@
  * http://www.gnu.org/licenses/gpl-3.0.html
  */
 
+#include    "oflp-common.hh"
+#include    "oflp-common-macros.hh"
+
+#include    "oflp-cb.hh"
+
 #include    "oflp-plugin.hh"
 #include    "oflp-panel.hh"
 #include    "oflp-settings.hh"
 //  ................................................................................................
 #include    "oflp-plugin-module.hh"
 #include    "oflp-plugin-mod-gfx.hh"
-#include    "oflp-plugin-mod-layout.hh"
+//#include    "oflp-plugin-mod-layout.hh"
 #include    "oflp-plugin-mod-panels.hh"
-#include    "oflp-plugin-mod-settings.hh"
+//#include    "oflp-plugin-mod-settings.hh"
 #include    "oflp-plugin-mod-runflow.hh"
+//#include    "oflp-plugin-mod-tooltips.hh"
+#include    "oflp-plugin-mod-flog.hh"
 //  ................................................................................................
 #include    <configurationpanel.h>
 //  ................................................................................................
-#define GWR_OFLP_SANITY_CHECKS
-#define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
-#define GWR_TKI(FORMAT, ...)    GWRCB_TKI(FORMAT, __VA_ARGS__);
-#define GWR_TKW(FORMAT, ...)    GWRCB_TKW(FORMAT, __VA_ARGS__);
-#define GWR_TKE(FORMAT, ...)    GWRCB_TKE(FORMAT, __VA_ARGS__);
-#define GWR_INF(FORMAT, ...)    GWRCB_INF(FORMAT, __VA_ARGS__);
-#define GWR_WNG(FORMAT, ...)    GWRCB_WNG(FORMAT, __VA_ARGS__);
-#define GWR_ERR(FORMAT, ...)    GWRCB_ERR(FORMAT, __VA_ARGS__);
+#define ERG_OFLP_SANITY_CHECKS
+#define ERG_LOG(FORMAT, ...)    ERGCB_LOG(FORMAT, __VA_ARGS__);
+#define ERG_TKI(FORMAT, ...)    ERGCB_TKI(FORMAT, __VA_ARGS__);
+#define ERG_TKW(FORMAT, ...)    ERGCB_TKW(FORMAT, __VA_ARGS__);
+#define ERG_TKE(FORMAT, ...)    ERGCB_TKE(FORMAT, __VA_ARGS__);
+#define ERG_INF(FORMAT, ...)    ERGCB_INF(FORMAT, __VA_ARGS__);
+#define ERG_WNG(FORMAT, ...)    ERGCB_WNG(FORMAT, __VA_ARGS__);
+#define ERG_ERR(FORMAT, ...)    ERGCB_ERR(FORMAT, __VA_ARGS__);
 //  ................................................................................................
 OpenFilesListPlus   *   OpenFilesListPlus::s_singleton  =   NULL;
-//  ................................................................................................
-void    OflpModule::init()
-{
-    a_instance              =   OpenFilesListPlus::Instance();
 
-    a_module_gfx            =   oflp()->gfx();
-    a_module_layout         =   oflp()->layout();
-    a_module_panels         =   oflp()->panels();
-    a_module_editors        =   oflp()->editors();
-    a_module_settings       =   oflp()->settings();
-    a_module_runflow        =   oflp()->runflow();
-}
+BitmapPointerHash       OflpModGfx::A_bitmap_hash;
+wxImageList             OflpModGfx::A_img_list(16, 16);
 //  ................................................................................................
 namespace
 {
@@ -58,11 +56,11 @@ void    OpenFilesListPlus:: dump_project_manager_state()
 
     ProjectManager* pjm = Manager::Get()->GetProjectManager();
 
-    GWR_TKI("  Workspace loading:[%i]", pjm->IsLoadingWorkspace()   );
-    GWR_TKI("  Workspace closing:[%i]", pjm->IsClosingWorkspace()   );
-    GWR_TKI("  Project   loading:[%i]", pjm->IsLoadingProject()     );
-    GWR_TKI("  Project   closing:[%i]", pjm->IsClosingProject()     );
-    GWR_TKI("  Project   l/c    :[%i]", pjm->IsLoadingOrClosing()   );
+    ERG_TKI("  Workspace loading:[%i]", pjm->IsLoadingWorkspace()   );
+    ERG_TKI("  Workspace closing:[%i]", pjm->IsClosingWorkspace()   );
+    ERG_TKI("  Project   loading:[%i]", pjm->IsLoadingProject()     );
+    ERG_TKI("  Project   closing:[%i]", pjm->IsClosingProject()     );
+    ERG_TKI("  Project   l/c    :[%i]", pjm->IsLoadingOrClosing()   );
 }
 //  ................................................................................................
 // constructor
@@ -71,12 +69,6 @@ OpenFilesListPlus::     OpenFilesListPlus()
     a_mode_degraded     =   false;
     aw_menu_view        =   NULL;
 
-    d_gfx               =   NULL;
-    d_layout            =   NULL;
-    d_editors           =   NULL;
-    d_panels            =   NULL;
-    d_settings          =   NULL;
-    d_runflow           =   NULL;
     // Make sure our resources are available.
     // In the generated boilerplate code we have no resources but when
     // we add some, it will be nice that this code is in place already ;)
@@ -89,6 +81,7 @@ OpenFilesListPlus::     OpenFilesListPlus()
 // destructor
 OpenFilesListPlus::    ~OpenFilesListPlus()
 {
+    oflp::modFLog()->x_log("OpenFilesListPlus::~OpenFilesListPlus()\n");
 }
 
 void OpenFilesListPlus::OnAttach()
@@ -100,33 +93,23 @@ void OpenFilesListPlus::OnAttach()
     oflp::A_log_console   =   false;
     oflp::Log_window_open( Manager::Get()->GetAppWindow() );                    //  enable log window at start
 
-    ///GWR_INF("OpenFilesListPlugin::OnAttach [%p][%p]", this, Instance());
+    ///ERG_INF("OpenFilesListPlugin::OnAttach [%p][%p]", this, Instance());
     //  ............................................................................................
     //  create & init the modules
-    d_gfx           =   new OflpModGfx(ConfigManager::GetDataFolder() + wxS("/images/"));
-    d_layout        =   new OflpModLayout();
-    d_panels        =   new OflpModPanels();
-    d_settings      =   new OflpModSettings();
-    d_runflow       =   new OflpModRunflow();
-
-    //  once all modules are created, init them with pointers to each others
-    gfx()           ->OflpModule::init();
-    layout()        ->OflpModule::init();
-    panels()        ->OflpModule::init();
-    settings()      ->OflpModule::init();
-    runflow()       ->OflpModule::init();
+    oflp::Modules::s_instance               =   new oflp::Modules();
+    oflp::Modules::Instance()->init();
     //  ............................................................................................
-    runflow()->attaching(true);
+    oflp::modRunflow()->attaching(true);
     //  ............................................................................................
     //  create main wxPanel & its sizer, create "bulk" panel
-    panels()->init();
+    oflp::modPanels()->init();
     //  ............................................................................................
     // add the tree to the docking system
     #ifndef MEMLEAKS
     CodeBlocksDockEvent evt(cbEVT_ADD_DOCK_WINDOW);
     evt.name        = _T("OpenFilesListPlusPane");
     evt.title       = _("Open files list plus");
-    evt.pWindow     = panels()->p0_main();
+    evt.pWindow     = oflp::modPanels()->z_get_main();
     evt.minimumSize.Set(50, 50);
     evt.desiredSize.Set(150, 100);
     evt.floatingSize.Set(100, 150);
@@ -182,13 +165,17 @@ void OpenFilesListPlus::OnAttach()
     CodeBlocksEvent e;
     evh_workspace_loading_complete(e);
 
-    runflow()->attaching(false);
+    oflp::modRunflow()->attaching(false);
 }
 
 void OpenFilesListPlus::OnRelease(bool appShutDown)
 {
-    if (appShutDown)
-        return;
+    oflp::modFLog()->x_log("OpenFilesListPlus::OnRelease(A)\n");
+
+    //if (appShutDown)
+        //return;
+
+    oflp::modFLog()->x_log("OpenFilesListPlus::OnRelease(B)\n");
 
     // remove registered event sinks
     Manager::Get()->RemoveAllEventSinksFor(this);
@@ -196,14 +183,18 @@ void OpenFilesListPlus::OnRelease(bool appShutDown)
     // remove tree from docking system
     #ifndef MEMLEAKS
     CodeBlocksDockEvent evt(cbEVT_REMOVE_DOCK_WINDOW);
-    evt.pWindow = panels()->p0_main();
+    evt.pWindow = oflp::modPanels()->z_get_main();
     Manager::Get()->ProcessEvent(evt);
     #endif
 
-    // finally destroy the widgets
-    oflp::Log_window_close();
+    // destroy the widgets
+    oflp::modPanels()->z_destroy();
 
-    panels()->z_destroy();
+    // layouts
+    oflp::modLayout()->z_release();
+
+    // close log window
+    oflp::Log_window_close();
 }
 
 int OpenFilesListPlus:: Configure()
@@ -278,7 +269,7 @@ void OpenFilesListPlus::evh_view_open_files_plus    (wxCommandEvent& event)
 {
     #ifndef MEMLEAKS
     CodeBlocksDockEvent evt(event.IsChecked() ? cbEVT_SHOW_DOCK_WINDOW : cbEVT_HIDE_DOCK_WINDOW);
-    evt.pWindow = panels()->p0_main();
+    evt.pWindow = oflp::modPanels()->z_get_main();
     Manager::Get()->ProcessEvent(evt);
     #endif
 }
@@ -287,7 +278,7 @@ void OpenFilesListPlus::evh_update_ui               (wxUpdateUIEvent& event)
 {
     if (aw_menu_view)
     {
-        bool isVis = IsWindowReallyShown((wxWindow*)panels()->p0_main());
+        bool isVis = IsWindowReallyShown((wxWindow*)oflp::modPanels()->z_get_main());
         aw_menu_view->Check(idViewOpenFilesPlus, isVis);
     }
 
@@ -298,14 +289,14 @@ void OpenFilesListPlus::evh_update_ui               (wxUpdateUIEvent& event)
 //! \brief  Delete all OflpPanels, forget about the layout
 void OpenFilesListPlus::y_reset()
 {
-    panels()->z_reset();
-    layout()->x_reset();
+    oflp::modPanels()->z_reset();
+    oflp::modLayout()->z_reset();
 }
 
 //! \brief  Emergency @ runtime
 void OpenFilesListPlus::emergency()
 {
-    GWR_ERR( "%s", wxS("### EMERGENCY ###") );
+    ERG_ERR( "%s", wxS("### EMERGENCY ###") );
     degrade();
 }
 
@@ -315,7 +306,7 @@ void OpenFilesListPlus::degrade()
     a_mode_degraded = true;
 
     wxColour c( 0xd1, 0xcd, 0xce );
-    panels()->p0_set_bgs(c);
+    oflp::modPanels()->x_set_col__bg_p(c);
 }
 
 //! \brief  Tell if OFLP is in degraded mode
@@ -324,26 +315,12 @@ bool OpenFilesListPlus::degraded()
     return a_mode_degraded;
 }
 
-//! \fn     EditorAdd
-//!
-//! \brief  Given an editor, add it to the good OflpPanel, following layout
-
-//! \fn     EditorSub
-//!
-//! \brief  Given an editor, add it to the good OflpPanel, following layout
-
-//! \fn     EditorMov
-//!
-//! \brief  Given an editor, add it to the good OflpPanel, following layout
-
-
 //! \fn     RefreshOpenFileState
 //!
 //! \brief  Given an editor :
-//!       - if    editor in list  : ensure corresponding wxTreeItem is selected
-//!         else                  : add a new wxTreeItem
 //!       - verify wxTreeItem icon
 //!       - verify wxTreeItem text
+//!       - verify wxTreeItem highlighting ( user selection )
 void OpenFilesListPlus::RefreshOpenFileState    (EditorBase* _nn_edb)
 {
     EditorManager   *   emgr  =   Manager::Get()->GetEditorManager();
@@ -356,14 +333,14 @@ void OpenFilesListPlus::RefreshOpenFileState    (EditorBase* _nn_edb)
     if ( Manager::IsAppShuttingDown() )
         return;
     //  ............................................................................................
-    panels()->p0_main()->Freeze();
+    oflp::modPanels()->z_get_main()->Freeze();
     //  ............................................................................................
     wxString            shortname   = _nn_edb->GetShortName();
-    panel                           = panels()->x_panel_from_editor(_nn_edb);
+    panel                           = oflp::modPanels()->x_get_from_editor(_nn_edb);
 
-    GWR_TKI("     ...editor         :[%p][%s]", _nn_edb, shortname.wc_str());
-    GWR_TKI("     ...panel          :[%p]"    , panel);
-    GWR_TKI("     ...active editor  :[%s]"    , aedb ? aedb->GetShortName().wc_str() : wxS("NULL"));
+    ERG_TKI("     ...editor         :[%p][%s]", _nn_edb, shortname.wc_str());
+    ERG_TKI("     ...panel          :[%p]"    , panel);
+    ERG_TKI("     ...active editor  :[%s]"    , aedb ? aedb->GetShortName().wc_str() : wxS("NULL"));
     //  ............................................................................................
     //  we found the editor in an OflpPanel
     if ( panel )
@@ -378,24 +355,24 @@ void OpenFilesListPlus::RefreshOpenFileState    (EditorBase* _nn_edb)
         {
             if ( ! panel->editor_selected(_nn_edb) )
             {
-                GWR_TKI("%s", wxS("      ...selecting"));
+                ERG_TKI("%s", wxS("      ...selecting"));
                 panel->editor_select(_nn_edb);
             }
             else
             {
-                GWR_TKI("%s", wxS("      ...not selecting (optimization)"));
+                ERG_TKI("%s", wxS("      ...not selecting (optimization)"));
             }
-            panels()->p0_unselect_except(panel);
+            oflp::modPanels()->z_unselect_except(panel);
         }
     }
     //  ............................................................................................
     //  editor was not found in any OflpPanel -> emergency
     else
     {
-        //  emergency();                                                        //  _GWR_TODO_ "Start here" is not in any panel !
+        //  emergency();                                                                            //  _GWR_TODO_ "Start here" is not in any panel !
     }
     //  ............................................................................................
-    panels()->p0_main()->Thaw();
+    oflp::modPanels()->z_get_main()->Thaw();
     //  ............................................................................................
     OFLP_LOG_FUNC_EXIT();
 }
@@ -411,7 +388,7 @@ void OpenFilesListPlus::SyncEditorToLayout      (EditorBase* _nn_edb)
     wxString    const       fn      =   _nn_edb->GetShortName();
     wxString    const       fp      =   _nn_edb->GetFilename();
 
-    CB::EdbInfos            inf;
+    oflp::CB::EdbInfos      inf;
 
     OflpPanel           *   psrc    =   nullptr;
     OflpPanel           *   pdst    =   nullptr;
@@ -421,41 +398,42 @@ void OpenFilesListPlus::SyncEditorToLayout      (EditorBase* _nn_edb)
     if ( Manager::IsAppShuttingDown() )
         goto lab_exit;
     //  ............................................................................................
-    GWR_TKI("      ...editor [%p][%s][%s]", OFLP_EDB_LOG(_nn_edb));
+    ERG_TKI("      ...editor [%p][%s][%s]", OFLP_EDB_LOG(_nn_edb));
 
-    psrc = panels()->x_panel_from_editor(_nn_edb);                                                  // get panel where editor resides
+    psrc = oflp::modPanels()->x_get_from_editor(_nn_edb);                                           // get panel where editor resides
 
-    if ( runflow()->attaching() )   goto lab_attaching;
+    if ( oflp::modRunflow()->attaching() )   goto lab_attaching;
     //  ============================================================================================
     //  non-attaching
 lab_non_attaching:
     {
 
-    GWR_TKI("%s", wxS("      ...non attaching())"));
+    ERG_TKI("%s", wxS("      ...non attaching"));
 
     if ( ! psrc )
     {
-        GWR_TKE("%s", wxS("      ...not found in any panel"));
+        ERG_TKE("%s", wxS("      ...not found in any panel"));
         goto lab_exit;
     }
-    GWR_TKI("      ...found in panel :[%p][%s][%s]", OFLP_PANEL_LOG(psrc));
+    ERG_TKI("      ...found in panel :[%p][%s][%s]", OFLP_PANEL_LOG(psrc));
 
-    if ( ! CB::X_EditorBase_get_infos( &inf, CB::eFlas, _nn_edb ) )
+    //L//if ( ! CB::X_EditorBase_get_infos( &inf, CB::ePfas, _nn_edb ) )
+    if ( ! oflp::CB::X_EditorBase_get_infos( &inf, oflp::CB::ePfas, _nn_edb ) )
     {
-        GWR_TKW("%s", wxS("      ...could not get infos from EditorBase"));
-        pdst    =   panels()->p0_bulk();
+        ERG_TKW("%s", wxS("      ...could not get PfAs from EditorBase"));
+        pdst    =   oflp::modPanels()->z_get_bulk();
         goto lab_move;
     }
-    GWR_TKI("      ...ProjectFile :[%p] fp[%s] rpfn[%s] rctlp[%s]", inf.pjf(), inf.a_fp, inf.a_rfp, wxS("---"));
-    GWR_TKI("      ...cbProject   :[%p] [%s]", inf.prj(), inf.prj()->GetTitle().wc_str());
-    GWR_TKI("      ...FlAs        :[%p] panel[%s]", inf.flas(), inf.flas()->uid().str().wc_str());
+    ERG_TKI("      ...ProjectFile :[%p] fp[%s] rpfn[%s] rctlp[%s]", inf.pjf(), inf.a_fp, inf.a_rfp, wxS("---"));
+    ERG_TKI("      ...cbProject   :[%p] [%s]", inf.prj(), inf.prj()->GetTitle().wc_str());
+    ERG_TKI("      ...PfAs        :[%p] panel[%s]", inf.pfas(), inf.pfas()->uid().str().wc_str());
 
-    if ( ! panels()->x_panel_from_uid( &pdst, inf.flas()->uid() ) )                                 // find the panel indicated by the layout
+    if ( ! oflp::modPanels()->x_get_from_uid( &pdst, inf.pfas()->uid() ) )                          // find the panel indicated by the layout
     {
-        GWR_TKE("%s", wxS("      ...dst Panel not found, aborting"));
+        ERG_TKE("%s", wxS("      ...dst Panel not found, aborting"));
         goto lab_exit;
     }
-    GWR_TKI("      ...dst Panel found:[%p][%s][%s]", OFLP_PANEL_LOG(pdst));
+    ERG_TKI("      ...dst Panel found:[%p][%s][%s]", OFLP_PANEL_LOG(pdst));
     goto lab_move;
 
     }
@@ -463,15 +441,15 @@ lab_non_attaching:
 lab_attaching:
     {
 
-    GWR_TKI("%s", wxS("      ...attaching())"));
+    ERG_TKI("%s", wxS("      ...attaching"));
 
     if ( psrc )                                                                                     // should be NULL OnAttach()
     {
-        GWR_TKE("      ...editor was found in panel [%p][%s][%s], aborting", OFLP_PANEL_LOG(psrc));
+        ERG_TKE("      ...editor was found in panel [%p][%s][%s], aborting", OFLP_PANEL_LOG(psrc));
         goto    lab_exit;
     }
-    GWR_TKI("%s", wxS("      ...editor was not found in any panel, adding to bulk"));
-    pdst = panels()->p0_bulk();
+    ERG_TKI("%s", wxS("      ...editor was not found in any panel, adding to bulk"));
+    pdst = oflp::modPanels()->z_get_bulk();
     goto lab_exit;
 
     }
@@ -480,12 +458,12 @@ lab_move:
     //  move if different panels
     if ( psrc != pdst )
     {
-        GWR_TKI("      ...moving editor to Panel[%p][%s][%s]", OFLP_PANEL_LOG(pdst));
-        panels()->z_editor_mov( pdst, psrc, _nn_edb );                                              //  _ERG_TODO_ needs panels()::resize() call here !!!
+        ERG_TKI("      ...moving editor to Panel[%p][%s][%s]", OFLP_PANEL_LOG(pdst));
+        oflp::modPanels()->z_editor_mov( pdst, psrc, _nn_edb );                                     //  _ERG_TODO_ needs panels()::resize() call here !!!
     }
     else
     {
-        GWR_TKI("%s", wxS("      ...not moving editor, psrc=pdst"));
+        ERG_TKI("%s", wxS("      ...not moving editor, psrc=pdst"));
     }
     //  ............................................................................................
 lab_exit:
@@ -502,138 +480,41 @@ void OpenFilesListPlus::SyncEditorsToLayout     ()
     //  ............................................................................................
     OFLP_LOG_FUNC_ENTER("OFLP::SyncEditorsToLayout()");
     //  ............................................................................................
-    //  optim : if workspace loading, first calls to RefreshOpenFileLayout()    //  _GWR_OPTIM_
+    //  optim : if workspace loading, first calls to RefreshOpenFileLayout()                        //  _GWR_OPTIM_
     //  occurs _BEFORE_ panels are created. So if no panel exist, drop.
     //  But dont optimize OnAttach()
-    if ( ! runflow()->attaching() )
-        if ( layout()->x_pnas_size() == 0 )
+    if ( ! oflp::modRunflow()->attaching() )
+        if ( oflp::modLayout()->x_pnas_size() == 0 )
         {
-            GWR_TKI("%s", wxS("      ...no panel is present - dropping"));
+            ERG_TKI("%s", wxS("      ...not attaching, and no panel is present - dropping"));
             goto lab_exit;
         }
     //  ............................................................................................
-    panels()->p0_main()->Freeze();
+    oflp::modPanels()->z_get_main()->Freeze();
 
     for ( int i = 0 ; i != emgr->GetEditorsCount() ; i++ )
     {
         SyncEditorToLayout( emgr->GetEditor(i) );
     }
 
-    panels()->resize_and_layout();
+    oflp::modPanels()->x_resize_and_layout();
 
     if ( emgr->GetActiveEditor() )
         SyncEditorToLayout( emgr->GetActiveEditor() );
     else
     {
-        GWR_TKE("%s", wxS("      ...active editor is NULL"));
+        ERG_TKE("%s", wxS("      ...active editor is NULL"));
     }
 
-    panels()->p0_main()->Thaw();
+    oflp::modPanels()->z_get_main()->Thaw();
     //  ............................................................................................
 lab_exit:
-    GWR_TKI("time [%s]us", stw.TimeInMicro().ToString().wc_str());
+    ERG_TKI("time [%s]us", stw.TimeInMicro().ToString().wc_str());
     OFLP_LOG_FUNC_EXIT();
 }
 //  ################################################################################################
-bool    OpenFilesListPlus::CB:: X_cbEditor_from_file_path   (cbEditor** _ed, wxString const & _fp)
-{
-    int             s       =   0;
-    int             i       =   0;
-    EditorBase  *   edb     =   nullptr;
-    cbEditor    *   ed      =   nullptr;
-    //  ............................................................................................
-    s = Manager::Get()->GetEditorManager()->GetEditorsCount();
-
-    for ( i = 0 ; i != s ; i++ )
-    {
-        edb =   Manager::Get()->GetEditorManager()->GetEditor(i);
-
-        if ( ! edb->IsBuiltinEditor() )
-            continue;
-
-        ed = reinterpret_cast< cbEditor* >( edb );
-
-        if ( ed->GetFilename().Cmp(_fp) == 0 )
-        {
-            *(_ed) = ed;
-            return true;
-        }
-    }
-
-    *(_ed) = nullptr;
-    return false;
-}
-
-bool    OpenFilesListPlus::CB:: X_EditorBase_get_infos      (EdbInfos* _inf, eEdbInfoType _type, EditorBase* _nn_edb)
-{
-    cbEditor    *   edc =   reinterpret_cast< cbEditor* >( _nn_edb );
-    wxStopWatch     stw;
-    //  ............................................................................................
-    OFLP_LOG_FUNC_INC();
-    //  ............................................................................................
-    _inf->clear();
-    _inf->a_fn = _nn_edb->GetTitle();
-    //  ............................................................................................
-    if ( ! _nn_edb->IsBuiltinEditor() )
-    {
-        GWR_TKW("Oflp::CB::X_EditorBase_get_infos():not a builtin editor [%p][%s]", _nn_edb, _inf->a_fn.wc_str());
-        goto lab_exit_failure;
-    }
-    _inf->a_fp  =   edc->GetFilename();
-    //  ............................................................................................
-    if ( _type & CB::ePrj )  _type |= CB::ePjf;                                                     // cbProject => ProjectFile
-    if ( _type & CB::eFlas ) _type |= ( CB::ePjas | CB::ePjf );                                     // FlAs      => PjAs & ProjectFile
-    //  ............................................................................................
-    if ( ! ( _type & OpenFilesListPlus::CB::ePjf ) )
-        goto lab_exit_success;
-
-    _inf->a_prj = Manager::Get()->GetProjectManager()->FindProjectForFile(
-            _inf->a_fp      ,
-        &   _inf->a_pjf     ,
-        false, false        );
-
-    if ( ( ! _inf->a_pjf ) || ( ! _inf->a_prj ) )
-    {
-        GWR_TKI("%s", wxS("Oflp::CB::X_EditorBase_get_infos():call to FindProjectForFile() failed"));
-        goto lab_exit_failure;
-    }
-    _inf->a_rfp =   _inf->a_pjf->relativeFilename;
-    _inf->a_inf |=  ( OpenFilesListPlus::CB::ePjf | OpenFilesListPlus::CB::ePrj);
-    //  ............................................................................................
-    if ( ! ( _type & OpenFilesListPlus::CB::ePjas ) )
-        goto lab_exit_success;
-
-    if ( ! OpenFilesListPlus::Instance()->layout()->x_pjas( &(_inf->a_pjas), _inf->a_prj) )
-    {
-        GWR_TKI("%s", wxS("Oflp::CB::X_EditorBase_get_infos():call to x_pjas() failed"));
-        goto lab_exit_failure;
-    }
-    _inf->a_inf |=  OpenFilesListPlus::CB::ePjas;
-    //  ............................................................................................
-    if ( ! ( _type & OpenFilesListPlus::CB::eFlas ) )
-        goto lab_exit_success;
-
-    if ( ! _inf->a_pjas->x_flas( &(_inf->a_flas), _inf->a_fn, _inf->a_rfp) )
-    {
-        GWR_TKI("%s", wxS("Oflp::CB::X_EditorBase_get_infos():call to x_flas() failed"));
-        goto lab_exit_failure;
-    }
-    _inf->a_inf |=  OpenFilesListPlus::CB::eFlas;
-    //  ............................................................................................
-lab_exit_success:
-    GWR_TKI("Oflp::CB::X_EditorBase_get_infos():time [%s]us", stw.TimeInMicro().ToString().wc_str());
-    OFLP_LOG_FUNC_DEC();
-    return true;
-
-lab_exit_failure:
-    GWR_TKI("Oflp::CB::X_EditorBase_get_infos():time [%s]us", stw.TimeInMicro().ToString().wc_str());
-    OFLP_LOG_FUNC_DEC();
-    return false;
-}
 
 
-BitmapPointerHash   OflpModGfx::A_bitmap_hash;
-wxImageList         OflpModGfx::A_img_list(16, 16);
 
 
 

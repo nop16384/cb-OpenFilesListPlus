@@ -3,10 +3,11 @@
  * http://www.gnu.org/licenses/gpl-3.0.html
  */
 
+#include    "oflp-common.hh"
 #include    "oflp-log.hh"
-//  ****************************************************************************
+//  ************************************************************************************************
 //  logs enabled
-//  ****************************************************************************
+//  ************************************************************************************************
 #ifdef  OFLP_LOG
 
 #include    <wx/frame.h>
@@ -89,6 +90,13 @@ class   LogFrame : public wxFrame
 
                     this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler(LogFrame::evh_close_window), NULL, this);
                 }
+            ~LogFrame()
+                {
+                    //  plugin c++ object may be already invalid
+                    //OpenFilesListPlus::Instance()->flog()->x_log("LogFrame::~LogFrame()\n");
+                }
+
+
   private:
     void    print_header()
         {
@@ -180,7 +188,7 @@ void    Log_spc_dec()
 
 void    Log_function_mark   (const wxChar* _funcname)
 {
-    GWRCB_FNE("%s%s%s", wxS("----------  "), _funcname, wxS("  ---------- ") );
+    ERGCB_FNE("%s%s%s", wxS("----------  "), _funcname, wxS("  ---------- ") );
 }
 
 void    Log_function_enter  (const wxChar* _funcname)
@@ -188,7 +196,7 @@ void    Log_function_enter  (const wxChar* _funcname)
     oflp::Log_spc_inc();
 
     oflp::Log_window_set_text_attr(oflp::A_att_002);
-    GWRCB_LOG(wxS("%s%s"), _funcname);
+    ERGCB_LOG(wxS("%s%s"), _funcname);
     oflp::Log_window_set_text_attr(oflp::A_att_001);
 }
 
@@ -255,10 +263,10 @@ void    Log_window_set_text_attr    (wxTextAttr& _att)
 
 }
 
-#endif                                                                          //  #ifdef OFLP_LOG
-//  ****************************************************************************
+#endif                                                                                              //  #ifdef OFLP_LOG
+//  ************************************************************************************************
 //  logs disabled
-//  ****************************************************************************
+//  ************************************************************************************************
 #ifndef OFLP_LOG
 
 //  instead of just defining 'class wxWindow', we have to #include wxWidgets stuff

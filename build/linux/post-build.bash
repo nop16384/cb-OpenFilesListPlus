@@ -1,33 +1,44 @@
 #!/bin/bash
 
-################################################################################
+####################################################################################################
 #   src/common/post-build.bash
 #
 #   $1  : target identifier ( Debug, devel, ... )
-#   $2  : wx version ( 2.8, 3.0 )
+#   $2  OFLP_WXVERSION
+#   $3  OFLP_WXTOOLKIT
 #
-################################################################################
+####################################################################################################
 TargetId="${1}"
-WxVersion="${2}"
-echo "> target id  [${TargetId}]"
-echo "> wx version [${WxVersion}]"
-#   ----------------------------------------------------------------------------
+OflpWxVersion="${2}"
+OflpWxToolkit="${3}"
+
+echo "> Options"
+echo "  target id  [${TargetId}]"
+echo "  wx version [${OflpWxVersion}]"
+echo "  wx toolkit [${OflpWxToolkit}]"
+#   ------------------------------------------------------------------------------------------------
 OflpInstallDir=""
 
-if [[ "${WxVersion}" = "3.0" ]] ; then
+if [[ "${OflpWxVersion}" = "3.0" ]] ; then
 
-    OflpInstallDir="./plugin/${TargetId}/linux/wx-3.0.2"
-
-fi
-
-if [[ "${WxVersion}" = "2.8" ]] ; then
-
-    OflpInstallDir="./plugin/${TargetId}/linux/wx-2.8.12"
+    OflpWxVersion="3.0.4"
 
 fi
 
-echo "> installation directory [${OflpInstallDir}]"
-#   ----------------------------------------------------------------------------
+if [[ "${OflpWxVersion}" = "2.8" ]] ; then
+
+    OflpWxVersion="2.8.12"
+
+fi
+
+OflpInstallDir="./plugin/${TargetId}/linux/wx-${OflpWxVersion}"
+echo "  plugin       directory [${OflpInstallDir}]"
+
+OflpSystemDir="/usr/local/gwr/codeblocks/standalone/svn11267/wx-${OflpWxVersion}"
+echo "  installation directory [${OflpSystemDir}]"
+#   ------------------------------------------------------------------------------------------------
+echo "> packing plugin"
+
 mkdir -p                                                "${OflpInstallDir}"
 
 cp  "./plugin/${TargetId}/linux/OpenFilesListPlus.so"   "${OflpInstallDir}"
@@ -40,6 +51,6 @@ zip -j9 "${OflpInstallDir}/OpenFilesListPlus.zip"       src/manifest.xml src/ofl
 zip -j9 "${OflpInstallDir}/OpenFilesListPlus.cbplugin"  "${OflpInstallDir}/OpenFilesListPlus.so" "${OflpInstallDir}/OpenFilesListPlus.zip"
 
 #   overwrite "standalone" for debugging
-echo "> updating plugin in [/usr/local/gwr/codeblocks/standalone/svn10692/wx-3.0.2]"
-cp -f "${OflpInstallDir}/OpenFilesListPlus.zip" "/usr/local/gwr/codeblocks/standalone/svn10692/wx-3.0.2/codeblocks"
-cp -f "${OflpInstallDir}/OpenFilesListPlus.so"  "/usr/local/gwr/codeblocks/standalone/svn10692/wx-3.0.2/lib/codeblocks/plugins"
+#echo "> updating plugin in [${OflpInstallDir}]"
+#cp -f "${OflpInstallDir}/OpenFilesListPlus.zip" "${OflpSystemDir}/codeblocks"
+#cp -f "${OflpInstallDir}/OpenFilesListPlus.so"  "${OflpSystemDir}/lib/codeblocks/plugins"

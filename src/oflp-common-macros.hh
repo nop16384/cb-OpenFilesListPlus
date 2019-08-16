@@ -11,7 +11,7 @@
 //  ............................................................................
 #define OFLP01(SIZE_T_VARIABLE) ( static_cast< int >( SIZE_T_VARIABLE ) )
 //  ............................................................................
-#define GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF()                                   \
+#define ERG_LABELS_EXIT_SUCCESS_FAILURE_RTF()                                   \
     lab_exit_success:                                                           \
         OFLP_LOG_FUNC_EXIT();                                                   \
         return true;                                                            \
@@ -20,7 +20,7 @@
         OFLP_LOG_FUNC_EXIT();                                                   \
         return false;
 
-#define GWR_LABELS_EXIT_SUCCESS_FAILURE_RET()                                   \
+#define ERG_LABELS_EXIT_SUCCESS_FAILURE_RET()                                   \
     lab_exit_success:                                                           \
         OFLP_LOG_FUNC_EXIT();                                                   \
         return;                                                                 \
@@ -55,7 +55,7 @@
         return;                                                                 \
     }
 //  ............................................................................
-//  for(...) loop on stl containers, tired of lines like
+//  for(...) loop on stl containers, Im tired of lines like :
 //      for ( EditorArray::const_iterator it = array->begin() ; it != array->end() ; it++)
 //  or
 //      EditorArray::const_iterator         it;

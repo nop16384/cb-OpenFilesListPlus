@@ -3,25 +3,20 @@
  * http://www.gnu.org/licenses/gpl-3.0.html
  */
 
+#include    "oflp-common.hh"
+#include    "oflp-common-macros.hh"
+
+#include    "oflp-cb.hh"
+
 #include    "oflp-plugin-mod-layout.hh"
 
 #include    "oflp-plugin.hh"
-
 #include    "oflp-plugin-mod-panels.hh"
-
 #include    "oflp-panel.hh"
 //  ................................................................................................
-//  specific to this file oflp defines
-#define GWR_OFLP_SANITY_CHECKS
-#define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
-#ifdef  OFLP_DEBUG_LAYOUT
-    #define GWR_TKI(FORMAT, ...)    GWRCB_TKI(FORMAT, __VA_ARGS__);
-    #define GWR_TKW(FORMAT, ...)    GWRCB_TKW(FORMAT, __VA_ARGS__);
-    #define GWR_TKE(FORMAT, ...)    GWRCB_TKE(FORMAT, __VA_ARGS__);
-#endif
-#define GWR_INF(FORMAT, ...)    GWRCB_INF(FORMAT, __VA_ARGS__);
-#define GWR_WNG(FORMAT, ...)    GWRCB_WNG(FORMAT, __VA_ARGS__);
-#define GWR_ERR(FORMAT, ...)    GWRCB_ERR(FORMAT, __VA_ARGS__);
+//  defines specific to this module
+#define     ERG_OFLP_SANITY_CHECKS
+#include    "generated/oflp-plugin-mod-layout--log-defines.cci"
 //  ################################################################################################
 //
 //                      CB WORKSPACES & PROJECTS LAYOUTS
@@ -40,9 +35,7 @@ void    OflpModLayout::     Cb_filename_to_oflp_filename(
 //  ################################################################################################
 //                              XML stuff ( boring )
 //  ################################################################################################
-
-
-bool    OflpModLayout::     x_xml_save_workspace    ()
+bool    OflpModLayout::     z_xml_save_workspace    ()
 {
     //  - no TiXml constructore are available in plugins ( why : ??? ). So      //  _GWR_KNO_
     //    every TiXml object has to be new-allocated - NOT in new CB versions
@@ -95,9 +88,9 @@ bool    OflpModLayout::     x_xml_save_workspace    ()
         goto lab_failure;
     //  ............................................................................................
     //  xml stuff - layout
-    for ( size_t i = 0 ; i != panels()->size() ; i++ )
+    for ( size_t i = 0 ; i != oflp::Modules::Instance()->panels()->x_card() ; i++ )
     {
-        panel = panels()->panel(i);
+        panel = oflp::Modules::Instance()->panels()->x_get(i);
 
         if ( panel->is_bulk() )
             continue;
@@ -108,7 +101,7 @@ bool    OflpModLayout::     x_xml_save_workspace    ()
             goto lab_failure;
 
         psix.Clear();
-        psix << panels()->get_visual_index(panel);
+        psix << oflp::Modules::Instance()->panels()->x_get_vix(panel);
 
         panelnode->SetAttribute( "uid"   , panel->uid().str()                           );
         panelnode->SetAttribute( "name"  , cbU2C(panel->title() )                       );
@@ -135,7 +128,7 @@ lab_failure:
     return FALSE;
 }
 
-bool    OflpModLayout::     x_xml_save_project      (cbProject* _pro)
+bool    OflpModLayout::     z_xml_save_project      (cbProject* _pro)
 {
     //  - no TiXml constructore are available in plugins ( why : ??? ). So      //  _GWR_KNO_
     //    every TiXml object has to be new-allocated
@@ -192,27 +185,29 @@ bool    OflpModLayout::     x_xml_save_project      (cbProject* _pro)
 
         if ( ! pjf->editorOpen )
         {
-            GWR_INF("ProjectFile [%p][%s] has _NOT_ editorOpen, dropping", pjf, pjf->file.GetFullPath());
+            ERG_INF("ProjectFile [%p] editorOpen[N], dropping [%s]", pjf, pjf->file.GetFullPath());
             continue;
         }
+        ERG_INF("ProjectFile [%p] editorOpen[Y]           [%s]", pjf, pjf->file.GetFullPath());
 
-        if ( ! OpenFilesListPlus::CB::X_cbEditor_from_file_path(&ed, pjf->file.GetFullPath()) )
+        //L//if ( ! OpenFilesListPlus::CB::X_cbEditor_from_file_path(&ed, pjf->file.GetFullPath()) )
+        if ( ! oflp::CB::X_cbEditor_from_file_path(&ed, pjf->file.GetFullPath()) )
         {
-            GWR_TKE("ProjectFile [%p][%s] has editorOpen, but no cbEditor found", pjf, pjf->file.GetFullPath());
+            ERG_TKE("ProjectFile [%p][%s] has editorOpen, but no cbEditor found", pjf, pjf->file.GetFullPath());
             continue;
         }
 
-        panel = panels()->x_panel_from_editor( ed );
+        panel = oflp::Modules::Instance()->panels()->x_get_from_editor( ed );
 
         if ( ! panel )
         {
-            GWR_TKE("ProjectFile [%p][%s] has editorOpen, but not found in any panel", pjf, pjf->file.GetFullPath());
+            ERG_TKE("ProjectFile [%p][%s] has editorOpen, but not found in any panel", pjf, pjf->file.GetFullPath());
             continue;
         }
 
         if ( ! panel->is_bulk() )
         {
-            GWR_TKI("+[%s] -> [%s][%s]",
+            ERG_TKI("+[%s] -> [%s][%s]",
                 pjf->relativeFilename.wc_str()  ,
                 panel->uid().str().wc_str()     ,
                 panel->title().wc_str()         );
@@ -227,6 +222,10 @@ bool    OflpModLayout::     x_xml_save_project      (cbProject* _pro)
 
             delete xe3;
         }
+        else
+        {
+            ERG_TKI("ProjectFile [%p][%s] is in bulk panel", pjf, pjf->file.GetFullPath());
+        }
     }
     //  ............................................................................................
     //  write file
@@ -235,18 +234,18 @@ bool    OflpModLayout::     x_xml_save_project      (cbProject* _pro)
 lab_exit:
     if ( xe1 )  delete xe1;
     if ( xe2 )  delete xe2;
-
+    OFLP_LOG_FUNC_EXIT();
     return bret;
     //  ............................................................................................
 lab_failure:
     if ( xe1 )  delete xe1;
     if ( xe2 )  delete xe2;
     if ( xe3 )  delete xe3;
-
+    OFLP_LOG_FUNC_EXIT();
     return FALSE;
 }
 
-bool    OflpModLayout::     x_xml_parse_workspace   (TiXmlDocument* _doc)
+bool    OflpModLayout::     z_xml_parse_workspace   (TiXmlDocument* _doc)
 {
     OFLP_LOG_FUNC_ENTER("Layout::z_xml_parse_workspace()");
     //  ............................................................................................
@@ -257,14 +256,14 @@ bool    OflpModLayout::     x_xml_parse_workspace   (TiXmlDocument* _doc)
     root = _doc->FirstChildElement("CodeBlocks_workspace_oflp_file");
     if ( ! root )
     {
-        GWR_ERR("%s", wxS("no <CodeBlocks_workspace_oflp_file> found"));
+        ERG_ERR("%s", wxS("no <CodeBlocks_workspace_oflp_file> found"));
         goto lab_exit_failure;
     }
 
     panels = root->FirstChildElement("Panels");
     if ( ! panels )
     {
-        GWR_ERR("%s", wxS("no <Panels> found"));
+        ERG_ERR("%s", wxS("no <Panels> found"));
         goto lab_exit_failure;
     }
 
@@ -278,7 +277,7 @@ bool    OflpModLayout::     x_xml_parse_workspace   (TiXmlDocument* _doc)
 
         if ( ! index.ToLong(&l1) )
         {
-            GWR_ERR("panel [%s][%s][%s] - index could not be transformed to int",
+            ERG_ERR("panel [%s][%s][%s] - index could not be transformed to int",
                 uid.wc_str(), name.wc_str(), index.wc_str());
                 goto lab_exit_failure;
         }
@@ -288,18 +287,18 @@ bool    OflpModLayout::     x_xml_parse_workspace   (TiXmlDocument* _doc)
     }
 
     //  ............................................................................................
-    GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
+    ERG_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
 
-bool    OflpModLayout::     x_xml_parse_project     (cbProject* _project, TiXmlDocument* _doc)
+bool    OflpModLayout::     z_xml_parse_project     (cbProject* _project, TiXmlDocument* _doc)
 {
     PjAs    *   pjas    =   nullptr;
     //  ............................................................................................
     //  first see if the project has not already been parsed :
     //  - reloading of project
-    if ( x_pjas( &pjas, _project ) )
+    if ( x_pjas_get( &pjas, _project ) )
     {
-        GWR_TKI("xml_parse_project():project[%s] already parsed", _project->GetTitle().wc_str());
+        ERG_TKI("z_xml_parse_project():project[%s] already parsed", _project->GetTitle().wc_str());
         return true;
     }
     //  ............................................................................................
@@ -321,9 +320,9 @@ bool    OflpModLayout::     x_xml_parse_project     (cbProject* _project, TiXmlD
 
         wxFileName  wxfn( _project->GetBasePath() + wxString(wxS("/")) + name );
 
-        GWR_TKI("xml_parse_project():file[%s] -> panel[%s]", name.wc_str(), uid.wc_str());
+        ERG_TKI("xml_parse_project():file[%s] -> panel[%s]", name.wc_str(), uid.wc_str());
 
-        pjas->add( wxfn, name, uid );
+        pjas->x_pfas_add(name, uid );
 
                     file    =   file->NextSiblingElement("File");
     }
@@ -334,37 +333,41 @@ bool    OflpModLayout::     x_xml_parse_project     (cbProject* _project, TiXmlD
 //  ################################################################################################
 //                              Assignments
 //  ################################################################################################
-bool        OflpModLayout::PjAs::   x_flas  (
-    FlAs        const   **  _flas   ,
+bool        OflpModLayout::PjAs::   x_pfas_get  (
+    PfAs        const   **  _pfas   ,
     wxString    const   &   _fn     ,
     wxString    const   &   _rfp    )   const
 {
-    FlAs                    *           flas    =   nullptr;
+    PfAs                    *           pfas    =   nullptr;
     oflp::HString::tHash                hfn     =   oflp::HString::Hash(_fn);
     oflp::HString::tHash                hrfp    =   oflp::HString::Hash(_rfp);
     //  ............................................................................................
-    OFLP_STL_CFOR( FlAsAr, a_fl_as_ar, it )
+    OFLP_STL_CFOR( PfAsAr, a_pf_as_ar, it )
     {
-        flas = (*it);
+        pfas = (*it);
 
-        //D GWR_TKI("              ...comparing [%lu] with FileAssignment[%lu][%s]", hash, fas->hrfp(), fas->afp().wc_str());
+        //D ERG_TKI("              ...comparing [%lu] with FileAssignment[%lu][%s]", hash, fas->hrfp(), fas->afp().wc_str());
 
-        if ( flas->hrfp() != hrfp )
+        if ( pfas->hrfp() != hrfp )
             continue;
 
-        if ( flas->rfp().Cmp( _rfp ) )
+        if ( pfas->rfp().Cmp( _rfp ) )
             continue;
 
         //  here we are
-        *(_flas) = flas;
+        *(_pfas) = pfas;
         return true;
     }
-    *(_flas) = nullptr;
+    *(_pfas) = nullptr;
 
     return FALSE;
 }
 //  ================================================================================================
-void        OflpModLayout:: x_reset                                     ()
+void        OflpModLayout::     z_release                                   ()
+{
+    z_reset();
+}
+void        OflpModLayout::     z_reset                                     ()
 {
     //  we delete all Assignments, and free the memory used by the wxArrays too
 
@@ -374,7 +377,7 @@ void        OflpModLayout:: x_reset                                     ()
     }
 
     a_pj_as_ar.Clear();
-    GWR_TKI("OflpModLayout::z_reset():a_pj_as_ar GetCount[%lu]", a_pj_as_ar.GetCount());
+    ERG_TKI("OflpModLayout::x_reset():a_pj_as_ar GetCount[%lu]", a_pj_as_ar.GetCount());
 
     OFLP_STL_CFOR( PnAsAr, a_pn_as_ar, it )
     {
@@ -382,21 +385,21 @@ void        OflpModLayout:: x_reset                                     ()
     }
 
     a_pn_as_ar.Clear();
-    GWR_TKI("OflpModLayout::z_reset():a_pj_as_ar GetCount[%lu]", a_pn_as_ar.GetCount());
+    ERG_TKI("OflpModLayout::x_reset():a_pn_as_ar GetCount[%lu]", a_pn_as_ar.GetCount());
 }
 
-void        OflpModLayout:: z_pnas_add      (PnAs* _pnas)
+void        OflpModLayout::     z_pnas_add      (PnAs* _pnas)
 {
     OFLP_LOG_FUNC_ENTER("OFLP::Layout::z_pnas_add()");
 
-    GWR_TKI("adding PnAs[%s][%i][%s]",
-        _pnas->uid().str().wc_str(), _pnas->index(), _pnas->name().wc_str());
+    ERG_TKI("adding PnAs[%s][%i][%s]",
+        _pnas->uid().str().wc_str(), _pnas->vix(), _pnas->name().wc_str());
     a_pn_as_ar.Add( _pnas);
 
     OFLP_LOG_FUNC_EXIT();
 }
 
-bool        OflpModLayout:: z_pnas_sub      (PnAs* _pnas)
+bool        OflpModLayout::     z_pnas_sub      (PnAs* _pnas)
 {
     PnAs    *   pnas    =   nullptr;
     //  ............................................................................................
@@ -408,29 +411,27 @@ bool        OflpModLayout:: z_pnas_sub      (PnAs* _pnas)
 
         if ( pnas == _pnas )
         {
-            GWR_TKI("              ...PnAs removing[%s][%s][%i]",
-                pnas->uid().str().wc_str(), pnas->name().wc_str(), pnas->index());
+            ERG_TKI("              ...PnAs removing[%s][%s][%i]",
+                pnas->uid().str().wc_str(), pnas->name().wc_str(), pnas->vix());
             a_pn_as_ar.Remove(pnas);
             delete pnas;
             goto lab_exit_success;
         }
     }
-    GWR_TKE("              ...PnAs _NOT_ removed[%s][%s][%i]",
-                pnas->uid().str().wc_str(), pnas->name().wc_str(), pnas->index());
+    ERG_TKE("              ...PnAs _NOT_ removed[%s][%s][%i]",
+                pnas->uid().str().wc_str(), pnas->name().wc_str(), pnas->vix());
 
     goto lab_exit_failure;
     //  ............................................................................................
-    GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
+    ERG_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
 
-
-
-void        OflpModLayout:: z_pjas_add      (PjAs*      _pra)
+void        OflpModLayout::     z_pjas_add      (PjAs*      _pjas)
 {
-    a_pj_as_ar.Add(_pra);
+    a_pj_as_ar.Add(_pjas);
 }
 
-bool        OflpModLayout:: z_pjas_sub      (cbProject* _pro)
+bool        OflpModLayout::     z_pjas_sub      (cbProject* _pro)
 {
     PjAs    *   pjas    =   nullptr;
     //  ............................................................................................
@@ -444,49 +445,17 @@ bool        OflpModLayout:: z_pjas_sub      (cbProject* _pro)
         {
             a_pj_as_ar.Remove(pjas);
             delete pjas;
-            GWR_TKI("              ...ProjectAssignments removed for project[%s]", _pro->GetTitle().wc_str());
+            ERG_TKI("              ...ProjectAssignments removed for project[%s]", _pro->GetTitle().wc_str());
             goto lab_exit_success;
         }
     }
-    GWR_TKE("              ...No ProjectAssignments was removed for project[%s]", _pro->GetTitle().wc_str());
+    ERG_TKE("              ...No ProjectAssignments was removed for project[%s]", _pro->GetTitle().wc_str());
     goto lab_exit_failure;
     //  ............................................................................................
-    GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
+    ERG_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
-/*
-bool        OflpModLayout:: p0_project_assignments_get_from_editor_base (
-    EditorBase              *   _in_edb                     ,
-    ProjectAssignments      *&  _out_project_assignments    ,
-    ProjectFile             *&  _out_project_file           )
-{
-    cbProject                   *       pro         =   NULL;
-
-    ProjectAssignments          *       pa          =   NULL;
-    //  ............................................................................................
-    OFLP_LOG_FUNC_ENTER("OFLP::Layout::p0_project_assignments_get_from_editor_base()");
-    //  ............................................................................................
-    //  init outputs
-    _out_project_assignments    =   NULL;
-    _out_project_file           =   NULL;
-    //  ............................................................................................
-    //  get the project the file belongs too ( if any )
-    if ( ! oflp()->CB::X_cbProject_from_file_path(_in_edb->GetFilename(), &pro, &_out_project_file) )
-    {
-        GWR_TKI("              ...no cbProject contains file[%s]", _in_edb->GetFilename().wc_str());
-        goto lab_exit_failure;
-    }
-    //  ............................................................................................
-    if ( ! p0_project_assignments_get_from_cbProject(pro, _out_project_assignments) )
-    {
-        GWR_TKW("              ...no ProjectAssignments for cbProject[%s]", pro->GetTitle().wc_str());
-        goto lab_exit_failure;
-    }
-    //  ............................................................................................
-    GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
-}
-*/
 //  ================================================================================================
-bool        OflpModLayout::         x_pjas  (
+bool        OflpModLayout::     x_pjas_get  (
     PjAs                **  _pjas   ,
     cbProject   const   *   _pro    )
 {
@@ -503,8 +472,8 @@ bool        OflpModLayout::         x_pjas  (
     return FALSE;
 }
 
-bool        OflpModLayout::         x_flas  (
-    FlAs        const   **  _flas       ,
+bool        OflpModLayout::     x_pfas_get  (
+    PfAs        const   **  _pfas       ,
     cbProject   const   *   _nn_prj     ,
     wxString    const   &   _fn         ,
     wxString    const   &   _rfp        )
@@ -512,23 +481,23 @@ bool        OflpModLayout::         x_flas  (
     ProjectFile                 *       pjf         =   NULL;
     PjAs                        *       pjas        =   NULL;
     //  ............................................................................................
-    OFLP_LOG_FUNC_ENTER("OFLP::Layout::x_flas()");
+    OFLP_LOG_FUNC_ENTER("OFLP::Layout::x_flas_get()");
     //  ............................................................................................
     //  get the ProjectAssignments from the cbProject
-    if ( ! x_pjas(&pjas, _nn_prj) )
+    if ( ! x_pjas_get(&pjas, _nn_prj) )
     {
-        GWR_TKW("              ...no ProjectAssignments for cbProject[%s]", _nn_prj->GetTitle().wc_str());
+        ERG_TKW("              ...no ProjectAssignments for cbProject[%s]", _nn_prj->GetTitle().wc_str());
         goto lab_exit_failure;
     }
     //  ............................................................................................
     //  get the FileAssignment from ProjectAssignments
-    if ( ! pjas->x_flas( _flas, _fn, _rfp ) )
+    if ( ! pjas->x_pfas_get( _pfas, _fn, _rfp ) )
     {
-        GWR_TKW("              ...no FileAssignment found for cbProject[%s]", _nn_prj->GetTitle().wc_str());
+        ERG_TKW("              ...no FileAssignment found for cbProject[%s]", _nn_prj->GetTitle().wc_str());
         goto lab_exit_failure;
     }
     //  ............................................................................................
-    GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
+    ERG_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
 //  ################################################################################################
 //                              Actions
@@ -536,7 +505,7 @@ bool        OflpModLayout::         x_flas  (
 //  ################################################################################################
 //                              Events
 //  ################################################################################################
-bool    OflpModLayout::     x_workspace_load            ()
+bool    OflpModLayout::         x_workspace_load            ()
 {
     OFLP_LOG_FUNC_ENTER("Layout::workspace_load()");
     //  ............................................................................................
@@ -549,74 +518,74 @@ bool    OflpModLayout::     x_workspace_load            ()
     //  get current workspace & projects
     pjm = Manager::Get()->GetProjectManager();
     wsp = pjm->GetWorkspace();
-    GWR_TKI("workspace[%s]", wsp->GetTitle().wc_str());
+    ERG_TKI("workspace[%s]", wsp->GetTitle().wc_str());
     //  ............................................................................................
     //  load the oflp workspace layout
     Cb_filename_to_oflp_filename( wsp->GetFilename(), fp, 1 );                                      // build oflp workspace layout filename
-    GWR_TKI("workspace oflp file [%s]", fp.wc_str());
+    ERG_TKI("workspace oflp file [%s]", fp.wc_str());
 
     if ( ! TinyXML::LoadDocument(fp, &doc) )
     {
-        GWR_TKE("%s", wxS("workspace oflp file could _NOT_ be loaded"));
+        ERG_TKE("%s", wxS("workspace oflp file could _NOT_ be loaded"));
         goto lab_exit_failure;
     }
-    GWR_TKI("%s", wxS("workspace oflp file loaded"));
+    ERG_TKI("%s", wxS("workspace oflp file loaded"));
     //  ............................................................................................
     //  parse
-    if ( ! x_xml_parse_workspace(&doc) )
+    if ( ! z_xml_parse_workspace(&doc) )
         goto lab_exit_failure;
     //  ............................................................................................
-    GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
+    ERG_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
 
-bool    OflpModLayout::     x_workspace_save            ()
+bool    OflpModLayout::         x_workspace_save            ()
 {
     OFLP_LOG_FUNC_ENTER("Layout::workspace_save()");
 
-    GWR_TKI("workspace[%s]", Manager::Get()->GetProjectManager()->GetWorkspace()->GetTitle().wc_str());
+    ERG_TKI("workspace[%s]", Manager::Get()->GetProjectManager()->GetWorkspace()->GetTitle().wc_str());
 
-    if ( ! x_xml_save_workspace() )
+    if ( ! z_xml_save_workspace() )
         goto lab_exit_failure;
 
-    GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
+    ERG_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
 
-bool    OflpModLayout::     x_project_load              (cbProject* _pro)
+bool    OflpModLayout::         x_project_load              (cbProject* _pro)
 {
     PjAs            *   pa  =   NULL;
     TiXmlDocument       doc;
     wxString            fp;
     //  ............................................................................................
     OFLP_LOG_FUNC_ENTER("Layout::project_load()");
-    GWR_INF("project title[%s]", _pro->GetTitle().wc_str());
+    ERG_INF("project title[%s]", _pro->GetTitle().wc_str());
     //  ............................................................................................
     //  load the project's oflp-layout
     Cb_filename_to_oflp_filename( _pro->GetFilename(), fp, 2 );                                     //  build oflp project layout filename
-    GWR_TKI("project oflp file [%s]", fp.wc_str());
+    ERG_TKI("project oflp file [%s]", fp.wc_str());
 
     if ( ! TinyXML::LoadDocument(fp, &doc) )
     {
-        GWR_TKE("%s", wxS("project oflp file could _NOT_ be loaded"));
+        ERG_TKE("%s", wxS("project oflp file could _NOT_ be loaded"));
         goto lab_exit_failure;
     }
-    GWR_TKI("%s", wxS("project oflp file loaded"));
+    ERG_TKI("%s", wxS("project oflp file loaded"));
     //  ............................................................................................
     //  parse
-    if ( ! x_xml_parse_project(_pro, &doc) )
+    if ( ! z_xml_parse_project(_pro, &doc) )
         goto lab_exit_failure;
     //  ............................................................................................
-    GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
+    ERG_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
 
-bool    OflpModLayout::     x_project_close             (cbProject* _pro)
+bool    OflpModLayout::         x_project_close             (cbProject* _pro)
 {
-    OFLP_LOG_FUNC_ENTER("Layout::z_project_close()");
+    OFLP_LOG_FUNC_ENTER("Layout::x_project_close()");
 
-    GWR_INF("project title[%s]", _pro->GetTitle().wc_str());
+    ERG_INF("project title[%s]", _pro->GetTitle().wc_str());
 
     if ( ! x_project_save(_pro) )
     {
-        GWR_ERR("project title[%s] could not be saved", _pro->GetTitle().wc_str());
+        ERG_ERR("project title[%s] could not be saved", _pro->GetTitle().wc_str());
     }
 
     z_pjas_sub(_pro);
@@ -626,16 +595,29 @@ lab_exit:
     return true;
 }
 
-bool    OflpModLayout::     x_project_save              (cbProject* _pro)
+bool    OflpModLayout::         x_project_save              (cbProject* _pro)
 {
-    OFLP_LOG_FUNC_ENTER("Layout::z_project_save()");
+    OFLP_LOG_FUNC_ENTER("Layout::x_project_save()");
 
-    GWR_INF("project title[%s]", _pro->GetTitle().wc_str());
+    ERG_INF("project title[%s]", _pro->GetTitle().wc_str());
 
-    if ( ! x_xml_save_project(_pro) )
+    if ( ! z_xml_save_project(_pro) )
         goto lab_exit_failure;
     //  ............................................................................................
-    GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
+    ERG_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
+//  ################################################################################################
+//                              Debug
+//  ################################################################################################
+void    OflpModLayout::         x_dump_assignments              ()
+{
+    OFLP_LOG_FUNC_ENTER("Layout::x_dump_assignments()");
 
+    ProjectManager      *   pjm     =   Manager::Get()->GetProjectManager();
+    //cbWorkspace         *   wsp     =   Manager::Get()->GetProjectManager()->GetWorkspace();
 
+    //wsp->
+
+    //  ............................................................................................
+    OFLP_LOG_FUNC_EXIT();
+}

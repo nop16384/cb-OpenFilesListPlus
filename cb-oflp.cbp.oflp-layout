@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_oflp_file>
 	<FileVersion major="1" minor="0" />
-	<File name="src/oflp-plugin-events.cc" uid="020020051000361" />
-	<File name="src/oflp-plugin-mod-layout.cc" uid="020020051000361" />
-	<File name="src/oflp-plugin-mod-layout.hh" uid="020020051000361" />
-	<File name="src/oflp-plugin-mod-panels.cc" uid="020020051000361" />
-	<File name="src/oflp-plugin-mod-panels.hh" uid="020020051000361" />
-	<File name="src/oflp-plugin-mod-settings.cc" uid="020020051000361" />
-	<File name="src/oflp-plugin.cc" uid="020020051000361" />
-	<File name="src/oflp-plugin.hh" uid="020020051000361" />
+	<File name="src/oflp-plugin-mod-layout.cc" uid="015015039000041" />
+	<File name="src/oflp-plugin-mod-layout.hh" uid="015015039000041" />
+	<File name="src/oflp-plugin-mod-settings.cc" uid="012006023000155" />
+	<File name="src/oflp-plugin-mod-settings.hh" uid="012006023000155" />
+	<File name="src/oflp-plugin-mod-tooltips.cc" uid="019057030000891" />
+	<File name="src/oflp-plugin-mod-tooltips.hh" uid="019057030000891" />
+	<File name="src/oflp-settings-options.hh" uid="012006023000155" />
+	<File name="src/oflp-settings.cc" uid="012006023000155" />
+	<File name="src/oflp-settings.hh" uid="012006023000155" />
 </CodeBlocks_project_oflp_file>

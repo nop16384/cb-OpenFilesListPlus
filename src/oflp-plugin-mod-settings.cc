@@ -4,29 +4,25 @@
  */
 
 #include    "oflp-plugin-mod-settings.hh"
+#include    "oflp-plugin-mod-tooltips.hh"
+#include    "oflp-plugin-mod-panels.hh"
 
 #include    "oflp-settings.hh"
 
 #include    "oflp-plugin.hh"
-//  ............................................................................
-#define GWR_OFLP_SANITY_CHECKS
-#define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
-#define GWR_TKI(FORMAT, ...)    GWRCB_TKI(FORMAT, __VA_ARGS__);
-#define GWR_TKE(FORMAT, ...)    GWRCB_TKE(FORMAT, __VA_ARGS__);
-#define GWR_INF(FORMAT, ...)    GWRCB_INF(FORMAT, __VA_ARGS__);
-#define GWR_WNG(FORMAT, ...)    GWRCB_WNG(FORMAT, __VA_ARGS__);
-#define GWR_ERR(FORMAT, ...)    GWRCB_ERR(FORMAT, __VA_ARGS__);
-//  ############################################################################
+//  ................................................................................................
+#define ERG_OFLP_SANITY_CHECKS
+//  ################################################################################################
 //
 //                          SETTINGS
 //
-//  ############################################################################
+//  ################################################################################################
 void    OflpModSettings::   action                      (wxCommandEvent &   _e)
 {
-    //  ........................................................................
+    //  ............................................................................................
     OFLP_LOG_FUNC_ENTER("OFLP::Settings::action()");
-    //  ........................................................................
-    //  ........................................................................
+    //  ............................................................................................
+    //  ............................................................................................
     //  widget is shown,
     if ( ! dw_settings )
         popup(_e);
@@ -40,11 +36,11 @@ void    OflpModSettings::   settings_window_activated   (bool _b)
 {
     if ( _b )
     {
-        GWRCB_INF( "%s", wxS("SETTINGS ACTIVATED") );
+        ERGCB_INF( "%s", wxS("SETTINGS ACTIVATED") );
     }
     else
     {
-        GWRCB_INF( "%s", wxS("SETTINGS DE-ACTIVATED") );
+        ERGCB_INF( "%s", wxS("SETTINGS DE-ACTIVATED") );
 
         //  if we close the settings window and user clicked on options
         //  button( which caused the deactivation ), the button_clicked callback
@@ -60,34 +56,34 @@ void    OflpModSettings::   settings_window_activated   (bool _b)
 
         //  cf bugs#18
         if ( Manager::Get()->GetEditorManager()->GetActiveEditor() )
-            oflp()->RefreshOpenFileState( Manager::Get()->GetEditorManager()->GetActiveEditor() );
+            OpenFilesListPlus::Instance()->RefreshOpenFileState( Manager::Get()->GetEditorManager()->GetActiveEditor() );
     }
 }
 
 void    OflpModSettings::   popup                       (wxCommandEvent &   _e)
 {
-    //  ........................................................................
+    //  ............................................................................................
     //  create widget
     wxWindow    *   w   =   reinterpret_cast<wxWindow*>(_e.GetEventObject());
     wxRect          r   =   w->GetScreenRect();
 
-    //GWRCB_INF("x[%i] y[%i] h[%i] w[%i]", r.x, r.y, r.height, r.width);
+    //ERGCB_INF("x[%i] y[%i] h[%i] w[%i]", r.x, r.y, r.height, r.width);
 
     r.Offset( 0, r.GetHeight() );
 
     wxPoint         p   =   r.GetPosition();
     wxSize          s   =   r.GetSize();
 
-    dw_settings = new OpenFilesListPlusSettings(w, p, s, a_opt_log, a_opt_sel);
+    dw_settings = new OpenFilesListPlusSettings(w, p, s, a_opt_log, a_opt_sel, a_opt_div_tt, a_opt_colors);
 
     dw_settings->Connect(
         wxEVT_ACTIVATE                                                      ,
         wxActivateEventHandler(OpenFilesListPlus::evh_settings_activated)   ,
-        NULL, oflp());
+        NULL, OpenFilesListPlus::Instance());
 
     dw_settings->Show();
-    //  ........................................................................
-    //GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
+    //  ............................................................................................
+    //ERG_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
 
 void    OflpModSettings::   popout                      (wxCommandEvent &   _e)
@@ -97,18 +93,16 @@ void    OflpModSettings::   popout                      (wxCommandEvent &   _e)
 
 void    OflpModSettings::   popout                      ()
 {
-    //  ........................................................................
-    //  ........................................................................
-    //  ........................................................................
-    dw_settings->output(a_opt_log, a_opt_sel);
+    //  ............................................................................................
+    dw_settings->output(a_opt_log, a_opt_sel, a_opt_div_tt, a_opt_colors);
 
     delete dw_settings;
     dw_settings = NULL;
-    //  ........................................................................
+    //  ............................................................................................
     //  act accordingly to options
     update_from_user_input();
-    //  ........................................................................
-    //GWR_LABELS_EXIT_SUCCESS_FAILURE_RTF();
+    //  ............................................................................................
+    //ERG_LABELS_EXIT_SUCCESS_FAILURE_RTF();
 }
 
 void    OflpModSettings::   update_from_user_input      ()
@@ -120,12 +114,12 @@ void    OflpModSettings::   update_from_user_input      ()
 
         if ( log_window() )
         {
-            GWR_INF( "%s", wxS("+log window") );
+            ERGCB_INF( "%s", wxS("+log window") );
             oflp::Log_window_open( Manager::Get()->GetAppWindow() );
         }
         if ( ! log_window() )
         {
-            GWR_INF( "%s", wxS("-log window") );
+            ERGCB_INF( "%s", wxS("-log window") );
             oflp::Log_window_close();
         }
     }
@@ -136,15 +130,26 @@ void    OflpModSettings::   update_from_user_input      ()
 
         oflp::Log_window_close();
     }
+
+
+    oflp::Modules::Instance()->tooltips()->x_refresh_tooltips_visibility();
+
+    oflp::Modules::Instance()->panels()->x_set_col__bg_p( app_col_bg_p() );
+    oflp::Modules::Instance()->panels()->x_set_col__bg_h( app_col_bg_h() );
 }
-//  ############################################################################
+//  ################################################################################################
         OflpModSettings::   OflpModSettings()
 {
-    a_opt_log.enabled    = true;
-    a_opt_log.window     = true;
-    a_opt_log.console    = true;
+    a_opt_log.a_enabled = true;
+    a_opt_log.a_window  = true;
+    a_opt_log.a_console = true;
 
-    a_opt_sel.set_dclick(true);
+    a_opt_sel.sclick(true);
+
+    a_opt_div_tt.a_show = true;
+
+    a_opt_colors.a_bg_h.Set(0xd0, 0xd0, 0xd0);
+    a_opt_colors.a_bg_p.Set(0xf2, 0xf2, 0xf2);
 
     dw_settings = NULL;
 }

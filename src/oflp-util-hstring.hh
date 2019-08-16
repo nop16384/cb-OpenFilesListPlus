@@ -3,13 +3,10 @@
  * http://www.gnu.org/licenses/gpl-3.0.html
  */
 
-#ifndef __GWR_CB_GLOBALS_HH__
-#define __GWR_CB_GLOBALS_HH__
+#ifndef __OFLP_UTIL_HSTRING_HH__
+#define __OFLP_UTIL_HSTRING_HH__
 //  ................................................................................................
-#include    <stdio.h>
 #include    <wx/string.h>
-#include    <wx/strconv.h>
-#include    <wx/datetime.h>
 //  ................................................................................................
 #include    <vector>
 //  ................................................................................................
@@ -53,50 +50,8 @@ class   HString
 };
 
 
-class   UID
-{
-  private:
-    static const size_t     FldCard =   5;
-    static const size_t     FldSize =   3;
-    static const size_t     StrSize =   FldCard * FldSize;
-
-    oflp::HString           a_str;
-
-    static       wxString   NullStr;
-
-  public:
-    static UID const        Null;
-
-
-  private:
-    void                    z_set( wxString const & _str );
-    void                    z_set();
-
-  public:
-    wxString const &        str()   const   { return a_str.get();           }
-
-    void                    renew()         { z_set();                      }
-
-    bool                    is_null()       { return ( a_str.get().Cmp( UID::NullStr ) == 0 );      }
-
-  public:
-    UID(wxString & _str)
-    {
-        z_set( _str );
-    }
-    UID()
-    {
-        z_set();
-    }
-    UID(UID const & _uid)
-    {
-        a_str.set( _uid.str() );
-    }
-};
-
-
 }
 
-#endif                                                                                              //  __GWR_CB_GLOBALS_HH__
+#endif                                                                                              //  __OFLP_UTIL_HSTRING_HH__
 
 

@@ -1,0 +1,9 @@
+OFLP_LOG_DND                                oflp-dnd
+OFLP_LOG_PLUGIN_EVENTS                      oflp-plugin-events
+
+OFLP_LOG_PLUGIN_MOD_PANELS                  oflp-plugin-mod-panels
+OFLP_LOG_PLUGIN_MOD_LAYOUT                  oflp-plugin-mod-layout
+OFLP_LOG_PLUGIN_MOD_TOOLTIPS                oflp-plugin-mod-tooltips
+
+OFLP_LOG_PANEL                              oflp-panel
+OFLP_LOG_PANEL_HEADER                       oflp-panel-header

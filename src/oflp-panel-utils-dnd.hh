@@ -3,6 +3,9 @@
  * http://www.gnu.org/licenses/gpl-3.0.html
  */
 
+#ifndef __OFLP_PANEL_UTILS_DND_HH__
+#define __OFLP_PANEL_UTILS_DND_HH__
+
 /// ************************************************************************************************
 //! \class  OflpPanelDndDataObject
 //!
@@ -76,3 +79,6 @@ class OpenFilesListPlusPanelDropTarget    : public wxDropTarget
     OpenFilesListPlusPanelDropTarget(wxTreeCtrl *_owner, OflpPanel* _owner_panel);
    ~OpenFilesListPlusPanelDropTarget();
 };
+
+
+#endif

@@ -4,19 +4,11 @@ legacy/*
 obj/*
 samples/*
 plugin/*
-Pulled/*
 *.layout
 
-src/svn9857/trunk/*
-src/svn10373/trunk/*
+src/generated
 
-src/svn9857/nm-files/*
-src/svn10373/nm-files/*
-
-src/lexer_ext__gas_arm_generic.sample
-src/lexer_ext__gas_arm_generic.xml
-src/lexer_ext__gas_i386x64.sample
-src/lexer_ext__gas_i386x64.xml
+tests
 
 *.backup
 *.bak

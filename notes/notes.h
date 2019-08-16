@@ -22,7 +22,7 @@ defined for compiling OpenFilesListPlus :
     OFLP_WXTOOLKIT  toolkit to use ( ex:for linux, gtk2 )
     OFLP_UNICODE    [yes|no] whether to use an unicode version of wxWidgets ; choose the same as
                     the above C::B sources use
-    OFLP_DEBUG      [yes|no] wether to use a debug or release eversion of wxWidgets
+    OFLP_WXDEBUG    [yes|no] wether to use a debug or release eversion of wxWidgets
 
 //  ================================================================================================
 BUILDING_PLUGIN

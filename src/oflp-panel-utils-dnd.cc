@@ -3,21 +3,19 @@
  * http://www.gnu.org/licenses/gpl-3.0.html
  */
 
+#include    "oflp-common.hh"
+
 #include    "oflp-plugin.hh"
 
+#include    "oflp-plugin-module.hh"
 #include    "oflp-plugin-mod-panels.hh"
 
 #include    "oflp-panel.hh"
+#include    "oflp-panel-utils.hh"
+#include    "oflp-panel-utils-dnd.hh"
 //  ................................................................................................
-#define GWR_OFLP_SANITY_CHECKS
-#ifdef  OFLP_LOG_DND
-    #define GWR_LOG(FORMAT, ...)    GWRCB_LOG(FORMAT, __VA_ARGS__);
-    #define GWR_TKI(FORMAT, ...)    GWRCB_TKI(FORMAT, __VA_ARGS__);
-    #define GWR_TKE(FORMAT, ...)    GWRCB_TKE(FORMAT, __VA_ARGS__);
-    #define GWR_INF(FORMAT, ...)    GWRCB_INF(FORMAT, __VA_ARGS__);
-    #define GWR_WNG(FORMAT, ...)    GWRCB_WNG(FORMAT, __VA_ARGS__);
-    #define GWR_ERR(FORMAT, ...)    GWRCB_ERR(FORMAT, __VA_ARGS__);
-#endif
+#define     ERG_OFLP_SANITY_CHECKS
+#include    "generated/oflp-dnd--log-defines.cci"
 //  ################################################################################################
 //
 //                          OflpPanelDataObject
@@ -95,13 +93,13 @@ EditorBase* OflpPanelDataObject::x_data_editor()
 //  ================================================================================================
 size_t      OflpPanelDndDataObject::GetDataSize     ()                     const
 {
-    //GWR_TKI("OflpPanelDataObject::GetDataSize():[%i]", oflp::Log_szt2int(a_data_size));
+    //ERG_TKI("OflpPanelDataObject::GetDataSize():[%i]", oflp::Log_szt2int(a_data_size));
     return a_data_size;
 }
 
 bool        OflpPanelDndDataObject::GetDataHere     (void *buf)            const
 {
-    //GWR_TKI("OflpPanelDataObject::GetDataHere():this[%p], buf[%p] data sz[%lu]", this, buf, a_data_size);
+    //ERG_TKI("OflpPanelDataObject::GetDataHere():this[%p], buf[%p] data sz[%lu]", this, buf, a_data_size);
     if ( ! a_data_size )
         return false;
 
@@ -111,7 +109,7 @@ bool        OflpPanelDndDataObject::GetDataHere     (void *buf)            const
 
 bool        OflpPanelDndDataObject::SetData         (size_t _len, const void* _buf)
 {
-    GWR_TKI("OflpPanelDataObject::SetData([%lu], [%p])", _len, _buf);
+    ERG_TKI("OflpPanelDataObject::SetData([%lu], [%p])", _len, _buf);
     //  ............................................................................................
     if ( _len > x_data_capacity() )
         return false;
@@ -127,7 +125,7 @@ bool        OflpPanelDndDataObject::SetData         (size_t _len, const void* _b
 
 bool        OflpPanelDndDataObject::SetData         (int _panel_vix, int _item_vix, EditorBase* _editor)
 {
-    GWR_TKI("OflpPanelDataObject::SetData([%i], [%i], [%p])", _panel_vix, _item_vix, _editor);
+    ERG_TKI("OflpPanelDataObject::SetData([%i], [%i], [%p])", _panel_vix, _item_vix, _editor);
     //  ............................................................................................
     //  input validity checks
     if ( ( _panel_vix < 0 ) || ( _panel_vix >= OflpPanelDndDataObject::s_panel_index_max ) )
@@ -193,7 +191,7 @@ OpenFilesListPlusPanelDropTarget::        OnData(wxCoord x, wxCoord y, wxDragRes
     //dres = wxDropTarget::OnData(x, y, defaultDragResult);                                         //  see bug#
     dres = defaultDragResult;
 
-    GWR_TKI("OnData():suggested drag result[%s] returned[%s]"  ,
+    ERG_TKI("OnData():suggested drag result[%s] returned[%s]"  ,
         OpenFilesListPlusPanel::stringize_drag_result(defaultDragResult).wc_str()   ,
         OpenFilesListPlusPanel::stringize_drag_result(dres).wc_str()                );
 
@@ -208,18 +206,18 @@ OpenFilesListPlusPanelDropTarget::        OnData(wxCoord x, wxCoord y, wxDragRes
     editor  = d_data_object->x_data_editor();                                                       //  get editor from unserialized data
     spvix   = d_data_object->x_data_panel_vix();                                                    //  ...src panel visual index
     sivix   = d_data_object->x_data_item_vix();                                                     //  ...src item visual index
-    GWR_INF("  data :spvix[%i] sivix[%i] ed[%p]", spvix, sivix, editor);
-    spanel  = OpenFilesListPlus::Instance()->panels()->x_panel_from_editor(editor);                 // get src panel from editor
+    ERG_INF("  data :spvix[%i] sivix[%i] ed[%p]", spvix, sivix, editor);
+    spanel  = oflp::Modules::Instance()->panels()->x_get_from_editor(editor);                       // get src panel from editor
 
-    #ifdef  GWR_OFLP_SANITY_CHECKS                                                                  //  _GWR_SANITY_CHECK_
-    cpvix   = OpenFilesListPlus::Instance()->panels()->get_visual_index(spanel);                    // get panel visual index
+    #ifdef  ERG_OFLP_SANITY_CHECKS                                                                  //  _ERG_SANITY_CHECK_
+    cpvix   = oflp::Modules::Instance()->panels()->x_get_vix(spanel);                               // get panel visual index
     //iid     = dpanel->item_find(ed);                                                              // _ERG_TODO_ get item visual index too
 
-    GWR_INF("  s-chk:spvix[%i] sivix[%i] ed[%p]", spvix, sivix, editor);
+    ERG_INF("  s-chk:spvix[%i] sivix[%i] ed[%p]", spvix, sivix, editor);
 
     if ( spvix != cpvix )
     {
-        GWR_ERR("%s", wxS("  s-chk:panel visual index mismatch") );
+        ERG_ERR("%s", wxS("  s-chk:panel visual index mismatch") );
         dres = wxDragError;
         goto lab_return;
     }
@@ -277,27 +275,27 @@ void OpenFilesListPlusPanel:: OnDragInit  (wxTreeEvent& _e)
     //  ............................................................................................
     OFLP_LOG_FUNC_ENTER("OflpPanel::OnDragInit()");
     //  ............................................................................................
-    GWR_INF("  object format count [%i]", oflp::Log_szt2int( dobj.GetFormatCount()) );
+    ERG_INF("  object format count [%i]", oflp::Log_szt2int( dobj.GetFormatCount()) );
     //  ............................................................................................
     //  You can init a drag anywhere inside the wxTreeCtrl, even where there is
     //  nothing ! In this case, iid IsOk() ( why ??? ) , but idata is NULL
     if ( ! iid.IsOk() )                                                                             //  _GWR_UNUSEFUL_ should never happen
     {
-        GWR_TKE("%s", wxS("  invalid wxTreeItemId") );
+        ERG_TKE("%s", wxS("  invalid wxTreeItemId") );
         goto lab_return;
     }
 
     tid = static_cast< OflpPanelTiData* >( d_tree->GetItemData(iid) );
     if ( ! tid )
     {
-        GWR_TKI("%s", wxS("  NULL data (maybe dragged from empty blank space ?)") );
+        ERG_TKI("%s", wxS("  NULL data (maybe dragged from empty blank space ?)") );
         goto lab_return;
     }
 
     editor  =   tid->x_get_editor();
     //  ............................................................................................
     //  prepare
-    dobj.SetData( OpenFilesListPlus::Instance()->panels()->get_visual_index(this) , 9999, editor ); //  drag source _ERG_TODO_ visual item index
+    dobj.SetData( oflp::Modules::Instance()->panels()->x_get_vix(this) , 9999, editor );            //  drag source _ERG_TODO_ visual item index
     dropSource.SetData(dobj);
     //  ............................................................................................
     // do DnD
@@ -305,7 +303,7 @@ void OpenFilesListPlusPanel:: OnDragInit  (wxTreeEvent& _e)
 
     if ( dres != wxDragMove )
     {
-        GWR_TKE("  res[%s], expected wxDragMove", OpenFilesListPlusPanel::stringize_drag_result(dres).wc_str() );
+        ERG_TKE("  res[%s], expected wxDragMove", OpenFilesListPlusPanel::stringize_drag_result(dres).wc_str() );
         goto lab_return;
     }
     //  ............................................................................................
@@ -316,5 +314,5 @@ lab_return:
 
 void OpenFilesListPlusPanel:: OnDragEnd   (wxTreeEvent& _e)
 {
-    GWR_INF("%s", wxS("OflpPanel::OnDragEnd()") );
+    ERG_INF("%s", wxS("OflpPanel::OnDragEnd()") );
 }
