@@ -1,7 +1,5 @@
-# cb-OpenFilesListPlus
+cb-OpenFilesListPlus
+====================
 Enhanced open files list dock window for codeblocks
 
-Compilation
-===========
-
-* Add manually the codeblocks sdk directory in properties->build options->search directories
+View README.md on the "doc" branch.
