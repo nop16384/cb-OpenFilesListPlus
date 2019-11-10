@@ -1,17 +1,15 @@
 .git/*
-img/*
-legacy/*
+
 obj/*
-samples/*
+
 plugin/*
-*.layout
 
 src/generated
 
-tests
+branches
 
+*.layout
 *.backup
 *.bak
 *.orig
-
 *.bz2

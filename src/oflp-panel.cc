@@ -35,12 +35,10 @@ wxTreeItemId    OflpPanel::A_last_wxTreeItemId_dragged_and_dropped  =   0;
 void OpenFilesListPlusPanel:: dump()
 {
     OFLP_FUNC_ENTER_MARK("OflpPanel::dump()");
-
+    //  ............................................................................................
     EditorBase              *   edb     =   NULL;
-    oflp::HString::tHash        hash    =   0;
-    oflp::HString::tHash        hash2   =   0;
-
-    ERG_TKI("panel[%p][%s] editors[%lu] hashs[%lu]", this, title().wc_str(), a_editors_array.size(), a_harray.size());
+    //  ............................................................................................
+    ERG_TKI("panel[%p][%s] editors[%lu]", this, title().wc_str(), a_editors_array.size());
 
     for ( size_t
         i  =   0                        ;
@@ -48,16 +46,11 @@ void OpenFilesListPlusPanel:: dump()
         i++                             )
     {
         edb     =   a_editors_array.Item(i);
-        hash    =   a_harray.at(i);
 
-        hash2   =   oflp::HString::Hash( edb->GetFilename() );
-
-        ERG_TKI("Editor[%lu]:[%p][%s]hash[%lu][%lu]" ,
+        ERG_TKI("Editor[%lu]:[%p][%s]"  ,
             i                           ,
             edb                         ,
-            edb->GetTitle().wc_str()    ,
-            hash                        ,
-            hash2                       )
+            edb->GetTitle().wc_str()    );
     }
 }
 //  ================================================================================================
@@ -294,7 +287,6 @@ bool            OpenFilesListPlusPanel::    editor_add          (EditorBase* _ed
     }
 
     a_editors_array.Add(_editor);
-    a_harray.push_back( oflp::HString::Hash(_editor->GetFilename()) );
 
     dump();
 
@@ -311,7 +303,6 @@ bool            OpenFilesListPlusPanel::    editor_del          (EditorBase* _ed
 
     dump();
 
-    a_harray.erase( a_harray.begin() + a_editors_array.Index(_editor) );
     a_editors_array.Remove(_editor);
 
     dump();
@@ -380,7 +371,6 @@ void            OpenFilesListPlusPanel::    editors_del         ()
     ERG_INF("OflpPanel::editors_del([%p])", this);
     //  ............................................................................................
     a_editors_array.Clear();
-    a_harray.clear();
     items_del();
 }
 

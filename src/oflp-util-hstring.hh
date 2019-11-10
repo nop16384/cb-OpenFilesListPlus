@@ -8,8 +8,6 @@
 //  ................................................................................................
 #include    <wx/string.h>
 //  ................................................................................................
-#include    <vector>
-//  ................................................................................................
 namespace   oflp
 {
 
@@ -25,7 +23,7 @@ class   HString
 {
   public:
     typedef     unsigned long           tHash;
-    typedef     std::vector< tHash >    HArray;
+    //typedef     std::vector< tHash >    HArray;                                                   //  unused
 
   public:
     static  tHash   Hash(wxString const & _wxstr);

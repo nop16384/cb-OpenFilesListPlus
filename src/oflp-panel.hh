@@ -32,7 +32,6 @@ class OpenFilesListPlusPanel              : public wxPanel
     wxBoxSizer                      *   dw_sizer;
 
     EditorArray                         a_editors_array;                                            //  speed up finding editors
-    oflp::HString::HArray               a_harray;
 
     OpenFilesListPlusPanelDropTarget*   d_drop_target;
     //  ............................................................................................

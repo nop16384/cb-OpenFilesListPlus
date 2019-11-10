@@ -18,3 +18,4 @@
   used to move back editors in bulk panel when closing projects / workspace, which break the layout
   saving process.
 - moved compilation environment variables from 'envvars' to 'per-project variables'
+- removed member a_harray member of type oflp::HString::Harray from OflpPanel class since it was not used
