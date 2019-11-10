@@ -29,7 +29,7 @@
 #define     OFLP_LOG_PLUGIN_MOD_LAYOUT
 #define     OFLP_LOG_PLUGIN_MOD_TOOLTIPS
 
-//  #define     OFLP_LOG_PANEL
+#define     OFLP_LOG_PANEL
 //  #define     OFLP_LOG_PANEL_HEADER
 //  ................................................................................................
 

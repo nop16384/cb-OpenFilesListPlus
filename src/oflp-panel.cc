@@ -269,6 +269,11 @@ void            OpenFilesListPlusPanel::    items_del           ()
 //  ================================================================================================
 bool            OpenFilesListPlusPanel::    editor_has          (EditorBase* _editor)
 {
+    //  ............................................................................................
+    ERG_TKI("OflpPanel::editor_has():[%p][%s][%p]", this, title().wc_str(), _editor);
+    //  ............................................................................................
+    dump();
+
     int ix = a_editors_array.Index(_editor);
 
     return ( a_editors_array.Index(_editor) != wxNOT_FOUND );
@@ -291,6 +296,8 @@ bool            OpenFilesListPlusPanel::    editor_add          (EditorBase* _ed
     a_editors_array.Add(_editor);
     a_harray.push_back( oflp::HString::Hash(_editor->GetFilename()) );
 
+    dump();
+
     return true;
 }
 
@@ -302,8 +309,12 @@ bool            OpenFilesListPlusPanel::    editor_del          (EditorBase* _ed
     if ( ! item_del(_editor) )
         return false;
 
+    dump();
+
     a_harray.erase( a_harray.begin() + a_editors_array.Index(_editor) );
     a_editors_array.Remove(_editor);
+
+    dump();
 
     return true;
 }

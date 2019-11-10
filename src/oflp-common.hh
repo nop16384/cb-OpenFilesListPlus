@@ -23,7 +23,7 @@
 
 #ifndef CB_PRECOMP
 
-    //D #pragma message "-CBPRECOMP"
+    #pragma message "-CBPRECOMP"
 
     #include <cbplugin.h>                                             //  for "class cbPlugin"
     #include <manager.h>
@@ -41,7 +41,7 @@
     #include <cbproject.h>
     #include <projectmanager.h>
 #else
-    //D #pragma message "+CBPRECOMP"
+    #pragma message "+CBPRECOMP"
 #endif
 //  ................................................................................................
 //  general defines - compilation options

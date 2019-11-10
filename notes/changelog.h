@@ -13,3 +13,7 @@
 - proper wxWidgets DnD ( GetData() call forgotten ! )
 - renamed OpenFilesListPlusPanelItemData in OpenFilesListPlusPanelTiData
 - renamed OpenFilesListPlusPanelItemInfo in OpenFilesListPlusPanelTiEventInfo
+2019.11.10
+- re-added layout synchro in oflp-plugin-dnd.c, because incessant calls to SyncEditorsToLayout()
+  used to move back editors in bulk panel when closing projects / workspace, which break the layout
+  saving process.

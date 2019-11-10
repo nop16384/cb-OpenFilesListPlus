@@ -51,6 +51,9 @@ zip -j9 "${OflpInstallDir}/OpenFilesListPlus.zip"       src/manifest.xml src/ofl
 zip -j9 "${OflpInstallDir}/OpenFilesListPlus.cbplugin"  "${OflpInstallDir}/OpenFilesListPlus.so" "${OflpInstallDir}/OpenFilesListPlus.zip"
 
 #   overwrite "standalone" for debugging
-#echo "> updating plugin in [${OflpInstallDir}]"
+echo "> updating plugin from [${OflpInstallDir}] to [${OflpSystemDir}]"
 #cp -f "${OflpInstallDir}/OpenFilesListPlus.zip" "${OflpSystemDir}/codeblocks"
-#cp -f "${OflpInstallDir}/OpenFilesListPlus.so"  "${OflpSystemDir}/lib/codeblocks/plugins"
+cp -f "${OflpInstallDir}/OpenFilesListPlus.so"  "${OflpSystemDir}/lib/codeblocks/plugins"
+
+echo "> updating plugin from [${OflpInstallDir}] to [/home/gwr/.local/share/codeblocks/plugins/]"
+cp -f "${OflpInstallDir}/OpenFilesListPlus.so"  "/home/gwr/.local/share/codeblocks/plugins/OpenFilesListPlus.so"

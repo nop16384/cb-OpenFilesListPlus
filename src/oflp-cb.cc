@@ -71,8 +71,9 @@ bool    CB:: X_EditorBase_get_infos      (EdbInfos* _inf, eEdbInfoType _type, Ed
     //  logical stuff :
     //  cbProject <=> ProjectFile           , we take ePjf as reference
     //  FlAs       => PjAs & ProjectFile
-    if ( _type & CB::ePrj )  _type |= CB::ePjf;
-    if ( _type & CB::ePfas ) _type |= ( CB::ePjas | CB::ePjf );
+    if ( _type & CB::ePrj )  _type |= ( CB::ePjf );
+    if ( _type & CB::ePjas ) _type |= ( CB::ePjf );
+    if ( _type & CB::ePfas ) _type |= ( CB::ePjf | CB::ePjas );
     //  ............................................................................................
     if ( ! ( _type & oflp::CB::ePjf ) )
         goto lab_exit_success;
