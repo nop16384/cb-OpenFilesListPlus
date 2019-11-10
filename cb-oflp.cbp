@@ -5,7 +5,7 @@
 		<Option title="cb-oflp-plugin" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="src/;src/plugin/;src/panels/;src/panels/c/;src/panels/h/;src/log/;src/common/;src/devel-memleaks/;src/settings/;notes/;build/;build/linux/;src/plugin/h/;src/plugin/c/;" />
+		<Option virtualFolders="src/;src/plugin/;src/panels/;src/panels/c/;src/panels/h/;src/log/;src/common/;src/devel-memleaks/;src/settings/;notes/;build/;src/plugin/h/;src/plugin/c/;build/lx/;" />
 		<Option show_notes="0">
 			<notes>
 				<![CDATA[OpenFilesListPlus plugin project
@@ -18,8 +18,8 @@ Targets
 			</notes>
 		</Option>
 		<Build>
-			<Target title="devel-linux">
-				<Option output="plugin/devel/linux/OpenFilesListPlus.so" prefix_auto="0" extension_auto="0" />
+			<Target title="lx-dev">
+				<Option output="plugin/lx/dev/OpenFilesListPlus.so" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -27,8 +27,8 @@ Targets
 				<Option run_host_application_in_terminal="0" />
 				<Compiler>
 					<Add option="-std=c++11" />
-					<Add option="-g" />
 					<Add option="-fPIC" />
+					<Add option="-g" />
 					<Add option="-g -ggdb" />
 					<Add option="-Winvalid-pch" />
 					<Add option="-fexceptions" />
@@ -38,22 +38,30 @@ Targets
 					<Add option="-DPIC" />
 					<Add option="-DOFLP_LINUX" />
 					<Add option="-DCB_PRECOMP" />
-					<Add directory="$(OFLP_CBSRC)/include" />
-					<Add directory="$(OFLP_CBSRC)/sdk/wxscintilla/include" />
-					<Add directory="$(OFLP_CBSRC)/include/tinyxml" />
+					<Add directory="/${OFLP_CBSRC}/include" />
+					<Add directory="/${OFLP_CBSRC}/sdk/wxscintilla/include" />
+					<Add directory="/${OFLP_CBSRC}/include/tinyxml" />
 				</Compiler>
 				<Linker>
 					<Add option="`wx-config --version=$(OFLP_WXVERSION) --toolkit=$(OFLP_WXTOOLKIT) --unicode=$(OFLP_WXUNICODE) --debug=$(OFLP_WXDEBUG) --libs`" />
 				</Linker>
 				<ExtraCommands>
-					<Add before="chmod u=rwx ./build/linux/pre-build.bash" />
-					<Add before="./build/linux/pre-build.bash $(PROJECT_DIR)" />
-					<Add after="chmod u=rwx ./build/linux/post-build.bash" />
-					<Add after="./build/linux/post-build.bash devel $(OFLP_WXVERSION) $(OFLP_WXTOOLKIT)" />
+					<Add before="echo ${KEYTEST}" />
+					<Add before="chmod u=rwx ./build/lx/pre-build.bash" />
+					<Add before="./build/lx/pre-build.bash $(PROJECT_DIR)" />
+					<Add after="chmod u=rwx ./build/lx/post-build.bash" />
+					<Add after="./build/lx/post-build.bash dev $(OFLP_WXVERSION) $(OFLP_WXTOOLKIT)" />
 					<Mode after="always" />
 				</ExtraCommands>
+				<Environment>
+					<Variable name="OFLP_CBSRC" value="home/gwr/Src/C-C++/codeblocks/cb-custom/standalone/svn11267/wx-3.0.2/trunk/src" />
+					<Variable name="OFLP_WXDEBUG" value="no" />
+					<Variable name="OFLP_WXTOOKIT" value="gtk2" />
+					<Variable name="OFLP_WXUNICODE" value="yes" />
+					<Variable name="OFLP_WXVERSION" value="3.0" />
+				</Environment>
 			</Target>
-			<Target title="devel-linux-configure">
+			<Target title="lx-dev-configure">
 				<Option output="plugin/devel/linux-configure/libOpenFilesListPlus.so" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj" />
 				<Option type="3" />
@@ -75,7 +83,7 @@ Targets
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
-			<Target title="devel-linux-memleaks">
+			<Target title="lx-dev-memleaks">
 				<Option output="plugin/devel/linux-memleaks/OpenFilesListPlus" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj" />
 				<Option type="1" />
@@ -95,26 +103,7 @@ Targets
 					<Add library="../gwr.codeblocks/src/svn10502/trunk/src/base/tinyxml/.libs/libtinyxml.a" />
 				</Linker>
 			</Target>
-			<Target title="devel-linux-symbols">
-				<Option output="plugin/devel/linux/symbols/OpenFilesListPlus.so" prefix_auto="0" extension_auto="0" />
-				<Option object_output="obj" />
-				<Option type="3" />
-				<Option compiler="gcc" />
-				<Option host_application="codeblocks" />
-				<Option run_host_application_in_terminal="0" />
-				<Compiler>
-					<Add option="-ansi" />
-					<Add option="-g" />
-					<Add option="`wx-config --cflags`" />
-					<Add option="-fPIC" />
-					<Add option="-DOFLP_DEBUG" />
-				</Compiler>
-				<Linker>
-					<Add option="`wx-config --libs`" />
-					<Add option="-Wl,-z,defs" />
-				</Linker>
-			</Target>
-			<Target title="devel-ms">
+			<Target title="ms-dev">
 				<Option output="plugin/devel/ms/$(#oflp.tdm_id)/OpenFilesListPlus.dll" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj" />
 				<Option type="3" />
@@ -156,76 +145,68 @@ Targets
 					<Add after="zip -j9 plugin/devel/ms/$(#oflp.tdm_id)/OpenFilesListPlus.cbplugin plugin/devel/ms/$(#oflp.tdm_id)/OpenFilesListPlus.dll plugin/devel/ms/$(#oflp.tdm_id)/OpenFilesListPlus.zip" />
 					<Mode after="always" />
 				</ExtraCommands>
+				<Environment>
+					<Variable name="MSKEY" value="47" />
+				</Environment>
 			</Target>
 		</Build>
-		<Unit filename="build/linux/build.config.bash">
-			<Option virtualFolder="build/linux/" />
-			<Option target="devel-linux" />
-			<Option target="devel-linux-configure" />
-			<Option target="devel-linux-memleaks" />
-			<Option target="devel-linux-symbols" />
+		<Unit filename="build/lx/post-build.bash">
+			<Option virtualFolder="build/lx/" />
+			<Option target="lx-dev" />
+			<Option target="lx-dev-configure" />
+			<Option target="lx-dev-memleaks" />
 		</Unit>
-		<Unit filename="build/linux/post-build.bash">
-			<Option virtualFolder="build/linux/" />
-			<Option target="devel-linux" />
-			<Option target="devel-linux-configure" />
-			<Option target="devel-linux-memleaks" />
-			<Option target="devel-linux-symbols" />
-		</Unit>
-		<Unit filename="build/linux/pre-build.bash">
-			<Option virtualFolder="build/linux/" />
-			<Option target="devel-linux" />
-			<Option target="devel-linux-configure" />
-			<Option target="devel-linux-memleaks" />
-			<Option target="devel-linux-symbols" />
-		</Unit>
-		<Unit filename="build/log-defines.txt">
-			<Option virtualFolder="build/" />
+		<Unit filename="build/lx/pre-build.bash">
+			<Option virtualFolder="build/lx/" />
+			<Option target="lx-dev" />
+			<Option target="lx-dev-configure" />
+			<Option target="lx-dev-memleaks" />
 		</Unit>
 		<Unit filename="notes/bugs.h">
 			<Option virtualFolder="notes/" />
-			<Option target="devel-linux" />
-			<Option target="devel-linux-memleaks" />
-			<Option target="devel-ms" />
+			<Option target="lx-dev" />
+			<Option target="lx-dev-memleaks" />
+			<Option target="ms-dev" />
 		</Unit>
 		<Unit filename="notes/changelog.h">
 			<Option virtualFolder="notes/" />
-			<Option target="devel-linux" />
-			<Option target="devel-linux-memleaks" />
-			<Option target="devel-linux-symbols" />
-			<Option target="devel-ms" />
+			<Option target="lx-dev" />
+			<Option target="lx-dev-memleaks" />
+			<Option target="ms-dev" />
 		</Unit>
 		<Unit filename="notes/new-list.h">
 			<Option virtualFolder="notes/" />
-			<Option target="devel-linux" />
-			<Option target="devel-linux-memleaks" />
-			<Option target="devel-ms" />
+			<Option target="lx-dev" />
+			<Option target="lx-dev-memleaks" />
+			<Option target="ms-dev" />
 		</Unit>
 		<Unit filename="notes/notes.h">
 			<Option virtualFolder="notes/" />
-			<Option target="devel-linux" />
-			<Option target="devel-linux-memleaks" />
-			<Option target="devel-ms" />
+			<Option target="lx-dev" />
+			<Option target="lx-dev-memleaks" />
+			<Option target="ms-dev" />
 		</Unit>
 		<Unit filename="notes/techs.h">
 			<Option virtualFolder="notes/" />
 		</Unit>
 		<Unit filename="notes/todo.h">
 			<Option virtualFolder="notes/" />
-			<Option target="devel-linux" />
-			<Option target="devel-linux-memleaks" />
-			<Option target="devel-ms" />
+			<Option target="lx-dev" />
+			<Option target="lx-dev-memleaks" />
+			<Option target="ms-dev" />
 		</Unit>
 		<Unit filename="src/devel-memleaks/devel-memleaks.cc">
 			<Option virtualFolder="src/devel-memleaks/" />
-			<Option target="devel-linux-memleaks" />
+			<Option target="lx-dev-memleaks" />
+		</Unit>
+		<Unit filename="src/log-defines.txt">
+			<Option virtualFolder="src/log/" />
 		</Unit>
 		<Unit filename="src/manifest.xml">
 			<Option virtualFolder="src/common/" />
-			<Option target="devel-linux" />
-			<Option target="devel-linux-memleaks" />
-			<Option target="devel-linux-symbols" />
-			<Option target="devel-ms" />
+			<Option target="lx-dev" />
+			<Option target="lx-dev-memleaks" />
+			<Option target="ms-dev" />
 		</Unit>
 		<Unit filename="src/oflp-cb.cc">
 			<Option virtualFolder="src/common/" />
@@ -244,10 +225,9 @@ Targets
 		</Unit>
 		<Unit filename="src/oflp-common.hh">
 			<Option virtualFolder="src/common/" />
-			<Option target="devel-linux" />
-			<Option target="devel-linux-memleaks" />
-			<Option target="devel-linux-symbols" />
-			<Option target="devel-ms" />
+			<Option target="lx-dev" />
+			<Option target="lx-dev-memleaks" />
+			<Option target="ms-dev" />
 		</Unit>
 		<Unit filename="src/oflp-log.cc">
 			<Option virtualFolder="src/log/" />
@@ -275,17 +255,15 @@ Targets
 		</Unit>
 		<Unit filename="src/oflp-panel.cc">
 			<Option virtualFolder="src/panels/c/" />
-			<Option target="devel-linux" />
-			<Option target="devel-linux-memleaks" />
-			<Option target="devel-linux-symbols" />
-			<Option target="devel-ms" />
+			<Option target="lx-dev" />
+			<Option target="lx-dev-memleaks" />
+			<Option target="ms-dev" />
 		</Unit>
 		<Unit filename="src/oflp-panel.hh">
 			<Option virtualFolder="src/panels/h/" />
-			<Option target="devel-linux" />
-			<Option target="devel-linux-memleaks" />
-			<Option target="devel-linux-symbols" />
-			<Option target="devel-ms" />
+			<Option target="lx-dev" />
+			<Option target="lx-dev-memleaks" />
+			<Option target="ms-dev" />
 		</Unit>
 		<Unit filename="src/oflp-plugin-dnd.cc">
 			<Option virtualFolder="src/plugin/c/" />
@@ -340,10 +318,9 @@ Targets
 		</Unit>
 		<Unit filename="src/oflp-plugin.hh">
 			<Option virtualFolder="src/plugin/h/" />
-			<Option target="devel-linux" />
-			<Option target="devel-linux-memleaks" />
-			<Option target="devel-linux-symbols" />
-			<Option target="devel-ms" />
+			<Option target="lx-dev" />
+			<Option target="lx-dev-memleaks" />
+			<Option target="ms-dev" />
 		</Unit>
 		<Unit filename="src/oflp-settings-options.hh">
 			<Option virtualFolder="src/settings/" />
@@ -368,10 +345,9 @@ Targets
 		</Unit>
 		<Unit filename="src/oflp.xrc">
 			<Option virtualFolder="src/common/" />
-			<Option target="devel-linux" />
-			<Option target="devel-linux-memleaks" />
-			<Option target="devel-linux-symbols" />
-			<Option target="devel-ms" />
+			<Option target="lx-dev" />
+			<Option target="lx-dev-memleaks" />
+			<Option target="ms-dev" />
 		</Unit>
 		<Extensions>
 			<envvars />

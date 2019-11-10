@@ -23,7 +23,7 @@
 
 #ifndef CB_PRECOMP
 
-    #pragma message "-CBPRECOMP"
+    //#pragma message "-CBPRECOMP"
 
     #include <cbplugin.h>                                             //  for "class cbPlugin"
     #include <manager.h>
@@ -41,49 +41,22 @@
     #include <cbproject.h>
     #include <projectmanager.h>
 #else
-    #pragma message "+CBPRECOMP"
+    //#pragma message "+CBPRECOMP"
 #endif
 //  ................................................................................................
 //  general defines - compilation options
 //  ................................................................................................
 #include    "oflp-common-defines.hh"
-#include    "oflp-log.hh"                                                                           //  OFLP plugin log system
-//#include    "oflp-globals.hh"
+#include    "oflp-log.hh"
 //  ................................................................................................
 
 //  ................................................................................................
 //  some macros
-//#include    "oflp-common-macros.hh"
+//#include    "oflp-common-macros.hh"                                                               // not needed everywhere
 //  ................................................................................................
 //  declare all classes ( and some aliases ) for header files
 #include    "oflp-common-classes.hh"
-//  ................................................................................................
-/*
-WX_DEFINE_ARRAY(        EditorBase  *, EditorArray);
-WX_DEFINE_ARRAY(        OflpPanel   *, OflpPanelArray);
 
-WX_DECLARE_HASH_MAP(    int                 ,
-                        wxBitmap*           ,
-                        wxIntegerHash       ,
-                        wxIntegerEqual      ,
-                        BitmapPointerHash   );
-*/
-//  ................................................................................................
-//  containers custom accessors for :
-//      - avoiding modifying a container while looping on it
-//  - The same macros as OFLP_STL_FOR etc... defined in oflp-common-macros.hhi and
-//    using the custom containers are also defined.
-//  - "devel" target use the custom
-//    containers, "prod" target dont and use classical wx containers
-/*
-#ifdef  OFLP_COMPILE_TARGET_DEVEL
-#include    "oflp-common-stl-devel.hhi"
-#endif
-#ifdef  OFLP_COMPILE_TARGET_PROD
-#include    "oflp-common-stl-prod.hhi"
-#endif
-*/
-//  ................................................................................................
 
 
 

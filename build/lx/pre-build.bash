@@ -47,7 +47,7 @@ function    f_create_new_cci_str
 ####################################################################################################
 echo "Pre-build.bash...[${TEST}]"
 
-F1="${ProjectDir}/build/log-defines.txt"
+F1="${ProjectDir}/src/log-defines.txt"
 
 while read -d $'\n' dn fn
 do

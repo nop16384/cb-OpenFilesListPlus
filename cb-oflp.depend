@@ -6611,11 +6611,13 @@
 	"oflp-panel-header.hh"
 	"generated/oflp-panel--log-defines.cci"
 
-1573371509 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-dnd.cc
+1573378021 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-dnd.cc
 	"oflp-common.hh"
 	"oflp-plugin.hh"
+	"oflp-cb.hh"
 	"oflp-panel.hh"
 	"oflp-plugin-mod-panels.hh"
+	"generated/oflp-dnd--log-defines.cci"
 
 1515698777 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-editors.hh
 
@@ -7302,7 +7304,7 @@
 	"oflp-common.hh"
 	"oflp-util-uid.hh"
 
-1565805979 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-cb.cc
+1573378483 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-cb.cc
 	"oflp-common.hh"
 	"oflp-cb.hh"
 	<configurationpanel.h>

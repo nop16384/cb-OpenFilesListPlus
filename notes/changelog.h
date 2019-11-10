@@ -17,3 +17,4 @@
 - re-added layout synchro in oflp-plugin-dnd.c, because incessant calls to SyncEditorsToLayout()
   used to move back editors in bulk panel when closing projects / workspace, which break the layout
   saving process.
+- moved compilation environment variables from 'envvars' to 'per-project variables'
