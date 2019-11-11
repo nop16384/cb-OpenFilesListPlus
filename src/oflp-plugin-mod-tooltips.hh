@@ -75,8 +75,10 @@ class OflpModTooltips       :   public  OflpModule
   public:
     void        x_refresh_tooltips_visibility   ();
     //  --------------------------------------------------------------------------------------------
+    //  module
   private:
-    virtual     void    z_release()    {}
+    virtual     void    modinit()       {};
+    virtual     void    modrelease()    {};
     //  --------------------------------------------------------------------------------------------
   public:
     OflpModTooltips()

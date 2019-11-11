@@ -49,7 +49,7 @@ Core :
     1) DndDst->OnDrop() is called, have to return true
     2) DtObj->OnData() is called with its data copied from DsObj
 
-
+OFLP_LOG should imply OFLP_MENU__LOG
 
 
 

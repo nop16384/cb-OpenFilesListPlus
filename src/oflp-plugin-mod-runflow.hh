@@ -49,8 +49,10 @@ class OflpModRunflow        :   public  OflpModule
     bool            pop()       { return a_pro_open;                }
     bool            pcl()       { return a_pro_close;               }
     //  --------------------------------------------------------------------------------------------
+    //  module
   private:
-    virtual     void    z_release() {}
+    virtual     void    modinit()       {};
+    virtual     void    modrelease()    {};
     //  --------------------------------------------------------------------------------------------
   public:
     OflpModRunflow()

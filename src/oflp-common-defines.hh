@@ -12,12 +12,13 @@
 #define OFLP_FILE_VERSION_MAJOR_NUM     1
 #define OFLP_FILE_VERSION_MINOR_NUM     0
 //  ................................................................................................
-//  global log capability
+//  global customizable capabilities
 //  ................................................................................................
-#define     OFLP_LOG
-//  ................................................................................................
-//  log entry & exit of functions
-//  ................................................................................................
+//  OFLP_EMBED__LOG             embed log
+//  OFLP_EMBED__MENU_LOG        show log options in popup menu
+//  OFLP_EMBED__MENU_DBG        show debug actions in popup menu
+//  OFLP_LOG_FUNCTIONS          log enter / exit of functions
+
 #define     OFLP_LOG_FUNCTIONS
 //  ................................................................................................
 //  per c++ module logs

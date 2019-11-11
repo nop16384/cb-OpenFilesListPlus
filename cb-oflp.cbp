@@ -27,8 +27,8 @@ Targets
 				<Option run_host_application_in_terminal="0" />
 				<Compiler>
 					<Add option="-std=c++11" />
-					<Add option="-fPIC" />
 					<Add option="-g" />
+					<Add option="-fPIC" />
 					<Add option="-g -ggdb" />
 					<Add option="-Winvalid-pch" />
 					<Add option="-fexceptions" />
@@ -36,8 +36,11 @@ Targets
 					<Add option="-DTIXML_USE_STL" />
 					<Add option="-DCB_AUTOCONF" />
 					<Add option="-DPIC" />
-					<Add option="-DOFLP_LINUX" />
 					<Add option="-DCB_PRECOMP" />
+					<Add option="-DOFLP_LX" />
+					<Add option="-DOFLP_EMBED__LOG" />
+					<Add option="-DOFLP_EMBED__MENU_LOG" />
+					<Add option="-DOFLP_EMBED__MENU_DBG" />
 					<Add directory="/${OFLP_CBSRC}/include" />
 					<Add directory="/${OFLP_CBSRC}/sdk/wxscintilla/include" />
 					<Add directory="/${OFLP_CBSRC}/include/tinyxml" />
@@ -55,10 +58,6 @@ Targets
 				</ExtraCommands>
 				<Environment>
 					<Variable name="OFLP_CBSRC" value="home/gwr/Src/C-C++/codeblocks/cb-custom/standalone/svn11267/wx-3.0.2/trunk/src" />
-					<Variable name="OFLP_WXDEBUG" value="no" />
-					<Variable name="OFLP_WXTOOKIT" value="gtk2" />
-					<Variable name="OFLP_WXUNICODE" value="yes" />
-					<Variable name="OFLP_WXVERSION" value="3.0" />
 				</Environment>
 			</Target>
 			<Target title="lx-dev-configure">
@@ -149,42 +148,95 @@ Targets
 					<Variable name="MSKEY" value="47" />
 				</Environment>
 			</Target>
+			<Target title="lx-dpub">
+				<Option output="plugin/lx/dpub/OpenFilesListPlus.so" prefix_auto="0" extension_auto="0" />
+				<Option object_output="obj" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option host_application="codeblocks" />
+				<Option run_host_application_in_terminal="0" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-g" />
+					<Add option="-fPIC" />
+					<Add option="-g -ggdb" />
+					<Add option="-Winvalid-pch" />
+					<Add option="-fexceptions" />
+					<Add option="`wx-config --version=$(OFLP_WXVERSION) --toolkit=$(OFLP_WXTOOLKIT) --unicode=$(OFLP_WXUNICODE) --debug=$(OFLP_WXDEBUG) --cflags`" />
+					<Add option="-DTIXML_USE_STL" />
+					<Add option="-DCB_AUTOCONF" />
+					<Add option="-DPIC" />
+					<Add option="-DCB_PRECOMP" />
+					<Add option="-DOFLP_LX" />
+					<Add option="-DOFLP_EMBED__LOG" />
+					<Add option="-DOFLP_EMBED__MENU_LOG" />
+					<Add directory="/${OFLP_CBSRC}/include" />
+					<Add directory="/${OFLP_CBSRC}/sdk/wxscintilla/include" />
+					<Add directory="/${OFLP_CBSRC}/include/tinyxml" />
+				</Compiler>
+				<Linker>
+					<Add option="`wx-config --version=$(OFLP_WXVERSION) --toolkit=$(OFLP_WXTOOLKIT) --unicode=$(OFLP_WXUNICODE) --debug=$(OFLP_WXDEBUG) --libs`" />
+				</Linker>
+				<ExtraCommands>
+					<Add before="echo ${KEYTEST}" />
+					<Add before="chmod u=rwx ./build/lx/pre-build.bash" />
+					<Add before="./build/lx/pre-build.bash $(PROJECT_DIR)" />
+					<Add after="chmod u=rwx ./build/lx/post-build.bash" />
+					<Add after="./build/lx/post-build.bash dpub $(OFLP_WXVERSION) $(OFLP_WXTOOLKIT)" />
+					<Mode after="always" />
+				</ExtraCommands>
+				<Environment>
+					<Variable name="OFLP_CBSRC" value="home/gwr/Src/C-C++/codeblocks/cb-custom/standalone/svn11267/wx-3.0.2/trunk/src" />
+				</Environment>
+			</Target>
+			<Environment>
+				<Variable name="OFLP_WXDEBUG" value="no" />
+				<Variable name="OFLP_WXTOOLKIT" value="gtk2" />
+				<Variable name="OFLP_WXUNICODE" value="yes" />
+				<Variable name="OFLP_WXVERSION" value="3.0" />
+			</Environment>
 		</Build>
 		<Unit filename="build/lx/post-build.bash">
 			<Option virtualFolder="build/lx/" />
 			<Option target="lx-dev" />
 			<Option target="lx-dev-configure" />
 			<Option target="lx-dev-memleaks" />
+			<Option target="lx-dpub" />
 		</Unit>
 		<Unit filename="build/lx/pre-build.bash">
 			<Option virtualFolder="build/lx/" />
 			<Option target="lx-dev" />
 			<Option target="lx-dev-configure" />
 			<Option target="lx-dev-memleaks" />
+			<Option target="lx-dpub" />
 		</Unit>
 		<Unit filename="notes/bugs.h">
 			<Option virtualFolder="notes/" />
 			<Option target="lx-dev" />
 			<Option target="lx-dev-memleaks" />
 			<Option target="ms-dev" />
+			<Option target="lx-dpub" />
 		</Unit>
 		<Unit filename="notes/changelog.h">
 			<Option virtualFolder="notes/" />
 			<Option target="lx-dev" />
 			<Option target="lx-dev-memleaks" />
 			<Option target="ms-dev" />
+			<Option target="lx-dpub" />
 		</Unit>
 		<Unit filename="notes/new-list.h">
 			<Option virtualFolder="notes/" />
 			<Option target="lx-dev" />
 			<Option target="lx-dev-memleaks" />
 			<Option target="ms-dev" />
+			<Option target="lx-dpub" />
 		</Unit>
 		<Unit filename="notes/notes.h">
 			<Option virtualFolder="notes/" />
 			<Option target="lx-dev" />
 			<Option target="lx-dev-memleaks" />
 			<Option target="ms-dev" />
+			<Option target="lx-dpub" />
 		</Unit>
 		<Unit filename="notes/techs.h">
 			<Option virtualFolder="notes/" />
@@ -194,6 +246,7 @@ Targets
 			<Option target="lx-dev" />
 			<Option target="lx-dev-memleaks" />
 			<Option target="ms-dev" />
+			<Option target="lx-dpub" />
 		</Unit>
 		<Unit filename="src/devel-memleaks/devel-memleaks.cc">
 			<Option virtualFolder="src/devel-memleaks/" />
@@ -207,6 +260,7 @@ Targets
 			<Option target="lx-dev" />
 			<Option target="lx-dev-memleaks" />
 			<Option target="ms-dev" />
+			<Option target="lx-dpub" />
 		</Unit>
 		<Unit filename="src/oflp-cb.cc">
 			<Option virtualFolder="src/common/" />
@@ -228,6 +282,13 @@ Targets
 			<Option target="lx-dev" />
 			<Option target="lx-dev-memleaks" />
 			<Option target="ms-dev" />
+			<Option target="lx-dpub" />
+		</Unit>
+		<Unit filename="src/oflp-log-frame.cc">
+			<Option virtualFolder="src/log/" />
+		</Unit>
+		<Unit filename="src/oflp-log-frame.hh">
+			<Option virtualFolder="src/log/" />
 		</Unit>
 		<Unit filename="src/oflp-log.cc">
 			<Option virtualFolder="src/log/" />
@@ -258,12 +319,14 @@ Targets
 			<Option target="lx-dev" />
 			<Option target="lx-dev-memleaks" />
 			<Option target="ms-dev" />
+			<Option target="lx-dpub" />
 		</Unit>
 		<Unit filename="src/oflp-panel.hh">
 			<Option virtualFolder="src/panels/h/" />
 			<Option target="lx-dev" />
 			<Option target="lx-dev-memleaks" />
 			<Option target="ms-dev" />
+			<Option target="lx-dpub" />
 		</Unit>
 		<Unit filename="src/oflp-plugin-dnd.cc">
 			<Option virtualFolder="src/plugin/c/" />
@@ -321,6 +384,7 @@ Targets
 			<Option target="lx-dev" />
 			<Option target="lx-dev-memleaks" />
 			<Option target="ms-dev" />
+			<Option target="lx-dpub" />
 		</Unit>
 		<Unit filename="src/oflp-settings-options.hh">
 			<Option virtualFolder="src/settings/" />
@@ -348,6 +412,7 @@ Targets
 			<Option target="lx-dev" />
 			<Option target="lx-dev-memleaks" />
 			<Option target="ms-dev" />
+			<Option target="lx-dpub" />
 		</Unit>
 		<Extensions>
 			<envvars />

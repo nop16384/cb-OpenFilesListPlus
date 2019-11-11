@@ -70,8 +70,10 @@ class OflpModPanels : public OflpModule
     bool                    z_editors_mov   (OflpPanel* _nn_dst, OflpPanel* _nn_src);
     bool                    z_editor_mov    (OflpPanel* _nn_dst, OflpPanel* _nn_src, EditorBase* _nn_edb);
     //  --------------------------------------------------------------------------------------------
+    //  module
   private:
-    virtual     void    z_release() {}
+    virtual     void    modinit()       {};
+    virtual     void    modrelease()    { z_destroy(); }
     //  --------------------------------------------------------------------------------------------
   public:
     OflpModPanels();

@@ -19,3 +19,8 @@
   saving process.
 - moved compilation environment variables from 'envvars' to 'per-project variables'
 - removed member a_harray member of type oflp::HString::Harray from OflpPanel class since it was not used
+2019.11.11
+- updated popup menu code
+- new defines for compilation options
+- modifications in Modules : new methods modinit() and modrelease(). Was confusing with
+  some init() modules methods.

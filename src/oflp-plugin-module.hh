@@ -7,45 +7,7 @@
 #define __OFLP_PLUGIN_MODULE_HH__
 
 #include    "oflp-common-defines.hh"
-/// ************************************************************************************************
-//! \class  OflpModule
-//!
-//! \brief  OpenFilesListPlus is splitted in many classes called
-//!     modules, for code lisibility. Each module inherits from class
-//!     OflpModule, which allows inter-module & OpenFilesListPlus
-//!     instance access.
-/// ************************************************************************************************
-class OflpModule
-{
-    /*
-  private:
-    OpenFilesListPlus       *   a_instance;
-    OflpModGfx              *   a_module_gfx;
-    OflpModLayout           *   a_module_layout;
-    OflpModPanels           *   a_module_panels;
-    OflpModMenuOptions      *   a_module_menu_options;
-    OflpModSettings         *   a_module_settings;
-    OflpModRunflow          *   a_module_runflow;
-    OflpModTooltips         *   a_module_tooltips;
-    OflpModFLog             *   a_module_flog;
 
-  protected:
-    //OpenFilesListPlus       *   oflp()      { return a_instance;        }
-    //OflpModLayout           *   layout()    { return a_module_layout;   }
-    //OflpModPanels           *   panels()    { return a_module_panels;   }
-    //OflpModGfx              *   gfx()       { return a_module_gfx;      }
-    //OflpModSettings         *   settings()  { return a_module_settings; }
-    //OflpModRunflow          *   runflow()   { return a_module_runflow;  }
-    //OflpModTooltips         *   tooltips()  { return a_module_tooltips; }
-    //OflpModFLog             *   flog()      { return a_module_flog;     }
-    */
-  private:
-    virtual     void            z_release()                                                     = 0;
-
-  public:
-                void            init();
-};
-//  ################################################################################################
 namespace   oflp
 {
 
@@ -78,7 +40,8 @@ class   Modules
                         }
     //  --------------------------------------------------------------------------------------------
   private:
-    void    init();
+    void    modinit();
+    void    modrelease();
     //  --------------------------------------------------------------------------------------------
   public:
                 Modules();
@@ -102,5 +65,21 @@ OFLP_MODULE_SHORTCUT_DECL(flog      , FLog      );
 
 }
 
+/// ************************************************************************************************
+//! \class  OflpModule
+//!
+//! \brief  OpenFilesListPlus is splitted in many classes called
+//!     modules, for code lisibility. Each module inherits from class
+//!     OflpModule, which allows inter-module & OpenFilesListPlus
+//!     instance access.
+/// ************************************************************************************************
+class OflpModule
+{
+    friend class oflp::Modules;
+
+  private:
+    virtual     void            modinit()                                                       = 0;
+    virtual     void            modrelease()                                                    = 0;
+};
 
 #endif

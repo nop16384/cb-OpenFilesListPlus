@@ -331,6 +331,13 @@ bool    OflpModLayout::     z_xml_parse_project     (cbProject* _project, TiXmlD
     return true;
 }
 //  ################################################################################################
+//                              Module
+//  ################################################################################################
+void        OflpModLayout::     modrelease          ()
+{
+    z_reset();
+}
+//  ################################################################################################
 //                              Assignments
 //  ################################################################################################
 bool        OflpModLayout::PjAs::   x_pfas_get  (
@@ -363,31 +370,6 @@ bool        OflpModLayout::PjAs::   x_pfas_get  (
     return FALSE;
 }
 //  ================================================================================================
-void        OflpModLayout::     z_release                                   ()
-{
-    z_reset();
-}
-void        OflpModLayout::     z_reset                                     ()
-{
-    //  we delete all Assignments, and free the memory used by the wxArrays too
-
-    OFLP_STL_CFOR( PjAsAr, a_pj_as_ar, it )
-    {
-        delete (*it);
-    }
-
-    a_pj_as_ar.Clear();
-    ERG_TKI("OflpModLayout::x_reset():a_pj_as_ar GetCount[%lu]", a_pj_as_ar.GetCount());
-
-    OFLP_STL_CFOR( PnAsAr, a_pn_as_ar, it )
-    {
-        delete (*it);
-    }
-
-    a_pn_as_ar.Clear();
-    ERG_TKI("OflpModLayout::x_reset():a_pn_as_ar GetCount[%lu]", a_pn_as_ar.GetCount());
-}
-
 void        OflpModLayout::     z_pnas_add      (PnAs* _pnas)
 {
     OFLP_LOG_FUNC_ENTER("OFLP::Layout::z_pnas_add()");
@@ -502,6 +484,26 @@ bool        OflpModLayout::     x_pfas_get  (
 //  ################################################################################################
 //                              Actions
 //  ################################################################################################
+void        OflpModLayout::     z_reset                                     ()
+{
+    //  we delete all Assignments, and free the memory used by the wxArrays too
+
+    OFLP_STL_CFOR( PjAsAr, a_pj_as_ar, it )
+    {
+        delete (*it);
+    }
+
+    a_pj_as_ar.Clear();
+    ERG_TKI("OflpModLayout::x_reset():a_pj_as_ar GetCount[%lu]", a_pj_as_ar.GetCount());
+
+    OFLP_STL_CFOR( PnAsAr, a_pn_as_ar, it )
+    {
+        delete (*it);
+    }
+
+    a_pn_as_ar.Clear();
+    ERG_TKI("OflpModLayout::x_reset():a_pn_as_ar GetCount[%lu]", a_pn_as_ar.GetCount());
+}
 //  ################################################################################################
 //                              Events
 //  ################################################################################################

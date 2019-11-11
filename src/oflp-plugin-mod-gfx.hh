@@ -84,8 +84,10 @@ class OflpModGfx   :   public  OflpModule
             return *d_fnt_8;
         }
     //  --------------------------------------------------------------------------------------------
+    //  module
   private:
-    virtual     void    z_release() {}
+    virtual     void    modinit()       {};
+    virtual     void    modrelease()    {};
     //  --------------------------------------------------------------------------------------------
   public:
     OflpModGfx(wxString _gfx_dir)

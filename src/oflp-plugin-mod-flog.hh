@@ -29,8 +29,10 @@ class OflpModFLog   :    public  OflpModule
     void            x_log                   (char           const *);
     void            x_log                   (std::string    const &);
     //  --------------------------------------------------------------------------------------------
+    //  module
   private:
-    virtual     void    z_release() {}
+    virtual     void    modinit()       {};
+    virtual     void    modrelease()    {};
     //  --------------------------------------------------------------------------------------------
   public:
     OflpModFLog();

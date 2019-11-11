@@ -174,8 +174,10 @@ class OflpModLayout : public OflpModule
     //  --------------------------------------------------------------------------------------------
     void                x_dump_assignments      ();
     //  --------------------------------------------------------------------------------------------
-  public:
-    virtual void        z_release               ();
+    //  module
+  private:
+    virtual     void    modinit()       {};
+    virtual     void    modrelease();
     //  --------------------------------------------------------------------------------------------
   public:
     OflpModLayout()                                                             {}

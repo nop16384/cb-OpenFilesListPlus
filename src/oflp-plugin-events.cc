@@ -588,7 +588,7 @@ void    OpenFilesListPlus::     evh_panel_header_button_clicked_opt (wxCommandEv
 {
     OFLP_ON_DEGRADED__RET();
     //  ............................................................................................
-    oflp::modSettings()->action(_e);
+    oflp::modSettings()->clicked(_e);
     //  ............................................................................................
     //  this handler is connect to a wxButton, so
     //  - _e.GetEventObject() is not NULL

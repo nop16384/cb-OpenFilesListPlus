@@ -6,33 +6,25 @@
 #include    "oflp-common.hh"
 
 #include    "oflp-plugin.hh"
+#include    "oflp-plugin-mod-settings.hh"
 #include    "oflp-plugin-mod-gfx.hh"
 
 #include    "oflp-settings.hh"
 //  ................................................................................................
 //  specific to this file oflp defines
 #define ERG_OFLP_SANITY_CHECKS
+
+
+
 //  ################################################################################################
 //
 //                          OPENFILESLISTPLUSSETTINGS
 //
 //  ################################################################################################
-void            OpenFilesListPlusSettings:: opt_log__sync_from_var          (OflpOptLog & _o)
+void            OpenFilesListPlusSettings:: opt_log__sync_widgets_activity()
 {
-    a_opt_log   =   _o;
-    opt_log__sync_from_internals();
-}
-void            OpenFilesListPlusSettings:: opt_log__sync_from_widgets      ()
-{
-    a_opt_log.a_enabled =   dw_log_cb_enable->GetValue();
-    a_opt_log.a_window  =   dw_log_cb_ew->GetValue();
-    a_opt_log.a_console =   dw_log_cb_ec->GetValue();
-}
-void            OpenFilesListPlusSettings:: opt_log__sync_from_internals    ()
-{
-    dw_log_cb_enable    ->SetValue(a_opt_log.a_enabled);
-    dw_log_cb_ew        ->SetValue(a_opt_log.a_window);
-    dw_log_cb_ec        ->SetValue(a_opt_log.a_console);
+    if ( ! oflp::Modules::Instance()->settings()->emb_menu__log() )
+        return;
 
     if ( dw_log_cb_enable->GetValue() )
     {
@@ -45,6 +37,34 @@ void            OpenFilesListPlusSettings:: opt_log__sync_from_internals    ()
         dw_log_cb_ec    ->Enable(false);
     }
 }
+void            OpenFilesListPlusSettings:: opt_log__sync_from_var          (OflpOptLog & _o)
+{
+    if ( ! oflp::Modules::Instance()->settings()->emb_menu__log() )
+        return;
+
+    a_opt_log   =   _o;
+    opt_log__sync_from_internals();
+}
+void            OpenFilesListPlusSettings:: opt_log__sync_from_widgets      ()
+{
+    if ( ! oflp::Modules::Instance()->settings()->emb_menu__log() )
+        return;
+
+    a_opt_log.a_enabled =   dw_log_cb_enable->GetValue();
+    a_opt_log.a_window  =   dw_log_cb_ew->GetValue();
+    a_opt_log.a_console =   dw_log_cb_ec->GetValue();
+}
+void            OpenFilesListPlusSettings:: opt_log__sync_from_internals    ()
+{
+    if ( ! oflp::Modules::Instance()->settings()->emb_menu__log() )
+        return;
+
+    dw_log_cb_enable    ->SetValue(a_opt_log.a_enabled);
+    dw_log_cb_ew        ->SetValue(a_opt_log.a_window);
+    dw_log_cb_ec        ->SetValue(a_opt_log.a_console);
+
+    opt_log__sync_widgets_activity();
+}
 
 void            OpenFilesListPlusSettings:: opt_sel__sync_from_var          (OflpOptSel & _o)
 {
@@ -53,13 +73,13 @@ void            OpenFilesListPlusSettings:: opt_sel__sync_from_var          (Ofl
 }
 void            OpenFilesListPlusSettings:: opt_sel__sync_from_widgets      ()
 {
-    a_opt_sel.sclick( dw_cb_sel_single->GetValue() );
-    a_opt_sel.dclick( dw_cb_sel_double->GetValue() );
+    a_opt_sel.sclick( dw_sel_cb_single->GetValue() );
+    a_opt_sel.dclick( dw_sel_cb_double->GetValue() );
 }
 void            OpenFilesListPlusSettings:: opt_sel__sync_from_internals    ()
 {
-    dw_cb_sel_single->SetValue(a_opt_sel.sclick());
-    dw_cb_sel_double->SetValue(a_opt_sel.dclick());
+    dw_sel_cb_single->SetValue(a_opt_sel.sclick());
+    dw_sel_cb_double->SetValue(a_opt_sel.dclick());
 }
 
 void            OpenFilesListPlusSettings:: opt_div_tt__sync_from_var       (OflpOptDivTt & _o)
@@ -83,7 +103,7 @@ void            OpenFilesListPlusSettings:: opt_app_col__sync_from_widgets()
 }
 
 
-void            OpenFilesListPlusSettings:: output      (OflpOptLog& _olog, OflpOptSel& _osel, OflpOptDivTt& _odivtt, OflpOptColors& _ocolors)
+void            OpenFilesListPlusSettings:: xport(OflpOptLog& _olog, OflpOptSel& _osel, OflpOptDivTt& _odivtt, OflpOptColors& _ocolors)
 {
     opt_log__sync_from_widgets();
     opt_sel__sync_from_widgets();
@@ -100,23 +120,29 @@ void            OpenFilesListPlusSettings:: evh_check_box_clicked       (wxComma
 {
     //ERG_INF("ClientData[%p] ClientObject[%p] EventObject[%p]", _e.GetClientData(), _e.GetClientObject(), _e.GetEventObject());
 
+    if ( oflp::Modules::Instance()->settings()->emb_menu__log() )
+    {
 
     if  (   ( _e.GetEventObject() == dw_log_cb_enable       )   ||
             ( _e.GetEventObject() == dw_log_cb_ew           )   ||
             ( _e.GetEventObject() == dw_log_cb_ec           )   )
     {
+        opt_log__sync_widgets_activity();
+
         opt_log__sync_from_widgets();
     }
 
-    if  (   ( _e.GetEventObject() == dw_cb_sel_single   )   )
+    }
+
+    if  (   ( _e.GetEventObject() == dw_sel_cb_single   )   )
     {
-        dw_cb_sel_double->SetValue( ! dw_cb_sel_single->GetValue() );                               //  sync the other checkbox
+        dw_sel_cb_double->SetValue( ! dw_sel_cb_single->GetValue() );                               //  sync the other checkbox
         opt_sel__sync_from_widgets();
     }
 
-    if  (   ( _e.GetEventObject() == dw_cb_sel_double   )   )
+    if  (   ( _e.GetEventObject() == dw_sel_cb_double   )   )
     {
-        dw_cb_sel_single->SetValue( ! dw_cb_sel_double->GetValue() );                               //  sync the other checkbox
+        dw_sel_cb_single->SetValue( ! dw_sel_cb_double->GetValue() );                               //  sync the other checkbox
         opt_sel__sync_from_widgets();
     }
 
@@ -150,6 +176,7 @@ void            OpenFilesListPlusSettings:: z_build_widgets_01(
     dw_bs_main                          =   new wxBoxSizer( wxVERTICAL );
     //  ............................................................................................
     //  log options
+    if ( oflp::Modules::Instance()->settings()->emb_menu__log() )
     {
 
     wxPanel         *pn1, *pn2, *pn3, *pn4;
@@ -197,25 +224,25 @@ void            OpenFilesListPlusSettings:: z_build_widgets_01(
     //  file selection mode option
     {
 
-    dw_cp_sel                           = new wxCollapsiblePane( this, wxID_ANY, wxS("Selection"));
-    aw_pn_sel1                          = dw_cp_sel->GetPane();
-    aw_pn_sel1->SetFont( oflp::Modules::Instance()->gfx()->fnt8() );
+    dw_sel_cp                           = new wxCollapsiblePane( this, wxID_ANY, wxS("Selection"));
+    aw_sel_pn1                          = dw_sel_cp->GetPane();
+    aw_sel_pn1->SetFont( oflp::Modules::Instance()->gfx()->fnt8() );
 
     wxBoxSizer  *   s = new wxBoxSizer(wxVERTICAL);
-    wxPanel     *   p = new wxPanel(aw_pn_sel1, wxID_ANY);
+    wxPanel     *   p = new wxPanel(aw_sel_pn1, wxID_ANY);
 
-      dw_sz_sel1                        = new wxBoxSizer(wxVERTICAL);
-        dw_cb_sel_double                = new wxCheckBox(p, idb + 3, wxS("double click"));
-        dw_cb_sel_single                = new wxCheckBox(p, idb + 4, wxS("simple click"));
+      dw_sel_sz1                        = new wxBoxSizer(wxVERTICAL);
+        dw_sel_cb_double                = new wxCheckBox(p, idb + 3, wxS("double click"));
+        dw_sel_cb_single                = new wxCheckBox(p, idb + 4, wxS("simple click"));
 
-    dw_sz_sel1->Add( dw_cb_sel_double, 1, wxGROW | wxALL, 0);
-    dw_sz_sel1->Add( dw_cb_sel_single, 1, wxGROW | wxALL, 0);
+    dw_sel_sz1->Add( dw_sel_cb_double, 1, wxGROW | wxALL, 0);
+    dw_sel_sz1->Add( dw_sel_cb_single, 1, wxGROW | wxALL, 0);
 
-    p->SetSizer(dw_sz_sel1);
+    p->SetSizer(dw_sel_sz1);
 
     s->Add(p, 1, wxGROW | wxALL, 0);
-    aw_pn_sel1->SetSizer(s);
-    s->SetSizeHints(aw_pn_sel1);
+    aw_sel_pn1->SetSizer(s);
+    s->SetSizeHints(aw_sel_pn1);
 
     }
     //  ............................................................................................
@@ -238,6 +265,7 @@ void            OpenFilesListPlusSettings:: z_build_widgets_01(
     }
     //  ............................................................................................
     //  debug actions
+    if ( oflp::Modules::Instance()->settings()->emb_menu__dbg() )
     {
 
     wxSizer     *   sz1;
@@ -248,9 +276,9 @@ void            OpenFilesListPlusSettings:: z_build_widgets_01(
 
     sz1                                 =   new wxBoxSizer(wxVERTICAL);
 
-      dw_bt_dbg_chk01                   =   new wxButton(aw_dbg_cp_wn, idb + 6, wxS("panel vs layout"));
+      dw_dbg_bt_chk01                   =   new wxButton(aw_dbg_cp_wn, idb + 6, wxS("panel vs layout"));
 
-    sz1                     ->Add( dw_bt_dbg_chk01, 1, wxGROW|wxALL, 0);
+    sz1                     ->Add( dw_dbg_bt_chk01, 1, wxGROW|wxALL, 0);
     aw_dbg_cp_wn            ->SetSizer(sz1);
     sz1                     ->SetSizeHints(aw_dbg_cp_wn);
 
@@ -287,17 +315,20 @@ void            OpenFilesListPlusSettings:: z_build_widgets_01(
 
     }
     //  ............................................................................................
+    if ( oflp::Modules::Instance()->settings()->emb_menu__log() )
+    {
     dw_bs_main              ->Add(dw_log_cp                 , 0, wxGROW|wxALL, 0);
-    dw_bs_main              ->Add(dw_cp_sel                 , 0, wxGROW|wxALL, 0);
-    dw_bs_main              ->Add(dw_div_cp                 , 0, wxGROW|wxALL, 0);
-    dw_bs_main              ->Add(dw_dbg_cp                 , 0, wxGROW|wxALL, 0);
-    dw_bs_main              ->Add(dw_app_cp                 , 0, wxGROW|wxALL, 0);
+    }
 
-    //  if no logs, just hide the wxStaticBoxSizer here instead of not creating
-    //  it, which would lead to spread #ifndef OFLP_LOG checks everywhere
-    #ifndef OFLP_LOG
-    dw_log_cp->Show(false);
-    #endif
+    dw_bs_main              ->Add(dw_sel_cp                 , 0, wxGROW|wxALL, 0);
+    dw_bs_main              ->Add(dw_div_cp                 , 0, wxGROW|wxALL, 0);
+
+    if ( oflp::Modules::Instance()->settings()->emb_menu__dbg() )
+    {
+    dw_bs_main              ->Add(dw_dbg_cp                 , 0, wxGROW|wxALL, 0);
+    }
+
+    dw_bs_main              ->Add(dw_app_cp                 , 0, wxGROW|wxALL, 0);
     //  ............................................................................................
     opt_log__sync_from_var(_opt_log);
     opt_sel__sync_from_var(_opt_sel);
@@ -361,7 +392,7 @@ void            OpenFilesListPlusSettings:: z_build_widgets_02  (wxPoint& _scr_p
 //  ================================================================================================
 //  constructor specialized stuff -> linux
 //  ================================================================================================
-#ifdef  OFLP_LINUX
+#ifdef  OFLP_LX
 //  ------------------------------------------------------------------------------------------------
 //  constructor specialized stuff -> linux -> wx-3.0.?
 //  ------------------------------------------------------------------------------------------------
@@ -376,8 +407,13 @@ void            OpenFilesListPlusSettings:: z_build_widgets_02  (wxPoint& _scr_p
         OflpOptColors   _opt_colors )
             :   wxFrame (   _parent             , wxNewId()     ,   wxT("title")    ,
                             wxDefaultPosition   , wxDefaultSize ,
-                            (wxBORDER_NONE)                         )   ,
-                a_parent    (_parent)
+                            (wxBORDER_NONE)                                         )   ,
+                a_parent    (_parent)                                                   ,
+                dw_log_cp   (nullptr)                                                   ,
+                dw_sel_cp   (nullptr)                                                   ,
+                dw_app_cp   (nullptr)                                                   ,
+                dw_div_cp   (nullptr)                                                   ,
+                dw_dbg_cp   (nullptr)
 {
 
     this->SetFont(oflp::Modules::Instance()->gfx()->fnt8());

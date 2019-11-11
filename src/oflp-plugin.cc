@@ -88,16 +88,17 @@ void OpenFilesListPlus::OnAttach()
 {
     s_singleton             =   this;
     //  ............................................................................................
-    //  this is for debugging only : enable log window at very startup of plugin
-    oflp::A_log_window    =   true;                                             //  enable log window at start
-    oflp::A_log_console   =   false;
-    oflp::Log_window_open( Manager::Get()->GetAppWindow() );                    //  enable log window at start
-
+    //  Code below has been replaced with OflpModSettings::modinit()
+    //
+    //      this is for debugging only : enable log window at very startup of plugin
+    //      oflp::A_log_window    =   true;                                                         //  enable log window at start
+    //      oflp::A_log_console   =   false;
+    //      oflp::Log_window_open( Manager::Get()->GetAppWindow() );                                //  enable log window at start
     ///ERG_INF("OpenFilesListPlugin::OnAttach [%p][%p]", this, Instance());
     //  ............................................................................................
     //  create & init the modules
-    oflp::Modules::s_instance               =   new oflp::Modules();
-    oflp::Modules::Instance()->init();
+    oflp::Modules::s_instance = new oflp::Modules();
+    oflp::Modules::Instance()->modinit();
     //  ............................................................................................
     oflp::modRunflow()->attaching(true);
     //  ............................................................................................
@@ -187,11 +188,12 @@ void OpenFilesListPlus::OnRelease(bool appShutDown)
     Manager::Get()->ProcessEvent(evt);
     #endif
 
-    // destroy the widgets
-    oflp::modPanels()->z_destroy();
-
-    // layouts
-    oflp::modLayout()->z_release();
+    //  Code below is superseded by modrelease()
+    //      destroy the widgets
+    //      oflp::modPanels()->z_destroy();
+    //      layouts
+    //      oflp::modLayout()->z_release();
+    oflp::Modules::Instance()->modrelease();
 
     // close log window
     oflp::Log_window_close();

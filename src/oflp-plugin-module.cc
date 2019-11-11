@@ -14,10 +14,13 @@
 #include    "oflp-plugin-mod-tooltips.hh"
 #include    "oflp-plugin-mod-flog.hh"
 //  ................................................................................................
-void    OflpModule::init()
+void    OflpModule::modinit()
+{
+    modinit();
+}
+void    OflpModule::modrelease()
 {
 }
-
 //  ................................................................................................
 namespace   oflp
 {
@@ -47,15 +50,25 @@ Modules::~Modules()
 {
 }
 
-void    Modules::init()
+void    Modules::modinit()
 {
-    d_gfx           ->OflpModule::init();
-    d_layout        ->OflpModule::init();
-    d_panels        ->OflpModule::init();
-    d_settings      ->OflpModule::init();
-    d_runflow       ->OflpModule::init();
-    d_tooltips      ->OflpModule::init();
-    d_flog          ->OflpModule::init();
+    d_gfx           ->OflpModule::modinit();
+    d_layout        ->OflpModule::modinit();
+    d_panels        ->OflpModule::modinit();
+    d_settings      ->OflpModule::modinit();
+    d_runflow       ->OflpModule::modinit();
+    d_tooltips      ->OflpModule::modinit();
+    d_flog          ->OflpModule::modinit();
+}
+void    Modules::modrelease()
+{
+    d_gfx           ->OflpModule::modrelease();
+    d_layout        ->OflpModule::modrelease();
+    d_panels        ->OflpModule::modrelease();
+    d_settings      ->OflpModule::modrelease();
+    d_runflow       ->OflpModule::modrelease();
+    d_tooltips      ->OflpModule::modrelease();
+    d_flog          ->OflpModule::modrelease();
 }
 
 

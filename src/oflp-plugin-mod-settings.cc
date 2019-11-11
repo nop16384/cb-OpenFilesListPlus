@@ -12,18 +12,23 @@
 #include    "oflp-plugin.hh"
 //  ................................................................................................
 #define ERG_OFLP_SANITY_CHECKS
-//  ################################################################################################
-//
-//                          SETTINGS
-//
-//  ################################################################################################
-void    OflpModSettings::   action                      (wxCommandEvent &   _e)
+
+void    OflpModSettings::   modinit()
+{
+    if ( oflp::Modules::Instance()->settings()->emb_log() )
+    {
+
+    oflp::Log_window_open( Manager::Get()->GetAppWindow() );
+
+    }
+}
+
+void    OflpModSettings::   clicked                     (wxCommandEvent &   _e)
 {
     //  ............................................................................................
     OFLP_LOG_FUNC_ENTER("OFLP::Settings::action()");
     //  ............................................................................................
     //  ............................................................................................
-    //  widget is shown,
     if ( ! dw_settings )
         popup(_e);
     else
@@ -94,7 +99,7 @@ void    OflpModSettings::   popout                      (wxCommandEvent &   _e)
 void    OflpModSettings::   popout                      ()
 {
     //  ............................................................................................
-    dw_settings->output(a_opt_log, a_opt_sel, a_opt_div_tt, a_opt_colors);
+    dw_settings->xport(a_opt_log, a_opt_sel, a_opt_div_tt, a_opt_colors);
 
     delete dw_settings;
     dw_settings = NULL;
@@ -107,11 +112,11 @@ void    OflpModSettings::   popout                      ()
 
 void    OflpModSettings::   update_from_user_input      ()
 {
+    if ( oflp::Modules::Instance()->settings()->emb_menu__log() )
+    {
+
     if ( log_enabled() )
     {
-        oflp::A_log_window    =   log_window();
-        oflp::A_log_console   =   log_console();
-
         if ( log_window() )
         {
             ERGCB_INF( "%s", wxS("+log window") );
@@ -125,24 +130,41 @@ void    OflpModSettings::   update_from_user_input      ()
     }
     else
     {
-        oflp::A_log_window    =   false;
-        oflp::A_log_console   =   false;
-
         oflp::Log_window_close();
     }
 
+    }
 
     oflp::Modules::Instance()->tooltips()->x_refresh_tooltips_visibility();
 
     oflp::Modules::Instance()->panels()->x_set_col__bg_p( app_col_bg_p() );
     oflp::Modules::Instance()->panels()->x_set_col__bg_h( app_col_bg_h() );
 }
-//  ################################################################################################
+
         OflpModSettings::   OflpModSettings()
 {
+    //  transform some defines options into OflpModSettings variables
+    a_embed_log         =   false;
+    a_embed_menu__log   =   false;
+    a_embed_menu__dbg   =   false;
+
+    #ifdef  OFLP_EMBED__LOG
+    a_embed_log = true;
+        #ifdef  OFLP_EMBED__MENU_LOG
+        a_embed_menu__log = true;
+        #endif
+    #endif
+
+    #ifdef  OFLP_EMBED__MENU_DBG
+    a_embed_menu__dbg  = true;
+    #endif
+
+    //  __ERG_NOTE__ Since the settings are not saved on disk, if log is embedded, they will always
+    //  be activated, and the LogFrame that will be shown in OflpModSettings::modinit(). Keep
+    //  the two synchronized.
     a_opt_log.a_enabled = true;
     a_opt_log.a_window  = true;
-    a_opt_log.a_console = true;
+    a_opt_log.a_console = false;
 
     a_opt_sel.sclick(true);
 

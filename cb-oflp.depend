@@ -5461,19 +5461,14 @@
 1452364080 source:c:\root\src\openfileslistplus\src\oflp-settings.cc
 	"oflp-settings.hh"
 
-1565200340 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-log.cc
+1573467784 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-log.cc
 	"oflp-common.hh"
 	"oflp-log.hh"
-	<wx/frame.h>
-	<wx/font.h>
-	<wx/textctrl.h>
-	<wx/sizer.h>
+	"oflp-plugin-mod-settings.hh"
 	<wx/window.h>
 
-1565200319 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-log.hh
-	<wx/string.h>
-	<wx/colour.h>
-	<wx/textctrl.h>
+1573459472 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-log.hh
+	"oflp-log-frame.hh"
 
 1439816714 /usr/include/wx-2.8/wx/string.h
 	"wx/defs.h"
@@ -6047,7 +6042,7 @@
 	"oflp-panel.hh"
 	"generated/oflp-panel-header--log-defines.cci"
 
-1563994260 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-gfx.hh
+1573464743 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-gfx.hh
 	"oflp-common.hh"
 	"oflp-plugin-module.hh"
 	<wx/imaglist.h>
@@ -6573,7 +6568,7 @@
 
 1565198929 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-common-classes.hh
 
-1565879209 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-module.hh
+1573467923 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-module.hh
 	"oflp-common-defines.hh"
 
 1573389014 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-panel.hh
@@ -6593,7 +6588,7 @@
 
 1565856895 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin.hh
 
-1565201443 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-panels.hh
+1573464958 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-panels.hh
 	"oflp-plugin-module.hh"
 	"oflp-util-uid.hh"
 
@@ -6619,7 +6614,7 @@
 
 1515698777 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-editors.hh
 
-1573375264 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-events.cc
+1573416081 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-events.cc
 	"oflp-common.hh"
 	"oflp-common-macros.hh"
 	"oflp-cb.hh"
@@ -6632,7 +6627,7 @@
 	"oflp-panel-utils.hh"
 	"generated/oflp-plugin-events--log-defines.cci"
 
-1565200612 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-layout.hh
+1573465306 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-layout.hh
 	"oflp-util-uid.hh"
 	"oflp-plugin-module.hh"
 	<tinyxml.h>
@@ -6640,20 +6635,20 @@
 
 1514098688 /home/gwr/Src/C-C++/codeblocks/cb-custom/standalone/svn10692/wx-3.0.2/trunk/src/include/tinyxml/tinywxuni.h
 
-1564752180 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-settings.hh
+1573464821 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-settings.hh
 	"oflp-common.hh"
 	"oflp-plugin-module.hh"
 	"oflp-settings-options.hh"
 
-1564750132 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-settings-options.hh
+1573455245 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-settings-options.hh
 
-1563994137 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-runflow.hh
+1573464743 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-runflow.hh
 	"oflp-common.hh"
 	"oflp-plugin-module.hh"
 
 1515698781 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-editors.cc
 
-1573375275 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-layout.cc
+1573465348 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-layout.cc
 	"oflp-common.hh"
 	"oflp-common-macros.hh"
 	"oflp-cb.hh"
@@ -6674,14 +6669,14 @@
 	"oflp-panel-header.hh"
 	"generated/oflp-plugin-mod-panels--log-defines.cci"
 
-1565846276 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-settings.cc
+1573467464 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-settings.cc
 	"oflp-plugin-mod-settings.hh"
 	"oflp-plugin-mod-tooltips.hh"
 	"oflp-plugin-mod-panels.hh"
 	"oflp-settings.hh"
 	"oflp-plugin.hh"
 
-1565294403 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-settings.hh
+1573461704 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-settings.hh
 	"oflp-plugin-module.hh"
 	"oflp-settings-options.hh"
 	<wx/sizer.h>
@@ -6689,7 +6684,7 @@
 	<wx/minifram.h>
 	<wx/collpane.h>
 
-1565883791 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin.cc
+1573465436 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin.cc
 	"oflp-common.hh"
 	"oflp-common-macros.hh"
 	"oflp-cb.hh"
@@ -6703,15 +6698,16 @@
 	"oflp-plugin-mod-flog.hh"
 	<configurationpanel.h>
 
-1565806228 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-settings.cc
+1573461704 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-settings.cc
 	"oflp-common.hh"
 	"oflp-plugin.hh"
+	"oflp-plugin-mod-settings.hh"
 	"oflp-plugin-mod-gfx.hh"
 	"oflp-settings.hh"
 
 1565199139 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-panel-utils-dnd.hh
 
-1573375236 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-panel-utils-dnd.cc
+1573457631 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-panel-utils-dnd.cc
 	"oflp-common.hh"
 	"oflp-plugin.hh"
 	"oflp-plugin-module.hh"
@@ -7235,7 +7231,7 @@
 	"oflp-plugin-mod-tooltips.hh"
 	"generated/oflp-plugin-mod-tooltips--log-defines.cci"
 
-1565108186 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-tooltips.hh
+1573464743 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-tooltips.hh
 	<list>
 	"oflp-common-defines.hh"
 	"oflp-plugin-module.hh"
@@ -7255,7 +7251,7 @@
 	<assert.h>
 	<string.h>
 
-1565110472 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-flog.hh
+1573464696 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-mod-flog.hh
 	<wx/time.h>
 	<wx/file.h>
 	"oflp-common.hh"
@@ -7283,15 +7279,14 @@
 
 1565883486 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/generated/oflp-panel--log-defines.cci
 
-1573367596 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-common-defines.hh
+1573466427 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-common-defines.hh
 
 1565200058 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-util-hstring.cc
 	"oflp-common.hh"
 	"oflp-util-hstring.hh"
 
-1573389123 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-util-hstring.hh
+1573389295 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-util-hstring.hh
 	<wx/string.h>
-	<vector>
 
 1565200124 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-util-uid.hh
 	<wx/string.h>
@@ -7310,7 +7305,7 @@
 1565413195 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-cb.hh
 	"oflp-plugin-mod-layout.hh"
 
-1565879204 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-module.cc
+1573464839 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-plugin-module.cc
 	"oflp-common.hh"
 	"oflp-plugin-module.hh"
 	"oflp-plugin-mod-gfx.hh"
@@ -7320,4 +7315,20 @@
 	"oflp-plugin-mod-runflow.hh"
 	"oflp-plugin-mod-tooltips.hh"
 	"oflp-plugin-mod-flog.hh"
+
+1573459403 /home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-log-frame.hh
+	"oflp-common.hh"
+	"oflp-log.hh"
+	<wx/frame.h>
+	<wx/font.h>
+	<wx/textctrl.h>
+	<wx/sizer.h>
+
+1573467243 source:/home/gwr/Src/C-C++/codeblocks/cb-OpenFilesListPlus/src/oflp-log-frame.cc
+	<wx/frame.h>
+	<wx/font.h>
+	<wx/textctrl.h>
+	<wx/sizer.h>
+	"oflp-common.hh"
+	"oflp-log-frame.hh"
 

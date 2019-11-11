@@ -21,12 +21,21 @@ class OflpModSettings       : public OflpModule
     friend class OpenFilesListPlus;
     //  --------------------------------------------------------------------------------------------
   private:
+    bool                a_embed_log;
+    bool                a_embed_menu__log;
+    bool                a_embed_menu__dbg;
+
+  private:
     OflpOptLog          a_opt_log;
     OflpOptSel          a_opt_sel;
     OflpOptDivTt        a_opt_div_tt;
     OflpOptColors       a_opt_colors;
 
   public:
+    bool                emb_log             ()  { return a_embed_log;           }
+    bool                emb_menu__log       ()  { return a_embed_menu__log;     }
+    bool                emb_menu__dbg       ()  { return a_embed_menu__dbg;     }
+
     bool                mode_standard       ()  { return a_opt_sel.dclick();    }
     bool                mode_productivity   ()  { return a_opt_sel.sclick();    }
     bool                log_enabled         ()  { return a_opt_log.a_enabled;   }
@@ -40,7 +49,7 @@ class OflpModSettings       : public OflpModule
     OflpSettings    *   dw_settings;
     //  --------------------------------------------------------------------------------------------
   protected:
-    void                action                      (wxCommandEvent&);
+    void                clicked                     (wxCommandEvent&);
     void                settings_window_activated   (bool _b);
 
     void                popup   (wxCommandEvent&);
@@ -48,8 +57,10 @@ class OflpModSettings       : public OflpModule
     void                popout  ();
     void                update_from_user_input();
     //  --------------------------------------------------------------------------------------------
+    //  module
   private:
-    virtual     void    z_release() {}
+    virtual     void    modinit();
+    virtual     void    modrelease()    {}
     //  --------------------------------------------------------------------------------------------
   public:
     OflpModSettings();

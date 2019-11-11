@@ -51,8 +51,8 @@ zip -j9 "${OflpOutputDir}/OpenFilesListPlus.cbplugin"  "${OflpOutputDir}/OpenFil
 #   overwrite "standalone" for debugging
 echo "> updating plugin from [${OflpOutputDir}] to [${OflpSystemDir}]"
 #cp -f "${OflpOutputDir}/OpenFilesListPlus.zip" "${OflpSystemDir}/codeblocks"
-#cp -f "${OflpOutputDir}/OpenFilesListPlus.so"  "${OflpSystemDir}/lib/codeblocks/plugins"
+cp -f "${OflpOutputDir}/OpenFilesListPlus.so"  "${OflpSystemDir}/lib/codeblocks/plugins"
 
 echo "> updating plugin from [${OflpOutputDir}] to [/home/gwr/.local/share/codeblocks/plugins/]"
-#cp -f "${OflpOutputDir}/OpenFilesListPlus.so"  "/home/gwr/.local/share/codeblocks/plugins/OpenFilesListPlus.so"
+cp -f "${OflpOutputDir}/OpenFilesListPlus.so"  "/home/gwr/.local/share/codeblocks/plugins/OpenFilesListPlus.so"
 

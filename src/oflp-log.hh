@@ -3,16 +3,16 @@
  * http://www.gnu.org/licenses/gpl-3.0.html
  */
 
-#ifndef __GWR_CB_LOG_HH__
-#define __GWR_CB_LOG_HH__
-//  ************************************************************************************************
+#ifndef __OFLP_PLUGIN_LOG_HH__
+#define __OFLP_PLUGIN_LOG_HH__
+//  ################################################################################################
 //  logs enabled
-//  ************************************************************************************************
-#ifdef  OFLP_LOG
-
-#include    <wx/string.h>
-#include    <wx/colour.h>
-#include    <wx/textctrl.h>
+//  ################################################################################################
+#ifdef  OFLP_EMBED__LOG
+//  ================================================================================================
+//  log frame
+//  ================================================================================================
+#include    "oflp-log-frame.hh"
 
 class   wxWindow;
 
@@ -28,17 +28,6 @@ extern  wxColour    A_colour_log_tki;
 extern  wxColour    A_colour_log_tkw;
 extern  wxColour    A_colour_log_tke;
 //  ................................................................................................
-extern  bool        A_log_console;
-extern  bool        A_log_window;
-
-extern  void        Log_console                 (wxString&);
-extern  void        Log_window                  (wxString&);
-extern  void        Log_window_set_text_col_fg  (wxColour&);
-extern  void        Log_window_set_text_attr    (wxTextAttr&);
-extern  bool        Log_window_opened           ();
-extern  void        Log_window_open             (wxWindow*);
-extern  void        Log_window_close            ();
-
 extern          void            Log_spc_inc();
 extern          void            Log_spc_dec();
 extern  const   wxChar      *   Log_spc_wxc();
@@ -47,9 +36,18 @@ extern          void            Log_function_mark   (const wxChar*);
 extern          void            Log_function_enter  (const wxChar*);
 extern          void            Log_function_exit   ();
 
-extern          int             Log_szt2int         (size_t _szt);
+extern          void            Log_window_open             (wxWindow*);
+extern          void            Log_window_close            ();
 
-//  ................................................................................................
+extern          void            Log_console                 (wxString&);
+extern          void            Log_window                  (wxString&);
+extern          void            Log_window_set_text_col_fg  (wxColour&);
+extern          void            Log_window_set_text_attr    (wxTextAttr&);
+
+}
+//  ================================================================================================
+//  log macros
+//  ================================================================================================
 #define     ERGCB_LOG(WXFORMAT, ...)                                            \
 {                                                                               \
     wxString tmp =                                                              \
@@ -58,14 +56,8 @@ extern          int             Log_szt2int         (size_t _szt);
             oflp::Log_spc_wxc()         ,                                       \
             __VA_ARGS__                 );                                      \
                                                                                 \
-    if ( oflp::A_log_console )                                                  \
-    {                                                                           \
         oflp::Log_console  ( tmp );                                             \
-    }                                                                           \
-    if ( oflp::A_log_window )                                                   \
-    {                                                                           \
         oflp::Log_window   ( tmp );                                             \
-    }                                                                           \
 }
 //  ................................................................................................
 #define ERGCB_FNE(FORMAT, ...)                                                  \
@@ -129,29 +121,29 @@ extern          int             Log_szt2int         (size_t _szt);
 #define OFLP_LOG_FUNC_EXIT()
 #define OFLP_FUNC_ENTER_MARK(FUNCNAME)
 
-#endif                                                                                              //  #ifdef OFLP_LOG_FUNCTIONS
+#endif                                                                                              //  OFLP_LOG_FUNCTIONS
 
-}
-
-#endif                                                                                              //  #ifdef OFLP_LOG
-//  ************************************************************************************************
+#endif                                                                                              //  OFLP_EMBED__LOG
+//  ################################################################################################
 //  logs disabled
-//  ************************************************************************************************
-#ifndef OFLP_LOG
-
+//  ################################################################################################
+#ifndef OFLP_EMBED__LOG
+//  ================================================================================================
+//  log frame
+//  ================================================================================================
 class   wxWindow;
 
 namespace oflp
 {
 
-extern  bool        A_log_console;
-extern  bool        A_log_window;
-
 extern  void        Log_window_open             (wxWindow*);
 //extern  void        Log_window_open             ();
 extern  void        Log_window_close            ();
 
-//  ................................................................................................
+}
+//  ================================================================================================
+//  log macros
+//  ================================================================================================
 #define ERGCB_LOG(WXFORMAT, ...)
 //  ................................................................................................
 #define ERGCB_TCS(FORMAT, ...)
@@ -170,8 +162,7 @@ extern  void        Log_window_close            ();
 #define OFLP_LOG_FUNC_DEC()
 #define OFLP_FUNC_ENTER_MARK(FUNCNAME)
 
-}
 
-#endif                                                                          //  #ifndef OFLP_LOG
+#endif                                                                                              //  OFLP_EMBED__LOG
 
-#endif                                                                          //  __GWR_CB_LOG_HH__
+#endif                                                                                              //  __OFLP_PLUGIN_LOG_HH__
