@@ -11,6 +11,8 @@ Main coding.
 
 ![scr-001](https://github.com/earlgrey-bis/cb-OpenFilesListPlus/blob/doc/scr/screenshot-001.png "screenshot-001.png")
 
+![scr-002](https://github.com/earlgrey-bis/cb-OpenFilesListPlus/blob/doc/scr/screenshot-002.png "screenshot-002.png")
+
 ## 02 doc
 
 Documentation
